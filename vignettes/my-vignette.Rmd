@@ -27,5 +27,5 @@ library(TexoR)
 ```
 
 # Introduction 
-\CRANpackage{TexoR} is a proposed package that can help in converting old LaTeX based documents, research papers to HTML through intermediate conversions. This is particularly a problem for pre 2008 R Research papers where R journal was not available and hence modern compatibility to export a HTML file was missed out.
+\CRANpackage{TexoR} is a proposed package that can help in converting old LaTeX based documents, research papers to HTML through intermediate conversions. This is particularly a problem for  R Research papers where HTML export was not available and hence modern compatibility to export a HTML file was missed out.
     To bring these documents online HTML based webpages are a much better alternative as opposed to PDFs and to solve the lack of web versions TexoR will provide a mechanism.  
