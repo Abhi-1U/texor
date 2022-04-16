@@ -1,0 +1,16 @@
+Package: TexoR
+Type: Package
+Title: Converts Tex into Rmd
+Version: 0.1.0
+Author: Abhishek ulayil
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: Converts tex files into Rmd which can then be exported as HTML
+    This is for old pre 2008 era where R journal wasnt widespread.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
+Imports: 
+    rmarkdown
+Authors@R: person("Abhishek", "ulayil", email = "perricoq@outlook.com",
+  role = c("aut", "cre"))
