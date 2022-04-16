@@ -1,0 +1,31 @@
+---
+title: "TexoR"
+subtitle: '**Convert Old LaTeX files to RMd/HTML**'
+author:  
+  # see ?rjournal_article for more information
+  - name: Abhishek Ulayil
+    affiliation: (proposed)GSoC Contributer
+    address:
+    - Somewhere in Mumbai
+    - India
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(TexoR)
+```
+
+# Introduction 
+\CRANpackage{TexoR} is a proposed package that can help in converting old LaTeX based documents, research papers to HTML through intermediate conversions. This is particularly a problem for pre 2008 R Research papers where R journal was not available and hence modern compatibility to export a HTML file was missed out.
+    To bring these documents online HTML based webpages are a much better alternative as opposed to PDFs and to solve the lack of web versions TexoR will provide a mechanism.  
