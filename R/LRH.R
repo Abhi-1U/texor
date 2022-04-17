@@ -12,11 +12,11 @@
 #'  "input_file_name.md"
 #' TODO : Examples
 Convert_To_Markdown<- function(input_file){
-  old_working_dir=getwd()
+  old_working_directory=getwd()
   setwd(dirname(input_file))
   md_file_name=paste(toString(tools::file_path_sans_ext(input_file)),".md",sep="")
   rmarkdown::pandoc_convert(input_file, to= "markdown",output=md_file_name)
-  setwd(old_working_dir)
+  setwd(old_working_directory)
 }
 
 #'Append_Markdown_Files :
@@ -33,7 +33,7 @@ Convert_To_Markdown<- function(input_file){
 #'    file
 #' TODO : Examples
 Append_Markdown_Files <- function(input_file,title,bib_file){
-  old_working_dir=getwd()
+  old_working_directory=getwd()
   setwd(dirname(input_file))
   md_file = file(input_file,open="rt")
   md_file_content=readLines(md_file)
@@ -51,7 +51,7 @@ Append_Markdown_Files <- function(input_file,title,bib_file){
   writeLines(paste(md_file_content,""),con=output_file,useBytes = FALSE)
   close.connection(md_file,type = "rt")
   close.connection(output_file,type = "wt")
-  setwd(old_working_dir)
+  setwd(old_working_directory)
 }
 
 
@@ -77,4 +77,15 @@ Copy_Other_Files<-function(base_dir_path){
   file.copy(target_files,to = "output/", copy.mode = T, recursive=FALSE,)
   setwd(old_working_directory)
 }
-
+#' Produce HTML
+#'
+#' @param input_file_path ; String path for the R-Markdown file
+#'
+#' @return none
+#' @export HTML output
+#'
+#' @examples
+#' TODO
+Produce_HTML<-function(input_file_path){
+    rmarkdown::render(input = input_file_path)
+}
