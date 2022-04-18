@@ -6,10 +6,10 @@
   Copies Supporting documents like images,pdf,bib files into the output
   folder for building the HTML version of the R-Markdown file.}
 \usage{
-Copy_Other_Files(base_dir_path)
+Copy_Other_Files(from_path)
 }
 \arguments{
-\item{base_dir_path}{: String indicating base path for the working directory}
+\item{from_path}{: String indicating base path for the working directory}
 }
 \value{
 none

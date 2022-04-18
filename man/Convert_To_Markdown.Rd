@@ -6,10 +6,10 @@
  This Function converts the LaTeX file into a Markdown file using pandoc
  with the same file name in the same directory}
 \usage{
-Convert_To_Markdown(input_file)
+Convert_To_Markdown(input_file_path)
 }
 \arguments{
-\item{input_file}{: String Path for the Input File}
+\item{input_file_path}{: String Path for the Input File}
 }
 \value{
 none :

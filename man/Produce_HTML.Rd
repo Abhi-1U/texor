@@ -15,6 +15,3 @@ none
 \description{
 Produce HTML
 }
-\examples{
-TODO
-}
