@@ -93,7 +93,7 @@ Produce_HTML<-function(input_file_path){
     rmarkdown::render(input = input_file_path,output_format = "rjtools::rjournal_web_article")
 }
 
-PdfToPng<-function(input_file_path){
+Pdf_To_Png<-function(input_file_path){
     path=dirname(input_file_path)
     old_working_directory=getwd()
     setwd(path)
