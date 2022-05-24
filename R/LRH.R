@@ -90,5 +90,15 @@ Copy_Other_Files<-function(from_path){
 #'
 #'
 Produce_HTML<-function(input_file_path){
-    rmarkdown::render(input = input_file_path,output_format = "html_document")
+    rmarkdown::render(input = input_file_path,output_format = "rjtools::rjournal_web_article")
+}
+
+PdfToPng<-function(input_file_path){
+    path=dirname(input_file_path)
+    old_working_directory=getwd()
+    setwd(path)
+    input_file=basename(input_file_path)
+    png_file=paste(toString(tools::file_path_sans_ext(input_file)),".md",sep="")
+    magick::image_convert(input_file, to= "markdown",output = png_file)
+    setwd(old_working_directory)
 }
