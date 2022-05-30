@@ -1,4 +1,4 @@
-Package: TexoR
+Package: texor
 Type: Package
 Title: Converts Tex into Rmd
 Version: 0.2.1
@@ -11,7 +11,8 @@ LazyData: true
 RoxygenNote: 7.1.2
 Imports: 
     qpdf,
-    rmarkdown
+    rmarkdown,
+    animation
 Authors@R: person("Abhishek", "ulayil", email = "perricoq@outlook.com",
     role = c("aut", "cre"))
 Suggests: 
