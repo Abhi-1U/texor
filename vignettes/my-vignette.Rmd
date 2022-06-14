@@ -1,5 +1,5 @@
 ---
-title: "TexoR"
+title: "texor"
 subtitle: '**Convert Old LaTeX files to RMd/HTML**'
 author:  
   # see ?rjournal_article for more information
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(TexoR)
+library(texor)
 ```
 
 # Introduction 

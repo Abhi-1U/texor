@@ -7,10 +7,12 @@
   and generates a R-Markdown file from a normal Markdown file in a new
   output folder.}
 \usage{
-Append_Markdown_Files(input_file_path, title, bib_file)
+Append_Markdown_Files(input_file_path, author, title, bib_file)
 }
 \arguments{
 \item{input_file_path}{: String path to the input Markdown File}
+
+\item{author}{: String name(s) of author(s)}
 
 \item{title}{: String title of the document}
 
