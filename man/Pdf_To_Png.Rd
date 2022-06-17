@@ -2,7 +2,7 @@
 % Please edit documentation in R/LRH.R
 \name{Pdf_To_Png}
 \alias{Pdf_To_Png}
-\title{Title}
+\title{Pdf_To_Png}
 \usage{
 Pdf_To_Png(input_file_path)
 }
@@ -13,5 +13,5 @@ Pdf_To_Png(input_file_path)
 
 }
 \description{
-Title
+Pdf_To_Png
 }

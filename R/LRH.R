@@ -17,7 +17,7 @@ Convert_To_Markdown<- function(input_file_path){
     setwd(path)
     input_file=basename(input_file_path)
     md_file=paste(toString(tools::file_path_sans_ext(input_file)),".md",sep="")
-    rmarkdown::pandoc_convert(input_file, to= "markdown",output = md_file,citeproc = TRUE)
+    rmarkdown::pandoc_convert(input_file, to= "markdown",options=c("-s"),output = md_file,citeproc = TRUE,verbose = TRUE)
     setwd(old_working_directory)
 }
 
@@ -58,6 +58,92 @@ Append_Markdown_Files <- function(input_file_path,author,title,bib_file){
     close.connection(output_file,type = "wt")
 }
 
+#' md_to_rmd
+#'
+#' @param input_file_path : The input file name along with path
+#'
+#' @return
+#' @export A rmd file with same name to the output folder
+#'
+#' @examples
+md_to_rmd<-function(input_file_path){
+    input_file=basename(input_file_path)
+    md_file = file(input_file_path,open="rt")
+    md_file_content=readLines(md_file)
+    output_file_name=paste(dirname(input_file_path),"/output/",toString(tools::file_path_sans_ext(input_file)),".Rmd",sep="")
+    dir.create(dirname(output_file_name),showWarnings = F)
+    output_file = file(output_file_name, open="wt")
+    writeLines(paste(md_file_content,""),con=output_file,useBytes = FALSE)
+    close.connection(md_file,type = "rt")
+    close.connection(output_file,type = "wt")
+}
+
+#' Modify_YAML_Data
+#'
+#' @param input_file: The file whose YAML data has to be modified.
+#' @param ... the YAML data that needs to be appended
+#'
+#' @return
+#' @export
+#'
+#' @examples
+Modify_YAML_Data<-function(input_file,...){
+    input_lines <- readLines(input_file)
+    delimiters <- grep("^---\\s*$", input_lines)
+    if (!length(delimiters)) {
+        stop("unable to find yaml delimiters")
+    } else if (length(delimiters) == 1L) {
+        if (delimiters[1] == 1L) {
+            stop("cannot find second delimiter, first is on line 1")
+        } else {
+            # found just one set, assume it is *closing* the yaml matter;
+            # fake a preceding line of delimiter
+            delimiters <- c(0L, delimiters[1])
+        }
+    }
+    delimiters <- delimiters[1:2]
+    yaml_list <- yaml::yaml.load(input_lines[ (delimiters[1]+1):(delimiters[2]-1) ])
+    dots <- list(...)
+    yaml_list <- c(yaml_list[ setdiff(names(yaml_list), names(dots)) ], dots)
+    output_lines <- c(
+        if (delimiters[1] > 0) input_lines[1:(delimiters[1])],
+        strsplit(yaml::as.yaml(yaml_list), "\n")[[1]],
+        input_lines[ -(1:(delimiters[2]-1)) ]
+    )
+    writeLines(output_lines, con = input_file)
+    return(invisible(output_lines))
+}
+
+#' Find_Bib_File
+#'
+#' @param path current working directory
+#'
+#' @return bib_file name as a string
+#' @export
+#'
+#' @examples
+Find_Bib_File <- function(path){
+    old_working_directory=getwd()
+    setwd(path)
+    file_list=list.files(recursive = FALSE)
+    extensions = c("*.bib")
+    bib_file = unique(grep(paste(extensions,collapse="|"), file_list, value=TRUE))
+    print(bib_file)
+    return(bib_file)
+}
+
+#' Include_Bib_Metadata
+#'
+#' @param input_file
+#'
+#' @return
+#' @export Modified input file
+#'
+#' @examples
+Include_Bib_Metadata<- function(input_file){
+    bib_file=Find_Bib_File('.')
+    Modify_YAML_Data(input_file,bib_file=bib_file)
+}
 
 #' Copy_Other_Files :
 #'   Copies Supporting documents like images,pdf,bib files into the output
@@ -83,6 +169,7 @@ Copy_Other_Files<-function(from_path){
     file.copy(target_files,to = "output/", copy.mode = T, recursive=FALSE,)
     setwd(old_working_directory)
 }
+
 #' Produce HTML
 #'
 #' @param input_file_path ; String path for the R-Markdown file
@@ -95,7 +182,7 @@ Produce_HTML<-function(input_file_path){
     rmarkdown::render(input = input_file_path,output_format = "rjtools::rjournal_web_article")
 }
 
-#' Title
+#' Pdf_To_Png
 #'
 #' @param input_file_path
 #'
