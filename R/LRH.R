@@ -69,10 +69,10 @@ Append_Markdown_Files <- function(input_file_path,author,title,bib_file){
 #' @examples
 md_to_rmd<-function(input_file_path){
     input_file=basename(input_file_path)
-    md_file = file(input_file_path,open="rt")
+    template_path=paste(find.package('texor'),'extdata/rmd-style-markdown.template',sep ='/')
     output_file_name=paste(dirname(input_file_path),"/output/",toString(tools::file_path_sans_ext(input_file)),".Rmd",sep="")
     dir.create(dirname(output_file_name),showWarnings = F)
-    rmarkdown::pandoc_convert(input_file, to= "markdown",options=c("-s","--template",'/home/abhi/Documents/pandoc-template/markdown-template/rmd-style-markdown.template'),output = output_file_name,citeproc = TRUE,verbose = TRUE)
+    rmarkdown::pandoc_convert(input_file, to= "markdown",options=c("-s","--template",template_path),output = output_file_name,citeproc = TRUE,verbose = TRUE)
 }
 
 #' Modify_YAML_Data
