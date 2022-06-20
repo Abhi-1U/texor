@@ -35,6 +35,7 @@ Convert_To_Markdown<- function(input_file_path){
 #'
 #'
 Append_Markdown_Files <- function(input_file_path,author,title,bib_file){
+    print('A Deprecated alternative method: use texor::md_to_rmd()')
     input_file=basename(input_file_path)
     md_file = file(input_file_path,open="rt")
     md_file_content=readLines(md_file)
@@ -69,13 +70,9 @@ Append_Markdown_Files <- function(input_file_path,author,title,bib_file){
 md_to_rmd<-function(input_file_path){
     input_file=basename(input_file_path)
     md_file = file(input_file_path,open="rt")
-    md_file_content=readLines(md_file)
     output_file_name=paste(dirname(input_file_path),"/output/",toString(tools::file_path_sans_ext(input_file)),".Rmd",sep="")
     dir.create(dirname(output_file_name),showWarnings = F)
-    output_file = file(output_file_name, open="wt")
-    writeLines(paste(md_file_content,""),con=output_file,useBytes = FALSE)
-    close.connection(md_file,type = "rt")
-    close.connection(output_file,type = "wt")
+    rmarkdown::pandoc_convert(input_file, to= "markdown",options=c("-s","--template",'/home/abhi/Documents/pandoc-template/markdown-template/rmd-style-markdown.template'),output = output_file_name,citeproc = TRUE,verbose = TRUE)
 }
 
 #' Modify_YAML_Data
@@ -199,6 +196,7 @@ Pdf_To_Png<-function(input_file_path){
     magick::image_convert(input_file, to= "markdown",output = png_file)
     setwd(old_working_directory)
 }
+
 
 
 
