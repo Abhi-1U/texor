@@ -13,7 +13,8 @@ Imports:
     rmarkdown,
     animation,
     magick,
-    yaml
+    yaml,
+    stringr
 Authors@R: person("Abhishek", "ulayil", email = "perricoq@outlook.com",
     role = c("aut", "cre"))
 Suggests: 

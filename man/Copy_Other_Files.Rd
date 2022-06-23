@@ -2,19 +2,58 @@
 % Please edit documentation in R/LRH.R
 \name{Copy_Other_Files}
 \alias{Copy_Other_Files}
-\title{Copy_Other_Files :
-  Copies Supporting documents like images,pdf,bib files into the output
-  folder for building the HTML version of the R-Markdown file.}
+\title{Convert_To_Markdown :
+ This Function converts the LaTeX file into a Markdown file using pandoc
+ with the same file name in the same directory}
 \usage{
 Copy_Other_Files(from_path)
 }
 \arguments{
 \item{from_path}{: String indicating base path for the working directory}
+
+\item{title}{: String title of the document}
+
+\item{bib_file}{: String path to the bib file}
+
+\item{author}{: String name(s) of author(s)}
+
+\item{input_file_path}{: The input file name along with path}
+
+\item{input_file:}{The file whose YAML data has to be modified.}
+
+\item{...}{the YAML data that needs to be appended}
+
+\item{path}{current working directory}
+
+\item{input_file}{}
 }
 \value{
+none :
+
+none :
+
+
+
+
+
+bib_file name as a string
+
+
+
 none
 }
 \description{
+Convert_To_Markdown :
+ This Function converts the LaTeX file into a Markdown file using pandoc
+ with the same file name in the same directory
+}
+\examples{
+Modify_YAML_Data
+
+Find_Bib_File
+
+Include_Bib_Metadata
+
 Copy_Other_Files :
   Copies Supporting documents like images,pdf,bib files into the output
   folder for building the HTML version of the R-Markdown file.
