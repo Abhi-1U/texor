@@ -93,6 +93,7 @@ convert_to_markdown<-function(article_dir){
 generate_rmd<-function(markdown_file,volume, issue){
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
     metadata$abstract<- metadata$author[2]
+    #metadata$emails<-metadata$author[3:length(metadata$author)]
     metadata$author <- lapply(
             strsplit(metadata$address, "\\\n", fixed = TRUE),
             function(person) {
@@ -106,6 +107,9 @@ generate_rmd<-function(markdown_file,volume, issue){
                 if(any(email <- grepl("^email:", person))) {
                     author$email <- sub("^email:", "", person[email])
                 }
+                #if(!is.na(metadata$emails)){
+                #    author$email <- metadata$emails[2+person]
+                #}
                 fields <- logical(length(person))
                 fields[1:2] <- TRUE
                 if(any(address <- !(fields | orcid | email))) {
@@ -143,7 +147,7 @@ generate_rmd<-function(markdown_file,volume, issue){
     }
     front_matter <- list(
         title = metadata$title,
-        abstract = metadata$abstract, #%||%paste0('The "', metadata$title, '" article from the ', issue_year, '-', issue, ' issue.'),
+        abstract = metadata$abstract, #%||% paste0('The "', metadata$title, '" article from the ', issue_year, '-', issue, ' issue.'),
         author = metadata$author,
         date = format_non_null(article_metadata$online),
         date_received = format_non_null(article_metadata$acknowledged),

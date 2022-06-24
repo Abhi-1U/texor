@@ -56,3 +56,7 @@ load_article <- function(path, quiet = FALSE) {
   dcf$path <- dirname(path)
   do.call(article, dcf)
 }
+
+"%||%" <- function(a, b) if (empty(a)) b else a
+
+"%NA%" <- function(a, b) ifelse(is.na(a), b, a)
