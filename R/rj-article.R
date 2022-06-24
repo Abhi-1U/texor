@@ -62,7 +62,6 @@ include_style_file<-function(article_dir){
 #' @examples
 convert_to_markdown<-function(article_dir){
     # a precautionary measure to ensure that working directory is managed
-    path=article_dir
     if(file.exists(file.path(article_dir, "RJwrapper.tex"))) {
         input_file='RJwrapper.tex'
     }
@@ -74,19 +73,11 @@ convert_to_markdown<-function(article_dir){
             print('RJwrapper.tex or RJwrap.tex does not exist !')
         }
     }
-    md_file=paste(
-        toString(tools::file_path_sans_ext(input_file)),
-        ".md",
-        sep=""
-    )
+    print(input_file)
+    md_file=paste(toString(tools::file_path_sans_ext(input_file)),".md",sep="")
+    print(md_file)
     # This will generate a markdown file with YAML headers.
-    rmarkdown::pandoc_convert(paste(article_dir,input_file,sep='/'),
-                to= "markdown",
-                options=c("-s"),
-                output = md_file,
-                citeproc = TRUE,
-                verbose = TRUE
-            )
+    rmarkdown::pandoc_convert(input_file,to= "markdown",options=c("-s"),output = md_file,citeproc = TRUE,verbose = TRUE)
 }
 
 #' generate rmarkdown file in output folder
@@ -101,6 +92,7 @@ convert_to_markdown<-function(article_dir){
 #' @examples
 generate_rmd<-function(markdown_file,volume, issue){
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
+    metadata$abstract<- metadata$author[2]
     metadata$author <- lapply(
             strsplit(metadata$address, "\\\n", fixed = TRUE),
             function(person) {
@@ -151,7 +143,7 @@ generate_rmd<-function(markdown_file,volume, issue){
     }
     front_matter <- list(
         title = metadata$title,
-        abstract = metadata$subject, #%||%paste0('The "', metadata$title, '" article from the ', issue_year, '-', issue, ' issue.'),
+        abstract = metadata$abstract, #%||%paste0('The "', metadata$title, '" article from the ', issue_year, '-', issue, ' issue.'),
         author = metadata$author,
         date = format_non_null(article_metadata$online),
         date_received = format_non_null(article_metadata$acknowledged),
@@ -194,37 +186,5 @@ generate_rmd<-function(markdown_file,volume, issue){
         c("---", yaml::as.yaml(front_matter), "---", article_body),
         output_file_name)
 }
-str_trim<-function(x){
-    return(stringr::str_trim(x))
-}
-str_detect<-function(x,re){
-    return(stringr::str_detect(x,re))
-}
-str_match<-function(x,re){
-    return(stringr::str_match(x,re))
-}
-str_split<-function(x,patt){
-    return(stringr::str_split(x,patt))
-}
-str_length<-function(x){
-    return(stringr::str_length(x))
-}
-str_replace_all<-function(x,patt,rep){
-    return(stringr::str_replace_all(x,patt,rep))
-}
-fixed<-function(x){
-    return(stringr::fixed(x))
-}
-str_c<-function(x,sep){
-    return(stringr::str_c(x,sep))
-}
-empty <- function(x) UseMethod("empty")
 
-empty.character <- function(x) str_length(x) == 0
-#' @method empty address_list
-#' @export
-empty.address_list <- function(x) length(x) == 0
-#' @method empty NULL
-#' @export
-empty.NULL <- function(x) TRUE
 
