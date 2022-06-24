@@ -31,7 +31,7 @@ make_bib <- function(unique_shorthand, author = "",title = "",journal = "",
         author = author,# author name
         journal = journal,# publisher details 
         title = title,# title of the article/book/manual
-        year = parse_year(year),# publishing year
+        year = year,# publishing year
         volume = volume, # volume detail
         number = number, # volume number detail
         pages = pages,# pages referred

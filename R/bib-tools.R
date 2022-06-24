@@ -42,11 +42,151 @@ extract_embeded_bibliography<-function(article_dir,file_name){
     }
     return(bib_items)
 }
-convert_bbl_to_bib<-function(bbl_data){
+convert_bbl_to_bib<-function(bib_items,article_dir,file_name){
+    bib_tex_records<-list()
+    for(item in bib_items){
+        bib_record<-list()
+        # if bib item closes on the first index
+        if(which(grepl("\\}$", item[[1]]))==which(grepl("^\\s*\\\\bibitem\\[", item[[1]]))){
+            start_idx<-which(grepl("^\\s*\\\\bibitem\\[", item[[1]]))# start_idx =1
+            bib_record$unique_id<-str_split(str_split(gsub("\\\\bibitem\\[|\\]","",item[[1]][start_idx]),"\\{")[[1]][2],"\\}")[[1]][1]
+            break_points<-which(grepl("^\\\\newblock", item[[1]]))
+            # author_names
+            # difference between start of identifier and authors
+            if((break_points[1]-start_idx)==2){
+                bib_record$author<-item[[1]][start_idx+1]
+            }
+            # difference between start of identifier and authors
+            if((break_points[1]-start_idx)==3){
+                bib_record$author<-paste(item[[1]][start_idx+1],item[[1]][start_idx+2])
+            }
+            # title extraction
+            # difference between author names and title is 1 line
+            if((break_points[2]-break_points[1])==1){
+                bib_record$title<-gsub("\\\\newblock","",item[[1]][break_points[1]])
+            }
+            # difference between author names and title is 2 lines
+            if((break_points[2]-break_points[1])==2){
+                bib_record$title<-paste(gsub("\\\\newblock","",item[[1]][break_points[1]]),item[[1]][break_points[1]+1])
+            }
 
+            # journal ,volume ,number ,pages , year 
+            # difference between title and journal details is 1 line
+            if((break_points[3]-break_points[2])==1){
+                journal_line<-which(grepl("^\\\\newblock\\\\emph{", item[[1]]))
+                journal_info<-strsplit(item[[1]][which(grepl("\\\\emph\\{", item[[1]]))]," ")
+                journal_start_idx<-which(grepl("\\\\emph\\{",journal_info[[1]]))
+                journal_end_idx<-which(grepl("\\}",journal_info[[1]]))
+                journal_name<-""
+                for(i in journal_start_idx:journal_end_idx){
+                    journal_name<-paste(journal_name,journal_info[[1]][i])
+                }
+                bib_record$journal<-gsub("\\}"," ",gsub("\\\\emph\\{"," ",journal_name))
+                bib_record$volume<-gsub("\\\\penalty0"," ",journal_info[[1]][j_end_idx+1])
+                bib_record$number<-gsub("\\\\penalty0"," ",journal_info[[1]][j_end_idx+2])
+                bib_record$pages<-journal_info[[1]][j_end_idx+3]
+                if(length(journal_info)>=(j_end_idx+3)){
+                    bib_record$year<-journal_info[[1]][j_end_idx+4]
+                }
+            }
+            # difference between title and journal details is 2 line
+            if((break_points[3]-break_points[2])==2){
+                journal_line<-which(grepl("^\\\\newblock\\\\emph{", item[[1]]))
+                journal_info<-strsplit(item[[1]][which(grepl("\\\\emph\\{", item[[1]]))]," ")
+                journal_start_idx<-which(grepl("\\\\emph\\{",journal_info[[1]]))
+                journal_end_idx<-which(grepl("\\}",journal_info[[1]]))
+                journal_name<-""
+                for(i in journal_start_idx:journal_end_idx){
+                    journal_name<-paste(journal_name,journal_info[[1]][i])
+                }
+                bib_record$journal<-gsub("\\}"," ",gsub("\\\\emph\\{"," ",journal_name))
+                bib_record$volume<-gsub("\\\\penalty0"," ",journal_info[[1]][j_end_idx+1])
+                bib_record$number<-gsub("\\\\penalty0"," ",journal_info[[1]][j_end_idx+2])
+                bib_record$pages<-journal_info[[1]][j_end_idx+3]
+                if(length(journal_info)>=(j_end_idx+3)){
+                    bib_record$year<-journal_info[[1]][j_end_idx+4]
+                }
+                bib_record$year<-item[break_points[3]+1]
+                
+            } 
+
+
+        }
+        # if bib item identifier is two lines long
+        if((which(grepl("\\}$", item[[1]]))-1)==which(grepl("^\\s*\\\\bibitem\\[", item[[1]]))){
+            start_idx<-which(grepl("\\}$", item[[1]]))
+            unique_id<-gsub("\\}$","",str_split(item[[1]][start_idx],"\\{")[[1]][2])
+            break_points<-which(grepl("^\\\\newblock", item[[1]]))
+            # difference between start of identifier and authors
+            if((break_points[1]-start_idx)==3){
+                bib_record$author<-item[[1]][start_idx+2]
+            }
+            # difference between start of identifier and authors
+            if((break_points[1]-start_idx)==4){
+                bib_record$author<-paste(item[[1]][start_idx+2],item[[1]][start_idx+3])
+            }
+            # difference between author names and title is 1 line
+            if((break_points[2]-break_points[1])==1){
+                bib_record$title<-gsub("\\\\newblock","",item[[1]][break_points[1]])
+            }
+            # difference between author names and title is 2 lines
+            if((break_points[2]-break_points[1])==2){
+                bib_record$title<-paste(gsub("\\\\newblock","",item[[1]][break_points[1]]),item[[1]][break_points[1]+1])
+            }
+            # journal ,volume ,number ,pages , year 
+            # difference between title and journal details is 1 line
+            if((break_points[3]-break_points[2])==1){
+                journal_line<-which(grepl("^\\\\newblock\\\\emph{", item[[1]]))
+                journal_info<-strsplit(item[[1]][which(grepl("\\\\emph\\{", item[[1]]))]," ")
+                journal_start_idx<-which(grepl("\\\\emph\\{",journal_info[[1]]))
+                journal_end_idx<-which(grepl("\\}",journal_info[[1]]))
+                journal_name<-""
+                for(i in journal_start_idx:journal_end_idx){
+                    journal_name<-paste(journal_name,journal_info[[1]][i])
+                }
+                bib_record$journal<-gsub("\\}"," ",gsub("\\\\emph\\{"," ",journal_name))
+                bib_record$volume<-gsub("\\\\penalty0"," ",journal_info[[1]][j_end_idx+1])
+                bib_record$number<-gsub("\\\\penalty0"," ",journal_info[[1]][j_end_idx+2])
+                bib_record$pages<-journal_info[[1]][j_end_idx+3]
+                if(length(journal_info)>=(j_end_idx+3)){
+                    bib_record$year<-journal_info[[1]][j_end_idx+4]
+                }
+            }
+            # difference between title and journal details is 2 line
+            if((break_points[3]-break_points[2])==2){
+                journal_line<-which(grepl("^\\\\newblock\\\\emph{", item[[1]]))
+                journal_info<-strsplit(item[[1]][which(grepl("\\\\emph\\{", item[[1]]))]," ")
+                journal_start_idx<-which(grepl("\\\\emph\\{",journal_info[[1]]))
+                journal_end_idx<-which(grepl("\\}",journal_info[[1]]))
+                journal_name<-""
+                for(i in journal_start_idx:journal_end_idx){
+                    journal_name<-paste(journal_name,journal_info[[1]][i])
+                }
+                bib_record$journal<-gsub("\\}"," ",gsub("\\\\emph\\{"," ",journal_name))
+                bib_record$volume<-gsub("\\\\penalty0"," ",journal_info[[1]][j_end_idx+1])
+                bib_record$number<-gsub("\\\\penalty0"," ",journal_info[[1]][j_end_idx+2])
+                bib_record$pages<-journal_info[[1]][j_end_idx+3]
+                if(length(journal_info)>=(j_end_idx+3)){
+                    bib_record$year<-journal_info[[1]][j_end_idx+4]
+                }
+                bib_record$year<-item[break_points[3]+1]
+            }
+            bib_tex_records[[length(bib_tex_records)+1]] <- list(bib_record)
+        }
+    input_file=basename(input_file)
+    #template_path=paste(find.package('texor'),'extdata/rmd-style-markdown.template',sep ='/')
+    output_file_name=paste(dirname(input_file),"/output/",toString(tools::file_path_sans_ext(input_file)),".bib",sep="")
+    dir.create(dirname(output_file_name),showWarnings = F)
+    xfun::write_utf8(
+        c("---", yaml::as.yaml(list=(BibTex=bib_tex_records)), "---"),
+        output_file_name)
+        #yaml::as.yaml(list=(
+        #      BibTex=bib_tex_records))
+        return(bib_tex_records)
+    }
 }
 link_bibliography<-function(){
-
+    # To Do
 }
 find_src_file<-function(article_dir,lookup_file){
     wrapper_file <- readLines(file.path(article_dir,lookup_file))
