@@ -55,6 +55,6 @@ Find_Bib_File
 Include_Bib_Metadata
 
 Copy_Other_Files :
-  Copies Supporting documents like images,pdf,bib files into the output
+  Copies supporting documents like images,pdf,bib files into the output
   folder for building the HTML version of the R-Markdown file.
 }
