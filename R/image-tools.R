@@ -1,0 +1,52 @@
+#' Pdf_To_Png
+#'
+#' @param article_dir
+#'
+#' @return
+#' @export
+#'
+#' @examples
+Pdf_To_Png<-function(article_dir){
+    path=dirname(article_dir)
+    old_working_directory=getwd()
+    if(old_working_directory!=path){
+        print('Working directory path is same')
+    }
+    else{
+        setwd(path)
+    }
+    input_files=find_pdf_files('.')
+    make_png_files('.',input_files)
+    setwd(old_working_directory)
+}
+
+find_pdf_files<-function(article_dir){
+    print("Finding inclusive PDF files")
+    file_list=list.files(article_dir,recursive = FALSE)
+    extensions = c("*.pdf")
+    pdf_files = unique(grep(paste(extensions,collapse="|"), file_list, value=TRUE))
+    pdf_files_native<-c('RJwrapper.pdf','RJwrap.pdf','wrapper.pdf')
+    filtered_pdf_files<-setdiff(pdf_files,pdf_files_native)
+    if(identical(filtered_pdf_files, character(0)) ){
+        print("Image : No PDF graphic files found !")
+        return("NA")
+    }
+    else{
+        print(paste("Image : Found",length(filtered_pdf_files),"PDF graphic files"))
+        return(filtered_pdf_files)
+    }
+}
+make_png_files<-function(article_dir,input_files){
+    if(input_files=="NA"){
+        print("No files to convert")
+        return('')
+    }
+    library(animation)
+    ani.options(outdir = paste(article_dir,"/output",sep=""))
+    ani.options('autobrowse') == FALSE
+    for(file in input_files){
+        png_file=paste(toString(tools::file_path_sans_ext(file)),".png",sep="")    
+        im.convert(file, output = png_file, extra.opts="-density 10000")
+    }
+    print("made PNG graphics @ 10000 density")
+}
