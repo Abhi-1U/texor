@@ -258,7 +258,7 @@ link_bibliography_line<-function(article_dir,file_name){
     close(write_file)
     # write to original wrapper file
     write_file<-file(file_name,'a')
-    writeLines(c(src_file_data,bib_line), write_file,)
+    writeLines(c(bib_line), write_file,)
     close(write_file)
 }
 find_src_file<-function(article_dir,lookup_file){

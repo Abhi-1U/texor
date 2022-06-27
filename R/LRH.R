@@ -191,23 +191,6 @@ Produce_HTML<-function(input_file_path){
     rmarkdown::render(input = input_file_path,output_format = "rjtools::rjournal_web_article")
 }
 
-#' Pdf_To_Png
-#'
-#' @param input_file_path
-#'
-#' @return
-#' @export
-#'
-#' @examples
-Pdf_To_Png<-function(input_file_path){
-    path=dirname(input_file_path)
-    old_working_directory=getwd()
-    setwd(path)
-    input_file=basename(input_file_path)
-    png_file=paste(toString(tools::file_path_sans_ext(input_file)),".md",sep="")
-    magick::image_convert(input_file, to= "markdown",output = png_file)
-    setwd(old_working_directory)
-}
 
 
 
