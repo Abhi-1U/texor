@@ -41,12 +41,10 @@ make_png_files<-function(article_dir,input_files){
         print("No files to convert")
         return('')
     }
-    library(animation)
-    ani.options(outdir = paste(article_dir,"/output",sep=""))
-    ani.options('autobrowse') == FALSE
+    library('pdftools')
     for(file in input_files){
-        png_file=paste(toString(tools::file_path_sans_ext(file)),".png",sep="")    
-        im.convert(file, output = png_file, extra.opts="-density 10000")
+        png_file=paste(toString(tools::file_path_sans_ext(file)),".png",sep="")
+        pdf_convert(file, dpi = 600,pages = 1,filenames = png_file)
     }
-    print("made PNG graphics @ 10000 density")
+    print("made PNG graphics @ 600 dpi density")
 }
