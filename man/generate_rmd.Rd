@@ -7,7 +7,11 @@
 generate_rmd(markdown_file, volume, issue)
 }
 \arguments{
-\item{issue}{}
+\item{markdown_file}{relative path along with name of the markdown file}
+
+\item{volume}{volume number (int)}
+
+\item{issue}{issue number (int)}
 }
 \value{
 

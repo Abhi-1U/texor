@@ -7,7 +7,7 @@
 include_style_file(article_dir)
 }
 \arguments{
-\item{article_dir}{}
+\item{article_dir}{path to the directory which contains tex article}
 }
 \value{
 
