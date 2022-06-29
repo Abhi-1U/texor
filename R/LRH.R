@@ -1,16 +1,6 @@
-# Abhi-1U
+# Abhi-1U Initial work
 #
 
-#'Convert_To_Markdown :
-#'  This Function converts the LaTeX file into a Markdown file using pandoc
-#'  with the same file name in the same directory
-#'
-#' @param input_file_path : String Path for the Input File
-#'
-#' @return none :
-#' @export
-#'  "input_file_name.md"
-#'
 # Convert_To_Markdown<- function(input_file_path){
 #     #Filter(input_file_path)
 #     path=dirname(input_file_path)
@@ -33,19 +23,7 @@
 #     setwd(old_working_directory)
 # }
 
-#'Append_Markdown_Files :
-#'   Appends the R-Markdown YML meta data like title,bibliography file etc..
-#'   and generates a R-Markdown file from a normal Markdown file in a new
-#'   output folder.
-#' @param input_file_path : String path to the input Markdown File
-#' @param title : String title of the document
-#' @param bib_file : String path to the bib file
-#' @param author : String name(s) of author(s)
-#' @return none :
-#' @export
-#'   A new folder named output with the R-Markdown version of the input Markdown
-#'
-#'
+
 # Append_Markdown_Files <- function(input_file_path,author,title,bib_file){
 #     print('A Deprecated alternative method: use texor::md_to_rmd()')
 #     input_file=basename(input_file_path)
@@ -71,14 +49,6 @@
 #     close.connection(output_file,type = "wt")
 # }
 
-#' md_to_rmd
-#'
-#' @param input_file_path : The input file name along with path
-#'
-#' @return
-#' @export A rmd file with same name to the output folder
-#'
-#' @examples
 # md_to_rmd<-function(input_file_path){
 #     input_file=basename(input_file_path)
 #     template_path=paste(find.package('texor'),'extdata/rmd-style-markdown.template',sep ='/')
@@ -87,15 +57,7 @@
 #     rmarkdown::pandoc_convert(input_file, to= "markdown",options=c("-s","--template",template_path),output = output_file_name,citeproc = TRUE,verbose = TRUE)
 # }
 
-#' Modify_YAML_Data
-#'
-#' @param input_file: The file whose YAML data has to be modified.
-#' @param ... the YAML data that needs to be appended
-#'
-#' @return
-#' @export
-#'
-#' @examples
+
 # Modify_YAML_Data<-function(input_file,...){
 #     input_lines <- readLines(input_file)
 #     delimiters <- grep("^---\\s*$", input_lines)
@@ -123,14 +85,6 @@
 #     return(invisible(output_lines))
 # }
 
-#' Find_Bib_File
-#'
-#' @param path current working directory
-#'
-#' @return bib_file name as a string
-#' @export
-#'
-#' @examples
 # Find_Bib_File <- function(path){
 #     old_working_directory=getwd()
 #     setwd(path)
@@ -141,14 +95,6 @@
 #     return(bib_file)
 # }
 
-#' Include_Bib_Metadata
-#'
-#' @param input_file
-#'
-#' @return
-#' @export Modified input file
-#'
-#' @examples
 # Include_Bib_Metadata<- function(input_file){
 #     bib_file=Find_Bib_File('.')
 #     Modify_YAML_Data(input_file,bib_file=bib_file)

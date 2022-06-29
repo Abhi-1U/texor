@@ -1,6 +1,6 @@
 #' Include Style File
 #'
-#' @param article_dir
+#' @param article_dir path to the directory which contains tex article
 #'
 #' @return
 #' @export
@@ -74,8 +74,8 @@ convert_to_markdown<-function(article_dir){
         }
     }
     print(input_file)
-    library(tools)
-    abs_file_path<-file_path_as_absolute(article_dir)
+    #library(tools)
+    abs_file_path<-tools::file_path_as_absolute(article_dir)
     md_file=paste(toString(tools::file_path_sans_ext(input_file)),".md",sep="")
     print(md_file)
     bib_filter<-system.file("extdata/bib_filter.lua", package = "texor")
@@ -92,9 +92,9 @@ convert_to_markdown<-function(article_dir){
 
 #' generate rmarkdown file in output folder
 #'
-#' @param markdown_file
-#' @param volume
-#' @param issue
+#' @param markdown_file relative path along with name of the markdown file
+#' @param volume volume number (int)
+#' @param issue issue number (int)
 #'
 #' @return
 #' @export

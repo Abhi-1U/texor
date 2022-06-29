@@ -1,12 +1,12 @@
-#' Pdf_To_Png
+#' pdf_to_png
 #'
-#' @param article_dir
+#' @param article_dir path to the directory which contains tex article
 #'
 #' @return
 #' @export
 #'
 #' @examples
-Pdf_To_Png<-function(article_dir){
+pdf_to_png<-function(article_dir){
     path=dirname(article_dir)
     old_working_directory=getwd()
     if(old_working_directory!=path){
@@ -20,6 +20,14 @@ Pdf_To_Png<-function(article_dir){
     setwd(old_working_directory)
 }
 
+#' find pdf files
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return
+#' @export
+#'
+#' @examples
 find_pdf_files<-function(article_dir){
     print("Finding inclusive PDF files")
     file_list=list.files(article_dir,recursive = FALSE)
@@ -36,15 +44,26 @@ find_pdf_files<-function(article_dir){
         return(filtered_pdf_files)
     }
 }
+
+
+#' make png file
+#'
+#' @param article_dir path to the directory which contains tex article
+#' @param input_files list of file names to be converted to png
+#'
+#' @return
+#' @export
+#'
+#' @examples
 make_png_files<-function(article_dir,input_files){
     if(input_files=="NA"){
         print("No files to convert")
         return('')
     }
-    library('pdftools')
+    #library('pdftools')
     for(file in input_files){
         png_file=paste(toString(tools::file_path_sans_ext(file)),".png",sep="")
-        pdf_convert(file, dpi = 600,pages = 1,filenames = png_file)
+        pdftools::pdf_convert(file, dpi = 600,pages = 1,filenames = png_file)
     }
     print("made PNG graphics @ 600 dpi density")
 }
