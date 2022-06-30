@@ -1,18 +1,14 @@
+
 function CodeBlock(block)
-   return pandoc.CodeBlock(inlines_tostring(block.content),{('R')})
+    --pandoc.walk_inline(block.content,breaklines)
+    local attributes= pandoc.Attr("", {'r'}, {{}})
+   return pandoc.CodeBlock(pandoc.utils.stringify(block.content:walk {SoftBreak  = function(_) return pandoc.Str('\n') end}),attributes)
 end
+
 
 ENV_CLASSES = { 'example', 'example*', 'Sinput', 'Soutput', 'Sin','Sout','Scode'}
 
---- convert a list of Inline elements to a string.
-function inlines_tostring (inlines)
-  local strs = {}
-  for i = 1, #inlines do
-    strs[i] = tostring(inlines[i])
-  end
-  return table.concat(strs)
-end
-
+--[ Legacy function
 local function markdown(s)
   return pandoc.RawBlock('markdown', s)
 end
@@ -37,8 +33,8 @@ end
 function Div(el)
   local env_class = get_env_class(el) -- nil if there is none
   if env_class then -- false if env_class is nil
-    --return {CodeBlock(el)}
-    return { markdown('```R\n'), el, markdown('\n```') }
+    return {CodeBlock(el)}
+    --return { markdown('```R\n'), el, markdown('\n```') }
   end
 end
 
