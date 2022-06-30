@@ -1,11 +1,13 @@
 
+
 function removePDFExtensions(src)
-    return src:gsub("%.pdf", "")
+  return src:gsub("%.pdf", "")
 end
 
 function checkPDFextension(src)
-    return src:match("%.pdf")
+  return src:match("%.pdf")
 end
+
 function Image(img)
   if(checkPDFextension(img.src)) then
     local img_old_src = removePDFExtensions(img.src)
@@ -15,4 +17,3 @@ function Image(img)
   end
   return img
 end
-
