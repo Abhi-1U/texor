@@ -3,17 +3,5 @@
 \newcommand{\CRANpkg}[1]{\href{https://CRAN.R-project.org/package=#1}{\pkg{#1}}}%
 \renewcommand{\pkg}[1]{#1}
 
-\newcommand{\code}[1]{\texorpdfstring%
-{{\normalfont\ttfamily\hyphenchar\font=-1 #1}}%
-{#1}}
-\newcommand{\kbd}[1]{{\normalfont\texttt{#1}}}
-\newcommand{\key}[1]{{\normalfont\texttt{\uppercase{#1}}}}
+\newcommand{\code}[1]{\verb! #1 !}
 
-\newcommand{\samp}[1]{\normalfont\texttt{#1}}
-
-\newcommand{\var}[1]{{\normalfont\textsl{#1}}}
-\let\env=\code
-\newcommand{\file}[1]{{`\normalfont\textsf{#1}'}}
-\let\command=\code
-\let\option=\samp
-\newcommand{\dfn}[1]{{\normalfont\textsl{#1}}}
