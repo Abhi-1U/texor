@@ -1,6 +1,10 @@
 manage_tikz_images<-function(article_dir){
+    old_wd<-getwd()
+    if(getwd()!=article_dir){
+        setwd(article_dir)
+    }
     # checking for RJwrapper and fetching the file name for tex file
-    wrapper_types=c('RJwrapper.tex','RJwrap.tex','wrapper.tex')
+    wrapper_types=c('wrapper.tex','RJwrap.tex','RJwrapper.tex')
     wrapper_file=""
     for(w_type in wrapper_types){
         if(file.exists(file.path(article_dir, w_type))) {
@@ -8,7 +12,7 @@ manage_tikz_images<-function(article_dir){
             wrapper_file=w_type
         }
     }
-    file_name<-find_src_file(article_dir,w_type)
+    file_name<-find_src_file(article_dir,wrapper_file)
     if(!grepl(".tex$",file_name)){
         file_name<-paste0(file_name,".tex")
     }
@@ -18,7 +22,12 @@ manage_tikz_images<-function(article_dir){
     tikz_template<-c(
         "\\documentclass{standalone}",
         "\\usepackage{xcolor}",
+        "\\usepackage{verbatim}",
         "\\usepackage{tikz}",
+        "\\newcommand{\\CRANpkg}[1]{\\href{https://CRAN.R-project.org/package=#1}{\\pkg{#1}}}%",
+        "\\newcommand{\\pkg}[1]{#1}",
+        "\\newcommand{\\code}[1]{#1 }",
+        "\\usetikzlibrary{fit}",
         "\\begin{document}",
         "\\nopagecolor",
         tikz_object,
@@ -30,12 +39,16 @@ manage_tikz_images<-function(article_dir){
     # convert the tex file into pdf
     dir.create('tikz',showWarnings = F)
     tikz_dir<-paste(article_dir,'tikz',sep='/')
-    tex_build("tikz.tex",tikz_dir)
+    file.copy('tikz.tex',tikz_dir,copy.mode=T,recursive=F)
+    tinytex::latexmk('tikz/tikz.tex',engine = 'pdflatex')
     # run pdf to png
-    texor::make_png_files('.',c('tikz.pdf'))
+    texor::make_png_files('','./tikz/tikz.pdf')
     # copy over the file 
-    
+    texor::Copy_Other_Files('.')
     # include tikz as pdf in the tex document
+    image_path<-'tikz/tikz.png'
+    texor::inject_generated_image(article_dir,file_name,image_path)
+
 }
 
 extract_embeded_tikz_image<-function(article_dir,file_name){
@@ -48,6 +61,7 @@ extract_embeded_tikz_image<-function(article_dir,file_name){
     fig_data<-setdiff(post_fig,pre_fig)
     tikz_start<- which(grepl("^\\s*\\\\begin\\{tikzpicture", fig_data))
     tikz_end<- which(grepl("^\\s*\\\\end\\{tikzpicture", fig_data))
+    tikz_style<- which(grepl("^\\s*\\\\tikzstyle\\{", fig_data))
     # if no tikz its probably a PDF or PNG image
     if(identical(tikz_start,integer(0))||identical(tikz_end,integer(0))){
         print("Not a tikz file")
@@ -55,27 +69,21 @@ extract_embeded_tikz_image<-function(article_dir,file_name){
     }
     # Return Tikz data for a single tikz image
     # will not work on multiple tikz images
-    pre_tikz<- fig_data[seq_len(tikz_start-1)]
+    pre_tikz<- fig_data[seq_len(tikz_style-1)]
     post_tikz<-fig_data[seq_len(tikz_end)]
     tikz_data<-setdiff(post_tikz,pre_tikz)
-    print(paste("Stage 4 : Extracted tikz image data from  ",file_name))
+    print(paste("TKZ-S2 : Extracted tikz image data from  ",file_name))
+    print(tikz_data)
     return(tikz_data)
 }
-tex_build <- function(tex_file,
-                      fileDir ,
-                      engine = 'pdflatex',
-                      ...){
-  cwd <- getwd()
-  on.exit({setwd(cwd)},add = TRUE)
-  setwd(fileDir)
-  temp_log    <- sprintf('%sDoc.log',stem)
-  writeLines(tex_lines, con = temp_tex)
-  tinytex::latexmk(file        = tex_file, 
-                   engine      = engine,
-                   engine_args = '-synctex=1',
-                   clean       = FALSE,
-                   ...)  
-  log_lines <- readLines(temp_log)
-  attr(log_lines,'error') <- grepl('error',log_lines[length(log_lines)])
-  log_lines
+inject_generated_image<-function(article_dir,file_name,image_path){
+    tex_file <- readLines(file.path(article_dir, file_name))
+    tikz_start <- which(grepl("^\\s*\\\\begin\\{tikzpicture", tex_file))
+    pre_tikz<- tex_file[seq_len(tikz_start-1)]
+    post_tikz<-setdiff(tex_file,pre_tikz)
+    include_graphics<-paste("\\includegraphics[scale=1]{",image_path,"}",sep='')
+    # write to original wrapper file
+    write_file<-file(file_name,'w')
+    writeLines(c(pre_tikz,include_graphics,"",post_tikz), write_file)
+    close(write_file)
 }

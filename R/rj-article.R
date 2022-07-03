@@ -81,11 +81,13 @@ convert_to_markdown<-function(article_dir){
     bib_filter<-system.file("extdata/bib_filter.lua", package = "texor")
     code_block_filter<-system.file("extdata/code_block_filter.lua", package = "texor")
     image_filter<-system.file("extdata/image_filter.lua", package = "texor")
+    tikz_filter<-system.file("extdata/tikz_image_filter.lua", package = "texor")
     pandoc_opt<-c("-s",
                   "--resource-path",abs_file_path,
                   "--lua-filter",bib_filter,
                   "--lua-filter",image_filter,
-                  "--lua-filter",code_block_filter)
+                  "--lua-filter",code_block_filter
+                  )
     # This will generate a markdown file with YAML headers.
     rmarkdown::pandoc_convert(input_file,from = "latex",to= "markdown",options=pandoc_opt,output = md_file,citeproc = TRUE,verbose = TRUE)
 }

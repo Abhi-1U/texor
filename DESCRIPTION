@@ -1,7 +1,7 @@
 Package: texor
 Type: Package
 Title: Converts Tex into Rmd
-Version: 0.4.5
+Version: 0.4.7
 Author: Abhishek ulayil
 Description: Converts tex files into Rmd which can then be exported as HTML
     This is for past  R journals available only in pdfs.
