@@ -1,7 +1,7 @@
 # texor : tools for LaTeX source files into RJ-web-articles
 ![](https://img.shields.io/badge/R-%3E=3.6.3-blue?style=for-the-badge&logo=R&logoColor=lightblue)
 ![](https://img.shields.io/badge/Developemnt-active-green?style=for-the-badge&logo=)
-![](https://img.shields.io/badge/R CMD check-failing-red?style=for-the-badge)
+![](https://img.shields.io/badge/R_CMD_check-failing-red?style=for-the-badge)
 ![](https://img.shields.io/github/issues/Abhi-1U/texor?color=orange&logo=github&logoColor=&style=for-the-badge)
 
 texor is a package that deals with multiple challenges that occour in conversion of LaTeX source files which typically generate a PDF, to a web friendly RJ-web-article format. 
