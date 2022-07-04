@@ -1,4 +1,4 @@
-# texor : tools for LaTeX source files into RJ-web-articles
+# texor : tools for converting LaTeX source files into RJ-web-articles
 ![](https://img.shields.io/badge/R-%3E=3.6.3-blue?style=for-the-badge&logo=R&logoColor=lightblue)
 ![](https://img.shields.io/badge/Developemnt-active-green?style=for-the-badge&logo=)
 ![](https://img.shields.io/badge/R_CMD_check-failing-red?style=for-the-badge)
