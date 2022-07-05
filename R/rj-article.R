@@ -88,8 +88,10 @@ convert_to_markdown<-function(article_dir){
                   "--lua-filter",image_filter,
                   "--lua-filter",code_block_filter
                   )
+    #output_format<-"markdown-simple_tables-multiline_tables-pipe_tables"
+    output_format<-"markdown-simple_tables-pipe_tables"
     # This will generate a markdown file with YAML headers.
-    rmarkdown::pandoc_convert(input_file,from = "latex",to= "markdown",options=pandoc_opt,output = md_file,citeproc = TRUE,verbose = TRUE)
+    rmarkdown::pandoc_convert(input_file,from = "latex",to= output_format,options=pandoc_opt,output = md_file,citeproc = TRUE,verbose = TRUE)
 }
 
 #' generate rmarkdown file in output folder
