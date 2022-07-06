@@ -21,13 +21,13 @@ include_style_file<-function(article_dir){
         after_doc_start<-setdiff(wrapper_file,before_doc_start)
         usepackage_metafix<-"\\usepackage{Metafix}"
         # Backup original wrapper file
-        write_file<-file("RJwrapper.tex.bk")
-        writeLines(wrapper_file, write_file)
-        close(write_file)
+        file.rename('RJwrapper.tex','RJwrapper.tex.bk')
         # write to original wrapper file
-        write_file<-file("RJwrapper.tex",'w')
-        writeLines(c(before_doc_start,usepackage_metafix,"",after_doc_start), write_file)
-        close(write_file)
+        xfun::write_utf8(
+            c(before_doc_start,usepackage_metafix,"",after_doc_start),
+            "RJwrapper.tex.new")
+        #
+        file.rename('RJwrapper.tex.new','RJwrapper.tex')
     }
     else{
     # If the wrapper file name is RJwrap.tex
@@ -82,12 +82,13 @@ convert_to_markdown<-function(article_dir){
     code_block_filter<-system.file("extdata/code_block_filter.lua", package = "texor")
     image_filter<-system.file("extdata/image_filter.lua", package = "texor")
     tikz_filter<-system.file("extdata/tikz_image_filter.lua", package = "texor")
+    knitr_filter<-system.file("extdata/knitr_filter.lua",package ="texor")
     pandoc_opt<-c("-s",
                   "--resource-path",abs_file_path,
                   "--lua-filter",bib_filter,
                   "--lua-filter",image_filter,
-                  "--lua-filter",code_block_filter
-                  )
+                  "--lua-filter",code_block_filter,
+                  "--lua-filter",knitr_filter)
     #output_format<-"markdown-simple_tables-multiline_tables-pipe_tables"
     output_format<-"markdown-simple_tables-pipe_tables"
     # This will generate a markdown file with YAML headers.
