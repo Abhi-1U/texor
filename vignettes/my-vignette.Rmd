@@ -6,8 +6,7 @@ author:
   - name: Abhishek Ulayil
     affiliation: (proposed)GSoC Contributer
     address:
-    - Somewhere in Mumbai
-    - India
+    - Mumbai,India
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{my-vignette}

@@ -87,3 +87,29 @@ inject_generated_image<-function(article_dir,file_name,image_path){
     writeLines(c(pre_tikz,include_graphics,"",post_tikz), write_file)
     close(write_file)
 }
+pre_process_tikz<-function(article_dir){
+    wrapper_types=c('wrapper.tex','RJwrap.tex','RJwrapper.tex')
+    wrapper_file=""
+    for(w_type in wrapper_types){
+        if(file.exists(file.path(article_dir, w_type))) {
+            print(paste("Tikz-tools Stage 1 : Found ",w_type))
+            wrapper_file=w_type
+        }
+    }
+    file_name<-find_src_file(article_dir,wrapper_file)
+    if(!grepl(".tex$",file_name)){
+        file_name<-paste0(file_name,".tex")
+    }
+    abs_file_path<-tools::file_path_as_absolute(article_dir)
+    input_file<-file_name
+    latex_template<-system.file("extdata/latex.template", package = "texor")
+    tikz_filter<-system.file("extdata/extract_tikz_filter.lua", package = "texor")
+    pandoc_opt<-c(
+                  "--resource-path",abs_file_path,
+                  "--lua-filter",tikz_filter,
+                  "--template",latex_template)
+    input_format<-"latex+raw_tex"
+    output_format<-"latex"
+    out_file<-"outfile.tex" # temporary solution will change it later
+    rmarkdown::pandoc_convert(input_file,from = input_format,to= output_format,options=pandoc_opt,output = out_file,verbose = TRUE)
+}

@@ -1,0 +1,35 @@
+% !TeX root = RJwrapper.tex (usually)
+% LaTeX title
+$if(title)$
+\title{$title$}
+$endif$
+% LaTeX author name
+$if(author)$
+\author{$author$}
+$endif$
+
+
+$for(include-before)$
+$include-before$
+
+$endfor$
+$if(toc)$
+$table-of-contents$
+
+$endif$
+$body$
+$for(include-after)$
+
+$include-after$
+$endfor$
+
+% LaTeX author address
+$if(address)$
+$for(address)$
+\address{$address$}
+$endfor$
+$endif$
+% LaTeX bib file link
+$if(bibliography)$
+\bibliography{$bibliography$}
+$endif$
