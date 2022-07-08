@@ -43,7 +43,7 @@ manage_tikz_images<-function(article_dir){
     tinytex::latexmk('tikz/tikz.tex',engine = 'pdflatex')
     # run pdf to png
     texor::make_png_files('','./tikz/tikz.pdf')
-    # copy over the file 
+    # copy over the file
     texor::Copy_Other_Files('.')
     # include tikz as pdf in the tex document
     image_path<-'tikz/tikz.png'
@@ -112,4 +112,34 @@ pre_process_tikz<-function(article_dir){
     output_format<-"latex"
     out_file<-"outfile.tex" # temporary solution will change it later
     rmarkdown::pandoc_convert(input_file,from = input_format,to= output_format,options=pandoc_opt,output = out_file,verbose = TRUE)
+}
+read_tikz_metadata<-function(article_dir){
+    wrapper_types=c('wrapper.tex','RJwrap.tex','RJwrapper.tex')
+    wrapper_file=""
+    for(w_type in wrapper_types){
+        if(file.exists(file.path(article_dir, w_type))) {
+            print(paste("Tikz-tools Stage 1 : Found ",w_type))
+            wrapper_file=w_type
+        }
+    }
+    file_name<-find_src_file(article_dir,wrapper_file)
+    if(!grepl(".tex$",file_name)){
+        file_name<-paste0(file_name,".tex")
+    }
+    src_file_data<- readLines(file.path(article_dir,file_name))
+    fig_start<- which(grepl("^\\s*\\\\begin\\{figure", src_file_data))
+    fig_end<- which(grepl("^\\s*\\\\end\\{figure", src_file_data))
+    pre_fig<- src_file_data[seq_len(fig_start)-1]
+    post_fig<-src_file_data[seq_len(fig_end)]
+    fig_data<-setdiff(post_fig,pre_fig)
+    caption_line<- which(grepl("^\\s*\\\\caption\\{", fig_data))
+    caption_data<- fig_data[caption_line]
+    caption_raw_text<- gsub("[[:space:]]", "",gsub("\\\\caption\\{|\\}","",caption_data))
+    label_line<- which(grepl("^\\s*\\\\label\\{", fig_data))
+    label_data<- fig_data[label_line]
+    label_raw_text<- gsub("[[:space:]]", "",gsub("\\\\label\\{|\\}","",label_data))
+    # write caption and label into a temp_metadata file
+    fileConn<-file("tikz_temp_meta.txt")
+    writeLines(paste(label_raw_text,"\n",caption_raw_text), fileConn)
+    close(fileConn)
 }
