@@ -15,8 +15,9 @@ function read_tikz()
     local data_file,err = io.open("tikz_temp_data.txt",'r')
     if data_file then
         -- read all lines of the file
-        local tikz_content = data_file:read "*a"
-        return tikz_content
+
+        local tikz_data = data_file:read "*a"
+        return tikz_data
     else
         print("error:", err)
         return "nil"
@@ -24,14 +25,31 @@ function read_tikz()
 end
 
 --[[
-Reads tikz related meta data in top-down sequence
+Reads tikz related caption data
 --]]
-function read_meta()
-    local meta_file,err = io.open("tikz_temp_meta.txt",'r')
+function read_caption()
+    local meta_file,err = io.open("tikz_caption_meta.txt",'r')
     if meta_file then
         -- read all lines of the file
         local meta_content = meta_file:read "*a"
-        return meta_content
+        local caption= meta_content:gsub("\n","")
+        return caption
+    else
+        print("error:", err)
+        return "Nil"
+    end
+end
+
+--[[
+Reads tikz related label data
+--]]
+function read_label()
+    local meta_file,err = io.open("tikz_label_meta.txt",'r')
+    if meta_file then
+        -- read all lines of the file
+        local meta_content = meta_file:read "*a"
+        local label = meta_content:gsub("\n","")
+        return label
     else
         print("error:", err)
         return "Nil"
@@ -41,9 +59,9 @@ end
 --[[
 Creates a new pandoc.RawInline with placeholder
 --]]
-local function markdown_tikz_block(data,metadata)
-    local attr="```{tikz, fig.cap = 'Funky tikz', fig.ext = 'png'}\n"
-    return pandoc.RawBlock('markdown', attr..data .. "\n" .. metadata .. "\n```")
+local function markdown_tikz_block(data,label,caption)
+    local attr="```{tikz ".. label .. ", fig.cap ='".. caption .."', fig.ext = 'png'}\n"
+    return pandoc.RawBlock('markdown', attr .. data .. "\n```")
 end
 
 --[[
@@ -61,8 +79,9 @@ function Div(el)
     if el.classes[1] == "StikzImage" then
         -- Reinstate the actual data (data gets read and removed from the temp_file)
         tikz_content=read_tikz()
-        meta_content=read_meta()
+        label=read_label()
+        caption=read_caption()
         -- return tikz content as a RawBlock which will be later treated as tikz in R-markdown
-        return markdown_tikz_block(tikz_content,"")
+        return markdown_tikz_block(tikz_content,label,caption)
     end
 end
