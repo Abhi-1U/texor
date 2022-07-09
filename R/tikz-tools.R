@@ -134,12 +134,16 @@ read_tikz_metadata<-function(article_dir){
     fig_data<-setdiff(post_fig,pre_fig)
     caption_line<- which(grepl("^\\s*\\\\caption\\{", fig_data))
     caption_data<- fig_data[caption_line]
-    caption_raw_text<- gsub("[[:space:]]", "",gsub("\\\\caption\\{|\\}","",caption_data))
+    caption_text<- gsub("\\\\caption\\{|","",caption_data)
+    caption_raw_text <- str_match(caption_text, "\\{\\s*(.*?)\\s*\\}")[,2]
     label_line<- which(grepl("^\\s*\\\\label\\{", fig_data))
     label_data<- fig_data[label_line]
-    label_raw_text<- gsub("[[:space:]]", "",gsub("\\\\label\\{|\\}","",label_data))
+    label_raw_text<- gsub("fig:","",gsub("[[:space:]]", "",gsub("\\\\label\\{|\\}","",label_data)))
     # write caption and label into a temp_metadata file
-    fileConn<-file("tikz_temp_meta.txt")
-    writeLines(paste(label_raw_text,"\n",caption_raw_text), fileConn)
+    fileConn<-file("tikz_label_meta.txt")
+    writeLines(paste(label_raw_text), fileConn)
+    close(fileConn)
+    fileConn<-file("tikz_caption_meta.txt")
+    writeLines(paste(caption_raw_text), fileConn)
     close(fileConn)
 }
