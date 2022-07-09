@@ -81,14 +81,15 @@ convert_to_markdown<-function(article_dir){
     bib_filter<-system.file("extdata/bib_filter.lua", package = "texor")
     code_block_filter<-system.file("extdata/code_block_filter.lua", package = "texor")
     image_filter<-system.file("extdata/image_filter.lua", package = "texor")
-    tikz_filter<-system.file("extdata/tikz_image_filter.lua", package = "texor")
+    post_tikz_filter<-system.file("extdata/reinstate_tikz_filter.lua", package = "texor")
     knitr_filter<-system.file("extdata/knitr_filter.lua",package ="texor")
     pandoc_opt<-c("-s",
                   "--resource-path",abs_file_path,
                   "--lua-filter",bib_filter,
                   "--lua-filter",image_filter,
                   "--lua-filter",code_block_filter,
-                  "--lua-filter",knitr_filter)
+                  "--lua-filter",knitr_filter,
+                  "--lua-filter",post_tikz_filter)
     #output_format<-"markdown-simple_tables-multiline_tables-pipe_tables"
     output_format<-"markdown-simple_tables-pipe_tables"
     # This will generate a markdown file with YAML headers.
