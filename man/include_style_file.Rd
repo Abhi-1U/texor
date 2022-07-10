@@ -2,7 +2,7 @@
 % Please edit documentation in R/rj-article.R
 \name{include_style_file}
 \alias{include_style_file}
-\title{Include Style File}
+\title{Include a Metafix.sty style file}
 \usage{
 include_style_file(article_dir)
 }
@@ -13,5 +13,9 @@ include_style_file(article_dir)
 
 }
 \description{
-Include Style File
+This style file helps texor and pandoc to retain metadata and ease
+the conversion process.
+}
+\examples{
+texor::include_style_file(".")
 }

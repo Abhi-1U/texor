@@ -19,3 +19,6 @@ generate_rmd(markdown_file, volume, issue)
 \description{
 generate rmarkdown file in output folder
 }
+\examples{
+texor::generate_rmd("/2009-05/RJwrapper.md", 1, 1)
+}

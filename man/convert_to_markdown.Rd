@@ -2,16 +2,19 @@
 % Please edit documentation in R/rj-article.R
 \name{convert_to_markdown}
 \alias{convert_to_markdown}
-\title{convert to Rmarkdown}
+\title{convert latex(wrapper) file to markdown}
 \usage{
 convert_to_markdown(article_dir)
 }
 \arguments{
-\item{article_dir}{}
+\item{article_dir}{path to the directory which contains tex article}
 }
 \value{
 
 }
 \description{
-convert to Rmarkdown
+convert latex(wrapper) file to markdown
+}
+\examples{
+texor::convert_to_markdown(".")
 }
