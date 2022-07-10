@@ -2,18 +2,24 @@
 % Please edit documentation in R/image-tools.R
 \name{make_png_files}
 \alias{make_png_files}
-\title{make png file}
+\title{Internal function to invoke `pdftools:pdf_convert()`}
 \usage{
-make_png_files(article_dir, input_files)
+make_png_files(input_files)
 }
 \arguments{
-\item{article_dir}{path to the directory which contains tex article}
-
 \item{input_files}{list of file names to be converted to png}
 }
 \value{
 
 }
 \description{
-make png file
+This function is designed to be used internally and is called
+by `texor::pdf_to_png(file_dir)` function for converting a
+filtered list of pdf images.
+}
+\examples{
+pdf_file <- system.file("extdata/examples/pdf_conversion/normal.pdf",
+                 package = "texor")
+texor::make_png_files(c(pdf_file))
+
 }

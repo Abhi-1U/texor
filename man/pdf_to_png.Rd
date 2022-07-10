@@ -2,7 +2,8 @@
 % Please edit documentation in R/image-tools.R
 \name{pdf_to_png}
 \alias{pdf_to_png}
-\title{pdf_to_png}
+\title{convert pdf images in the directory to png format
+using pdftools and poppler utils.}
 \usage{
 pdf_to_png(article_dir)
 }
@@ -13,5 +14,12 @@ pdf_to_png(article_dir)
 
 }
 \description{
-pdf_to_png
+Note : The extensions in LaTeX source code will
+automatically be changed during pandoc conversion
+by a lua filter (refer : inst/extdata/image_filter.lua)
+}
+\examples{
+file_dir <- system.file("extdata/examples/pdf_conversion/",
+             package = "texor")
+texor::pdf_to_png(file_dir)
 }
