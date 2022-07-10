@@ -13,12 +13,12 @@ modify_table_environment(file_name)
 
 }
 \description{
-changes are made to :
-1. table* environment to table environment
-2. \\multicolumn to \\multicolumnx
 These are due to the pandoc's limitations and ease in conversion.
 }
 \details{
+changes are made to :
+1. table* environment to table environment
+2. \\multicolumn to \\multicolumnx
 \\multicolumnx is redefined in Metafix.sty as
 \\renewcommand{\\multicolumnx}[3]{\\multicolumn{#1}{c}{#3}}
 }

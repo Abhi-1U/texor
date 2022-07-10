@@ -1,9 +1,10 @@
 unparsed <- function(...) {
     structure(list(...), class = c("unparsed", "article"))
 }
-make_article <- function(id, slug = "", authors = "", title = "", editor = "", ae = "",
-                         reviewers = "", status = "", path = "",type = "", suppl = "",
-                         keywords = "", otherids = "") {
+make_article <- function(id, slug = "",
+                        authors = "", title = "", editor = "", ae = "",
+                         reviewers = "", status = "", path = "",type = "",
+                          suppl = "", keywords = "", otherids = "") {
     structure(list(
         id = parse_id(id),
         other_id = otherids,
@@ -36,7 +37,8 @@ article <- function(..., quiet = FALSE) {
 }
 
 load_article <- function(path, quiet = FALSE) {
-  fields <- c("ID", "Slug", "Authors", "Keywords", "OtherIDs", "Title", "Editor", "AE", "Reviewers", "Status", "Suppl")
+  fields <- c("ID", "Slug", "Authors", "Keywords", 
+  "OtherIDs", "Title", "Editor", "AE", "Reviewers", "Status", "Suppl")
   dcf <- read.dcf(path, fields = fields, keep.white = fields)
   if (nrow(dcf) != 1) stop("DCF parsing error: ", path, call. = FALSE)
 

@@ -1,11 +1,11 @@
 #' function to modify env and commands in TeX using GNU sed
 #'
+#'These are due to the pandoc's limitations and ease in conversion.
 #'
+#' @details
 #' changes are made to :
 #' 1. table* environment to table environment
 #' 2. \\multicolumn to \\multicolumnx
-#' These are due to the pandoc's limitations and ease in conversion.
-#'
 #' \\multicolumnx is redefined in Metafix.sty as
 #' \\renewcommand{\\multicolumnx}[3]{\\multicolumn{#1}{c}{#3}}
 #' @param file_name name of the Tex file where modifications are to be made
