@@ -1,42 +1,42 @@
-manage_tikz_images<-function(article_dir){
-    if (getwd()!= article_dir) {
-        setwd(article_dir)
-    }
-    # checking for RJwrapper and fetching the file name for tex file
-    file_name <- get_texfile_name(article_dir)
-    # extract tikz blocks as objects
-    tikz_object <- extract_embeded_tikz_image(article_dir, file_name)
-    # isolate tikz into a template latex file
-    tikz_template <- c(
-        "\\documentclass{standalone}",
-        "\\usepackage{xcolor}",
-        "\\usepackage{verbatim}",
-        "\\usepackage{tikz}",
-        "\\newcommand{\\CRANpkg}[1]{\\href{https://CRAN.R-project.org/package=#1}{\\pkg{#1}}}%",
-        "\\newcommand{\\pkg}[1]{#1}",
-        "\\newcommand{\\code}[1]{#1 }",
-        "\\usetikzlibrary{fit}",
-        "\\begin{document}",
-        "\\nopagecolor",
-        tikz_object,
-        "\\end{document}"
-    )
-    fileconn <- file("tikz.tex")
-    writeLines(tikz_template, fileconn)
-    close(fileconn)
-    # convert the tex file into pdf
-    dir.create("tikz", showWarnings = FALSE)
-    tikz_dir <- paste(article_dir, "tikz", sep = "/")
-    file.copy("tikz.tex", tikz_dir, copy.mode = TRUE, recursive = FALSE)
-    tinytex::latexmk("tikz/tikz.tex", engine = "pdflatex")
-    # run pdf to png
-    texor::make_png_files("./tikz/tikz.pdf")
-    # copy over the file
-    texor::copy_other_files(".")
-    # include tikz as pdf in the tex document
-    image_path <- "tikz/tikz.png"
-    texor::inject_generated_image(article_dir, file_name, image_path)
-}
+# manage_tikz_images<-function(article_dir){
+#     if (getwd()!= article_dir) {
+#         setwd(article_dir)
+#     }
+#     # checking for RJwrapper and fetching the file name for tex file
+#     file_name <- get_texfile_name(article_dir)
+#     # extract tikz blocks as objects
+#     tikz_object <- extract_embeded_tikz_image(article_dir, file_name)
+#     # isolate tikz into a template latex file
+#     tikz_template <- c(
+#         "\\documentclass{standalone}",
+#         "\\usepackage{xcolor}",
+#         "\\usepackage{verbatim}",
+#         "\\usepackage{tikz}",
+#         "\\newcommand{\\CRANpkg}[1]{\\href{https://CRAN.R-project.org/package=#1}{\\pkg{#1}}}%",
+#         "\\newcommand{\\pkg}[1]{#1}",
+#         "\\newcommand{\\code}[1]{#1 }",
+#         "\\usetikzlibrary{fit}",
+#         "\\begin{document}",
+#         "\\nopagecolor",
+#         tikz_object,
+#         "\\end{document}"
+#     )
+#     fileconn <- file("tikz.tex")
+#     writeLines(tikz_template, fileconn)
+#     close(fileconn)
+#     # convert the tex file into pdf
+#     dir.create("tikz", showWarnings = FALSE)
+#     tikz_dir <- paste(article_dir, "tikz", sep = "/")
+#     file.copy("tikz.tex", tikz_dir, copy.mode = TRUE, recursive = FALSE)
+#     tinytex::latexmk("tikz/tikz.tex", engine = "pdflatex")
+#     # run pdf to png
+#     texor::make_png_files("./tikz/tikz.pdf")
+#     # copy over the file
+#     texor::copy_other_files(".")
+#     # include tikz as pdf in the tex document
+#     image_path <- "tikz/tikz.png"
+#     texor::inject_generated_image(article_dir, file_name, image_path)
+# }
 
 #' Check if article has tikz images or not
 #'
@@ -61,6 +61,16 @@ article_has_tikz <- function(article_dir, file_name) {
     }
 }
 
+#' a sub-function to isolate a single tikz image
+#'
+#' @param src_file_data path to the directory which contains tex article
+#' @param fig_start start point of figure around tikz image (integer)
+#' @param fig_end end point of figure around tikz image (integer)
+#'
+#' @return tikz image data in a list of strings
+#' @export
+#'
+#' @examples
 extract_single_tikz <- function(src_file_data, fig_start, fig_end) {
     pre_fig <- src_file_data[seq_len(fig_start) - 1]
     post_fig <- src_file_data[seq_len(fig_end)]
@@ -72,6 +82,16 @@ extract_single_tikz <- function(src_file_data, fig_start, fig_end) {
     tikz_data <- setdiff(post_tikz, pre_tikz)
     return(tikz_data)
 }
+#' a sub-function to isolate multiple tikz images
+#'
+#' @param src_file_data path to the directory which contains tex article
+#' @param fig_start_list start points of figures around a tikz image (list)
+#' @param fig_end_list end points of figures around a tikz image (list)
+#'
+#' @return tikz image data in a list of list of strings
+#' @export
+#'
+#' @examples
 extract_multiple_tikz <- function(src_file_data,
                         fig_start_list, fig_end_list) {
     tikz_image_lines <- list()
@@ -84,6 +104,18 @@ extract_multiple_tikz <- function(src_file_data,
     return(tikz_image_lines)
 }
 
+#' extracts embedded tikz image(s) from a tex file
+#'
+#' @description
+#'This will isolate the tikz image into a new text file which will be
+#'read by a lua filter
+#' @param article_dir path to the directory which contains tex article
+#' @param file_name name of the tex file
+#'
+#' @return
+#' @export tikz_main_data.txt this file contains isolated tikz code
+#'
+#' @examples
 extract_embeded_tikz_image <- function(article_dir, file_name) {
     print(paste("TKZ-S2 : extracting Tikz Code from ", file_name))
     if (! article_has_tikz(article_dir, file_name)) {
@@ -99,8 +131,9 @@ extract_embeded_tikz_image <- function(article_dir, file_name) {
     # all possibke values of tikz start points
     tikz_image_list <- which(grepl("^\\s*\\\\begin\\{tikzpicture",
                             src_file_data))
+    print(paste("Debug 1 : ", tikz_image_list))
     # checks if there are multiple figures or not
-    if (identical(class(fig_start_list), "integer")) {
+    if (length(fig_start_list) == 1) {
         # if there is only one figure then it is possibly the one with tikz
         if (identical(class(tikz_image_list), "integer") &&
             (! identical(tikz_image_list, integer(0)))) {
@@ -111,13 +144,14 @@ extract_embeded_tikz_image <- function(article_dir, file_name) {
         }
     } else {
         # case of multiple figure but single tikz image
-        if (identical(class(tikz_image_list), "integer") &&
+        if (length(fig_start_list) > 1 &&
             (! identical(tikz_image_list, integer(0)))) {
             for (iterator in seq_along(fig_start_list)) {
                 if (tikz_image_list > fig_start_list[iterator] &&
                     tikz_image_list < fig_end_list[iterator]) {
                         tikz_fig_start <- fig_start_list[iterator]
                         tikz_fig_end <- fig_end_list[iterator]
+                        print(paste("Debug 2 : ", tikz_fig_start))
                 }
             }
         # case of multiple tikz images and multiple figures
@@ -145,6 +179,8 @@ extract_embeded_tikz_image <- function(article_dir, file_name) {
         }
     # handle a single tikz image
     } else {
+        print(paste("Debug 3 : ", tikz_fig_start))
+        print(tikz_fig_start)
         tikz_image <- extract_single_tikz(src_file_data,
                                         tikz_fig_start,
                                         tikz_fig_end)
@@ -200,19 +236,31 @@ check_tikz_set <- function(pre_fig, fig_data) {
 
 
 
+#
+# inject_generated_image <- function(article_dir, file_name, image_path){
+#     tex_file <- readLines(file.path(article_dir, file_name))
+#     tikz_start <- which(grepl("^\\s*\\\\begin\\{tikzpicture", tex_file))
+#     pre_tikz <- tex_file[seq_len(tikz_start - 1)]
+#     post_tikz <- setdiff(tex_file, pre_tikz)
+#     include_graphics <- paste("\\includegraphics[scale=1]{",
+#                              image_path, "}" ,sep = "")
+#     # write to original wrapper file
+#     write_file <- file(file_name, "w")
+#     writeLines(c(pre_tikz,include_graphics, "", post_tikz), write_file)
+#     close(write_file)
+# }
 
-inject_generated_image <- function(article_dir, file_name, image_path){
-    tex_file <- readLines(file.path(article_dir, file_name))
-    tikz_start <- which(grepl("^\\s*\\\\begin\\{tikzpicture", tex_file))
-    pre_tikz <- tex_file[seq_len(tikz_start - 1)]
-    post_tikz <- setdiff(tex_file, pre_tikz)
-    include_graphics <- paste("\\includegraphics[scale=1]{",
-                             image_path, "}" ,sep = "")
-    # write to original wrapper file
-    write_file <- file(file_name, "w")
-    writeLines(c(pre_tikz,include_graphics, "", post_tikz), write_file)
-    close(write_file)
-}
+
+#' pre-process tex file for handling tikz images
+#'
+#' This function will remove tikz images from raw_latex and replace
+#' it with placeholders, which will be filled by a lua filter later.
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return
+#' @export outfile.tex a modified latex document
+#'
+#' @examples
 pre_process_tikz <- function(article_dir){
     input_file <- get_texfile_name(article_dir)
     abs_file_path <- tools::file_path_as_absolute(article_dir)
@@ -237,6 +285,17 @@ pre_process_tikz <- function(article_dir){
                               verbose = TRUE)
 }
 
+#' parse tikz metadata like label and caption
+#'
+#' Also export it to a new text file which can be read by a lua filter
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return
+#' @export tikz_caption_meta.txt contains caption of tikz image
+#' @export tikz_label_meta.txt contains label of tikz image
+#'
+#'
+#' @examples
 read_tikz_metadata <- function(article_dir) {
     file_name <- get_texfile_name(article_dir)
     src_file_data <- readLines(file.path(article_dir, file_name))
