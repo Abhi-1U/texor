@@ -1,72 +1,16 @@
-generate_bib_file<-function(article_dir){
+generate_bib_file <- function(article_dir) {
     # checking for RJwrapper and fetching the file name for tex file
-    if(file.exists(file.path(article_dir, "RJwrapper.tex"))) {
-        print("Stage 1 : Found RJWrapper.tex")
-        file_name<-find_src_file(article_dir,"RJwrapper.tex")
-        if(grepl(".tex$",file_name)){
-            # read the bibliography from file_name
-            # if bib_file already exists!
-            if(find_bib_file()==paste(toString(tools::file_path_sans_ext(file_name)),".bib",sep="")){
-                print('Bib file exists')
-                link_bibliography_line(article_dir,file_name)
-            }else{
-                print("Using parser to generate bibtex entries")
-                bib_items<-extract_embeded_bibliography(article_dir,file_name)
-                bibtex_data<-convert_bbl_to_bib(bib_items,article_dir,file_name)
-                link_bibliography_line(article_dir,file_name)
-            }
-        }
-        else{
-            # add the file extension
-            file_name<-paste0(file_name,".tex")
-            print(paste("Found ",file_name))
-            # read the bibliography from file_name
-            # if bib_file already exists!
-            if(find_bib_file()==paste(toString(tools::file_path_sans_ext(file_name)),".bib",sep="")){
-                print('Bib file exists')
-                link_bibliography_line(article_dir,file_name)
-            }else{
-                print("Using parser to generate bibtex entries")
-                bib_items<-extract_embeded_bibliography(article_dir,file_name)
-                bibtex_data<-convert_bbl_to_bib(bib_items,article_dir,file_name)
-                link_bibliography_line(article_dir,file_name)
-            }
-        }
-    }
-    # checking for RJwrap and fetching the file name for tex file
-    else{
-        if(file.exists(file.path(article_dir, "RJwrap.tex"))) {
-            file_name<-find_src_file(article_dir,"RJwrapper.tex")
-            if(grepl(".tex$",file_name)){
-                # read the bibliography from file_name
-                # read the bibliography from file_name
-                # if bib_file already exists!
-                if(find_bib_file()==paste(toString(tools::file_path_sans_ext(file_name)),".bib",sep="")){
-                    link_bibliography_line(article_dir,file_name)
-                }else{
-                    bib_items<-extract_embeded_bibliography(article_dir,file_name)
-                    bibtex_data<-convert_bbl_to_bib(bib_items,article_dir,file_name)
-                    link_bibliography_line(article_dir,file_name)
-                }
-            }
-            else{
-                # add the file extension
-                file_name<-paste0(file_name,".tex")
-                # read the bibliography from file_name
-                # if bib_file already exists!
-                if(find_bib_file()==paste(toString(tools::file_path_sans_ext(file_name)),".bib",sep="")){
-                    link_bibliography_line(article_dir,file_name)
-                }else{
-                    bib_items<-extract_embeded_bibliography(article_dir,file_name)
-                    bibtex_data<-convert_bbl_to_bib(bib_items,article_dir,file_name)
-                    link_bibliography_line(article_dir,file_name)
-                }
-            }
-        }
-        # No file found in directory
-        else{
-            print('RJwrapper.tex or RJwrap not found !')
-        }
+    file_name <- get_texfile_name(article_dir)
+    bib_file <- get_bib_file(article_dir, file_name)
+    if (! identical(bib_file, "")) {
+            link_bibliography_line(article_dir, file_name)
+    } else {
+        print("Using parser to generate bibtex entries")
+        bib_items <- extract_embeded_bibliography(
+                    article_dir, file_name)
+        bibtex_data <- convert_bbl_to_bib(
+                    bib_items, article_dir, file_name)
+        link_bibliography_line(article_dir, file_name)
     }
 }
 
@@ -257,35 +201,7 @@ link_bibliography_line<-function(article_dir,file_name){
     writeLines(src_file_data, write_file)
     close(write_file)
     # write to original wrapper file
-    write_file<-file(file_name,'a')
+    write_file<-file(file_name, 'a')
     writeLines(c(bib_line), write_file,)
     close(write_file)
-}
-find_src_file<-function(article_dir,lookup_file){
-    print(paste("Stage 2 : Looking for source file included in",lookup_file))
-    wrapper_file <- readLines(file.path(article_dir,lookup_file))
-    article_start <- which(grepl("^\\s*\\\\begin\\{article\\}", wrapper_file))
-    pre_marker<-wrapper_file[seq_len(article_start)]
-    post_marker<- wrapper_file[seq_len(article_start)+1]
-    source_line<-setdiff(post_marker,pre_marker)
-    diff_patt<-c("\\input{","}")
-    intermediate<-setdiff(source_line,diff_patt)
-    tex_file<- gsub("[[:space:]]", "",gsub("\\\\input\\{|\\}","",source_line))
-    print(paste("Stage 2 : Found source file ",tex_file))
-    return(tex_file)
-}
-
-find_bib_file<-function(){
-    print("Stage 3 : Finding bib files")
-    file_list=list.files(recursive = FALSE)
-    extensions = c("*.bib")
-    bib_file = unique(grep(paste(extensions,collapse="|"), file_list, value=TRUE))
-    if(identical(bib_file, character(0)) ){
-        print("Stage 3 : No Bib files found !")
-        return("")
-    }
-    else{
-        print(paste("Stage 3 : Found Bib file ",bib_file))
-        return(bib_file)
-    }
 }

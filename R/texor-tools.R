@@ -51,8 +51,58 @@ get_texfile_name <- function(article_dir) {
     source_line <- setdiff(post_marker, pre_marker)
     tex_file <- gsub("[[:space:]]", "",
                 gsub("\\\\input\\{|\\}", "", source_line))
-    if (!grepl(".tex$",tex_file)) {
+    if (!grepl(".tex$", tex_file)) {
         tex_file <- paste0(tex_file, ".tex")
     }
     return(tex_file)
+}
+
+#' finds the bib file in directory which is referenced in the article
+#'
+#' @param article_dir path to the directory which contains tex article
+#' @param file_name name of the tex file
+#'
+#' @return name of bib file (character)
+#' @export
+#'
+#' @examples
+get_bib_file <- function(article_dir, file_name) {
+    file_list <- list.files(article_dir, recursive = FALSE)
+    extensions <- c("*.bib")
+    linked_bib <- toString(paste(tools::file_path_sans_ext(file_name),
+                    ".bib", sep = ""))
+    bib_file <- unique(grep(paste(extensions, collapse = "|"),
+                            file_list, value = TRUE))
+    if (identical(bib_file, character(0))) {
+        print("No Bib files found !")
+        return("")
+    }
+    if (identical(class(bib_file), "character") &&
+        identical(linked_bib, bib_file)) {
+        print(paste("Found Bib file ", bib_file))
+        return(bib_file)
+    } else {
+        for (file in bib_file) {
+            if (identical(file, linked_bib)) {
+                print(paste("Found Bib file ", bib_file))
+                return(file)
+            }
+        }
+    }
+}
+
+#' quick function to writelines to a file
+#'
+#' @param file_name name of text file to write contents to
+#' @param mode mode of opening
+#' @param raw_text the text/ list of lines to be written
+#'
+#' @return
+#' @export create/append/write a new file
+#'
+#' @examples
+write_external_file <- function(file_name, mode, raw_text) {
+    write_file <- file(file_name, mode)
+    writeLines(raw_text, write_file)
+    close(write_file)
 }
