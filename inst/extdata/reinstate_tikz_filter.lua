@@ -12,7 +12,7 @@ License:   MIT – see LICENSE file for details
 Reads tikz related data in top-down sequence
 --]]
 function read_tikz()
-    local data_file,err = io.open("tikz_temp_data.txt",'r')
+    local data_file,err = io.open("tikz_main_data.txt",'r')
     if data_file then
         -- read all lines of the file
 

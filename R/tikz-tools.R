@@ -74,7 +74,7 @@ article_has_tikz <- function(article_dir, file_name) {
 extract_single_tikz <- function(src_file_data, fig_start, fig_end) {
     pre_fig <- src_file_data[seq_len(fig_start) - 1]
     post_fig <- src_file_data[seq_len(fig_end)]
-    fig_data <- setdiff(post_fig,pre_fig)
+    fig_data <- setdiff(post_fig, pre_fig)
     tikz_start <- which(grepl("^\\s*\\\\begin\\{tikzpicture", fig_data))
     tikz_end <- which(grepl("^\\s*\\\\end\\{tikzpicture", fig_data))
     pre_tikz <- fig_data[seq_len(tikz_start - 1)]
@@ -170,7 +170,7 @@ extract_embeded_tikz_image <- function(article_dir, file_name) {
         }
     }
     # handle multiple tikz images
-    if (! identical(class(tikz_fig_start), "integer")) {
+    if (length(tikz_fig_start) == 1) {
         tikz_image <- extract_multiple_tikz(src_file_data,
                                             tikz_fig_start,
                                             tikz_fig_end)
@@ -181,6 +181,10 @@ extract_embeded_tikz_image <- function(article_dir, file_name) {
     } else {
         print(paste("Debug 3 : ", tikz_fig_start))
         print(tikz_fig_start)
+        tikz_style <- get_single_tikz_styleset(src_file_data,
+                                        tikz_fig_start,
+                                        tikz_fig_end)
+        write_external_file("tikz_main_data.txt", "a", tikz_style)
         tikz_image <- extract_single_tikz(src_file_data,
                                         tikz_fig_start,
                                         tikz_fig_end)
@@ -188,45 +192,51 @@ extract_embeded_tikz_image <- function(article_dir, file_name) {
     }
 }
 
-check_tikz_set <- function(pre_fig, fig_data) {
-    tikz_set_start <- NULL
-    tikz_set_end <- NULL
+#' an internal method to isolate tikz styleset
+#'
+#' @param src_file_data source file contents
+#' @param fig_start starting point of figure of interest
+#' @param fig_end end point of figure of interest
+#'
+#' @return tikz_styleset lines as a list of strings
+#' @export
+#'
+#' @examples
+get_single_tikz_styleset <- function(src_file_data, fig_start, fig_end) {
     tikz_set_data <- ""
-    tikz_style_in_fig <- which(grepl("^\\s*\\\\tikzstyle\\{", fig_data))
-    tikz_style_pre_fig <- which(grepl("^\\s*\\\\tikzstyle\\{", pre_fig))
-    tikz_set_in_fig <- which(grepl("^\\s*\\\\tikzset\\{", fig_data))
-    tikz_set_pre_fig <- which(grepl("^\\s*\\\\tikzset\\{", pre_fig))
-    if (identical(tikz_style_in_fig, integer(0))) {
-        tikz_style_in_fig <- FALSE
-    } else if (identical(tikz_style_pre_fig, integer(0))) {
-        tikz_style_pre_fig <- FALSE
-    } else if (identical(tikz_set_in_fig, integer(0))) {
-        tikz_set_in_fig <- FALSE
-    } else if (identical(tikz_set_pre_fig, integer(0))) {
-        tikz_set_pre_fig <- FALSE
+    tikz_set_pos <- which(grepl("^\\s*\\\\tikzset\\{", src_file_data))
+    tikz_style_pos <- which(grepl("^\\s*\\\\tikzstyle\\{", src_file_data))
+    if (identical(tikz_set_pos, integer(0))) {
+        tikz_set_pos <- FALSE
     }
-    points <- c(
-        tikz_style_in_fig,
-        tikz_style_pre_fig,
-        tikz_set_pre_fig,
-        tikz_set_in_fig
-    )
-    check_points <- c(
-        "tikz_style_in_fig",
-        "tikz_style_pre_fig",
-        "tikz_set_pre_fig",
-        "tikz_set_in_fig"
-    )
-    iterator <- 1
-    for (point in points) {
-        if (point != FALSE) {
-             tikz_set_start <- point
-             break
+    if (identical(tikz_style_pos, integer(0))) {
+        tikz_style_pos <- FALSE
+    }
+    if (! identical(class(tikz_style_pos), "logical") &&
+         tikz_style_pos < fig_end) {
+        pre_tikz_set <- src_file_data[seq_len(tikz_style_pos)-1]
+        post_tikz_set <- setdiff(src_file_data, pre_tikz_set)
+        style_ending <- which(grepl("\\]$", post_tikz_set))[1]
+        # single line style
+        if (style_ending == 1) {
+            tikz_set_data <- post_tikz_set[style_ending]
         } else {
-            iterator <- iterator + 1
+            tikz_set_data <- post_tikz_set[seq_len(style_ending)]
         }
     }
-    post_tikz_set_start <- points[iterator]
+    if (! identical(class(tikz_set_pos), "logical") &&
+         tikz_set_pos < fig_end) {
+        pre_tikz_set <- src_file_data[seq_len(tikz_set_pos) - 1]
+        post_tikz_set<- src_file_data[(tikz_set_pos - 1):length(src_file_data)]
+        style_ending <- which(grepl("^\\}", post_tikz_set))[1]
+        # single line style content
+        if (style_ending == 1) {
+            tikz_set_data <- post_tikz_set[style_ending]
+        # multiple line style content
+        } else {
+            tikz_set_data <- post_tikz_set[seq_len(style_ending)]
+        }
+    }
     return(tikz_set_data)
 }
 
@@ -261,7 +271,7 @@ check_tikz_set <- function(pre_fig, fig_data) {
 #' @export outfile.tex a modified latex document
 #'
 #' @examples
-pre_process_tikz <- function(article_dir){
+pre_process_tikz <- function(article_dir) {
     input_file <- get_texfile_name(article_dir)
     abs_file_path <- tools::file_path_as_absolute(article_dir)
     latex_template <- system.file(
