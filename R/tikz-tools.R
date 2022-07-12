@@ -275,10 +275,10 @@ pre_process_tikz <- function(article_dir) {
     input_file <- get_texfile_name(article_dir)
     abs_file_path <- tools::file_path_as_absolute(article_dir)
     latex_template <- system.file(
-                        "extdata/latex.template",
+                        "extdata/template/latex.template",
                         package = "texor")
     tikz_filter <- system.file(
-                        "extdata/extract_tikz_filter.lua",
+                        "extdata/filters/extract_tikz_filter.lua",
                         package = "texor")
     pandoc_opt <- c(
                   "--resource-path", abs_file_path,

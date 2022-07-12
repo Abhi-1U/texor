@@ -6,7 +6,7 @@ function CodeBlock(block)
 end
 
 
-ENV_CLASSES = { 'example', 'example*', 'Sinput', 'Soutput', 'Sin','Sout','Scode'}
+ENV_CLASSES = { 'example', 'example*', 'Sinput', 'Soutput', 'Sin','Sout','Scode','smallverbatim'}
 
 --[ Legacy function
 local function markdown(s)
