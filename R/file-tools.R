@@ -147,6 +147,5 @@ copy_other_files <- function(from_path) {
 #'
 produce_html <- function(input_file_path) {
     rmarkdown::render(
-        input = input_file_path,
-        output_format = "rjtools::rjournal_web_article")
+        input = input_file_path)
 }

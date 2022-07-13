@@ -60,7 +60,7 @@ convert_to_markdown <- function(article_dir) {
     post_tikz_filter <- system.file(
                 "extdata/filters/reinstate_tikz_filter.lua", package = "texor")
     knitr_filter <- system.file(
-                "extdata/filters/knitr_filter.lua",package = "texor")
+                "extdata/filters/knitr_filter.lua", package = "texor")
     pandoc_opt <- c("-s",
                   "--resource-path", abs_file_path,
                   "--lua-filter", bib_filter,
@@ -68,7 +68,6 @@ convert_to_markdown <- function(article_dir) {
                   "--lua-filter", code_block_filter,
                   "--lua-filter", knitr_filter,
                   "--lua-filter", post_tikz_filter)
-    #output_format<-"markdown-simple_tables-multiline_tables-pipe_tables"
     output_format <- "markdown-simple_tables-pipe_tables"
     # This will generate a markdown file with YAML headers.
     rmarkdown::pandoc_convert(input_file,
@@ -93,8 +92,8 @@ convert_to_markdown <- function(article_dir) {
 #' texor::generate_rmd("/2009-05/RJwrapper.md", 1, 1)
 generate_rmd <- function(markdown_file, volume, issue) {
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
+    # reads the abstract from the second author field
     metadata$abstract <- metadata$author[2]
-    #metadata$emails<-metadata$author[3:length(metadata$author)]
     metadata$author <- lapply(
             strsplit(metadata$address, "\\\n", fixed = TRUE),
             function(person) {
@@ -148,9 +147,14 @@ generate_rmd <- function(markdown_file, volume, issue) {
             issue_month, "01"), format = "%Y %m %d")
         )
     }
+    if (toString(metadata$abstract) =="NA") {
+        metadata$abstract <- paste0("The '", metadata$title,
+                                    "' article from the'", issue_year,
+                                    "'-'", issue, "' issue.")
+    }
     front_matter <- list(
         title = metadata$title,
-        abstract = metadata$abstract, #%||% paste0('The "', metadata$title, '" article from the ', issue_year, '-', issue, ' issue.'),
+        abstract = metadata$abstract, #%||% ,
         author = metadata$author,
         date = format_non_null(article_metadata$online),
         date_received = format_non_null(article_metadata$acknowledged),
@@ -172,7 +176,8 @@ generate_rmd <- function(markdown_file, volume, issue) {
             `rjtools::rjournal_web_article` = list(
                 self_contained = FALSE,
                 toc = FALSE,
-                legacy_pdf = TRUE
+                texor_export = TRUE
+                #legacy_pdf = FALSE
             )
             # `rjtools::rjournal_pdf_article` = pdf_args
         )
@@ -186,8 +191,6 @@ generate_rmd <- function(markdown_file, volume, issue) {
         article_body <- c(article_body, pandoc_md_contents[-(1:delimiters[2])])
 
     input_file <- basename(markdown_file)
-    template_path <- paste(find.package("texor"),
-                "extdata/template/rmd-style-markdown.template", sep = "/")
     output_file_name <- paste(dirname(markdown_file),
                                     "/output/",
                             toString(tools::file_path_sans_ext(input_file)),
