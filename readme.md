@@ -10,17 +10,17 @@ texor is a package that deals with multiple challenges that occour in conversion
 
 1. RJournal based LaTeX files with macros such as `\pkg`,`\CRANpkg`,`\code`
 2. Reading Metadata from LaTeX file as well as DESCRIPTION.
-3. Reading Bibliography from Bibtex files and ignoring `\thebibliography`
-4. Supports Code Environments like `Sinput`,`Soutput`, `example` ,`example*`,`verbatim` with code highlight.
+3. Reading bibliography from bibtex files and ignoring `\thebibliography`
+4. Supports code environments like `Sinput`,`Soutput`, `example` ,`example*`,`verbatim` with code highlight.
 5. Supports graphics included as PDF,PNG,JPG.
-6. Functions to Convert PDF graphics to PNG.
-7. Most Tables are supported.
+6. Functions to convert PDF graphics to PNG.
+7. almost all tables are supported with a few exceptions.
 8. Other things like citations,links,footnotes,math are also supported.
+9. A parser to read and convert inbuilt `\thebibliography` to bibtex
 
 ### Work in Progress Features
 
 1. Tikz graphics compilation support functions
 2. Better Documentation as vignettes, man pages, articles, web-resource
-3. Comprehensive table support for more types
-4. table/equation Numbering
-5. A parser to read inbuilt `\thebibliography`
+3. table/equation Numbering
+
