@@ -16,14 +16,14 @@
 handle_bibliography <- function(article_dir) {
     # checking for RJwrapper and fetching the file name for tex file
     old_wd <- getwd()
-    setwd(wd)
+    setwd(article_dir)
     file_name <- get_texfile_name(article_dir)
     bib_file <- get_bib_file(article_dir, file_name)
     if (! identical(bib_file, "")) {
             link_bibliography_line(article_dir, file_name)
     } else {
         print("will need to convert bbl to .bib")
-        bib_items <- extract_embeded_bibliography_items(article_dir, file_name)
+        bib_items <- extract_embeded_bib_items(article_dir, file_name)
         bibtex_data <- bib_handler(bib_items)
         make_bibtex_file(bibtex_data, file_name)
         link_bibliography_line(article_dir, file_name)
@@ -67,7 +67,7 @@ make_bibtex_file <-function(bibtex_data,file_name) {
 #' which are extracted by the extraction function.
 #' @param bib_items bib entries extracted from extraction function
 #'
-#' @return b
+#' @return bbl_record nested list
 #' @export
 #'
 #' @examples
@@ -87,41 +87,47 @@ bib_handler <- function(bib_items) {
 }
 
 minimal_bibliography <- function(single_bib_data) {
-    bib_record <-list()
+    bib_record <- list()
     # minimal bibliography parser / generator
-    if(which(grepl("\\}$", single_bib_data))==which(grepl("^\\s*\\\\bibitem\\[", single_bib_data))){
-        start_idx<-which(grepl("^\\s*\\\\bibitem\\[", single_bib_data))# start_idx =1
-        bib_record$unique_id<-str_split(str_split(gsub("\\\\bibitem\\[|\\]","",single_bib_data[start_idx]),"\\{")[[1]][2],"\\}")[[1]][1]
-        break_points<-which(grepl("^\\\\newblock", single_bib_data))
+    if (which(grepl("\\}$", single_bib_data)) ==
+        which(grepl("^\\s*\\\\bibitem\\[", single_bib_data))) {
+        start_idx <- which(grepl("^\\s*\\\\bibitem\\[", single_bib_data))
+        # start_idx =1
+        bib_record$unique_id <- str_split(str_split(gsub("\\\\bibitem\\[|\\]",
+         "", single_bib_data[start_idx]), "\\{")[[1]][2], "\\}")[[1]][1]
+        break_points <- which(grepl("\\\\newblock", single_bib_data))
         # author_names
         # difference between start of identifier and authors
-        if((break_points[1]-start_idx)==2){
-            bib_record$author<- paste("{",single_bib_data[start_idx+1],"}")
-            remaining_data <- single_bib_data[break_points[1]:length(single_bib_data)]
+        if ((break_points[1] - start_idx) == 2) {
+            bib_record$author <- paste("{{", gsub(".$" ,"",
+                                        single_bib_data[start_idx + 1]), "}}")
         }
         # difference between start of identifier and authors
-        if((break_points[1]-start_idx)==3){
-            bib_record$author<-paste("{",single_bib_data[start_idx+1],single_bib_data[start_idx+2],"}")
-            remaining_data <- single_bib_data[break_points[1]:length(single_bib_data)]
+        if ((break_points[1] - start_idx) == 3) {
+            bib_record$author <- paste("{{", gsub(".$", "",
+                            single_bib_data[start_idx + 1]),
+                        gsub(".$" ,"", single_bib_data[start_idx + 2]), "}}")
         }
-
     }
-    if((which(grepl("\\}$", single_bib_data))-1)==which(grepl("^\\s*\\\\bibitem\\[", single_bib_data))){
-        start_idx<-which(grepl("\\}$", single_bib_data))
-        bib_record$unique_id<-gsub("\\}$","",str_split(single_bib_data[start_idx],"\\{")[[1]][2])
-        break_points<-which(grepl("^\\\\newblock", single_bib_data))
+    if ((which(grepl("\\}$", single_bib_data)) - 1) ==
+        which(grepl("^\\s*\\\\bibitem\\[", single_bib_data))) {
+        start_idx <- which(grepl("\\}$", single_bib_data))
+        bib_record$unique_id <- gsub("\\}$","",
+                    str_split(single_bib_data[start_idx], "\\{")[[1]][2])
+        break_points <- which(grepl("\\\\newblock", single_bib_data))
         # difference between start of identifier and authors
-        if((break_points[1]-start_idx)==2){
-            bib_record$author<-paste("{",single_bib_data[start_idx+1],"}")
-            remaining_data <- single_bib_data[break_points[1]:length(single_bib_data)]
+        if ((break_points[1] - start_idx) == 2) {
+            bib_record$author <- paste("{{",
+                        gsub(".$", "", single_bib_data[start_idx + 1]), "}}")
         }
         # difference between start of identifier and authors
-        if((break_points[1]-start_idx)==3){
-            bib_record$author<-paste("{",single_bib_data[start_idx+1],single_bib_data[start_idx+2],"}")
-            remaining_data <- single_bib_data[break_points[1]:length(single_bib_data)]
+        if ((break_points[1] - start_idx) == 3) {
+            bib_record$author <- paste("{{",
+                            gsub(".$" ,"", single_bib_data[start_idx+1]),
+                            gsub(".$", "", single_bib_data[start_idx+2]), "}}")
         }
-        remaining_data <-single_bib_data[break_points[1]:length(single_bib_data)]
     }
+    remaining_data <- single_bib_data[break_points[1]:length(single_bib_data)]
     latex_macros <- list(
                         "^\\bibitem",
                         "newblock",
@@ -132,78 +138,78 @@ minimal_bibliography <- function(single_bib_data) {
                         "\\}",
                         "\\\\"
                         )
-    filtered_data=remaining_data
+    filtered_data <- remaining_data
     for (line in seq_along(remaining_data)) {
         filtered_data[line] <- remaining_data[line]
         for (patt in latex_macros){
             if(patt == "newblock"){
-                filtered_data[line] <- gsub(patt,",",filtered_data[line])
+                filtered_data[line] <- gsub(patt, "", filtered_data[line])
             } else {
-                filtered_data[line] <- gsub(patt,"",filtered_data[line])
+                filtered_data[line] <- gsub(patt, "", filtered_data[line])
             }
 
         }
     }
-    title_line <- "{"
+    title_line <- "{{"
     for (line in filtered_data) {
-        title_line <- paste(title_line,line)
+        title_line <- paste(title_line, line)
     }
-    title_line <- paste(title_line,"}")
+    title_line <- paste(title_line, "}}")
     #print(filtered_data)
     bib_record$title <- title_line
     return(bib_record)
 }
 
-extract_embeded_bibliography<-function(article_dir,file_name){
-    src_file_data <- readLines(file.path(article_dir,file_name))
-    bbl_start <- which(grepl("^\\s*\\\\begin\\{thebibliography\\}", src_file_data))
-    bbl_end <- which(grepl("^\\s*\\\\end\\{thebibliography\\}", src_file_data))
+export_embeded_bibliography <- function(article_dir, file_name) {
+    src_file_data <- readLines(file.path(article_dir, file_name))
+    bbl_start <- which(grepl("^\\s*\\\\begin\\{thebibliography\\}",
+                    src_file_data))
+    bbl_end <- which(grepl("^\\s*\\\\end\\{thebibliography\\}",
+                    src_file_data))
     bbl_data <- src_file_data[bbl_start:bbl_end]
     bbl_file_name <- gsub(".tex", ".bbl", file_name)
     write_external_file(bbl_file_name, "w", bbl_data)
 }
 
-extract_embeded_bibliography_items<-function(article_dir,file_name){
-    src_file_data<- readLines(file.path(article_dir,file_name))
-    bbl_start<- which(grepl("^\\s*\\\\begin\\{thebibliography\\}", src_file_data))
-    bbl_end<- which(grepl("^\\s*\\\\end\\{thebibliography\\}", src_file_data))
-    pre_bbl<- src_file_data[seq_len(bbl_start)]
-    post_bbl<-src_file_data[seq_len(bbl_end)]
-    bbl_data<-setdiff(post_bbl,pre_bbl)
-    bib_breakpoints<-which(grepl("^\\s*\\\\bibitem\\[", bbl_data))
-    bib_items<-list()
+extract_embeded_bib_items <- function(article_dir, file_name){
+    src_file_data <- readLines(file.path(article_dir, file_name))
+    bbl_start <- which(grepl("^\\s*\\\\begin\\{thebibliography\\}",
+                        src_file_data))
+    bbl_end <- which(grepl("^\\s*\\\\end\\{thebibliography\\}", src_file_data))
+    bbl_data <- src_file_data[bbl_start:bbl_end]
+    ##
+    bib_ignore <- which(grepl("^\\%%", bbl_data))
+    bib_breakpoints <- which(grepl("^\\s*\\\\bibitem\\[", bbl_data))
+    bib_items <- list()
     # creating chunks of bibliography entries
-    for(i in 1:(length(bib_breakpoints)-1)){
-        bib_items[length(bib_items)+1]<-list(bbl_data[(bib_breakpoints[i]):(bib_breakpoints[(i+1)]-1)])
-        if(i==(length(bib_breakpoints)-1)){
-            bib_items[length(bib_items)+1]<-list(bbl_data[(bib_breakpoints[i+1]+1):length(bbl_data)-1])
+    for (i in 1:(length(bib_breakpoints) - 1)) {
+        bib_items[length(bib_items)+1] <- list(bbl_data[(bib_breakpoints[i]):(bib_breakpoints[(i+1)]-1)])
+        if (i == (length(bib_breakpoints) - 1)) {
+            bib_items[length(bib_items)+1] <- list(bbl_data[(bib_breakpoints[i+1]+1):length(bbl_data)-1])
         }
     }
     return(bib_items)
 }
 
-link_bibliography_line<-function(article_dir,file_name){
-    src_file_data<- readLines(file.path(article_dir,file_name))
-    bib_exist<-FALSE
-    for(line in src_file_data){
-        if(grepl("^\\\\bibliography",line)){
-            bib_exist<-TRUE
+link_bibliography_line <- function(article_dir, file_name) {
+    src_file_data <- readLines(file.path(article_dir, file_name))
+    bib_exist <- FALSE
+    for (line in src_file_data) {
+        if (grepl("^\\\\bibliography", line)) {
+            bib_exist <- TRUE
             break
         }
     }
-    if(bib_exist){
-        print('\\bibliography{bib_file} exists!')
-        bib_line<-""
-    }
-    else{
-        bib_line<-paste("\\bibliography{",toString(tools::file_path_sans_ext(file_name)),"}",sep="")
+    if (bib_exist) {
+        print("\\bibliography{bib_file} exists!")
+        return("")
+    } else {
+        bib_line <- paste("\\bibliography{",
+                toString(tools::file_path_sans_ext(file_name)), "}", sep = "")
     }
     # Backup original wrapper file
-    write_file<-file(paste(file_name,".bk",sep=""))
-    writeLines(src_file_data, write_file)
-    close(write_file)
+    backup_file <- paste(file_name,".bk",sep="")
+    write_external_file(backup_file, "w", src_file_data)
     # write to original wrapper file
-    write_file<-file(file_name, 'a')
-    writeLines(c(bib_line), write_file,)
-    close(write_file)
+    write_external_file(file_name, "a", bib_line)
 }
