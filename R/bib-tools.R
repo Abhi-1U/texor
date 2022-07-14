@@ -11,8 +11,12 @@
 #' file to the latex file
 #'
 #' @examples
+#' wd <-  system.file("examples/bibliography", package = "texor")
+#' texor::handle_bibliography(wd)
 handle_bibliography <- function(article_dir) {
     # checking for RJwrapper and fetching the file name for tex file
+    old_wd <- getwd()
+    setwd(wd)
     file_name <- get_texfile_name(article_dir)
     bib_file <- get_bib_file(article_dir, file_name)
     if (! identical(bib_file, "")) {
@@ -24,6 +28,7 @@ handle_bibliography <- function(article_dir) {
         make_bibtex_file(bibtex_data, file_name)
         link_bibliography_line(article_dir, file_name)
     }
+    on.exit(setwd(old_wd), add = TRUE)
 }
 
 #' writes bibtex data in a structured format to the .bib file
@@ -39,11 +44,11 @@ make_bibtex_file <-function(bibtex_data,file_name) {
     bib_file_name <- gsub(".tex", ".bib", file_name)
     for (iterator in seq_along(bibtex_data[["book"]])){
         unique_id <- bibtex_data[["book"]][[iterator]]$unique_id
-        print(unique_id)
+        #print(unique_id)
         author <- bibtex_data[["book"]][[iterator]]$author
         title <- bibtex_data[["book"]][[iterator]]$title
-        print(author)
-        print(title)
+        #print(author)
+        #print(title)
         line1 <- sprintf("@book{ %s,",unique_id)
         line2 <- sprintf("author = %s,",author)
         line3 <- sprintf("title = %s",title)
@@ -144,7 +149,7 @@ minimal_bibliography <- function(single_bib_data) {
         title_line <- paste(title_line,line)
     }
     title_line <- paste(title_line,"}")
-    print(filtered_data)
+    #print(filtered_data)
     bib_record$title <- title_line
     return(bib_record)
 }

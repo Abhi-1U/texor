@@ -19,7 +19,7 @@ automatically be changed during pandoc conversion
 by a lua filter (refer : inst/extdata/image_filter.lua)
 }
 \examples{
-file_dir <- system.file("extdata/examples/pdf_conversion/",
+file_dir <- system.file("examples/pdf_conversion/",
              package = "texor")
 texor::pdf_to_png(file_dir)
 }

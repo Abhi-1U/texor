@@ -15,7 +15,7 @@
 #' files in the directory.
 #'
 #' @examples
-#' file_dir <- system.file("extdata/examples/pdf_conversion/",
+#' file_dir <- system.file("examples/pdf_conversion/",
 #'              package = "texor")
 #' texor::pdf_to_png(file_dir)
 pdf_to_png <- function(article_dir) {
@@ -41,7 +41,7 @@ pdf_to_png <- function(article_dir) {
 #' @export
 #'
 #' @examples
-#'file_dir <- system.file("extdata/examples/pdf_conversion/",
+#'file_dir <- system.file("examples/pdf_conversion/",
 #'              package = "texor")
 #' print(find_pdf_files(file_dir))
 find_pdf_files <- function(article_dir) {
@@ -77,7 +77,7 @@ find_pdf_files <- function(article_dir) {
 #' @export Converts listed pdf files to png format
 #'
 #' @examples
-#'pdf_file <- system.file("extdata/examples/pdf_conversion/normal.pdf",
+#'pdf_file <- system.file("examples/pdf_conversion/normal.pdf",
 #'                  package = "texor")
 #'texor::make_png_files(c(pdf_file))
 #'

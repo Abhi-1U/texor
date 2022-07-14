@@ -17,3 +17,7 @@ if bibliography exists in bibtex format then (filename.bib) bibtex file will
 be preferred.
 else this function will generate a minimal bibliography
 }
+\examples{
+wd <-  system.file("examples/bibliography", package = "texor")
+texor::handle_bibliography(wd)
+}

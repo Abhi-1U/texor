@@ -16,7 +16,7 @@ list of filtered pdf files or "NA" string which signals no files.
 This function will find all pdf images and also filter out pdf article
 }
 \examples{
-file_dir <- system.file("extdata/examples/pdf_conversion/",
+file_dir <- system.file("examples/pdf_conversion/",
              package = "texor")
 print(find_pdf_files(file_dir))
 }

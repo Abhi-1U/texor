@@ -18,7 +18,7 @@ by `texor::pdf_to_png(file_dir)` function for converting a
 filtered list of pdf images.
 }
 \examples{
-pdf_file <- system.file("extdata/examples/pdf_conversion/normal.pdf",
+pdf_file <- system.file("examples/pdf_conversion/normal.pdf",
                  package = "texor")
 texor::make_png_files(c(pdf_file))
 

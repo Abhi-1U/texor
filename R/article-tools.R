@@ -176,7 +176,7 @@ generate_rmd <- function(markdown_file, volume, issue) {
             `rjtools::rjournal_web_article` = list(
                 self_contained = FALSE,
                 toc = FALSE,
-                texor_export = TRUE
+                web_export = TRUE
                 #legacy_pdf = FALSE
             )
             # `rjtools::rjournal_pdf_article` = pdf_args
