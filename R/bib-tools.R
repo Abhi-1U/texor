@@ -86,6 +86,17 @@ bib_handler <- function(bib_items) {
     return(bbl_record)
 }
 
+#' Main parser logic for converting inbuilt latex bibliography
+#'
+#' A function meant to be used internally or in a sequence as described
+#' in the documentation
+#' @param single_bib_data
+#'
+#' @return bib_record with unique_id, author and
+#'         title(also containing other info)
+#' @export
+#'
+#' @examples
 minimal_bibliography <- function(single_bib_data) {
     bib_record <- list()
     # minimal bibliography parser / generator
@@ -160,6 +171,18 @@ minimal_bibliography <- function(single_bib_data) {
     return(bib_record)
 }
 
+#' export embedded bibliography to a bbl file
+#' @description
+#' This function will extract the embedded bibliography and store it in .bbl
+#' file
+#'
+#' @param article_dir path to the directory which contains tex article
+#' @param file_name name of the tex file
+#'
+#' @return
+#' @export bbl_file
+#'
+#' @examples
 export_embeded_bibliography <- function(article_dir, file_name) {
     src_file_data <- readLines(file.path(article_dir, file_name))
     bbl_start <- which(grepl("^\\s*\\\\begin\\{thebibliography\\}",
@@ -171,6 +194,17 @@ export_embeded_bibliography <- function(article_dir, file_name) {
     write_external_file(bbl_file_name, "w", bbl_data)
 }
 
+#' extract the bibliography in chunks seperated at \bibitem
+#'
+#' @description intended to be an internal function which is used with other
+#'  functions in flow.
+#' @param article_dir path to the directory which contains tex article
+#' @param file_name name of the file
+#'
+#' @return a list of bib entries separated at \bibitem
+#' @export
+#'
+#' @examples
 extract_embeded_bib_items <- function(article_dir, file_name){
     src_file_data <- readLines(file.path(article_dir, file_name))
     bbl_start <- which(grepl("^\\s*\\\\begin\\{thebibliography\\}",
@@ -191,6 +225,15 @@ extract_embeded_bib_items <- function(article_dir, file_name){
     return(bib_items)
 }
 
+#' append the tex file with a line to link bibliography
+#'
+#' @param article_dir path to the directory which contains tex article
+#' @param file_name file name of the tex document
+#'
+#' @return
+#' @export appends the tex file with a line to link bibliography
+#'
+#' @examples
 link_bibliography_line <- function(article_dir, file_name) {
     src_file_data <- readLines(file.path(article_dir, file_name))
     bib_exist <- FALSE

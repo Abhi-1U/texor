@@ -10,7 +10,7 @@ bib_handler(bib_items)
 \item{bib_items}{bib entries extracted from extraction function}
 }
 \value{
-b
+bbl_record nested list
 }
 \description{
 which are extracted by the extraction function.

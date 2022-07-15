@@ -1,9 +1,17 @@
-
+% Metadata handlers
 \renewcommand{\abstract}[1]{\author{#1}}
-\newcommand{\CRANpkg}[1]{\href{https://CRAN.R-project.org/package=#1}{\pkg{#1}}}%
+\newcommand{\R}{R}
+\newcommand{\address}[1]{\addvspace{\baselineskip}\noindent\emph{#1}}
+\newcommand{\email}[1]{\href{mailto:#1}{\normalfont\texttt{#1}}}
+% Package name commands
 \renewcommand{\pkg}[1]{#1}
-
+\newcommand{\CRANpkg}[1]{\href{https://CRAN.R-project.org/package=#1}{\pkg{#1}}}%
+\newcommand{\BIOpkg}[1]{\href{https://www.bioconductor.org/packages/release/bioc/html/#1.html}{\pkg{#1}}}
+% acronym
+\newcommand{\acronym}[1]{#1}
+% code
 \newcommand{\code}[1]{\verb! #1 !}
+
 
 %\renewcommand{\multicolumn}[3]{ #3}
 \renewcommand{\multicolumnx}[3]{\multicolumn{#1}{c}{#3}}
