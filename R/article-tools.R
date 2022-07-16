@@ -84,7 +84,8 @@ convert_to_markdown <- function(article_dir) {
                               citeproc = TRUE,
                               verbose = TRUE)
     # post conversion process
-    find_pkg_references(input_file)
+    tex_file <- get_texfile_name(article_dir)
+    find_pkg_references(tex_file)
 }
 
 #' generate rmarkdown file in output folder
