@@ -83,6 +83,8 @@ convert_to_markdown <- function(article_dir) {
                               output = md_file,
                               citeproc = TRUE,
                               verbose = TRUE)
+    # post conversion process
+    find_pkg_references(input_file)
 }
 
 #' generate rmarkdown file in output folder
@@ -153,7 +155,10 @@ generate_rmd <- function(markdown_file, volume, issue) {
             issue_month, "01"), format = "%Y %m %d")
         )
     }
+    # if article has no abstract
     if (toString(metadata$abstract) =="NA") {
+        issue_year <- volume + 2008
+        issue_month <- if (issue_year < 2022) issue * 6 else issue * 3
         metadata$abstract <- paste0("The '", metadata$title,
                                     "' article from the'", issue_year,
                                     "'-'", issue, "' issue.")
@@ -171,10 +176,7 @@ generate_rmd <- function(markdown_file, volume, issue) {
         volume = as.integer(volume),
         issue = as.integer(issue),
         slug = article_metadata$slug,
-        packages = list(
-            cran = article_metadata$CRANpkgs,
-            bioc = article_metadata$BIOpkgs
-        ),
+        packages = yaml::read_yaml(paste(dirname(markdown_file),"pkg_meta.yaml",sep ="/")),
         preview = "preview.png",
         bibliography = metadata$bibliography,
         CTV = article_metadata$CTV_rev,

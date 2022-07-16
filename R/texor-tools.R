@@ -106,3 +106,9 @@ write_external_file <- function(file_name, mode, raw_text) {
     writeLines(raw_text, write_file)
     close(write_file)
 }
+
+get_md_file_name <- function(article_dir) {
+    lookup_file <- get_wrapper_type(article_dir)
+    markdown_file <- gsub(".tex", ".md", lookup_file)
+}
+
