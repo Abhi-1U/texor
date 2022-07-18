@@ -72,14 +72,12 @@ article_has_tikz <- function(article_dir, file_name) {
 #'
 #' @examples
 extract_single_tikz <- function(src_file_data, fig_start, fig_end) {
-    pre_fig <- src_file_data[seq_len(fig_start) - 1]
-    post_fig <- src_file_data[seq_len(fig_end)]
-    fig_data <- setdiff(post_fig, pre_fig)
+    print(fig_start)
+    print(fig_end)
+    fig_data <- src_file_data[fig_start[[1]]:fig_end[[1]]]
     tikz_start <- which(grepl("^\\s*\\\\begin\\{tikzpicture", fig_data))
     tikz_end <- which(grepl("^\\s*\\\\end\\{tikzpicture", fig_data))
-    pre_tikz <- fig_data[seq_len(tikz_start - 1)]
-    post_tikz <- fig_data[seq_len(tikz_end)]
-    tikz_data <- setdiff(post_tikz, pre_tikz)
+    tikz_data <- fig_data[tikz_start:tikz_end]
     return(tikz_data)
 }
 #' a sub-function to isolate multiple tikz images
@@ -96,6 +94,7 @@ extract_multiple_tikz <- function(src_file_data,
                         fig_start_list, fig_end_list) {
     tikz_image_lines <- list()
     for (iterator in seq_along(fig_start_list)) {
+        print(fig_start_list[iterator])
         tikz_image <- extract_single_tikz(src_file_data,
                       fig_start_list[iterator],
                       fig_end_list[iterator])
@@ -132,63 +131,28 @@ extract_embeded_tikz_image <- function(article_dir, file_name) {
     tikz_image_list <- which(grepl("^\\s*\\\\begin\\{tikzpicture",
                             src_file_data))
     print(paste("Debug 1 : ", tikz_image_list))
-    # checks if there are multiple figures or not
-    if (length(fig_start_list) == 1) {
-        # if there is only one figure then it is possibly the one with tikz
-        if (identical(class(tikz_image_list), "integer") &&
-            (! identical(tikz_image_list, integer(0)))) {
-            tikz_fig_start <- fig_start_list
-            tikz_fig_end <- fig_end_list
-        } else {
-            print("No Tikz images found")
-        }
-    } else {
-        # case of multiple figure but single tikz image
-        if (length(fig_start_list) > 1 &&
-            (! identical(tikz_image_list, integer(0)))) {
-            for (iterator in seq_along(fig_start_list)) {
-                if (tikz_image_list > fig_start_list[iterator] &&
-                    tikz_image_list < fig_end_list[iterator]) {
-                        tikz_fig_start <- fig_start_list[iterator]
-                        tikz_fig_end <- fig_end_list[iterator]
-                        print(paste("Debug 2 : ", tikz_fig_start))
-                }
-            }
-        # case of multiple tikz images and multiple figures
-        } else {
-            tikz_fig_start <- list()
-            tikz_fig_end <- list()
-            for (Ti in seq_along(tikz_image_list)) {
-                for (iterator in seq_along(fig_start_list)) {
-                    if (tikz_image_list[Ti] > fig_start_list[iterator] &&
-                        tikz_image_list[Ti] < fig_end_list[iterator]) {
-                           tikz_fig_start[Ti] <- fig_start_list[iterator]
-                           tikz_fig_end[Ti] <- fig_end_list[iterator]
-                    }
-                }
-            }
-        }
-    }
-    # handle multiple tikz images
-    if (length(tikz_fig_start) == 1) {
-        tikz_image <- extract_multiple_tikz(src_file_data,
-                                            tikz_fig_start,
-                                            tikz_fig_end)
-        for (image in tikz_image) {
-            write_external_file("tikz_main_data.txt", "a", image)
-        }
+    # fig containing tikz  start_pos
+    fil_start <- filter_fig_start(fig_start_list,tikz_image_list)
+    # fig containing tikz end_pos
+    fil_end <- filter_fig_end(fig_end_list,tikz_image_list)
+
+    if (length(fil_start) == 1) {
+        tikz_image <- extract_single_tikz(src_file_data,
+                                            fil_start,
+                                            fil_end)
+        write_external_file("tikz_main_data.txt", "a", tikz_image)
     # handle a single tikz image
     } else {
-        print(paste("Debug 3 : ", tikz_fig_start))
-        print(tikz_fig_start)
-        tikz_style <- get_single_tikz_styleset(src_file_data,
-                                        tikz_fig_start,
-                                        tikz_fig_end)
-        write_external_file("tikz_main_data.txt", "a", tikz_style)
-        tikz_image <- extract_single_tikz(src_file_data,
-                                        tikz_fig_start,
-                                        tikz_fig_end)
-        write_external_file("tikz_main_data.txt", "a", tikz_image)
+
+        for (iterator in seq_along(fil_start)) {
+
+            lines <- extract_single_tikz(src_file_data,
+                                              fil_start[iterator],
+                                              fil_end[iterator])
+            write_external_file("tikz_main_data.txt", "a", lines)
+            write_external_file("tikz_main_data.txt", "a", "")
+
+        }
     }
 }
 
@@ -215,7 +179,7 @@ get_single_tikz_styleset <- function(src_file_data, fig_start, fig_end) {
     if (! identical(class(tikz_style_pos), "logical") &&
          tikz_style_pos < fig_end) {
         pre_tikz_set <- src_file_data[seq_len(tikz_style_pos)-1]
-        post_tikz_set <- setdiff(src_file_data, pre_tikz_set)
+        post_tikz_set <- src_file_data[seq_len(tikz_style_pos)-1:fig_end]
         style_ending <- which(grepl("\\]$", post_tikz_set))[1]
         # single line style
         if (style_ending == 1) {
@@ -242,9 +206,29 @@ get_single_tikz_styleset <- function(src_file_data, fig_start, fig_end) {
 
 
 
+filter_fig_start <- function(fig_start_list,tikz_image_list){
+    filtered_list <- list()
+    for (fig in seq_along(fig_start_list)) {
+        for (tikz in seq_along(tikz_image_list)) {
+            if (tikz_image_list[tikz] > fig_start_list[fig]) {
+                filtered_list[tikz] <- fig_start_list[fig]
+            }
+        }
+    }
+    return(filtered_list)
+}
 
-
-
+filter_fig_end <- function(fig_end_list,tikz_image_list){
+    filtered_list <- list()
+    for (fig in rev(seq_along(fig_end_list))) {
+        for (tikz in rev(seq_along(tikz_image_list))) {
+            if (fig_end_list[fig] > tikz_image_list[tikz] ) {
+                filtered_list[tikz] <- fig_end_list[fig]
+            }
+        }
+    }
+    return(filtered_list)
+}
 
 #
 # inject_generated_image <- function(article_dir, file_name, image_path){

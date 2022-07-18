@@ -1,3 +1,14 @@
+#' scans LaTeX document for any package references
+#'
+#' Usually this was handled by rjtools package, since the generated Rmd lacks
+#' these commands (they are transformed to links during pandoc conversion), we
+#' need to add one more step to pre-process.
+#' @param input_file name of the input file
+#'
+#' @return
+#' @export pkg_meta.yaml file containing meta data
+#'
+#' @examples
 find_pkg_references <- function(input_file){
     input <- readLines(input_file)
     pkgs <- gregexpr("\\\\(CRAN|BIO)pkg\\{.+?\\}", input)
