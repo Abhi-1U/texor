@@ -112,3 +112,23 @@ get_md_file_name <- function(article_dir) {
     markdown_file <- gsub(".tex", ".md", lookup_file)
 }
 
+texor_orchestrate <- function(article_dir) {
+    old_wd <- getwd()
+    setwd(article_dir)
+    article_dirs <-list.dirs(recursive = FALSE)
+    for (dir in article_dirs) {
+        print(dir)
+        # Step - 1 : Include Meta-fix style file
+        # Step - 2 : Manage Bibliography(ies)
+        # Step - 3 : Check for PDF and then convert PDF to PNG based on condition
+        # Step - 4 : Check for Tikz images and pre-process it based on condition
+        # Step - 5 : Convert to markdown + find package references
+        # Step - 6 : Create a new directory and copy dependent files/folders
+        # Step - 7 : Go back a folder
+        # Step - 8 : generate rmarkdown with meta data and headers
+        # Step - 9 : call rmarkdown to create HTML
+        # Step - 10 : Subroutine to create PDF version
+    }
+    print(article_dir)
+    on.exit(setwd(old_wd), add = TRUE)
+}

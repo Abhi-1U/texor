@@ -168,40 +168,61 @@ extract_embeded_tikz_image <- function(article_dir, file_name) {
 #' @examples
 get_single_tikz_styleset <- function(src_file_data, fig_start, fig_end) {
     tikz_set_data <- ""
+    set_end_patt <- "\\]$"
+    style_end_patt <- "^\\}"
     tikz_set_pos <- which(grepl("^\\s*\\\\tikzset\\{", src_file_data))
-    tikz_style_pos <- which(grepl("^\\s*\\\\tikzstyle\\{", src_file_data))
     if (identical(tikz_set_pos, integer(0))) {
-        tikz_set_pos <- FALSE
+        tikz_set_pos <- which(grepl("^\\s*\\\\tikzstyle\\{", src_file_data))
     }
     if (identical(tikz_style_pos, integer(0))) {
-        tikz_style_pos <- FALSE
+        tikz_set_pos <- FALSE
+        return(0)
     }
-    if (! identical(class(tikz_style_pos), "logical") &&
-         tikz_style_pos < fig_end) {
-        pre_tikz_set <- src_file_data[seq_len(tikz_style_pos)-1]
-        post_tikz_set <- src_file_data[seq_len(tikz_style_pos)-1:fig_end]
-        style_ending <- which(grepl("\\]$", post_tikz_set))[1]
-        # single line style
-        if (style_ending == 1) {
-            tikz_set_data <- post_tikz_set[style_ending]
-        } else {
-            tikz_set_data <- post_tikz_set[seq_len(style_ending)]
+    end_patt <- style_end_patt
+    if (! tikz_style_pos) {
+        end_patt <- set_end_patt
+    }
+    for (iterator in seq_along(tikz_set_pos)) {
+        # if styleset is in middle of fig_start and fig_end
+        if (tikz_set_pos[iterator] > fig_start[iterator] && tikz_set_pos[iterator] < fig_end[iterator]) {
+            style_ending <- which(grepl(end_patt, src_file_data[fig_start[iterator]:fig_end[iterator]]))[1]
+            style_ending <- style_ending+fig_start[iterator]
+        }
+        # if styleset is above the fig_start
+        if (tikz_set_pos[iterator] < fig_end[iterator && tikz_set_pos[iterator] < fig_start[iterator]]) {
+            style_ending <- which(grepl(end_patt, rev(src_file_data[1:fig_start[iterator]])))[1]
+            style_ending <- fig_start[iterator] - style_ending
         }
     }
+    # ----- new above
+    # ----- old below
+    # if styleset is in middle of fig_start and fig_end
+    if  (tikz_set_pos < fig_end && tikz_set_pos) {
+        pre_tikz_set <- src_file_data[seq_len(tikz_style_pos)-1]
+        post_tikz_set <- src_file_data[seq_len(tikz_style_pos)-1:fig_end]
+
+                                       # single line style
+                                       if (style_ending == 1) {
+                                           tikz_set_data <- post_tikz_set[style_ending]
+                                       } else {
+                                           tikz_set_data <- post_tikz_set[seq_len(style_ending)]
+                                       }
+
     if (! identical(class(tikz_set_pos), "logical") &&
-         tikz_set_pos < fig_end) {
+        tikz_set_pos < fig_end) {
         pre_tikz_set <- src_file_data[seq_len(tikz_set_pos) - 1]
         post_tikz_set<- src_file_data[(tikz_set_pos - 1):length(src_file_data)]
         style_ending <- which(grepl("^\\}", post_tikz_set))[1]
         # single line style content
         if (style_ending == 1) {
             tikz_set_data <- post_tikz_set[style_ending]
-        # multiple line style content
+            # multiple line style content
         } else {
             tikz_set_data <- post_tikz_set[seq_len(style_ending)]
         }
     }
     return(tikz_set_data)
+    }
 }
 
 
