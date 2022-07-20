@@ -25,6 +25,6 @@ texor is a package that deals with multiple challenges that occour in conversion
 2. Better Documentation as vignettes, man pages, articles, web-resource
 3. Bibliography aggregation.
 4. New GNU-sed like find and replace function in R to manage alien commands/environments.
-
+5. Automation orchestration function to make the process one seamless process.
 
 ![texor features](inst/examples/graphics/texor.svg)
