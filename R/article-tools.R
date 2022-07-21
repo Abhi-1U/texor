@@ -1,14 +1,20 @@
 #' Include a Metafix.sty style file
 #'
-#' This style file helps texor and pandoc to retain metadata and ease
-#' the conversion process.
 #' @param article_dir path to the directory which contains tex article
 #'
-#' @return
+#' @details
+#' This style file helps texor and pandoc to retain metadata and ease
+#' the conversion process.
+#' @usage
+#' This function is used to include a custom style file (containing
+#' useful macros for conversion) in the wrapper file
+#'
 #' @export Metafix.sty file in the article_dir
 #'
-#' @examples
-#' texor::include_style_file(".")
+#' @example
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' texor::include_style_file(article_dir)
 include_style_file <- function(article_dir) {
     # Copy over the Metafix.sty file to the article directory
     file.copy(
@@ -17,50 +23,68 @@ include_style_file <- function(article_dir) {
         )
     # Modify LaTeX source to include the \include(Metafix) line
     file_name <- get_wrapper_type(article_dir)
-    wrapper_file <- readLines(file.path(article_dir, file_name))
-    doc_start <- which(grepl("^\\s*\\\\begin\\{document\\}", wrapper_file))
-    before_doc_start <- setdiff(wrapper_file[seq_len(doc_start) - 1], "\n")
-    after_doc_start <- setdiff(wrapper_file, before_doc_start)
+    wrapper_file_content <- readLines(file.path(article_dir, file_name))
+    wrapper_path <- paste(article_dir, file_name, sep = "/")
+    doc_start <- which(grepl("^\\s*\\\\begin\\{document\\}",
+                        wrapper_file_content))
+    before_doc_start <- wrapper_file_content[1:(doc_start - 1)]
+    after_doc_start <- wrapper_file_content[doc_start:
+                            length(wrapper_file_content)]
     usepackage_metafix <- "\\usepackage{Metafix}"
     # Backup original wrapper file
-    file.rename(file_name, paste(file_name, ".bk", sep = ""))
-        # write to original wrapper file
-        xfun::write_utf8(c(
+    file.rename(wrapper_path, paste(wrapper_path, ".bk", sep = ""))
+    # write to original wrapper file and save it as .new
+    xfun::write_utf8(c(
             before_doc_start,
             usepackage_metafix,
             "",
             after_doc_start),
-            paste(file_name, ".new", sep = ""))
-        #
-        file.rename(paste(file_name, ".new", sep = ""), file_name)
+            paste(wrapper_path, ".new", sep = ""))
+    # remove .new from extension
+    file.rename(paste(wrapper_path, ".new", sep = ""), wrapper_path)
 }
 
 #' convert latex(wrapper) file to markdown
 #'
 #' @param article_dir path to the directory which contains tex article
+#' @description
+#' Uses pandoc along with several lua filters
+#' found at inst/extdata/filters in texor package
+#' @note  pandoc (along with lua interpreter) is already installed with
+#'  R-studio, hence if not using R-studio you will need to install pandoc.
+#'  https://pandoc.org/installing.html
+#' @export creates a converted markdown file, as well as a pkg_meta.yaml file
 #'
-#' @return
-#' @export creates a converted markdown file
-#'
-#' @examples
-#' texor::convert_to_markdown(".")
+#' @example
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' texor::convert_to_markdown(article_dir)
 convert_to_markdown <- function(article_dir) {
+    # wrapper file name
     input_file <- get_wrapper_type(article_dir)
-    print(input_file)
+    # resource path for pandoc
     abs_file_path <- tools::file_path_as_absolute(article_dir)
+    input_file_path <- paste(article_dir, input_file, sep = "/")
+    # markdown equivalent filename
     md_file <- paste(toString(tools::file_path_sans_ext(input_file)),
                              ".md", sep = "")
-    print(md_file)
+    md_file_path <- paste(article_dir, md_file, sep = "/")
+    # a filter to remove embedded bibliography (if any)
     bib_filter <- system.file(
                 "extdata/filters/bib_filter.lua", package = "texor")
+    # a filter to handle Sinput/Soutput/Scode/example/example*
     code_block_filter <- system.file(
                 "extdata/filters/code_block_filter.lua", package = "texor")
+    # renames pdf images to png images (to be used with pdf_to_png())
     image_filter <- system.file(
                 "extdata/filters/image_filter.lua", package = "texor")
+    # replaces tikz placeholder with tikz image data/metadata
     post_tikz_filter <- system.file(
                 "extdata/filters/reinstate_tikz_filter.lua", package = "texor")
+    # converts markdown images to knitr image blocks for R-markdown
     knitr_filter <- system.file(
                 "extdata/filters/knitr_filter.lua", package = "texor")
+    # enables table numbering in captions
     table_filter <- system.file(
         "extdata/filters/table_caption.lua", package = "texor")
     #math_filter <- system.file(
@@ -69,23 +93,25 @@ convert_to_markdown <- function(article_dir) {
                   "--resource-path", abs_file_path,
                   "--lua-filter", bib_filter,
                   "--lua-filter", image_filter,
-                  "--lua-filter", code_block_filter,
+                  #"--lua-filter", code_block_filter,
                   "--lua-filter", knitr_filter,
                   "--lua-filter", table_filter,
                   #"--lua-filter", math_filter,
                   "--lua-filter", post_tikz_filter)
     output_format <- "markdown-simple_tables-pipe_tables"
     # This will generate a markdown file with YAML headers.
-    rmarkdown::pandoc_convert(input_file,
+    rmarkdown::pandoc_convert(input_file_path,
                               from = "latex",
                               to = output_format,
                               options = pandoc_opt,
-                              output = md_file,
+                              output = md_file_path,
                               citeproc = TRUE,
-                              verbose = TRUE)
+                              verbose = FALSE)
     # post conversion process
-    tex_file <- get_texfile_name(article_dir)
-    find_pkg_references(tex_file)
+    tex_file_path <- paste(article_dir,
+                            get_texfile_name(article_dir),
+                            sep = "/")
+    find_pkg_references(tex_file_path)
 }
 
 #' generate rmarkdown file in output folder
@@ -94,14 +120,21 @@ convert_to_markdown <- function(article_dir) {
 #' @param volume volume number (int)
 #' @param issue issue number (int)
 #'
-#' @return
-#' @export .Rmd file in the /output folder
+#'
+#' @export R-markdown file in the web folder
 #'
 #' @examples
-#' texor::generate_rmd("/2009-05/RJwrapper.md", 1, 1)
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' sample_root_path <- paste(article_dir, "2022-1", sep ="/")
+#' dir.create(sample_root_path)
+#' sample_article_path <- paste(sample_root_path, "2022-00", sep ="/")
+#' dir.create(sample_article_path)
+#' texor::generate_rmd(, 1, 1)
 generate_rmd <- function(markdown_file, volume, issue) {
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
     # reads the abstract from the second author field
+    # reason : abstract is patched as author in metafix.sty
     metadata$abstract <- metadata$author[2]
     metadata$author <- lapply(
             strsplit(metadata$address, "\\\n", fixed = TRUE),
@@ -116,7 +149,7 @@ generate_rmd <- function(markdown_file, volume, issue) {
                 if (any(email <- grepl("^email:", person))) {
                     author$email <- sub("^email:", "", person[email])
                 }
-                #if(!is.na(metadata$emails)){
+                #if (!is.na(metadata$emails)) {
                 #    author$email <- metadata$emails[2+person]
                 #}
                 fields <- logical(length(person))
@@ -177,7 +210,8 @@ generate_rmd <- function(markdown_file, volume, issue) {
         volume = as.integer(volume),
         issue = as.integer(issue),
         slug = article_metadata$slug,
-        packages = yaml::read_yaml(paste(dirname(markdown_file),"pkg_meta.yaml",sep ="/")),
+        packages = yaml::read_yaml(paste(dirname(markdown_file),
+                            "pkg_meta.yaml", sep = "/")),
         preview = "preview.png",
         bibliography = metadata$bibliography,
         CTV = article_metadata$CTV_rev,
@@ -201,7 +235,7 @@ generate_rmd <- function(markdown_file, volume, issue) {
 
     input_file <- basename(markdown_file)
     output_file_name <- paste(dirname(markdown_file),
-                                    "/output/",
+                                    "/web/",
                             toString(tools::file_path_sans_ext(input_file)),
                                     ".Rmd", sep = "")
     dir.create(dirname(output_file_name), showWarnings = FALSE)

@@ -9,12 +9,12 @@ convert_to_markdown(article_dir)
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
 }
-\value{
-
-}
 \description{
-convert latex(wrapper) file to markdown
+Uses pandoc along with several lua filters
+found at inst/extdata/filters in texor package
 }
-\examples{
-texor::convert_to_markdown(".")
+\note{
+pandoc (along with lua interpreter) is already installed with
+ R-studio, hence if not using R-studio you will need to install pandoc.
+ https://pandoc.org/installing.html
 }

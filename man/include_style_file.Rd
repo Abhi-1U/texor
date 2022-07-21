@@ -4,18 +4,16 @@
 \alias{include_style_file}
 \title{Include a Metafix.sty style file}
 \usage{
-include_style_file(article_dir)
+This function is used to include a custom style file (containing
+useful macros for conversion) in the wrapper file
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
 }
-\value{
-
-}
 \description{
+Include a Metafix.sty style file
+}
+\details{
 This style file helps texor and pandoc to retain metadata and ease
 the conversion process.
-}
-\examples{
-texor::include_style_file(".")
 }

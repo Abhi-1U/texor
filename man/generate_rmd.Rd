@@ -13,12 +13,15 @@ generate_rmd(markdown_file, volume, issue)
 
 \item{issue}{issue number (int)}
 }
-\value{
-
-}
 \description{
 generate rmarkdown file in output folder
 }
 \examples{
-texor::generate_rmd("/2009-05/RJwrapper.md", 1, 1)
+article_dir <- system.file("examples/article",
+                 package = "texor")
+sample_root_path <- paste(article_dir, "2022-1", sep ="/")
+dir.create(sample_root_path)
+sample_article_path <- paste(sample_root_path, "2022-00", sep ="/")
+dir.create(sample_article_path)
+texor::generate_rmd(, 1, 1)
 }
