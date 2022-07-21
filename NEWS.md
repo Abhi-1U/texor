@@ -1,13 +1,4 @@
----
-title: "Change Log"
-author: Abhishek Ulayil
-output: rmarkdown::html_vignette 
-vignette: >
-  %\VignetteIndexEntry{changelog}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-### Version 0.5.5 
+# Version 0.5.5 
 Update Highlights :
 
 1. Placeholder abstract text for articles missing abstract
@@ -17,7 +8,7 @@ Update Highlights :
 5. Patched Metafix.sty
 6. More vignettes
 
-### Version 0.5.2 
+# Version 0.5.2 
 This package matures at this point where almost all features are working, and soon will be ready for CRAN deployment.
 The following are the features working:
 

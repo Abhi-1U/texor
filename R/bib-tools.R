@@ -194,14 +194,14 @@ export_embeded_bibliography <- function(article_dir, file_name) {
     write_external_file(bbl_file_name, "w", bbl_data)
 }
 
-#' extract the bibliography in chunks seperated at \bibitem
+#' extract the bibliography in chunks seperated at bibitem
 #'
 #' @description intended to be an internal function which is used with other
 #'  functions in flow.
 #' @param article_dir path to the directory which contains tex article
 #' @param file_name name of the file
 #'
-#' @return a list of bib entries separated at \bibitem
+#' @return a list of bib entries separated at bibitem
 #' @export
 #'
 #' @examples
