@@ -1,3 +1,5 @@
+#' @title patch table environment
+#' @description
 #' function to modify env and commands in TeX using GNU sed
 #'
 #'These are due to the pandoc's limitations and ease in conversion.
@@ -8,31 +10,42 @@
 #' 2. \\multicolumn to \\multicolumnx
 #' \\multicolumnx is redefined in Metafix.sty as
 #' \\renewcommand{\\multicolumnx}[3]{\\multicolumn{#1}{c}{#3}}
-#' @param file_name name of the Tex file where modifications are to be made
+#' @param article_dir path to the directory which contains tex article
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' texor::modify_table_environment("myfile.tex")
-modify_table_environment <- function(file_name) {
+#' texor::patch_table_env(wd)
+patch_table_env <- function(article_dir) {
     # currently this works only on current working directory
     # Begin part
-    begin_command <- paste(
-        "sed -i -e 's/\\(begin\\){table\\*}/\\1{table}/g '",
-        file_name)
-    system(begin_command)
+    #begin_command <- paste(
+    #    "sed -i -e 's/\\(begin\\){table\\*}/\\1{table}/g '",
+    #    file_name)
+    #system(begin_command)
+    file_name <- get_texfile_name(article_dir)
+    raw_lines <- readLines(paste(article_dir, file_name, sep = "/"))
+    raw_lines <- stream_editor(raw_lines,
+                "^\\s*\\\\begin\\{table*\\}", "table*", "table")
     print("Changed \\begin{table*} to \\begin{table}")
     # end part
-    end_command <- paste(
-        "sed -i -e 's/\\(\\end\\){table\\*}/\\1{table}/g' ",
-        file_name)
-    system(end_command)
+    #end_command <- paste(
+    #    "sed -i -e 's/\\(\\end\\){table\\*}/\\1{table}/g' ",
+    #    file_name)
+    #system(end_command)
+    raw_lines <- stream_editor(raw_lines,
+                "^\\s*\\\\end\\{table*\\}", "table*", "table")
     print("Changed \\end{table*} to \\end{table}")
     # change the \multicolumn to \multicolumnx then metafix macro will fix it
-    multicolumn_command <- paste(
-        "sed -i -e 's/\\multicolumn/\\multicolumnx/g' ",
-        file_name)
-    system(multicolumn_command)
+    #multicolumn_command <- paste(
+    #    "sed -i -e 's/\\multicolumn/\\multicolumnx/g' ",
+    #    file_name)
+    #system(multicolumn_command)
+    raw_lines <- stream_editor(raw_lines,
+                "^\\s*\\\\multicolumn", "multicolumn", "multicolumnx")
     print("changed \\multicolumn to \\multicolumnx")
+    # testing functionality
+    return(raw_lines)
+    # should overwrite the file
 }

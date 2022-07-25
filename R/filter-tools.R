@@ -16,10 +16,18 @@ code_env <- c("example",
               "Soutput",
               "smallverbatim")
 
-code_env_patch <- function(article_dir) {
+patch_code_env <- function(article_dir) {
     # find tex file
+    file_name <- get_texfile_name(article_dir)
     # readLines
+    raw_lines <- readLines(paste(article_dir, file_name, sep = "/"))
+    replacement <- "verbatim"
     # apply filter_code_env over all the env's
+    for (env in code_env) {
+        raw_lines <- filter_code_env(raw_lines, env, replacement)
+    }
+    # testing functionality
+    return(raw_lines)
     # remove old tex file
     # write same tex file with new data
 }

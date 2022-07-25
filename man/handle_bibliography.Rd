@@ -9,15 +9,13 @@ handle_bibliography(article_dir)
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
 }
-\value{
-
-}
 \description{
 if bibliography exists in bibtex format then (filename.bib) bibtex file will
 be preferred.
 else this function will generate a minimal bibliography
 }
 \examples{
-wd <-  system.file("examples/bibliography", package = "texor")
+wd <-  system.file("examples/article", package = "texor")
 texor::handle_bibliography(wd)
+cat(readLines(paste(wd,"example.bib",sep="/")),sep = "\n")
 }

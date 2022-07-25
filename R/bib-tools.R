@@ -5,14 +5,14 @@
 #' else this function will generate a minimal bibliography
 #' @param article_dir path to the directory which contains tex article
 #'
-#' @return
 #' @export bibliography links the bibtex file with latex source code or
 #' generates a minimal bibtex file from embedded bibliography and links that
 #' file to the latex file
 #'
 #' @examples
-#' wd <-  system.file("examples/bibliography", package = "texor")
+#' wd <-  system.file("examples/article", package = "texor")
 #' texor::handle_bibliography(wd)
+#' cat(readLines(paste(wd,"example.bib",sep="/")),sep = "\n")
 handle_bibliography <- function(article_dir) {
     # checking for RJwrapper and fetching the file name for tex file
     old_wd <- getwd()
@@ -49,9 +49,9 @@ make_bibtex_file <-function(bibtex_data,file_name) {
         title <- bibtex_data[["book"]][[iterator]]$title
         #print(author)
         #print(title)
-        line1 <- sprintf("@book{ %s,",unique_id)
-        line2 <- sprintf("author = %s,",author)
-        line3 <- sprintf("title = %s",title)
+        line1 <- sprintf("@book{ %s,", unique_id)
+        line2 <- sprintf("author = %s,", author)
+        line3 <- sprintf("title = %s", title)
         line4 <- sprintf("}")
         write_external_file(bib_file_name,"a",toString(line1))
         write_external_file(bib_file_name,"a",toString(line2))
@@ -108,34 +108,35 @@ minimal_bibliography <- function(single_bib_data) {
          "", single_bib_data[start_idx]), "\\{")[[1]][2], "\\}")[[1]][1]
         break_points <- which(grepl("\\\\newblock", single_bib_data))
         # author_names
-        # difference between start of identifier and authors
+        # difference between start of identifier and authors = 2
         if ((break_points[1] - start_idx) == 2) {
-            bib_record$author <- paste("{{", gsub(".$" ,"",
+            bib_record$author <- paste("{{", gsub("\\.$", "",
                                         single_bib_data[start_idx + 1]), "}}")
         }
-        # difference between start of identifier and authors
+        # difference between start of identifier and authors = 3
         if ((break_points[1] - start_idx) == 3) {
-            bib_record$author <- paste("{{", gsub(".$", "",
+            bib_record$author <- paste("{{", gsub("\\.$", "",
                             single_bib_data[start_idx + 1]),
-                        gsub(".$" ,"", single_bib_data[start_idx + 2]), "}}")
+                        gsub("\\.$", "", single_bib_data[start_idx + 2]), "}}")
         }
     }
     if ((which(grepl("\\}$", single_bib_data)) - 1) ==
         which(grepl("^\\s*\\\\bibitem\\[", single_bib_data))) {
         start_idx <- which(grepl("\\}$", single_bib_data))
-        bib_record$unique_id <- gsub("\\}$","",
+        bib_record$unique_id <- gsub("\\}$", "",
                     str_split(single_bib_data[start_idx], "\\{")[[1]][2])
         break_points <- which(grepl("\\\\newblock", single_bib_data))
-        # difference between start of identifier and authors
+        # difference between start of identifier and authors = 2
         if ((break_points[1] - start_idx) == 2) {
             bib_record$author <- paste("{{",
-                        gsub(".$", "", single_bib_data[start_idx + 1]), "}}")
+                        gsub("\\.$", "", single_bib_data[start_idx + 1]), "}}")
         }
-        # difference between start of identifier and authors
+        # difference between start of identifier and authors = 3
         if ((break_points[1] - start_idx) == 3) {
             bib_record$author <- paste("{{",
-                            gsub(".$" ,"", single_bib_data[start_idx+1]),
-                            gsub(".$", "", single_bib_data[start_idx+2]), "}}")
+                            gsub("\\.$", "", single_bib_data[start_idx + 1]),
+                            gsub("\\.$", "", single_bib_data[start_idx + 2]),
+                            "}}")
         }
     }
     remaining_data <- single_bib_data[break_points[1]:length(single_bib_data)]
@@ -153,7 +154,7 @@ minimal_bibliography <- function(single_bib_data) {
     for (line in seq_along(remaining_data)) {
         filtered_data[line] <- remaining_data[line]
         for (patt in latex_macros){
-            if(patt == "newblock"){
+            if (patt == "newblock"){
                 filtered_data[line] <- gsub(patt, "", filtered_data[line])
             } else {
                 filtered_data[line] <- gsub(patt, "", filtered_data[line])

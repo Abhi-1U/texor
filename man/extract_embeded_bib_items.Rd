@@ -2,7 +2,7 @@
 % Please edit documentation in R/bib-tools.R
 \name{extract_embeded_bib_items}
 \alias{extract_embeded_bib_items}
-\title{extract the bibliography in chunks seperated at \bibitem}
+\title{extract the bibliography in chunks seperated at bibitem}
 \usage{
 extract_embeded_bib_items(article_dir, file_name)
 }
@@ -12,7 +12,7 @@ extract_embeded_bib_items(article_dir, file_name)
 \item{file_name}{name of the file}
 }
 \value{
-a list of bib entries separated at \bibitem
+a list of bib entries separated at bibitem
 }
 \description{
 intended to be an internal function which is used with other

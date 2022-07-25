@@ -1,5 +1,5 @@
 
-#' @title stream_editor
+#' @title stream editor
 #' @description R equivalent of GNU-sed
 #'
 #' @param raw_lines a vector of readLines from the file
@@ -19,9 +19,9 @@ stream_editor <- function(raw_lines, pattern, target, replacement) {
             raw_lines[break_points[iterator]] <- modified_line
         }
         message(paste(
-        "Found ", length(break_points), "Matches"))
+        "Found ", length(break_points), "Matches for target :", target))
     } else {
-        message("Found 0 Matches")
+        message(paste("Found 0 Matches for target : ", target))
     }
     return(raw_lines)
 }

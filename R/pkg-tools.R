@@ -14,8 +14,9 @@ find_pkg_references <- function(input_file){
     pkgs <- gregexpr("\\\\(CRAN|BIO)pkg\\{.+?\\}", input)
     pkgs <- mapply(
         function(pos, line) {
-            if(pos[1] == -1) return(NULL)
-            substr(rep_len(line, length(pos)), pos, pos + pos%@%"match.length" - 1)
+            if (pos[1] == -1) return(NULL)
+            substr(rep_len(line, length(pos)),
+            pos, pos + pos%@%"match.length" - 1)
         },
         pkgs, input,
         SIMPLIFY = FALSE

@@ -4,7 +4,7 @@
 \alias{article_has_tikz}
 \title{Check if article has tikz images or not}
 \usage{
-article_has_tikz(article_dir, file_name)
+article_has_tikz(article_dir)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
