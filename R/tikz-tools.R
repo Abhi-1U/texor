@@ -48,8 +48,9 @@
 #' @export
 #'
 #' @examples
-article_has_tikz <- function(article_dir, file_name) {
+article_has_tikz <- function(article_dir) {
     # reads the complete file
+    file_name <- get_texfile_name(article_dir)
     src_file_data <- readLines(file.path(article_dir, file_name))
     # all possibke values of tikz start points
     tikz_image_list <- which(grepl("^\\s*\\\\begin\\{tikzpicture",
