@@ -79,7 +79,7 @@ convert_to_markdown <- function(article_dir) {
                 "extdata/filters/bib_filter.lua", package = "texor")
     # a filter to handle Sinput/Soutput/Scode/example/example*
     code_block_filter <- system.file(
-                "extdata/filters/code_block_filter.lua", package = "texor")
+                "extdata/filters/R_code.lua", package = "texor")
     # renames pdf images to png images (to be used with pdf_to_png())
     image_filter <- system.file(
                 "extdata/filters/image_filter.lua", package = "texor")
@@ -95,15 +95,15 @@ convert_to_markdown <- function(article_dir) {
     #math_filter <- system.file(
     #    "extdata/filters/math2svg.lua", package = "texor")
     pandoc_opt <- c("-s",
-                  "--resource-path", abs_file_path,
+                  "--resource-path", dirname(abs_file_path),
                   "--lua-filter", bib_filter,
                   "--lua-filter", image_filter,
-                  #"--lua-filter", code_block_filter,
+                  "--lua-filter", code_block_filter,
                   "--lua-filter", knitr_filter,
                   "--lua-filter", table_filter,
                   #"--lua-filter", math_filter,
                   "--lua-filter", post_tikz_filter)
-    output_format <- "markdown-simple_tables-pipe_tables"
+    output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     rmarkdown::pandoc_convert(input_file_path,
                               from = "latex",
@@ -111,7 +111,7 @@ convert_to_markdown <- function(article_dir) {
                               options = pandoc_opt,
                               output = md_file_path,
                               citeproc = TRUE,
-                              verbose = FALSE)
+                              verbose = TRUE)
     # post conversion process
     tex_file_path <- paste(article_dir,
                             get_texfile_name(article_dir),
@@ -120,7 +120,7 @@ convert_to_markdown <- function(article_dir) {
 }
 
 #' @title Modify Markdown to R-markdown
-#' 
+#'
 #' @description
 #' generate rmarkdown file in output folder
 #'
@@ -205,6 +205,7 @@ generate_rmd <- function(markdown_file, volume, issue) {
                                     "' article from the'", issue_year,
                                     "'-'", issue, "' issue.")
     }
+    pkg_yaml_path <- paste(dirname(markdown_file), "pkg_meta.yaml", sep = "/" )
     front_matter <- list(
         title = metadata$title,
         abstract = metadata$abstract, #%||% ,
@@ -218,8 +219,7 @@ generate_rmd <- function(markdown_file, volume, issue) {
         volume = as.integer(volume),
         issue = as.integer(issue),
         slug = article_metadata$slug,
-        packages = yaml::read_yaml(paste(dirname(markdown_file),
-                            "pkg_meta.yaml", sep = "/")),
+        packages = yaml::read_yaml(pkg_yaml_path),
         preview = "preview.png",
         bibliography = metadata$bibliography,
         CTV = article_metadata$CTV_rev,
@@ -250,4 +250,76 @@ generate_rmd <- function(markdown_file, volume, issue) {
     xfun::write_utf8(
         c("---", yaml::as.yaml(front_matter), "---", article_body),
         output_file_name)
+}
+
+#' @title convert LaTeX wrapper to native pandoc AST
+#' @details
+#' convert latex(wrapper) file to pandoc AST
+#'
+#' @param article_dir path to the directory which contains tex article
+#' @description
+#' Uses pandoc along with several lua filters
+#' found at inst/extdata/filters in texor package
+#' @note  pandoc (along with lua interpreter) is already installed with
+#'  R-studio, hence if not using R-studio you will need to install pandoc.
+#'  https://pandoc.org/installing.html
+#' @export creates a converted markdown file, as well as a pkg_meta.yaml file
+#'
+#' @example
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' texor::convert_to_markdown(article_dir)
+convert_to_native <- function(article_dir) {
+    # wrapper file name
+    input_file <- get_wrapper_type(article_dir)
+    # resource path for pandoc
+    input_file_path <- paste(article_dir, input_file, sep = "/")
+    abs_file_path <- tools::file_path_as_absolute(input_file_path)
+    # markdown equivalent filename
+    md_file <- paste(toString(tools::file_path_sans_ext(input_file)),
+                     ".txt", sep = "")
+    md_file_path <- paste(article_dir, md_file, sep = "/")
+    # a filter to remove embedded bibliography (if any)
+    bib_filter <- system.file(
+        "extdata/filters/bib_filter.lua", package = "texor")
+    # a filter to handle Sinput/Soutput/Scode/example/example*
+    code_block_filter <- system.file(
+        "extdata/filters/R_code.lua", package = "texor")
+    # renames pdf images to png images (to be used with pdf_to_png())
+    image_filter <- system.file(
+        "extdata/filters/image_filter.lua", package = "texor")
+    # replaces tikz placeholder with tikz image data/metadata
+    post_tikz_filter <- system.file(
+        "extdata/filters/reinstate_tikz_filter.lua", package = "texor")
+    # converts markdown images to knitr image blocks for R-markdown
+    knitr_filter <- system.file(
+        "extdata/filters/knitr_filter.lua", package = "texor")
+    # enables table numbering in captions
+    table_filter <- system.file(
+        "extdata/filters/table_caption.lua", package = "texor")
+    #math_filter <- system.file(
+    #    "extdata/filters/math2svg.lua", package = "texor")
+    pandoc_opt <- c("-s",
+                    "--resource-path", dirname(abs_file_path),
+                    "--lua-filter", bib_filter,
+                    "--lua-filter", image_filter,
+                    "--lua-filter", code_block_filter,
+                    "--lua-filter", knitr_filter,
+                    "--lua-filter", table_filter,
+                    #"--lua-filter", math_filter,
+                    "--lua-filter", post_tikz_filter)
+    output_format <- "native"
+    # This will generate a markdown file with YAML headers.
+    rmarkdown::pandoc_convert(input_file_path,
+                              from = "latex",
+                              to = output_format,
+                              options = pandoc_opt,
+                              output = md_file_path,
+                              citeproc = TRUE,
+                              verbose = TRUE)
+    # post conversion process
+    tex_file_path <- paste(article_dir,
+                           get_texfile_name(article_dir),
+                           sep = "/")
+    find_pkg_references(tex_file_path)
 }

@@ -18,32 +18,29 @@ texor_orchestrate <- function(article_dir) {
         patch_code_env(dir)
         # Step - 5 : patch custom table environments to table
         patch_table_env(dir)
-        # Step - 5 : Check for Tikz images and pre-process
+        # Step - 6 : Check for Tikz images and pre-process
         #            it based on condition.
         if (article_has_tikz(dir)) {
             # Process tikz here
         }
-        # Step - 5 : Convert to markdown + find package
+        # Step - 7 : Convert to markdown + find package
         #            references
         convert_to_markdown(dir)
-        # Step - 6 : Create a new directory and copy
+        # Step - 8 : Create a new directory and copy
         #            dependent files/folders
         copy_other_files(dir)
-        # Step - 7 : Go back a folder
-        # setwd() one folder up
-        #
-        # Step - 8 : generate rmarkdown with meta data and headers
-        file_path <- "" # todo : a function to get the file path with file name
+
         volume <- 0 # todo : a function to get volume number from path
         issue <- 0 # todo : a function to get issue number from path
-        generate_rmd(file_path, volume, issue)
-        # Step - 9 : call rmarkdown to create HTML
-        rmd_file_path <- "" #todo : a function to fetch rmd file path
-        produce_html(rmd_file_path)
-        # Step - 10 : Subroutine to create PDF version
-        # todo : link some rmarkdown:: fun to generate PDF output
-        # Step - 11 : reset working directory
-        setwd(old_wd)
+        md_file_path <- gsub(".tex", ".md", paste(wd,
+                                texor::get_wrapper_type(wd), sep = "/"))
+        # the below function wont work on any article as it needs a folder structure
+        # similar to RJournal style /YYYY-ZZ/YYYY-MMM where YYYY is the year,
+        # ZZ is the Journal issue number and MMM is the DOI referral(unique article number)
+        texor::generate_rmd(md_file_path, volume,issue) # 2 is volume,1 is issue no
+        web_article_path <- gsub(".tex", ".Rmd", paste(wd, "web",
+                                    texor::get_wrapper_type(wd), sep = "/"))
+        texor::produce_html(web_article_path)
     }
     print(article_dir)
     on.exit(setwd(old_wd), add = TRUE)

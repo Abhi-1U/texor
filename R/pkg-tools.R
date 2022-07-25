@@ -33,7 +33,8 @@ find_pkg_references <- function(input_file){
         cran = pkgs[pkg_is_cran],
         bioc = pkgs[!pkg_is_cran]
     )
-    write_external_file("pkg_meta.yaml", "w", yaml::as.yaml(packages))
+    pkg_yaml_path <- paste(dirname(input_file), "pkg_meta.yaml", sep = "/" )
+    write_external_file(pkg_yaml_path, "w", yaml::as.yaml(packages))
 }
 
 `%@%` <- function(x, attribute) {

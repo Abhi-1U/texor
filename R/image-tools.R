@@ -19,16 +19,11 @@
 #'              package = "texor")
 #' texor::pdf_to_png(file_dir)
 pdf_to_png <- function(article_dir) {
-    path = dirname(article_dir)
-    old_working_directory = getwd()
-    if (old_working_directory != path) {
-        print("Working directory path is same")
-    } else {
-        setwd(path)
-    }
-    input_files = find_pdf_files(".")
-    texor::make_png_files(input_files)
-    setwd(old_working_directory)
+    input_files <- find_pdf_files(article_dir)
+    input_file_paths <- lapply(input_files, function(file) {
+        paste(article_dir, file, sep = "/")
+    })
+    make_png_files(input_file_paths)
 }
 
 #' find pdf files in a given directory
@@ -71,7 +66,7 @@ find_pdf_files <- function(article_dir) {
 #' by `texor::pdf_to_png(file_dir)` function for converting a
 #' filtered list of pdf images.
 #'
-#' @param input_files list of file names to be converted to png
+#' @param input_file_paths list of file paths to be converted to png
 #'
 #' @return
 #' @export Converts listed pdf files to png format
@@ -82,15 +77,18 @@ find_pdf_files <- function(article_dir) {
 #'texor::make_png_files(c(pdf_file))
 #'
 
-make_png_files <- function(input_files) {
-    if (input_files == "NA") {
-        print("No files to convert")
-        return("")
+make_png_files <- function(input_file_paths) {
+    if (length(input_file_paths) == 1) {
+        if (basename(input_file_paths[[1]]) == "NA") {
+            print("No files to convert")
+            return("")
+        }
     }
-    for (file in input_files) {
+    for (file in seq_along(input_file_paths)) {
         png_file <- paste(toString(
-            tools::file_path_sans_ext(file)), ".png", sep = "")
-        pdftools::pdf_convert(file,
+            tools::file_path_sans_ext(input_file_paths[[file]][1])), ".png",
+            sep = "")
+        pdftools::pdf_convert(input_file_paths[[file]][1],
                               dpi = 600,
                               pages = 1,
                               filenames = png_file)

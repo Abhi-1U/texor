@@ -19,7 +19,7 @@ filter_code_env <- function(raw_lines, target, replacement) {
 }
 
 code_env <- c("example",
-              "example*",
+              "example\\*",
               "Sin",
               "Sout",
               "Scode",

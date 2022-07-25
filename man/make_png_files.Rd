@@ -4,10 +4,10 @@
 \alias{make_png_files}
 \title{Internal function to invoke `pdftools:pdf_convert()`}
 \usage{
-make_png_files(input_files)
+make_png_files(input_file_paths)
 }
 \arguments{
-\item{input_files}{list of file names to be converted to png}
+\item{input_file_paths}{list of file paths to be converted to png}
 }
 \value{
 
