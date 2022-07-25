@@ -1,4 +1,15 @@
 
+#' @title filter code environment
+#'
+#' @description use stream editor to find and replace
+#' cide environments
+#' @param raw_lines a vector of lines from text file
+#' @param target target environment name
+#' @param replacement replacement environment name
+#'
+#' @return modified raw_lines
+#'
+#' @examples
 filter_code_env <- function(raw_lines, target, replacement) {
     begin_patt <- paste("\\s*\\\\begin\\{", target, "\\}", sep = "")
     end_patt <- paste("\\s*\\\\end\\{", target, "\\}", sep = "")
@@ -16,6 +27,22 @@ code_env <- c("example",
               "Soutput",
               "smallverbatim")
 
+#' @title patch all code environments
+#' @description This function calls the `filter_code_env()` function
+#' over the following code environments described in Rjournal.sty
+#'
+#' 1. example
+#' 2. example*
+#' 3. Sin
+#' 4. Sout
+#' 5. Sinput
+#' 6. Soutput
+#' 7. smallverbatim
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @export writes modified file and also backs up the old file before modification
+#'
 patch_code_env <- function(article_dir) {
     # find tex file
     file_name <- get_texfile_name(article_dir)
@@ -32,7 +59,7 @@ patch_code_env <- function(article_dir) {
     # backup old file
     src_file_data <- readLines(file_path)
     backup_file <- paste(file_path, ".bk", sep = "")
-    write_external_file(backup_file, "w")
+    write_external_file(backup_file, "w", src_file_data)
     # remove old tex file
     file.remove(file_path)
     # write same tex file with new data

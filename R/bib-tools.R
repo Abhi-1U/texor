@@ -1,8 +1,10 @@
-#' function to solve bibliography problems
-#'
+#' @title function to solve bibliography problems(legacy)
+#' @description
 #' if bibliography exists in bibtex format then (filename.bib) bibtex file will
 #' be preferred.
 #' else this function will generate a minimal bibliography
+#' @note Use rebib package to use the convertor, aggregator. This is a
+#' legacy parser with limited support and features
 #' @param article_dir path to the directory which contains tex article
 #'
 #' @export bibliography links the bibtex file with latex source code or
@@ -12,7 +14,7 @@
 #' @examples
 #' wd <-  system.file("examples/article", package = "texor")
 #' texor::handle_bibliography(wd)
-#' cat(readLines(paste(wd,"example.bib",sep="/")),sep = "\n")
+#' cat(readLines(paste(wd, "example.bib", sep = "/")),sep = "\n")
 handle_bibliography <- function(article_dir) {
     # checking for RJwrapper and fetching the file name for tex file
     old_wd <- getwd()
@@ -213,7 +215,6 @@ extract_embeded_bib_items <- function(article_dir, file_name){
     bbl_end <- which(grepl("^\\s*\\\\end\\{thebibliography\\}", src_file_data))
     bbl_data <- src_file_data[bbl_start:bbl_end]
     ##
-    bib_ignore <- which(grepl("^\\%%", bbl_data))
     bib_breakpoints <- which(grepl("^\\s*\\\\bibitem\\[", bbl_data))
     bib_items <- list()
     # creating chunks of bibliography entries

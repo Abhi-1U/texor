@@ -18,34 +18,26 @@
 #' @examples
 #' texor::patch_table_env(wd)
 patch_table_env <- function(article_dir) {
-    # currently this works only on current working directory
-    # Begin part
-    #begin_command <- paste(
-    #    "sed -i -e 's/\\(begin\\){table\\*}/\\1{table}/g '",
-    #    file_name)
-    #system(begin_command)
     file_name <- get_texfile_name(article_dir)
-    raw_lines <- readLines(paste(article_dir, file_name, sep = "/"))
+    file_path <- paste(article_dir, file_name, sep = "/")
+    raw_lines <- readLines(file_path)
     raw_lines <- stream_editor(raw_lines,
                 "^\\s*\\\\begin\\{table*\\}", "table*", "table")
     print("Changed \\begin{table*} to \\begin{table}")
-    # end part
-    #end_command <- paste(
-    #    "sed -i -e 's/\\(\\end\\){table\\*}/\\1{table}/g' ",
-    #    file_name)
-    #system(end_command)
     raw_lines <- stream_editor(raw_lines,
                 "^\\s*\\\\end\\{table*\\}", "table*", "table")
     print("Changed \\end{table*} to \\end{table}")
-    # change the \multicolumn to \multicolumnx then metafix macro will fix it
-    #multicolumn_command <- paste(
-    #    "sed -i -e 's/\\multicolumn/\\multicolumnx/g' ",
-    #    file_name)
-    #system(multicolumn_command)
     raw_lines <- stream_editor(raw_lines,
                 "^\\s*\\\\multicolumn", "multicolumn", "multicolumnx")
     print("changed \\multicolumn to \\multicolumnx")
     # testing functionality
-    return(raw_lines)
-    # should overwrite the file
+    #return(raw_lines)
+    # backup old file
+    src_file_data <- readLines(file_path)
+    backup_file <- paste(file_path, ".bk", sep = "")
+    write_external_file(backup_file, "w", src_file_data)
+    # remove old tex file
+    file.remove(file_path)
+    # write same tex file with new data
+    write_external_file(file_path, "w", raw_lines)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/bib-tools.R
 \name{handle_bibliography}
 \alias{handle_bibliography}
-\title{function to solve bibliography problems}
+\title{function to solve bibliography problems(legacy)}
 \usage{
 handle_bibliography(article_dir)
 }
@@ -14,8 +14,12 @@ if bibliography exists in bibtex format then (filename.bib) bibtex file will
 be preferred.
 else this function will generate a minimal bibliography
 }
+\note{
+Use rebib package to use the convertor, aggregator. This is a
+legacy parser with limited support and features
+}
 \examples{
 wd <-  system.file("examples/article", package = "texor")
 texor::handle_bibliography(wd)
-cat(readLines(paste(wd,"example.bib",sep="/")),sep = "\n")
+cat(readLines(paste(wd, "example.bib", sep = "/")),sep = "\n")
 }

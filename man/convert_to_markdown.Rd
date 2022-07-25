@@ -2,7 +2,7 @@
 % Please edit documentation in R/article-tools.R
 \name{convert_to_markdown}
 \alias{convert_to_markdown}
-\title{convert latex(wrapper) file to markdown}
+\title{convert LaTeX wrapper to markdown}
 \usage{
 convert_to_markdown(article_dir)
 }
@@ -12,6 +12,9 @@ convert_to_markdown(article_dir)
 \description{
 Uses pandoc along with several lua filters
 found at inst/extdata/filters in texor package
+}
+\details{
+convert latex(wrapper) file to markdown
 }
 \note{
 pandoc (along with lua interpreter) is already installed with

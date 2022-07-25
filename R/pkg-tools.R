@@ -39,5 +39,3 @@ find_pkg_references <- function(input_file){
 `%@%` <- function(x, attribute) {
     attr(x, attribute)
 }
-
-

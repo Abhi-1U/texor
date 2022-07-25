@@ -2,7 +2,7 @@
 % Please edit documentation in R/article-tools.R
 \name{include_style_file}
 \alias{include_style_file}
-\title{Include a Metafix.sty style file}
+\title{Include Style file}
 \usage{
 This function is used to include a custom style file (containing
 useful macros for conversion) in the wrapper file
@@ -11,7 +11,7 @@ useful macros for conversion) in the wrapper file
 \item{article_dir}{path to the directory which contains tex article}
 }
 \description{
-Include a Metafix.sty style file
+Includes the Metafix.sty style file
 }
 \details{
 This style file helps texor and pandoc to retain metadata and ease

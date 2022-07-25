@@ -13,7 +13,7 @@ copy_other_files <- function(from_path) {
     setwd(from_path)
     dir_list <- list.dirs(recursive = FALSE)
     possible_dirs <- c("*_files", "figures", "images", "tikz")
-    target_dir=basename(dir_list[grep(
+    target_dir <- basename(dir_list[grep(
         paste(possible_dirs, collapse = "|"), dir_list)])
     print(target_dir)
     dir.create("web/", showWarnings = FALSE)
@@ -31,7 +31,7 @@ copy_other_files <- function(from_path) {
     file.copy(target_files,
               to = "web/",
               copy.mode = TRUE,
-              recursive = FALSE,)
+              recursive = FALSE, )
     setwd(old_working_directory)
 }
 

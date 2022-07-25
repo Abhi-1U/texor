@@ -1,4 +1,7 @@
-#' Include a Metafix.sty style file
+#' @title Include Style file
+#'
+#' @description
+#' Includes the Metafix.sty style file
 #'
 #' @param article_dir path to the directory which contains tex article
 #'
@@ -44,6 +47,8 @@ include_style_file <- function(article_dir) {
     file.rename(paste(wrapper_path, ".new", sep = ""), wrapper_path)
 }
 
+#' @title convert LaTeX wrapper to markdown
+#' @details
 #' convert latex(wrapper) file to markdown
 #'
 #' @param article_dir path to the directory which contains tex article
@@ -63,8 +68,8 @@ convert_to_markdown <- function(article_dir) {
     # wrapper file name
     input_file <- get_wrapper_type(article_dir)
     # resource path for pandoc
-    abs_file_path <- tools::file_path_as_absolute(article_dir)
     input_file_path <- paste(article_dir, input_file, sep = "/")
+    abs_file_path <- tools::file_path_as_absolute(input_file_path)
     # markdown equivalent filename
     md_file <- paste(toString(tools::file_path_sans_ext(input_file)),
                              ".md", sep = "")
@@ -114,6 +119,9 @@ convert_to_markdown <- function(article_dir) {
     find_pkg_references(tex_file_path)
 }
 
+#' @title Modify Markdown to R-markdown
+#' 
+#' @description
 #' generate rmarkdown file in output folder
 #'
 #' @param markdown_file relative path along with name of the markdown file

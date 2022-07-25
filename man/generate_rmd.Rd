@@ -2,7 +2,7 @@
 % Please edit documentation in R/article-tools.R
 \name{generate_rmd}
 \alias{generate_rmd}
-\title{generate rmarkdown file in output folder}
+\title{Modify Markdown to R-markdown}
 \usage{
 generate_rmd(markdown_file, volume, issue)
 }

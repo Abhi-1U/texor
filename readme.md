@@ -55,11 +55,13 @@ install the development version from GitHub with:
 remotes::install_github("Abhi-1U/texor")
 # install.packages("pak")
 pak::pak("Abhi-1U/texor")
+# also install rebib for bibliography
+remotes::install_github("Abhi-1U/rebib")
 ```
 
 ## General Usage
 
-here is a quick example to use texor package with a sample Rjournal
+here is a quick example to use texor package with a sample RJournal
 article (included with the package
 [inst/article](https://github.com/Abhi-1U/texor/tree/master/inst/examples/article))
 
