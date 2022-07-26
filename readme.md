@@ -84,14 +84,9 @@ texor::pdf_to_png(wd)
 texor::copy_other_files(wd)
 # convert to markdown
 texor::convert_to_markdown(wd)
-# go up the wd one folder in RJ article
-md_file_path <- gsub(".tex", ".md", paste(wd,
-                        texor::get_wrapper_type(wd), sep = "/"))
 # the below function wont work on any article as it needs a folder structure
 # similar to RJournal style /YYYY-ZZ/YYYY-MMM where YYYY is the year, 
 # ZZ is the Journal issue number and MMM is the DOI referral(unique article number)
-texor::generate_rmd(md_file_path, 2,1)# 2 is volume,1 is issue no
-web_article_path <- gsub(".tex", ".Rmd", paste(wd, "web",
-                        texor::get_wrapper_type(wd), sep = "/"))
-texor::produce_html(web_article_path)
+texor::generate_rmd(wd)
+texor::produce_html(wd)
 ```

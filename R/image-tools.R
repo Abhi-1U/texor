@@ -95,3 +95,35 @@ make_png_files <- function(input_file_paths) {
     }
     print("made PNG graphics @ 600 dpi density")
 }
+
+#' @title patch figure environments
+#' @description This function calls the stream editor to change
+#' figure* to figure
+#' 1. figure*
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @export writes modified file and also backs up the old file before modification
+#'
+patch_figure_env <- function(article_dir) {
+    # find tex file
+    file_name <- get_texfile_name(article_dir)
+    file_path <- paste(article_dir, file_name, sep = "/")
+    # read Lines
+    raw_lines <- stream_editor(raw_lines,
+                               "\\s*\\\\begin\\{figure\\*\\}", "figure\\*", "figure")
+    print("Changed \\begin{figure\\*} to \\begin{figure}")
+    raw_lines <- stream_editor(raw_lines,
+                               "\\s*\\\\end\\{figure\\*\\}", "figure\\*", "figure")
+    print("Changed \\end{figure\\*} to \\end{figure}")
+    # testing functionality
+    #return(raw_lines)
+    # backup old file
+    src_file_data <- readLines(file_path)
+    backup_file <- paste(file_path, ".bk", sep = "")
+    write_external_file(backup_file, "w", src_file_data)
+    # remove old tex file
+    file.remove(file_path)
+    # write same tex file with new data
+    write_external_file(file_path, "w", raw_lines)
+}

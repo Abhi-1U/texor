@@ -37,13 +37,15 @@ copy_other_files <- function(from_path) {
 
 #' call rmarkdown::render to generate html file
 #'
-#' @param input_file_path ; String path for the R-Markdown file
+#' @param article_dir path to the directory which contains tex article
 #'
 #' @return none
 #' @export HTML output
 #'
 #'
-produce_html <- function(input_file_path) {
+produce_html <- function(article_dir) {
+    input_file_path <- gsub(".tex", ".Rmd", paste(article_dir, "web",
+                        texor::get_wrapper_type(article_dir), sep = "/"))
     rmarkdown::render(
         input = input_file_path)
 }

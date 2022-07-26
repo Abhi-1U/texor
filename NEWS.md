@@ -1,5 +1,24 @@
+# Version 0.5.9
+
+## Feature Updates
+
+1. Automated orchestration of conversion
+2. New stream editor in R 
+3. Using stream editor instead of lua filter for code
+4. Using stream editor instead of GNU sed for table
+5. changes in lua filter for R code
+6. Using stream editor for figure environment patching
+7. Automatic fetching of volume and issue from folder
+
+## Bug Fixes
+
+1. Support for absolute paths fixed(in almost all functions)
+2. Fixed some logic errors
+3. Fixes in metafix.sty
+
 # Version 0.5.5 
-Update Highlights :
+
+## Update Highlights :
 
 1. Placeholder abstract text for articles missing abstract
 2. `\CRANpkg()`,`\BIOpkg()` and `CRAN_TASK_VIEWS` are supported

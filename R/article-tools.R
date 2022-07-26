@@ -124,7 +124,7 @@ convert_to_markdown <- function(article_dir) {
 #' @description
 #' generate rmarkdown file in output folder
 #'
-#' @param markdown_file relative path along with name of the markdown file
+#' @param article_dir path to the directory which contains tex article
 #' @param volume volume number (int)
 #' @param issue issue number (int)
 #'
@@ -134,12 +134,15 @@ convert_to_markdown <- function(article_dir) {
 #' @examples
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
-#' sample_root_path <- paste(article_dir, "2022-1", sep ="/")
-#' dir.create(sample_root_path)
-#' sample_article_path <- paste(sample_root_path, "2022-00", sep ="/")
-#' dir.create(sample_article_path)
-#' texor::generate_rmd(, 1, 1)
-generate_rmd <- function(markdown_file, volume, issue) {
+#' texor::generate_rmd(article_dir)
+generate_rmd <- function(article_dir) {
+    volume <- 1 # placeholder value
+    issue <- 1 # placeholder value
+    journal_details <- get_journal_details(article_dir)
+    volume <- journal_details$volume
+    issue <- journal_details$issue
+    markdown_file <- gsub(".tex", ".md", paste(article_dir,
+                    texor::get_wrapper_type(article_dir), sep = "/"))
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
     # reads the abstract from the second author field
     # reason : abstract is patched as author in metafix.sty
@@ -268,7 +271,7 @@ generate_rmd <- function(markdown_file, volume, issue) {
 #' @example
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
-#' texor::convert_to_markdown(article_dir)
+#' texor::convert_to_native(article_dir)
 convert_to_native <- function(article_dir) {
     # wrapper file name
     input_file <- get_wrapper_type(article_dir)

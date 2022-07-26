@@ -111,3 +111,13 @@ get_md_file_name <- function(article_dir) {
     lookup_file <- get_wrapper_type(article_dir)
     markdown_file <- gsub(".tex", ".md", lookup_file)
 }
+
+get_journal_details <- function(article_dir) {
+    journal_details <- list()
+    hierarchy <- texor::str_split(article_dir, "/")[[1]]
+    journal_folder <- hierarchy[length(hierarchy)-1]
+    journal_info <- texor::str_split(journal_folder, "-")[[1]]
+    journal_details$volume <- strtoi(journal_info[1],10) - 2008
+    journal_details$issue <- strtoi(journal_info[2],10)
+    return(journal_details)
+}

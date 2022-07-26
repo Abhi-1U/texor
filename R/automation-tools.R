@@ -5,7 +5,6 @@ texor_orchestrate <- function(article_dir) {
     for (dir in article_dirs) {
         print(dir)
         # Step - 0 : Set working directory
-        #            html directory
         #            pdf directory
         # Step - 1 : Include Meta-fix style file
         include_style_file(dir)
@@ -18,29 +17,29 @@ texor_orchestrate <- function(article_dir) {
         patch_code_env(dir)
         # Step - 5 : patch custom table environments to table
         patch_table_env(dir)
-        # Step - 6 : Check for Tikz images and pre-process
+        # Step - 6 : patch figure environments to figure
+        patch_figure_env(dir)
+        # Step - 7 : Check for Tikz images and pre-process
         #            it based on condition.
         if (article_has_tikz(dir)) {
             # Process tikz here
         }
-        # Step - 7 : Convert to markdown + find package
+        # Step - 8 : Convert to markdown + find package
         #            references
         convert_to_markdown(dir)
-        # Step - 8 : Create a new directory and copy
+        # Step - 9 : Create a new directory and copy
         #            dependent files/folders
         copy_other_files(dir)
-
-        volume <- 0 # todo : a function to get volume number from path
-        issue <- 0 # todo : a function to get issue number from path
-        md_file_path <- gsub(".tex", ".md", paste(wd,
-                                texor::get_wrapper_type(wd), sep = "/"))
-        # the below function wont work on any article as it needs a folder structure
-        # similar to RJournal style /YYYY-ZZ/YYYY-MMM where YYYY is the year,
-        # ZZ is the Journal issue number and MMM is the DOI referral(unique article number)
-        texor::generate_rmd(md_file_path, volume,issue) # 2 is volume,1 is issue no
-        web_article_path <- gsub(".tex", ".Rmd", paste(wd, "web",
-                                    texor::get_wrapper_type(wd), sep = "/"))
-        texor::produce_html(web_article_path)
+        # Step - 10 : generate R markdown file with
+        #             metadata from DESCRIPTION, tex file
+        #             and file path
+        # Note : the below function wont work on any article as it needs a
+        #folder structure similar to RJournal style /YYYY-ZZ/YYYY-MMM where
+        #YYYY is the year, ZZ is the Journal issue number and MMM is the DOI
+        # referral(unique article number)
+        texor::generate_rmd(dir)
+        # Step - 11 : produce html (using rj_web_article) format
+        texor::produce_html(dir)
     }
     print(article_dir)
     on.exit(setwd(old_wd), add = TRUE)
