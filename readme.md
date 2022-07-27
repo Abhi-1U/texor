@@ -24,7 +24,7 @@ web friendly RJ-web-article format.
 3.  Reading bibliography from bibtex files and ignoring
     `\thebibliography`
 4.  Supports code environments like `Sinput`,`Soutput`, `example`
-    ,`example*`,`verbatim` with code highlight.
+    ,`example*`,`verbatim`, `smallverbatim` with code highlight.
 5.  Supports graphics included as PDF,PNG,JPG.
 6.  Functions to convert PDF graphics to PNG.
 7.  Almost all tables are supported with a few exceptions.
@@ -34,6 +34,7 @@ web friendly RJ-web-article format.
 10. Figure/Table numbering
 11. New GNU-sed like find and replace function in R to manage alien
     commands/environments.
+12. Pre and Post conversion statistics of environments for verification
 
 ### Work in Progress Features
 
@@ -72,6 +73,8 @@ wd <-  system.file("examples/article", package = "texor")
 texor::include_style_file(wd)
 # handle bibliography
 rebib::handle_bibliography(wd)
+# texor::handle_bibliography(wd)
+# will also work
 # patch table env using stream editor
 texor::patch_table_env(wd)
 # patch code env using stream editor
@@ -82,6 +85,8 @@ texor::article_has_tikz(wd)
 texor::pdf_to_png(wd)
 # copy files to a /web folder
 texor::copy_other_files(wd)
+# generate environment stats for tex file
+texor::pre_conversion_statistics(wd)
 # convert to markdown
 texor::convert_to_markdown(wd)
 # the below function wont work on any article as it needs a folder structure
