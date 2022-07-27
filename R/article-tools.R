@@ -67,13 +67,18 @@ include_style_file <- function(article_dir) {
 convert_to_markdown <- function(article_dir) {
     # wrapper file name
     input_file <- get_wrapper_type(article_dir)
+    print(input_file)
     # resource path for pandoc
     input_file_path <- paste(article_dir, input_file, sep = "/")
-    abs_file_path <- tools::file_path_as_absolute(input_file_path)
+    print(input_file_path)
+    abs_file_path <- dirname(input_file_path)
+    print(abs_file_path)
     # markdown equivalent filename
     md_file <- paste(toString(tools::file_path_sans_ext(input_file)),
                              ".md", sep = "")
+    print(md_file)
     md_file_path <- paste(article_dir, md_file, sep = "/")
+    print(md_file_path)
     # a filter to remove embedded bibliography (if any)
     bib_filter <- system.file(
                 "extdata/filters/bib_filter.lua", package = "texor")
@@ -92,15 +97,18 @@ convert_to_markdown <- function(article_dir) {
     # enables table numbering in captions
     table_filter <- system.file(
         "extdata/filters/table_caption.lua", package = "texor")
+    stat_filter <- system.file(
+        "extdata/filters/conversion_compat_check.lua", package = "texor")
     #math_filter <- system.file(
     #    "extdata/filters/math2svg.lua", package = "texor")
     pandoc_opt <- c("-s",
-                  "--resource-path", dirname(abs_file_path),
+                  "--resource-path", abs_file_path,
                   "--lua-filter", bib_filter,
                   "--lua-filter", image_filter,
                   "--lua-filter", code_block_filter,
                   "--lua-filter", knitr_filter,
                   "--lua-filter", table_filter,
+                  "--lua-filter", stat_filter,
                   #"--lua-filter", math_filter,
                   "--lua-filter", post_tikz_filter)
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
@@ -185,7 +193,7 @@ generate_rmd <- function(article_dir) {
         }
 
         list(
-            slug = dirname(markdown_file),
+            slug = journal_details$slug,
             acknowledged = Filter(function(x) x$status == "acknowledged", art$status)[[1]]$date,
             online = online_date
         )
@@ -195,7 +203,7 @@ generate_rmd <- function(article_dir) {
         issue_year <- volume + 2008
         issue_month <- if (issue_year < 2022) issue * 6 else issue * 3
         list(
-            slug = basename(dirname(markdown_file)),
+            slug = journal_details$slug,
             online = as.Date(paste(volume + 2008,
             issue_month, "01"), format = "%Y %m %d")
         )

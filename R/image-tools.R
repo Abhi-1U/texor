@@ -110,6 +110,7 @@ patch_figure_env <- function(article_dir) {
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # read Lines
+    raw_lines <- readLines(file_path)
     raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\begin\\{figure\\*\\}", "figure\\*", "figure")
     print("Changed \\begin{figure\\*} to \\begin{figure}")
