@@ -306,11 +306,13 @@ convert_to_native <- function(article_dir) {
     post_tikz_filter <- system.file(
         "extdata/filters/reinstate_tikz_filter.lua", package = "texor")
     # converts markdown images to knitr image blocks for R-markdown
-    knitr_filter <- system.file(
-        "extdata/filters/knitr_filter.lua", package = "texor")
+    #knitr_filter <- system.file(
+    #   "extdata/filters/knitr_filter.lua", package = "texor")
     # enables table numbering in captions
     table_filter <- system.file(
         "extdata/filters/table_caption.lua", package = "texor")
+    figure_filter <- system.file(
+        "extdata/filters/image_caption.lua", package = "texor")
     #math_filter <- system.file(
     #    "extdata/filters/math2svg.lua", package = "texor")
     pandoc_opt <- c("-s",
@@ -318,7 +320,7 @@ convert_to_native <- function(article_dir) {
                     "--lua-filter", bib_filter,
                     "--lua-filter", image_filter,
                     "--lua-filter", code_block_filter,
-                    "--lua-filter", knitr_filter,
+                    "--lua-filter", figure_filter,
                     "--lua-filter", table_filter,
                     #"--lua-filter", math_filter,
                     "--lua-filter", post_tikz_filter)
