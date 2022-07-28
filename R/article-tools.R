@@ -92,11 +92,14 @@ convert_to_markdown <- function(article_dir) {
     post_tikz_filter <- system.file(
                 "extdata/filters/reinstate_tikz_filter.lua", package = "texor")
     # converts markdown images to knitr image blocks for R-markdown
-    knitr_filter <- system.file(
-                "extdata/filters/knitr_filter.lua", package = "texor")
+    #knitr_filter <- system.file(
+    #            "extdata/filters/knitr_filter.lua", package = "texor")
     # enables table numbering in captions
     table_filter <- system.file(
         "extdata/filters/table_caption.lua", package = "texor")
+    # enables figure numbering in captions
+    figure_filter <- system.file(
+        "extdata/filters/image_caption.lua", package = "texor")
     stat_filter <- system.file(
         "extdata/filters/conversion_compat_check.lua", package = "texor")
     #math_filter <- system.file(
@@ -106,7 +109,7 @@ convert_to_markdown <- function(article_dir) {
                   "--lua-filter", bib_filter,
                   "--lua-filter", image_filter,
                   "--lua-filter", code_block_filter,
-                  "--lua-filter", knitr_filter,
+                  "--lua-filter", figure_filter,
                   "--lua-filter", table_filter,
                   "--lua-filter", stat_filter,
                   #"--lua-filter", math_filter,

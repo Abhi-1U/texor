@@ -41,6 +41,7 @@ count_inline <- function(article_dir, inline) {
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
     raw_lines <- readLines(file_path)
+    raw_words <- str_split(raw_lines," ")
     # filters comments in the given tex file
     comments <- which(grepl("\\%",raw_lines))
     for ( comment in comments) {
@@ -48,24 +49,28 @@ count_inline <- function(article_dir, inline) {
     }
     if (tolower(inline) == "math"){
         begin_patt <- "\\$\\s*(.*?)\\s*\\$"
-        begin_break_points <- str_match(raw_lines,begin_patt)
+        begin_break_points <- which(grepl(begin_patt,raw_lines))
         count <- 0
-        for (line in begin_break_points) {
-            if (is.na(line)) {
-            } else {
-                count = count + 1
+        for (pos in begin_break_points) {
+            raw_words <- str_split(raw_lines[pos]," ")
+            for (word in raw_words[[1]]) {
+                if (grepl(begin_patt, word)) {
+                    count = count + 1
+                }
             }
         }
         return(count)
     }
     if (tolower(inline) == "inlinecode") {
-        begin_patt <- "\\\\code\\{"
-        begin_break_points <- str_match(raw_lines,begin_patt)
         count <- 0
-        for (line in begin_break_points) {
-            if (is.na(line)) {
-            } else {
-                count = count + 1
+        begin_patt <- "\\\\code\\{"
+        begin_break_points <- which(grepl(begin_patt,raw_lines))
+        for (pos in begin_break_points) {
+            raw_words <- str_split(raw_lines[pos]," ")
+            for (word in raw_words[[1]]) {
+                if (grepl(begin_patt, word)) {
+                    count = count + 1
+                }
             }
         }
         return(count)
