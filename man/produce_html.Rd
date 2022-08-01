@@ -4,10 +4,10 @@
 \alias{produce_html}
 \title{call rmarkdown::render to generate html file}
 \usage{
-produce_html(input_file_path)
+produce_html(article_dir)
 }
 \arguments{
-\item{input_file_path}{; String path for the R-Markdown file}
+\item{article_dir}{path to the directory which contains tex article}
 }
 \value{
 none

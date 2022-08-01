@@ -4,10 +4,10 @@
 \alias{generate_rmd}
 \title{Modify Markdown to R-markdown}
 \usage{
-generate_rmd(markdown_file, volume, issue)
+generate_rmd(article_dir)
 }
 \arguments{
-\item{markdown_file}{relative path along with name of the markdown file}
+\item{article_dir}{path to the directory which contains tex article}
 
 \item{volume}{volume number (int)}
 
@@ -19,9 +19,5 @@ generate rmarkdown file in output folder
 \examples{
 article_dir <- system.file("examples/article",
                  package = "texor")
-sample_root_path <- paste(article_dir, "2022-1", sep ="/")
-dir.create(sample_root_path)
-sample_article_path <- paste(sample_root_path, "2022-00", sep ="/")
-dir.create(sample_article_path)
-texor::generate_rmd(, 1, 1)
+texor::generate_rmd(article_dir)
 }

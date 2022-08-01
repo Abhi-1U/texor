@@ -1,7 +1,8 @@
 -- counts environments in a document
-table = 0
+tables = 0
 figure = 0
-math = 0
+maths = 0
+cites = 0
 inlinemath = 0
 displaymath = 0
 codeblock = 0
@@ -19,6 +20,10 @@ wordcount = {
     end
     characters = characters + utf8.len(el.text)
     characters_and_spaces = characters_and_spaces + utf8.len(el.text)
+  end,
+
+  Cite = function(el)
+     cites = cites + 1
   end,
 
   Space = function(el)
@@ -39,7 +44,7 @@ wordcount = {
     displaymath = displaymath + 1
   end,
   Math = function(el)
-    math = math + 1
+    maths = maths + 1
   end,
 
   Image = function(el)
@@ -47,7 +52,7 @@ wordcount = {
   end,
 
   Table = function(el)
-    table = table + 1
+    tables = tables + 1
   end
 }
 
@@ -63,9 +68,10 @@ function Pandoc(el)
     -- skip metadata, just count body:
     pandoc.walk_block(pandoc.Div(el.blocks), wordcount)
     print("---")
-    print("table: " .. table)
+    print("table: " .. tables)
     print("figure: " .. figure)
-    print("math: " .. math)
+    print("math: " .. maths)
+    print("citations: " .. cites)
     print("codeblock:" .. codeblock)
     print("inlinecode:" .. inlinecode)
     print("---")

@@ -3,7 +3,7 @@ texor_orchestrate <- function(article_dir) {
     setwd(article_dir)
     article_dirs <- list.dirs(recursive = FALSE)
     for (dir in article_dirs) {
-
+        latex_to_web(dir)
     }
     print(article_dir)
     on.exit(setwd(old_wd), add = TRUE)

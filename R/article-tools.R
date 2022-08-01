@@ -313,6 +313,8 @@ convert_to_native <- function(article_dir) {
         "extdata/filters/table_caption.lua", package = "texor")
     figure_filter <- system.file(
         "extdata/filters/image_caption.lua", package = "texor")
+    stat_filter <- system.file(
+        "extdata/filters/conversion_compat_check.lua", package = "texor")
     #math_filter <- system.file(
     #    "extdata/filters/math2svg.lua", package = "texor")
     pandoc_opt <- c("-s",
@@ -322,6 +324,7 @@ convert_to_native <- function(article_dir) {
                     "--lua-filter", code_block_filter,
                     "--lua-filter", figure_filter,
                     "--lua-filter", table_filter,
+                    "--lua-filter", stat_filter,
                     #"--lua-filter", math_filter,
                     "--lua-filter", post_tikz_filter)
     output_format <- "native"
