@@ -216,8 +216,8 @@ generate_rmd <- function(article_dir) {
         issue_year <- volume + 2008
         issue_month <- if (issue_year < 2022) issue * 6 else issue * 3
         metadata$abstract <- paste0("The '", metadata$title,
-                                    "' article from the'", issue_year,
-                                    "'-'", issue, "' issue.")
+                                    "' article from the ", issue_year,
+                                    "-", issue, " issue.")
     }
     pkg_yaml_path <- paste(dirname(markdown_file), "pkg_meta.yaml", sep = "/" )
     front_matter <- list(
