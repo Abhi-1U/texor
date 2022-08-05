@@ -49,6 +49,15 @@ web friendly RJ-web-article format.
 
 ## Installation
 
+install these dependency packages (github development versions)
+
+``` r
+# install.packages("remotes")
+remotes::install_github("rstudio/distill")
+remotes::install_github("Abhi-1U/rjtools")
+remotes::install_github("Abhi-1U/rebib")
+```
+
 install the development version from GitHub with:
 
 ``` r
