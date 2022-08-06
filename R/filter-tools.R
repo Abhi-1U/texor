@@ -75,9 +75,11 @@ patch_tex_cmd <- function(article_dir) {
     # tilde
     raw_lines <- stream_editor(raw_lines, "\\s*\\\\textasciitilde\\s*", "\\\\textasciitilde", "\\\\sim")
     # less than or equal to
-    # raw_lines <- stream_editor(raw_lines, "\\leq", "\\leq", "\U2264")
+    #raw_lines <- stream_editor(raw_lines, "\\leq", "\\leq", "≤")
     # greater than or equal to
-    # raw_lines <- stream_editor(raw_lines, "\\geq", "\\geq", "\U2265")
+    #raw_lines <- stream_editor(raw_lines, "\\geq", "\\geq", "≤")
+    # mbox deleted as mathjax does not understand it.
+    raw_lines <- stream_editor(raw_lines, "\\s*\\\\mbox\\{", "\\\\mbox", "")
     # backup old file
     src_file_data <- readLines(file_path)
     backup_file <- paste(file_path, ".bk", sep = "")

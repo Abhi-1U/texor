@@ -278,8 +278,13 @@ filter_fig_end <- function(fig_end_list,tikz_image_list){
 #'
 #' @examples
 pre_process_tikz <- function(article_dir) {
+    # wrapper file name
     input_file <- get_texfile_name(article_dir)
-    abs_file_path <- tools::file_path_as_absolute(article_dir)
+    print(input_file)
+    # resource path for pandoc
+    input_file_path <- paste(article_dir, input_file, sep = "/")
+    print(input_file_path)
+    abs_file_path <- dirname(input_file_path)
     latex_template <- system.file(
                         "extdata/template/latex.template",
                         package = "texor")
@@ -292,50 +297,11 @@ pre_process_tikz <- function(article_dir) {
                   "--template", latex_template)
     input_format <- "latex+raw_tex"
     output_format <- "latex"
-    out_file <- "outfile.tex" # temporary solution will change it later
-    rmarkdown::pandoc_convert(input_file,
+    out_file <- "outfile.tex"
+    rmarkdown::pandoc_convert(input_file_path,
                               from = input_format,
                               to = output_format,
                               options = pandoc_opt,
                               output = out_file,
                               verbose = TRUE)
-}
-
-#' parse tikz metadata like label and caption
-#'
-#' Also export it to a new text file which can be read by a lua filter
-#' @param article_dir path to the directory which contains tex article
-#'
-#' @return
-#' @export tikz_caption_meta.txt contains caption of tikz image
-#' @export tikz_label_meta.txt contains label of tikz image
-#'
-#'
-#' @examples
-read_tikz_metadata <- function(article_dir) {
-    file_name <- get_texfile_name(article_dir)
-    src_file_data <- readLines(file.path(article_dir, file_name))
-    fig_start <- which(grepl(
-            "^\\s*\\\\begin\\{figure", src_file_data))
-    fig_end <- which(grepl(
-            "^\\s*\\\\end\\{figure", src_file_data))
-    pre_fig <- src_file_data[seq_len(fig_start) - 1]
-    post_fig <- src_file_data[seq_len(fig_end)]
-    fig_data <- setdiff(post_fig,pre_fig)
-    caption_line <- which(grepl("^\\s*\\\\caption\\{", fig_data))
-    caption_data <- fig_data[caption_line]
-    caption_text <- gsub("\\\\caption\\{|", "", caption_data)
-    caption_raw_text <- str_match(caption_text, "\\{\\s*(.*?)\\s*\\}")[, 2]
-    label_line <- which(grepl("^\\s*\\\\label\\{", fig_data))
-    label_data <- fig_data[label_line]
-    label_raw_text <- gsub("fig:", "",
-                      gsub("[[:space:]]", "",
-                      gsub("\\\\label\\{|\\}", "", label_data)))
-    # write caption and label into a temp_metadata file
-    tikz_label_file <- file("tikz_label_meta.txt")
-    writeLines(label_raw_text, tikz_label_file)
-    close(tikz_label_file)
-    tikz_caption_file <- file("tikz_caption_meta.txt")
-    writeLines(caption_raw_text, tikz_caption_file)
-    close(tikz_caption_file)
 }

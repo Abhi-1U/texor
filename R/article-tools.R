@@ -102,8 +102,8 @@ convert_to_markdown <- function(article_dir) {
         "extdata/filters/image_caption.lua", package = "texor")
     stat_filter <- system.file(
         "extdata/filters/conversion_compat_check.lua", package = "texor")
-    #math_filter <- system.file(
-    #    "extdata/filters/math2svg.lua", package = "texor")
+    math_filter <- system.file(
+        "extdata/filters/math_filter.lua", package = "texor")
     pandoc_opt <- c("-s",
                   "--resource-path", abs_file_path,
                   "--lua-filter", bib_filter,
@@ -112,7 +112,7 @@ convert_to_markdown <- function(article_dir) {
                   "--lua-filter", figure_filter,
                   "--lua-filter", table_filter,
                   "--lua-filter", stat_filter,
-                  #"--lua-filter", math_filter,
+                  "--lua-filter", math_filter,
                   "--lua-filter", post_tikz_filter)
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
@@ -315,8 +315,8 @@ convert_to_native <- function(article_dir) {
         "extdata/filters/image_caption.lua", package = "texor")
     stat_filter <- system.file(
         "extdata/filters/conversion_compat_check.lua", package = "texor")
-    #math_filter <- system.file(
-    #    "extdata/filters/math2svg.lua", package = "texor")
+    math_filter <- system.file(
+        "extdata/filters/math_filter.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", dirname(abs_file_path),
                     "--lua-filter", bib_filter,
@@ -325,7 +325,7 @@ convert_to_native <- function(article_dir) {
                     "--lua-filter", figure_filter,
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
-                    #"--lua-filter", math_filter,
+                    "--lua-filter", math_filter,
                     "--lua-filter", post_tikz_filter)
     output_format <- "native"
     # This will generate a markdown file with YAML headers.

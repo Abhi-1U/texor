@@ -25,3 +25,23 @@ stream_editor <- function(raw_lines, pattern, target, replacement) {
     }
     return(raw_lines)
 }
+
+#' @title comment filter for latex lines data
+#'
+#' @description
+#' removes commented latex lines to avoid wrong reference data
+#' @param data block of data
+#'
+#' @return filtered data
+#' @export
+comment_filter <- function(data) {
+    comment_break_points <- which(grepl("^%%", data))
+    for (pos in comment_break_points) {
+        data[pos] <- ""
+    }
+    comment_break_points_spaced <- which(grepl("%%", data))
+    for (pos in comment_break_points_spaced) {
+        data[pos] <- ""
+    }
+    return(data[nzchar(data)])
+}

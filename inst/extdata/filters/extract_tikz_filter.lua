@@ -33,18 +33,18 @@ Match RawBlocks for the specific tikz commands
 function RawBlock(el)
   -- First Read the tikzset or tikzstyle data
   if el.text:match'^\\tikzset' or el.text:match'^\\tikzstyle' or el.text:match('\\tikzstyle') or el.text:match'\\tikzset' then
-    --local tikz_dat=el.text
-    -- Store the initial tikzset or tikzstyle data
-    --store_tikz(tikz_dat)
-    -- return a placeholder replacement which will be later treated as div in markdown
-    return latex_placeholder_replacement("\\begin{SetTikz}\\n\\end{SetTikz}")
+    local tikz_dat=el.text
+    --Store the initial tikzset or tikzstyle data
+    store_tikz(tikz_dat)
+    --return a placeholder replacement which will be later treated as div in markdown
+    --return latex_placeholder_replacement("\\begin{SetTikz}\\n\\end{SetTikz}")
   end
   -- In the second pass Read the tikzpicture part
   if el.text:match'^\\begin{tikzpicture}' or el.text:match'\\begin{tikzpicture}' then
-    --local tikz_dat=el.text
+    local tikz_dat=el.text
     -- Store the actual data (data gets appended to the temp_file)
-    --store_tikz(tikz_dat)
+    store_tikz(tikz_dat)
     -- return a placeholder replacement which will be later treated as div in markdown
-    return latex_placeholder_replacement("\\begin{StikzImage}\\n\\end{StikzImage}")
+    --return latex_placeholder_replacement("\\begin{StikzImage}\\n\\end{StikzImage}")
   end
 end
