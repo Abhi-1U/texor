@@ -16,7 +16,7 @@ latex_to_web <- function(dir) {
     # Step - 1 : Include Meta-fix style file
     include_style_file(dir)
     # Step - 2 : Manage Bibliography(ies)
-    handle_bibliography(dir)
+    rebib::handle_bibliography(dir)
     # Step - 3 : Check for PDF and then convert
     #            PDF to PNG based on condition
     pdf_to_png(dir)
@@ -24,6 +24,8 @@ latex_to_web <- function(dir) {
     patch_code_env(dir)
     # Step - 5 : patch custom table environments to table
     patch_table_env(dir)
+    # Step - 5.5 : patch math or  latex commands
+    patch_tex_cmd(dir)
     # Step - 6 : patch figure environments to figure
     patch_figure_env(dir)
     # Step - 7 : Check for Tikz images and pre-process

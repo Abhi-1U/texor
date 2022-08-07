@@ -125,3 +125,8 @@ get_journal_details <- function(article_dir) {
     journal_details$slug <- hierarchy[length(hierarchy)]
     return(journal_details)
 }
+
+find_file <- function(file_path) {
+    split_path <-str_split(file_path,"/")
+    dirname <- paste0(split_path[1:(length(split_path)-1)])
+}
