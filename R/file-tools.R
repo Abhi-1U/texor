@@ -49,3 +49,23 @@ produce_html <- function(article_dir) {
     rmarkdown::render(
         input = input_file_path)
 }
+
+
+find_file <- function(article_dir, src_path) {
+    abs_img_path <- paste(article_dir,src_path,sep="/")
+    main_dir <- dirname(abs_img_path)
+    file_name <- basename(abs_img_path)
+    all_files <- list.files(main_dir)
+    target_extension <- ""
+    for (file in all_files) {
+        if (tools::file_path_sans_ext(file) == file_name) {
+            ext <- tools::file_ext(file)
+            if(ext == "pdf" | ext == "png" | ext == "jpg" | ext == "jpeg" ) {
+                target_extension <- tools::file_ext(file)
+            } else {
+                #skip
+            }
+        }
+    }
+    return(target_extension)
+}
