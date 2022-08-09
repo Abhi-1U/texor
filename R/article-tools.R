@@ -11,10 +11,10 @@
 #' @usage
 #' This function is used to include a custom style file (containing
 #' useful macros for conversion) in the wrapper file
+#' @return Metafix.sty file in the article_dir
+#' @export
 #'
-#' @export Metafix.sty file in the article_dir
-#'
-#' @example
+#' @examples
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
 #' texor::include_style_file(article_dir)
@@ -58,9 +58,10 @@ include_style_file <- function(article_dir) {
 #' @note  pandoc (along with lua interpreter) is already installed with
 #'  R-studio, hence if not using R-studio you will need to install pandoc.
 #'  https://pandoc.org/installing.html
-#' @export creates a converted markdown file, as well as a pkg_meta.yaml file
+#' @return creates a converted markdown file, as well as a pkg_meta.yaml file
+#' @export
 #'
-#' @example
+#' @examples
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
 #' texor::convert_to_markdown(article_dir)
@@ -139,8 +140,8 @@ convert_to_markdown <- function(article_dir) {
 #' @param volume volume number (int)
 #' @param issue issue number (int)
 #'
-#'
-#' @export R-markdown file in the web folder
+#' @return R-markdown file in the web folder
+#' @export
 #'
 #' @examples
 #' article_dir <- system.file("examples/article",
@@ -241,7 +242,9 @@ generate_rmd <- function(article_dir) {
             `rjtools::rjournal_web_article` = list(
                 self_contained = FALSE,
                 toc = FALSE,
-                web_export = TRUE
+                web_export = TRUE,
+                mathjax = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+
                 #legacy_pdf = FALSE
             )
             # `rjtools::rjournal_pdf_article` = pdf_args
@@ -277,9 +280,10 @@ generate_rmd <- function(article_dir) {
 #' @note  pandoc (along with lua interpreter) is already installed with
 #'  R-studio, hence if not using R-studio you will need to install pandoc.
 #'  https://pandoc.org/installing.html
-#' @export creates a converted markdown file, as well as a pkg_meta.yaml file
+#' @return creates a converted markdown file, as well as a pkg_meta.yaml file
+#' @export
 #'
-#' @example
+#' @examples
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
 #' texor::convert_to_native(article_dir)
