@@ -1,5 +1,9 @@
 --[[
-Math Filter – Fix Math environments to be MathJax safe
+Inline Math Filter – Supports nested math environment for MathjaX V3 compatibility
+pandoc generated sample : $\mbox{$\mathbf B$}$
+filter generated equivalent : [\(\mbox{$\mathbf B$}\)]{.math .inline}
+Conversion type : LaTeX --> Markdown
+Copyright: © 2022 Abhishek Ulayil
 License:   MIT – see LICENSE file for details
 --]]
 
@@ -7,12 +11,10 @@ License:   MIT – see LICENSE file for details
 Applies the filter to Math elements
 --]]
 function Math(el)
-    str_math =  pandoc.utils.stringify(el.text)
     if el.mathtype == 'InlineMath' then
-        if str_math:match'mbox' then
-            local delimiter =  "[\\(" .. el.text .. "\\)]{.math .inline}"
-            return(pandoc.RawInline('markdown', delimiter))
-        end
+        local math_data =  "[\\(" .. el.text .. "\\)]{.math .inline}"
+        return(pandoc.RawInline('markdown', math_data))
+    else
+        return(el)
     end
-    return(el)
 end
