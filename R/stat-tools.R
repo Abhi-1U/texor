@@ -2,10 +2,8 @@
 #' @description count common environments,inlines for debugging purposes
 #' @param article_dir path to the directory which contains RJ article
 #'
-#' @return
+#' @return conversion stat block
 #' @export
-#'
-#' @examples
 pre_conversion_statistics <- function(article_dir){
     con_stat <- list()
     con_stat$table <- count_env(article_dir, "table")
@@ -33,7 +31,7 @@ conversion_coverage_checK <- function(article_dir) {
 #' @examples
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
-#' table <- texor::count_env(article_dir, "figure")
+#' figures <- texor::count_env(article_dir, "figure")
 #' print(paste("figure count : ", figures))
 count_env <- function(article_dir, env_name) {
     # find tex file

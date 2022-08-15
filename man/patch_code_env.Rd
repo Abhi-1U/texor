@@ -9,6 +9,9 @@ patch_code_env(article_dir)
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
 }
+\value{
+writes modified file and also backs up the old file before modification
+}
 \description{
 This function calls the `filter_code_env()` function
 over the following code environments described in Rjournal.sty

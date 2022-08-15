@@ -4,10 +4,8 @@
 #' folder for building the HTML version of the R-Markdown file.
 #'
 #' @param from_path : String indicating base path for the working directory
-#' @return none
+#' @return copies dependency files into the output folder.
 #' @export
-#'   copies dependency files into the output folder.
-#'
 copy_other_files <- function(from_path) {
     old_working_directory <- getwd()
     setwd(from_path)
@@ -39,10 +37,8 @@ copy_other_files <- function(from_path) {
 #'
 #' @param article_dir path to the directory which contains tex article
 #'
-#' @return none
-#' @export HTML output
-#'
-#'
+#' @return HTML output
+#' @export
 produce_html <- function(article_dir) {
     input_file_path <- gsub(".tex", ".Rmd", paste(article_dir, "web",
                         texor::get_wrapper_type(article_dir), sep = "/"))

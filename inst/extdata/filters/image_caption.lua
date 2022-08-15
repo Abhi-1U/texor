@@ -19,7 +19,7 @@ function Image(el)
     if not caption then
       -- Figure has no caption, just add the label
       caption = label
-    else 
+    else
       caption = label .. " " .. caption
     end
     el.caption = caption
@@ -27,9 +27,9 @@ function Image(el)
     local classes = el.classes
     print_r(classes)
     if not classes[1] then
-        classes = {"center"}
+        classes = {"center", "width=100%"}
     else
-        classes = {"center"}
+        classes = {"center", "width=100%"}
     end
     el.classes = classes
     print_r(classes)
@@ -52,7 +52,7 @@ function print_r(arr, indentLevel)
     for index,value in pairs(arr) do
         if type(value) == "table" then
             str = str..indentStr..index..": \n"..print_r(value, (indentLevel + 1))
-        else 
+        else
             str = str..indentStr..index..": "..value.."\n"
         end
     end

@@ -3,3 +3,6 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^.*\.Rmd$
+^.*\.md$
+^\.github$

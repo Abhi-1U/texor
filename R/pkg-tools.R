@@ -5,10 +5,8 @@
 #' need to add one more step to pre-process.
 #' @param input_file name of the input file
 #'
-#' @return
-#' @export pkg_meta.yaml file containing meta data
-#'
-#' @examples
+#' @return pkg_meta.yaml file containing meta data
+#' @export
 find_pkg_references <- function(input_file){
     input <- readLines(input_file)
     pkgs <- gregexpr("\\\\(CRAN|BIO)pkg\\{.+?\\}", input)

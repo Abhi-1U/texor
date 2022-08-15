@@ -9,6 +9,9 @@ convert_to_markdown(article_dir)
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
 }
+\value{
+creates a converted markdown file, as well as a pkg_meta.yaml file
+}
 \description{
 Uses pandoc along with several lua filters
 found at inst/extdata/filters in texor package

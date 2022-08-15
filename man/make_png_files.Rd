@@ -10,7 +10,7 @@ make_png_files(input_file_paths)
 \item{input_file_paths}{list of file paths to be converted to png}
 }
 \value{
-
+Converts listed pdf files to png format
 }
 \description{
 This function is designed to be used internally and is called

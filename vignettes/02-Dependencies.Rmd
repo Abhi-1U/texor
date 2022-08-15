@@ -1,0 +1,19 @@
+---
+title: "Dependency List"
+output: rmarkdown::html_vignette 
+vignette: >
+  %\VignetteIndexEntry{02-texor dependencies}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This package is involved with solving conversion problems on multiple fronts, thus has to rely on multiple 
+software tools. A list with reasoning is included here:
+
+1. Pandoc ^[included in Rstudio] : To convert the basic LaTeX to rmarkdown.
+2. poppler pdfutils : To convert embedded PDF to PNG.
+3. LaTeX/TinyTex^[read more [here](https://yihui.org/tinytex/)] : For Tikz and PDF article generation.
+4. rebib(optional)^[texor package also contains a minimal bibliography parser for fallback] : For bibliography conversions/aggregations.
+5. rjtools : For the rjournal_web_article template.
+6. stringr : for string manipulation functions.
+7. Lua filters ^[Filters are included in texor package] ^[Filters as standalone are also available at [this github repo](https://github.com/Abhi-1U/tex-lua-filters)] : Filters for manipulation of ingested files.

@@ -8,9 +8,6 @@
 #' @details
 #' This style file helps texor and pandoc to retain metadata and ease
 #' the conversion process.
-#' @usage
-#' This function is used to include a custom style file (containing
-#' useful macros for conversion) in the wrapper file
 #' @return Metafix.sty file in the article_dir
 #' @export
 #'
@@ -60,11 +57,6 @@ include_style_file <- function(article_dir) {
 #'  https://pandoc.org/installing.html
 #' @return creates a converted markdown file, as well as a pkg_meta.yaml file
 #' @export
-#'
-#' @examples
-#' article_dir <- system.file("examples/article",
-#'                  package = "texor")
-#' texor::convert_to_markdown(article_dir)
 convert_to_markdown <- function(article_dir) {
     # wrapper file name
     input_file <- get_wrapper_type(article_dir)
@@ -105,6 +97,8 @@ convert_to_markdown <- function(article_dir) {
         "extdata/filters/conversion_compat_check.lua", package = "texor")
     math_filter <- system.file(
         "extdata/filters/math_filter.lua", package = "texor")
+    equation_filter <- system.file(
+        "extdata/filters/equation_filter.lua", package = "texor")
     pandoc_opt <- c("-s",
                   "--resource-path", abs_file_path,
                   "--lua-filter", bib_filter,
@@ -114,6 +108,7 @@ convert_to_markdown <- function(article_dir) {
                   "--lua-filter", table_filter,
                   "--lua-filter", stat_filter,
                   "--lua-filter", math_filter,
+                  "--lua-filter", equation_filter,
                   "--lua-filter", post_tikz_filter)
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
@@ -137,16 +132,8 @@ convert_to_markdown <- function(article_dir) {
 #' generate rmarkdown file in output folder
 #'
 #' @param article_dir path to the directory which contains tex article
-#' @param volume volume number (int)
-#' @param issue issue number (int)
-#'
 #' @return R-markdown file in the web folder
 #' @export
-#'
-#' @examples
-#' article_dir <- system.file("examples/article",
-#'                  package = "texor")
-#' texor::generate_rmd(article_dir)
 generate_rmd <- function(article_dir) {
     volume <- 1 # placeholder value
     issue <- 1 # placeholder value
@@ -282,11 +269,6 @@ generate_rmd <- function(article_dir) {
 #'  https://pandoc.org/installing.html
 #' @return creates a converted markdown file, as well as a pkg_meta.yaml file
 #' @export
-#'
-#' @examples
-#' article_dir <- system.file("examples/article",
-#'                  package = "texor")
-#' texor::convert_to_native(article_dir)
 convert_to_native <- function(article_dir) {
     # wrapper file name
     input_file <- get_wrapper_type(article_dir)
@@ -321,6 +303,8 @@ convert_to_native <- function(article_dir) {
         "extdata/filters/conversion_compat_check.lua", package = "texor")
     math_filter <- system.file(
         "extdata/filters/math_filter.lua", package = "texor")
+    equation_filter <- system.file(
+        "extdata/filters/equation_filter.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", dirname(abs_file_path),
                     "--lua-filter", bib_filter,
@@ -330,6 +314,7 @@ convert_to_native <- function(article_dir) {
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
                     "--lua-filter", math_filter,
+                    "--lua-filter", equation_filter,
                     "--lua-filter", post_tikz_filter)
     output_format <- "native"
     # This will generate a markdown file with YAML headers.

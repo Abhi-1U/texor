@@ -11,7 +11,9 @@ pdf_to_png(article_dir)
 \item{article_dir}{path to the directory which contains tex article}
 }
 \value{
-
+All PDF files in the directory except RJwrapper.pdf
+ will be converted to PNG, so avoid keeping any other pdf
+files in the directory.
 }
 \description{
 Note : The extensions in LaTeX source code will

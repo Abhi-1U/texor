@@ -35,9 +35,10 @@ function RawBlock(el)
   if el.text:match'^\\tikzset' or el.text:match'^\\tikzstyle' or el.text:match('\\tikzstyle') or el.text:match'\\tikzset' then
     local tikz_dat=el.text
     --Store the initial tikzset or tikzstyle data
+    --print(tikz_dat)
     store_tikz(tikz_dat)
     --return a placeholder replacement which will be later treated as div in markdown
-    --return latex_placeholder_replacement("\\begin{SetTikz}\\n\\end{SetTikz}")
+    return latex_placeholder_replacement("\\begin{SetTikz}\\n\\end{SetTikz}")
   end
   -- In the second pass Read the tikzpicture part
   if el.text:match'^\\begin{tikzpicture}' or el.text:match'\\begin{tikzpicture}' then
@@ -45,6 +46,20 @@ function RawBlock(el)
     -- Store the actual data (data gets appended to the temp_file)
     store_tikz(tikz_dat)
     -- return a placeholder replacement which will be later treated as div in markdown
-    --return latex_placeholder_replacement("\\begin{StikzImage}\\n\\end{StikzImage}")
+    return latex_placeholder_replacement("\\begin{StikzImage}\\n\\end{StikzImage}")
+  end
+end
+
+function Para(el)
+  local tikz_dat=pandoc.utils.stringify(el.content)
+  --local tikz_dat=pandoc.utils.stringify(el.text)print(tikz_dat)
+    -- First Read the tikzset or tikzstyle data
+  if tikz_dat:match'^\\tikzset' or tikz_dat:match'^\\tikzstyle' or tikz_dat:match('\\tikzstyle') or tikz_dat:match'\\tikzset' then
+    local tikz_dat=pandoc.utils.stringify(el.content)
+    --Store the initial tikzset or tikzstyle data
+    print(tikz_dat)
+    store_tikz(tikz_dat)
+    --return a placeholder replacement which will be later treated as div in markdown
+    return latex_placeholder_replacement("\\begin{SetTikz}\\n\\end{SetTikz}")
   end
 end

@@ -9,9 +9,6 @@ patch_table_env(article_dir)
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
 }
-\value{
-
-}
 \description{
 function to modify env and commands in TeX using GNU sed
 
@@ -25,5 +22,7 @@ changes are made to :
 \\renewcommand{\\multicolumnx}[3]{\\multicolumn{#1}{c}{#3}}
 }
 \examples{
+wd <- system.file("examples/article",
+                 package = "texor")
 texor::patch_table_env(wd)
 }

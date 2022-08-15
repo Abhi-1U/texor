@@ -12,7 +12,7 @@ export_embeded_bibliography(article_dir, file_name)
 \item{file_name}{name of the tex file}
 }
 \value{
-
+bbl_file
 }
 \description{
 This function will extract the embedded bibliography and store it in .bbl

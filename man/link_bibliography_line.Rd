@@ -12,7 +12,7 @@ link_bibliography_line(article_dir, file_name)
 \item{file_name}{file name of the tex document}
 }
 \value{
-
+appends the tex file with a line to link bibliography
 }
 \description{
 append the tex file with a line to link bibliography

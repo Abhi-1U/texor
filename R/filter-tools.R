@@ -8,8 +8,7 @@
 #' @param replacement replacement environment name
 #'
 #' @return modified raw_lines
-#'
-#' @examples
+#' @export
 filter_code_env <- function(raw_lines, target, replacement) {
     begin_patt <- paste("\\s*\\\\begin\\{", target, "\\}", sep = "")
     end_patt <- paste("\\s*\\\\end\\{", target, "\\}", sep = "")
@@ -41,8 +40,8 @@ code_env <- c("example",
 #'
 #' @param article_dir path to the directory which contains tex article
 #'
-#' @export writes modified file and also backs up the old file before modification
-#'
+#' @return writes modified file and also backs up the old file before modification
+#' @export
 patch_code_env <- function(article_dir) {
     # find tex file
     file_name <- get_texfile_name(article_dir)

@@ -5,10 +5,8 @@
 
 <!-- badges: start -->
 
-![](https://img.shields.io/badge/R-%3E=3.6.3-blue?style=for-the-badge&logo=R&logoColor=lightblue)
-![](https://img.shields.io/badge/Developemnt-active-green?style=for-the-badge&logo=)
-![](https://img.shields.io/badge/R_CMD_check-failing-red?style=for-the-badge)
-![](https://img.shields.io/github/issues/Abhi-1U/texor?color=orange&logo=github&logoColor=&style=for-the-badge)
+![Github
+Issues](https://img.shields.io/github/issues/Abhi-1U/texor?color=orange&logo=github&logoColor=&style=for-the-badge)
 
 <!-- badges: end -->
 
@@ -35,17 +33,15 @@ web friendly RJ-web-article format.
 11. New GNU-sed like find and replace function in R to manage alien
     commands/environments.
 12. Pre and Post conversion statistics of environments for verification
+13. Bibliography aggregation.(moved to
+    [rebib](https://github.com/Abhi-1U/rebib))
 
 ### Work in Progress Features
 
 1.  Tikz graphics compilation support functions
-2.  Better Documentation as vignettes, man pages, articles, web-resource
-3.  Bibliography aggregation.(moved to
-    [rebib](https://github.com/Abhi-1U/rebib))
-4.  Automated orchestration function to make the process one seamless
-    process.
-5.  Logging activities and generating analytics. ![texor
-    features](man/figures/texor.svg)
+2.  Better Documentation as vignettes, man pages, articles, pkgdown
+3.  Logging Events in Log Files
+4.  Passing R-CMD-check ![texor features](man/figures/texor.svg)
 
 ## Installation
 

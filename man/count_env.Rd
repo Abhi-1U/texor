@@ -20,6 +20,6 @@ count common environments like table,figure,verbatim etc..
 \examples{
 article_dir <- system.file("examples/article",
                  package = "texor")
-table <- texor::count_env(article_dir, "figure")
+figures <- texor::count_env(article_dir, "figure")
 print(paste("figure count : ", figures))
 }

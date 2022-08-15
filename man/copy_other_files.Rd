@@ -10,7 +10,7 @@ copy_other_files(from_path)
 \item{from_path}{: String indicating base path for the working directory}
 }
 \value{
-none
+copies dependency files into the output folder.
 }
 \description{
 Copies supporting documents like images,pdf,bib files into the output

@@ -14,7 +14,7 @@ write_external_file(file_name, mode, raw_text)
 \item{raw_text}{the text/ list of lines to be written}
 }
 \value{
-
+create/append/write a new file
 }
 \description{
 quick function to writelines to a file

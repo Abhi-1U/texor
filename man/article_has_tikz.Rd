@@ -8,8 +8,6 @@ article_has_tikz(article_dir)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
-
-\item{file_name}{file_name of the tex file}
 }
 \value{
 TRUE/FALSE(boolean)

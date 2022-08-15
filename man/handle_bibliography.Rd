@@ -9,6 +9,11 @@ handle_bibliography(article_dir)
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
 }
+\value{
+bibliography links the bibtex file with latex source code or
+generates a minimal bibtex file from embedded bibliography and links that
+file to the latex file
+}
 \description{
 if bibliography exists in bibtex format then (filename.bib) bibtex file will
 be preferred.
@@ -17,9 +22,4 @@ else this function will generate a minimal bibliography
 \note{
 Use rebib package to use the convertor, aggregator. This is a
 legacy parser with limited support and features
-}
-\examples{
-wd <-  system.file("examples/article", package = "texor")
-texor::handle_bibliography(wd)
-cat(readLines(paste(wd, "example.bib", sep = "/")),sep = "\n")
 }

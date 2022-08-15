@@ -8,7 +8,6 @@
 #' @param replacement replacement string to be substituted
 #'
 #' @return raw_lines : modified  vector of lines
-#' @examples
 stream_editor <- function(raw_lines, pattern, target, replacement) {
     break_points <- which(grepl(pattern, raw_lines))
     #check for length of break_points to avoid no matches
@@ -33,7 +32,6 @@ stream_editor <- function(raw_lines, pattern, target, replacement) {
 #' @param data block of data
 #'
 #' @return filtered data
-#' @export
 comment_filter <- function(data) {
     comment_break_points <- which(grepl("^%%", data))
     for (pos in comment_break_points) {

@@ -10,7 +10,7 @@ pre_conversion_statistics(article_dir)
 \item{article_dir}{path to the directory which contains RJ article}
 }
 \value{
-
+conversion stat block
 }
 \description{
 count common environments,inlines for debugging purposes

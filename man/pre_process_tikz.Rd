@@ -10,7 +10,7 @@ pre_process_tikz(article_dir)
 \item{article_dir}{path to the directory which contains tex article}
 }
 \value{
-
+outfile.tex a modified latex document
 }
 \description{
 This function will remove tikz images from raw_latex and replace

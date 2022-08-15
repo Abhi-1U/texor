@@ -12,7 +12,7 @@ extract_embeded_tikz_image(article_dir, file_name)
 \item{file_name}{name of the tex file}
 }
 \value{
-
+tikz_main_data.txt this file contains isolated tikz code
 }
 \description{
 This will isolate the tikz image into a new text file which will be

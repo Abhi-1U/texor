@@ -10,7 +10,7 @@ find_pkg_references(input_file)
 \item{input_file}{name of the input file}
 }
 \value{
-
+pkg_meta.yaml file containing meta data
 }
 \description{
 Usually this was handled by rjtools package, since the generated Rmd lacks

@@ -42,12 +42,9 @@
 #'
 #'This simple utiliy function will check for tikzpicture environment
 #' @param article_dir path to the directory which contains tex article
-#' @param file_name file_name of the tex file
 #'
 #' @return TRUE/FALSE(boolean)
 #' @export
-#'
-#' @examples
 article_has_tikz <- function(article_dir) {
     # reads the complete file
     file_name <- get_texfile_name(article_dir)
@@ -70,8 +67,6 @@ article_has_tikz <- function(article_dir) {
 #'
 #' @return tikz image data in a list of strings
 #' @export
-#'
-#' @examples
 extract_single_tikz <- function(src_file_data, fig_start, fig_end) {
     print(fig_start)
     print(fig_end)
@@ -89,8 +84,6 @@ extract_single_tikz <- function(src_file_data, fig_start, fig_end) {
 #'
 #' @return tikz image data in a list of list of strings
 #' @export
-#'
-#' @examples
 extract_multiple_tikz <- function(src_file_data,
                         fig_start_list, fig_end_list) {
     tikz_image_lines <- list()
@@ -112,10 +105,8 @@ extract_multiple_tikz <- function(src_file_data,
 #' @param article_dir path to the directory which contains tex article
 #' @param file_name name of the tex file
 #'
-#' @return
-#' @export tikz_main_data.txt this file contains isolated tikz code
-#'
-#' @examples
+#' @return tikz_main_data.txt this file contains isolated tikz code
+#' @export
 extract_embeded_tikz_image <- function(article_dir, file_name) {
     print(paste("TKZ-S2 : extracting Tikz Code from ", file_name))
     if (! article_has_tikz(article_dir, file_name)) {
@@ -165,8 +156,6 @@ extract_embeded_tikz_image <- function(article_dir, file_name) {
 #'
 #' @return tikz_styleset lines as a list of strings
 #' @export
-#'
-#' @examples
 get_single_tikz_styleset <- function(src_file_data, fig_start, fig_end) {
     tikz_set_data <- ""
     set_end_patt <- "\\]$"
@@ -273,10 +262,8 @@ filter_fig_end <- function(fig_end_list,tikz_image_list){
 #' it with placeholders, which will be filled by a lua filter later.
 #' @param article_dir path to the directory which contains tex article
 #'
-#' @return
-#' @export outfile.tex a modified latex document
-#'
-#' @examples
+#' @return outfile.tex a modified latex document
+#' @export
 pre_process_tikz <- function(article_dir) {
     # wrapper file name
     input_file <- get_texfile_name(article_dir)

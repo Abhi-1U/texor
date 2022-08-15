@@ -9,6 +9,13 @@ texor_orchestrate <- function(article_dir) {
     on.exit(setwd(old_wd), add = TRUE)
 }
 
+#' @title latex to web
+#' @description automated function for converting a single RJarticle to web
+#' @param dir directory path
+#'
+#' @return RJweb article document
+#'
+#' @export
 latex_to_web <- function(dir) {
     print(dir)
     # Step - 0 : Set working directory

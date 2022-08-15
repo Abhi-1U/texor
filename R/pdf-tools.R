@@ -8,11 +8,11 @@
 #'
 #' @param article_dir path to the directory which contains tex article
 #'
-#' @return
-#'
-#' @export All PDF files in the directory except RJwrapper.pdf
+#' @return All PDF files in the directory except RJwrapper.pdf
 #'  will be converted to PNG, so avoid keeping any other pdf
 #' files in the directory.
+#'
+#' @export
 #'
 #' @examples
 #' file_dir <- system.file("examples/pdf_conversion/",
@@ -68,8 +68,8 @@ find_pdf_files <- function(article_dir) {
 #'
 #' @param input_file_paths list of file paths to be converted to png
 #'
-#' @return
-#' @export Converts listed pdf files to png format
+#' @return Converts listed pdf files to png format
+#' @export
 #'
 #' @examples
 #'pdf_file <- system.file("examples/pdf_conversion/normal.pdf",
@@ -103,8 +103,8 @@ make_png_files <- function(input_file_paths) {
 #'
 #' @param article_dir path to the directory which contains tex article
 #'
-#' @export writes modified file and also backs up the old file before modification
-#'
+#' @return writes modified file and also backs up the old file before modification
+#' @export
 patch_figure_env <- function(article_dir) {
     # find tex file
     file_name <- get_texfile_name(article_dir)

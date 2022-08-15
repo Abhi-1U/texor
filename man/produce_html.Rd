@@ -10,7 +10,7 @@ produce_html(article_dir)
 \item{article_dir}{path to the directory which contains tex article}
 }
 \value{
-none
+HTML output
 }
 \description{
 call rmarkdown::render to generate html file

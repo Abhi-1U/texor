@@ -7,7 +7,7 @@
 minimal_bibliography(single_bib_data)
 }
 \arguments{
-\item{single_bib_data}{}
+\item{single_bib_data}{a single block of bibliographic entries}
 }
 \value{
 bib_record with unique_id, author and

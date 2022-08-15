@@ -12,8 +12,6 @@
 #'
 #' @return String with name of wrapper file or empty
 #' @export
-#'
-#' @examples
 get_wrapper_type <- function(article_dir) {
     wrapper_types <- c("wrapper.tex",
                        "RJwrap.tex",
@@ -38,8 +36,6 @@ get_wrapper_type <- function(article_dir) {
 #'
 #' @return String name of the tex-file name
 #' @export
-#'
-#' @examples
 get_texfile_name <- function(article_dir) {
     lookup_file <- get_wrapper_type(article_dir)
     wrapper_file <- readLines(file.path(article_dir, lookup_file))
@@ -64,8 +60,6 @@ get_texfile_name <- function(article_dir) {
 #'
 #' @return name of bib file (character)
 #' @export
-#'
-#' @examples
 get_bib_file <- function(article_dir, file_name) {
     file_list <- list.files(article_dir, recursive = FALSE)
     extensions <- c("*.bib")
@@ -97,10 +91,8 @@ get_bib_file <- function(article_dir, file_name) {
 #' @param mode mode of opening
 #' @param raw_text the text/ list of lines to be written
 #'
-#' @return
-#' @export create/append/write a new file
-#'
-#' @examples
+#' @return create/append/write a new file
+#' @export
 write_external_file <- function(file_name, mode, raw_text) {
     write_file <- file(file_name, mode)
     writeLines(raw_text, write_file)

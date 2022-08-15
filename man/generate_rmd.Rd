@@ -8,16 +8,10 @@ generate_rmd(article_dir)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
-
-\item{volume}{volume number (int)}
-
-\item{issue}{issue number (int)}
+}
+\value{
+R-markdown file in the web folder
 }
 \description{
 generate rmarkdown file in output folder
-}
-\examples{
-article_dir <- system.file("examples/article",
-                 package = "texor")
-texor::generate_rmd(article_dir)
 }

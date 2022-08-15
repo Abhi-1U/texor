@@ -1,0 +1,24 @@
+---
+title: "texor"
+subtitle: '**tools for converting LaTeX source files into RJ-web-articles**'
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{01-Introduction to texor}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(texor)
+```
+
+# Introduction 
+\CRANpackage{texor} is a proposed package that can help in converting old LaTeX based documents, research papers to HTML through intermediate conversions. This is particularly a problem for  R Research papers where HTML export was not available and hence modern compatibility to export a HTML file was missed out.
+    To bring these documents online HTML based webpages are a much better alternative as opposed to PDFs and to solve the lack of web versions texor will provide a mechanism.  

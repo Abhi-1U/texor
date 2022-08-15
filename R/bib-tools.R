@@ -7,14 +7,10 @@
 #' legacy parser with limited support and features
 #' @param article_dir path to the directory which contains tex article
 #'
-#' @export bibliography links the bibtex file with latex source code or
+#' @return bibliography links the bibtex file with latex source code or
 #' generates a minimal bibtex file from embedded bibliography and links that
 #' file to the latex file
-#'
-#' @examples
-#' wd <-  system.file("examples/article", package = "texor")
-#' texor::handle_bibliography(wd)
-#' cat(readLines(paste(wd, "example.bib", sep = "/")),sep = "\n")
+#' @export
 handle_bibliography <- function(article_dir) {
     # checking for RJwrapper and fetching the file name for tex file
     old_wd <- getwd()
@@ -38,10 +34,8 @@ handle_bibliography <- function(article_dir) {
 #' @param bibtex_data a list of minimal bibtex data
 #' @param file_name name of the tex file
 #'
-#' @return
-#' @export bibtex_file a bibtex file is generated
-#'
-#' @examples
+#' @return bibtex_file a bibtex file is generated
+#' @export
 make_bibtex_file <-function(bibtex_data,file_name) {
     bib_file_name <- gsub(".tex", ".bib", file_name)
     for (iterator in seq_along(bibtex_data[["book"]])){
@@ -71,8 +65,6 @@ make_bibtex_file <-function(bibtex_data,file_name) {
 #'
 #' @return bbl_record nested list
 #' @export
-#'
-#' @examples
 bib_handler <- function(bib_items) {
     bbl_record <- list()
     # applies minimal bibliography to all the items
@@ -92,13 +84,11 @@ bib_handler <- function(bib_items) {
 #'
 #' A function meant to be used internally or in a sequence as described
 #' in the documentation
-#' @param single_bib_data
+#' @param single_bib_data a single block of bibliographic entries
 #'
 #' @return bib_record with unique_id, author and
 #'         title(also containing other info)
 #' @export
-#'
-#' @examples
 minimal_bibliography <- function(single_bib_data) {
     bib_record <- list()
     # minimal bibliography parser / generator
@@ -182,10 +172,8 @@ minimal_bibliography <- function(single_bib_data) {
 #' @param article_dir path to the directory which contains tex article
 #' @param file_name name of the tex file
 #'
-#' @return
-#' @export bbl_file
-#'
-#' @examples
+#' @return bbl_file
+#' @export
 export_embeded_bibliography <- function(article_dir, file_name) {
     src_file_data <- readLines(file.path(article_dir, file_name))
     bbl_start <- which(grepl("^\\s*\\\\begin\\{thebibliography\\}",
@@ -206,8 +194,6 @@ export_embeded_bibliography <- function(article_dir, file_name) {
 #'
 #' @return a list of bib entries separated at bibitem
 #' @export
-#'
-#' @examples
 extract_embeded_bib_items <- function(article_dir, file_name){
     src_file_data <- readLines(file.path(article_dir, file_name))
     bbl_start <- which(grepl("^\\s*\\\\begin\\{thebibliography\\}",
@@ -232,10 +218,8 @@ extract_embeded_bib_items <- function(article_dir, file_name){
 #' @param article_dir path to the directory which contains tex article
 #' @param file_name file name of the tex document
 #'
-#' @return
-#' @export appends the tex file with a line to link bibliography
-#'
-#' @examples
+#' @return appends the tex file with a line to link bibliography
+#' @export
 link_bibliography_line <- function(article_dir, file_name) {
     src_file_data <- readLines(file.path(article_dir, file_name))
     bib_exist <- FALSE

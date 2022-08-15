@@ -12,10 +12,12 @@
 #' \\renewcommand{\\multicolumnx}[3]{\\multicolumn{#1}{c}{#3}}
 #' @param article_dir path to the directory which contains tex article
 #'
-#' @return
+#' @return NULL
 #' @export
 #'
 #' @examples
+#' wd <- system.file("examples/article",
+#'                  package = "texor")
 #' texor::patch_table_env(wd)
 patch_table_env <- function(article_dir) {
     file_name <- get_texfile_name(article_dir)

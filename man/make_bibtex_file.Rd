@@ -12,7 +12,7 @@ make_bibtex_file(bibtex_data, file_name)
 \item{file_name}{name of the tex file}
 }
 \value{
-
+bibtex_file a bibtex file is generated
 }
 \description{
 writes bibtex data in a structured format to the .bib file
