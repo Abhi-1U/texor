@@ -83,7 +83,7 @@ wd <-  system.file("examples/article", package = "texor")
 # first include the style file
 texor::include_style_file(wd)
 # handle bibliography
-rebib::handle_bibliography(wd)
+rebib::aggregate_bibliography(wd)
 # texor::handle_bibliography(wd)
 # will also work
 # patch table env using stream editor

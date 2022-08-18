@@ -23,7 +23,7 @@ latex_to_web <- function(dir) {
     # Step - 1 : Include Meta-fix style file
     include_style_file(dir)
     # Step - 2 : Manage Bibliography(ies)
-    rebib::handle_bibliography(dir)
+    rebib::aggregate_bibliography(dir)
     # Step - 3 : Check for PDF and then convert
     #            PDF to PNG based on condition
     pdf_to_png(dir)
