@@ -25,14 +25,25 @@ function Image(el)
     el.caption = caption
     -- centering the figure
     local classes = el.classes
-    print_r(classes)
     if not classes[1] then
-        classes = {"center", "width=100%"}
+        classes = {"center"}
     else
-        classes = {"center", "width=100%"}
+        classes = {"center"}
     end
     el.classes = classes
-    print_r(classes)
+    local width_attr = "width=100%"
+    local old_attr = el.attributes
+    print(el.attr)
+    if not old_attr[1] then
+      -- Figure has no attributes
+      old_attr = pandoc.Blocks{width_attr}
+    else
+      -- Add label as plain block element
+      --table.insert(old_attr[1],1, pandoc.Plain(width_attr))
+      new_attr = pandoc.Attr(el.attr.identifier, el.classes, {{"width","100%"}})
+    end
+    print(new_attr)
+    el.attr = new_attr
     return el
 end
 
