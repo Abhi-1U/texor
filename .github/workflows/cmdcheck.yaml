@@ -1,0 +1,28 @@
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      -'*'
+
+name: R_cmd_check
+
+jobs:
+  rcmdcheck:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+            extra-packages: any::rcmdcheck
+            needs: check
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+            args: 'c("--no-manual", "--as-cran")'
+            error-on: '"error"'
+            check-dir: '"check"'

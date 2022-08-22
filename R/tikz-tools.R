@@ -109,7 +109,7 @@ extract_multiple_tikz <- function(src_file_data,
 #' @export
 extract_embeded_tikz_image <- function(article_dir, file_name) {
     print(paste("TKZ-S2 : extracting Tikz Code from ", file_name))
-    if (! article_has_tikz(article_dir, file_name)) {
+    if (! article_has_tikz(article_dir)) {
        print("No tikz Image found")
        return(FALSE)
     }
