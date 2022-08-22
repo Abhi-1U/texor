@@ -18,34 +18,63 @@ texor_orchestrate <- function(article_dir) {
 #' @export
 latex_to_web <- function(dir) {
     print(dir)
+    date <- Sys.Date()
+    log_file <- paste0("texor-log-",date,".log")
+    log_setup(dir, log_file, 2)
+    texor_log(paste0("working directory : ", dir), "info", 2)
+    file_name <- get_texfile_name(dir)
+    texor_log(paste0("file name : ", file_name), "info", 2)
     # Step - 0 : Set working directory
     #            pdf directory
     # Step - 1 : Include Meta-fix style file
+    wrapper <- get_wrapper_type(dir)
+    texor_log(paste0("Stage-01 | ", "including Style File to : ", wrapper), "info", 2)
+    texor_log(paste0("Stage-01 | ", "Style File :  Metafix.sty"), "info", 2)
     include_style_file(dir)
+    texor_log(paste0("Stage-01 | ", "Included Style File :  Metafix.sty"), "info", 2)
     # Step - 2 : Manage Bibliography(ies)
+    texor_log(paste0("Stage-02 | ", "aggregating Bibliography using :  rebib"), "info", 2)
+    texor_log(paste0("Stage-02 | ", "Check rebib logs for more info"), "info", 2)
     rebib::aggregate_bibliography(dir)
+    log_setup(dir, log_file, 2)
     # Step - 3 : Check for PDF and then convert
     #            PDF to PNG based on condition
+    texor_log(paste0("Stage-03 | ","converting pdf files to png"), "info", 2)
     pdf_to_png(dir)
+    texor_log(paste0("Stage-03 | ","converted pdf files to png"), "info", 2)
     # Step - 4 : patch code environments to verbatim
+    texor_log(paste0("Stage-04 | ","Patching Code Env"), "info", 2)
     patch_code_env(dir)
+    texor_log(paste0("Stage-04 | ","Patched Code Env"), "info", 2)
     # Step - 5 : patch custom table environments to table
+    texor_log(paste0("Stage-05 | ","Patching Table Env"), "info", 2)
     patch_table_env(dir)
+    texor_log(paste0("Stage-05 | ","Patched Table Env"), "info", 2)
     # Step - 5.5 : patch math or  latex commands
-    patch_tex_cmd(dir)
+    #patch_tex_cmd(dir)
     # Step - 6 : patch figure environments to figure
+    texor_log(paste0("Stage-06 | ","Patching Figure Env"), "info", 2)
     patch_figure_env(dir)
+    texor_log(paste0("Stage-06 | ","Patched Figure Env"), "info", 2)
     # Step - 7 : Check for Tikz images and pre-process
     #            it based on condition.
+    texor_log(paste0("Stage-07 | ","Checking For Tikz Images"), "info", 2)
     if (article_has_tikz(dir)) {
-        # Process tikz here
+        # Add a note for tikz Process here
+        texor_log(paste0("Stage-07 | ","Tikz Image Found, Conversion will require manual intervention"), "info", 2)
+    } else {
+        texor_log(paste0("Stage-07 | ","No Tikz Image Found"), "info", 2)
     }
     # Step - 8 : Convert to markdown + find package
     #            references
+    texor_log(paste0("Stage-08 | ","Converting LaTeX to Markdown"), "info", 2)
     convert_to_markdown(dir)
+    texor_log(paste0("Stage-08 | ","Converted LaTeX to Markdown"), "info", 2)
     # Step - 9 : Create a new directory and copy
     #            dependent files/folders
+    texor_log(paste0("Stage-09 | ","Copying Dependencies to /web"), "info", 2)
     copy_other_files(dir)
+    texor_log(paste0("Stage-09 | ","Copied Dependencies to /web"), "info", 2)
     # Step - 10 : generate R markdown file with
     #             metadata from DESCRIPTION, tex file
     #             and file path
@@ -53,7 +82,11 @@ latex_to_web <- function(dir) {
     #folder structure similar to RJournal style /YYYY-ZZ/YYYY-MMM where
     #YYYY is the year, ZZ is the Journal issue number and MMM is the DOI
     # referral(unique article number)
+    texor_log(paste0("Stage-10 | ","Creating R-markdown File to /web"), "info", 2)
     texor::generate_rmd(dir)
+    texor_log(paste0("Stage-10 | ","Created R-markdown File to /web"), "info", 2)
     # Step - 11 : produce html (using rj_web_article) format
+    texor_log(paste0("Stage-11 | ","Knitting Rmd to html"), "info", 2)
     texor::produce_html(dir)
+    texor_log(paste0("Stage-11 | ","Knitted Rmd to html"), "info", 2)
 }
