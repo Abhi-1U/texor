@@ -20,9 +20,9 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
             extra-packages: |
-            any::rcmdcheck
-            github::Abhi-1U/rjtools
-            github::Abhi-1U/rebib
+                any::rcmdcheck
+                github::Abhi-1U/rjtools
+                github::Abhi-1U/rebib
             needs: check
       - uses: r-lib/actions/check-r-package@v2
         with:
