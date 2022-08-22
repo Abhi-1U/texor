@@ -18,7 +18,7 @@ jobs:
       - uses: r-lib/actions/setup-r@v1
       - uses: r-lib/actions/setup-pandoc@v1
       - uses: r-lib/actions/setup-r-dependencies@v2
-      with:
+        with:
             extra-packages: |
                 any::rcmdcheck
                 github::Abhi-1U/rjtools
