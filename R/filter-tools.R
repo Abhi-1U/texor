@@ -65,21 +65,33 @@ patch_code_env <- function(article_dir) {
     write_external_file(file_path, "w", raw_lines)
 }
 
-patch_tex_cmd <- function(article_dir) {
+patch_equations <- function(article_dir) {
     # find tex file
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
+    delimiter <- "$$"
     raw_lines <- readLines(file_path)
-    # tilde
-    #raw_lines <- stream_editor(raw_lines, "\\s*\\\\textasciitilde\\s*", "\\\\textasciitilde", "\\\\sim")
-    # less than or equal to
-    #raw_lines <- stream_editor(raw_lines, "\\leq", "\\leq", "≤")
-    # greater than or equal to
-    #raw_lines <- stream_editor(raw_lines, "\\geq", "\\geq", "≤")
-    # mbox deleted as mathjax does not understand it.
-    #raw_lines <- stream_editor(raw_lines, "\\s*\\\\mbox\\{", "\\\\mbox", "")
-    # backup old file
+    eqn_arr_begin_bps <- which(grepl("\\s*\\\\begin\\{eqnarray\\}",raw_lines))
+    eqn_arr_end_bps <- which(grepl("\\s*\\\\end\\{eqnarray\\}",raw_lines))
+    if (length(eqn_arr_begin_bps) == length(eqn_arr_end_bps)) {
+        for (iterator in seq_along(eqn_arr_begin_bps)) {
+             begin_pos <- eqn_arr_begin_bps[iterator]
+             end_pos <- eqn_arr_end_bps[iterator]
+             if (begin_pos != end_pos) {
+                 mod_begin_line <- paste(delimiter, raw_lines[begin_pos], sep = " ")
+                 mod_end_line <- paste(raw_lines[end_pos], delimiter, sep = " ")
+                 raw_lines[begin_pos] <- mod_begin_line
+                 raw_lines[end_pos] <- mod_end_line
+            } else {
+                 mod_line <- paste(delimiter, raw_lines[begin_pos], delimiter, sep = " ")
+                 raw_lines[begin_pos] <- mod_begin_line
+             }
+
+        }
+    } else {
+        print("The equations do not align")
+    }
     src_file_data <- readLines(file_path)
     backup_file <- paste(file_path, ".bk", sep = "")
     write_external_file(backup_file, "w", src_file_data)

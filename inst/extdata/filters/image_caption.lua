@@ -40,8 +40,9 @@ function Image(el)
     else
       -- Add label as plain block element
       --table.insert(old_attr[1],1, pandoc.Plain(width_attr))
-      new_attr = pandoc.Attr(el.attr.identifier, el.classes, {{"width","100%"}})
+      new_attr = pandoc.Attr(el.attr.identifier, el.classes, {{"max-width","100%"}})
     end
+    new_attr = pandoc.Attr(el.attr.identifier, el.classes, {{"max-width","100%"}})
     print(new_attr)
     el.attr = new_attr
     return el

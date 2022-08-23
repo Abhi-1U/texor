@@ -51,7 +51,7 @@ latex_to_web <- function(dir) {
     patch_table_env(dir)
     texor_log(paste0("Stage-05 | ","Patched Table Env"), "info", 2)
     # Step - 5.5 : patch math or  latex commands
-    #patch_tex_cmd(dir)
+    patch_equations(dir)
     # Step - 6 : patch figure environments to figure
     texor_log(paste0("Stage-06 | ","Patching Figure Env"), "info", 2)
     patch_figure_env(dir)
