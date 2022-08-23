@@ -106,8 +106,8 @@ convert_to_markdown <- function(article_dir) {
                   "--lua-filter", code_block_filter,
                   "--lua-filter", figure_filter,
                   "--lua-filter", table_filter,
-                  "--lua-filter", stat_filter,
-                  "--lua-filter", math_filter,
+                  #"--lua-filter", stat_filter,
+                  #"--lua-filter", math_filter,
                   "--lua-filter", equation_filter,
                   "--lua-filter", post_tikz_filter)
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
@@ -313,7 +313,7 @@ convert_to_native <- function(article_dir) {
                     "--lua-filter", figure_filter,
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
-                    "--lua-filter", math_filter,
+                    #"--lua-filter", math_filter,
                     "--lua-filter", equation_filter,
                     "--lua-filter", post_tikz_filter)
     output_format <- "native"

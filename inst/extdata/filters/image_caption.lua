@@ -31,20 +31,14 @@ function Image(el)
         classes = {"center"}
     end
     el.classes = classes
-    local width_attr = "width=100%"
-    local old_attr = el.attributes
-    print(el.attr)
-    if not old_attr[1] then
+    local old_attr = el.attr
+    if not old_attr then
       -- Figure has no attributes
-      old_attr = pandoc.Blocks{width_attr}
+      el.attr.attributes[1] = {"max-width","100%"}
     else
       -- Add label as plain block element
-      --table.insert(old_attr[1],1, pandoc.Plain(width_attr))
-      new_attr = pandoc.Attr(el.attr.identifier, el.classes, {{"max-width","100%"}})
+      el.attr.attributes[2] = {"max-width","100%"}
     end
-    new_attr = pandoc.Attr(el.attr.identifier, el.classes, {{"max-width","100%"}})
-    print(new_attr)
-    el.attr = new_attr
     return el
 end
 

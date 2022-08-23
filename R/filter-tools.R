@@ -78,16 +78,10 @@ patch_equations <- function(article_dir) {
         for (iterator in seq_along(eqn_arr_begin_bps)) {
              begin_pos <- eqn_arr_begin_bps[iterator]
              end_pos <- eqn_arr_end_bps[iterator]
-             if (begin_pos != end_pos) {
-                 mod_begin_line <- paste(delimiter, raw_lines[begin_pos], sep = " ")
-                 mod_end_line <- paste(raw_lines[end_pos], delimiter, sep = " ")
-                 raw_lines[begin_pos] <- mod_begin_line
-                 raw_lines[end_pos] <- mod_end_line
-            } else {
-                 mod_line <- paste(delimiter, raw_lines[begin_pos], delimiter, sep = " ")
-                 raw_lines[begin_pos] <- mod_begin_line
-             }
-
+             mod_begin_line <- gsub("\\\\begin\\{eqnarray(\\*?)\\}", "\\$\\$\\\\begin\\{eqnarray\\1\\}",raw_lines[begin_pos])
+             mod_end_line <- gsub("\\\\end\\{eqnarray(\\*?)\\}", "\\\\end\\{eqnarray\\1\\}\\$\\$", raw_lines[end_pos])
+             raw_lines[begin_pos] <- mod_begin_line
+             raw_lines[end_pos] <- mod_end_line
         }
     } else {
         print("The equations do not align")
