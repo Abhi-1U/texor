@@ -38,6 +38,11 @@ end
 
 function Link(el)
     is_bkdwn = false
+    local resource = el.target
+    if resource:match("^www.") then
+        resource = [[http://]] .. resource
+        el.target = resource
+    end
     for _,label in pairs(equation_labels) do
         if ("#"..label) == el.target then
             print(label)
