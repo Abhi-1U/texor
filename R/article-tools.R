@@ -149,7 +149,8 @@ generate_rmd <- function(article_dir) {
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
     # reads the abstract from the second author field
     # reason : abstract is patched as author in metafix.sty
-    metadata$abstract <- metadata$author[2]
+    abstract <- gsub("¶"," ", metadata$author[2])
+    metadata$abstract <- abstract
     metadata$author <- lapply(
             strsplit(metadata$address, "\\\n", fixed = TRUE),
             function(person) {
