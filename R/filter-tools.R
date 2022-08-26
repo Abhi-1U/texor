@@ -78,7 +78,7 @@ patch_equations <- function(article_dir) {
         for (iterator in seq_along(eqn_arr_begin_bps)) {
              begin_pos <- eqn_arr_begin_bps[iterator]
              end_pos <- eqn_arr_end_bps[iterator]
-             mod_begin_line <- gsub("\\\\begin\\{eqnarray(\\*?)\\}", "\\$\\$\\\\begin\\{eqnarray\\1\\}",raw_lines[begin_pos])
+             mod_begin_line <- gsub("\\\\begin\\{eqnarray(\\*?)\\}", "\\n\\$\\$\\\\begin\\{eqnarray\\1\\}",raw_lines[begin_pos])
              mod_end_line <- gsub("\\\\end\\{eqnarray(\\*?)\\}", "\\\\end\\{eqnarray\\1\\}\\$\\$", raw_lines[end_pos])
              raw_lines[begin_pos] <- mod_begin_line
              raw_lines[end_pos] <- mod_end_line

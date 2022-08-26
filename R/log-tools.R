@@ -3,23 +3,25 @@
 #' logging
 #' @param article_dir path to the directory which contains tex article
 #' @param file_name name of the log file
+#' @param namespace namespace of log file
 #' @param idx index of log level
 #' @return null
 #' @export
 #'
 #' @examples
 #'  wd <-  system.file("examples/article", package = "texor")
-#'  texor::log_setup(wd, "log-file.log", 2)
-log_setup <- function(article_dir, file_name, idx) {
+#'  texor::log_setup(wd, "log-file.log", "texor", 2)
+log_setup <- function(article_dir, file_name, namespace, idx) {
     log_file_path <- paste(article_dir, file_name, sep = "/")
     if(! file.exists(log_file_path)) {
         file.create(log_file_path,showWarnings = T)
     } else {
         #pass
     }
-    logger::log_threshold(index = idx)
-    logger::log_appender(logger::appender_file(log_file_path),index=idx)
-
+    logger::log_threshold(namespace = namespace, index = idx)
+    logger::log_appender(logger::appender_file(log_file_path),
+                         namespace = namespace,
+                         index=idx)
 }
 
 
@@ -34,35 +36,36 @@ log_setup <- function(article_dir, file_name, idx) {
 #'
 #' @examples
 #'  wd <-  system.file("examples/article", package = "texor")
-#' texor::log_setup(wd, "log-file.log", 2)
+#' texor::log_setup(wd, "log-file.log", "texor" , 2)
 #' texor::texor_log("Hello", "INFO", 2)
 #' cat(readLines(paste(wd,"/log-file.log",sep="")),sep="\n")
 texor_log <- function(message, category, idx) {
     if (identical(tolower(category), "info")) {
-        logger::log_info(message)
-        logger::log_appender(index = idx)
+        logger::log_info(message, namespace = "texor")
+        logger::log_appender(namespace = "texor",index = idx)
     }
     if (identical(tolower(category), "success")) {
-        logger::log_success(message)
-        logger::log_appender(index = idx)
+        logger::log_success(message, namespace = "texor")
+        logger::log_appender(namespace = "texor",index = idx)
     }
     if (identical(tolower(category), "warning")) {
-        logger::log_warn(message)
-        logger::log_appender(index = idx)
+        logger::log_warn(message, namespace = "texor")
+        logger::log_appender(namespace = "texor",index = idx)
     }
     if (identical(tolower(category), "debug")) {
-        logger::log_debug(message,index =2)
-        logger::log_appender(index = idx)
+        logger::log_debug(message,namespace = "texor",index =2)
+        logger::log_appender(namespace = "texor",index = idx)
     }
     if (identical(tolower(category), "error")) {
-        logger::log_error(message)
-        logger::log_appender(index = idx)
+        logger::log_error(message, namespace = "texor")
+        logger::log_appender(namespace = "texor",index = idx)
     }
     if (identical(tolower(category), "failure")) {
-        logger::log_failure(message)
-        logger::log_appender(index = idx)
+        logger::log_failure(message, namespace = "texor")
+        logger::log_appender(namespace = "texor",index = idx)
     } else {
         #pass
         #logger::log_info(message)
     }
 }
+

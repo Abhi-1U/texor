@@ -10,8 +10,10 @@ pre_conversion_statistics <- function(article_dir){
     con_stat$figure <- count_env(article_dir, "figure")
     con_stat$math <- count_inline(article_dir, "math")
     con_stat$citations <- count_inline(article_dir, "cite")
-    con_stat$codeblock <- count_env(article_dir, "verbatim")
-    con_stat$inlinecode <- count_inline(article_dir, "inlinecode")
+    con_stat$code$block <- count_env(article_dir, "verbatim")
+    con_stat$code$inline <- count_inline(article_dir, "inlinecode")
+    yaml_path <- paste0(article_dir,"/pre-conversion-meta.yaml")
+    yaml::write_yaml(con_stat,yaml_path)
     return(con_stat)
 }
 

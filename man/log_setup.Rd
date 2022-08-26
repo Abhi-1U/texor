@@ -4,12 +4,14 @@
 \alias{log_setup}
 \title{texor log setup}
 \usage{
-log_setup(article_dir, file_name, idx)
+log_setup(article_dir, file_name, namespace, idx)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
 
 \item{file_name}{name of the log file}
+
+\item{namespace}{namespace of log file}
 
 \item{idx}{index of log level}
 }
@@ -22,5 +24,5 @@ logging
 }
 \examples{
  wd <-  system.file("examples/article", package = "texor")
- texor::log_setup(wd, "log-file.log", 2)
+ texor::log_setup(wd, "log-file.log", "texor", 2)
 }

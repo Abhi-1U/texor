@@ -21,7 +21,7 @@ a wrapper function for logging different types of log entries
 }
 \examples{
  wd <-  system.file("examples/article", package = "texor")
-texor::log_setup(wd, "log-file.log", 2)
+texor::log_setup(wd, "log-file.log", "texor" , 2)
 texor::texor_log("Hello", "INFO", 2)
 cat(readLines(paste(wd,"/log-file.log",sep="")),sep="\n")
 }

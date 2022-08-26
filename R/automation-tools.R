@@ -20,7 +20,7 @@ latex_to_web <- function(dir) {
     print(dir)
     date <- Sys.Date()
     log_file <- paste0("texor-log-",date,".log")
-    log_setup(dir, log_file, 2)
+    log_setup(dir, log_file, "texor" ,2)
     texor_log(paste0("working directory : ", dir), "info", 2)
     file_name <- get_texfile_name(dir)
     texor_log(paste0("file name : ", file_name), "info", 2)

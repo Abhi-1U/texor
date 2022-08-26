@@ -25,6 +25,10 @@ include_style_file <- function(article_dir) {
     file_name <- get_wrapper_type(article_dir)
     wrapper_file_content <- readLines(file.path(article_dir, file_name))
     wrapper_path <- paste(article_dir, file_name, sep = "/")
+    if (!identical(which(grepl("\\usepackage\\{Metafix\\}",wrapper_file_content)),integer(0))) {
+        print("Metafix style file already exists")
+        return(NULL)
+    }
     doc_start <- which(grepl("^\\s*\\\\begin\\{document\\}",
                         wrapper_file_content))
     before_doc_start <- wrapper_file_content[1:(doc_start - 1)]
@@ -106,7 +110,7 @@ convert_to_markdown <- function(article_dir) {
                   "--lua-filter", code_block_filter,
                   "--lua-filter", figure_filter,
                   "--lua-filter", table_filter,
-                  #"--lua-filter", stat_filter,
+                  "--lua-filter", stat_filter,
                   #"--lua-filter", math_filter,
                   "--lua-filter", equation_filter,
                   "--lua-filter", post_tikz_filter)
