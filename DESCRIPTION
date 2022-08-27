@@ -11,8 +11,6 @@ LazyData: true
 RoxygenNote: 7.2.1
 Imports: 
     rmarkdown,
-    animation,
-    magick,
     pdftools,
     tools,
     tinytex,

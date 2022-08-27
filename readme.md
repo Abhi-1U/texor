@@ -26,13 +26,14 @@ web friendly RJ-web-article format.
 5.  Supports graphics included as PDF,PNG,JPG.
 6.  Functions to convert PDF graphics to PNG.
 7.  Almost all tables are supported with a few exceptions.
-8.  Other things like citations,links,footnotes,math are also supported.
+8.  Other things like citations,links,footnotes,math,ctv,package
+    references are also supported.
 9.  A parser to read and minimally convert inbuilt `\thebibliography` to
-    bibtex
-10. Figure/Table numbering
-11. New GNU-sed like find and replace function in R to manage alien
-    commands/environments.
-12. Pre and Post conversion statistics of environments for verification
+    bibtex (moved to [rebib](https://github.com/Abhi-1U/rebib))
+10. Figure/Table/Equation numbering
+11. Stream Editor to rename alien commands/environments to accepted
+    defaults.
+12. Pre and Post conversion statistics of environments for verification.
 13. Bibliography aggregation.(moved to
     [rebib](https://github.com/Abhi-1U/rebib))
 

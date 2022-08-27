@@ -176,7 +176,6 @@ generate_rmd <- function(article_dir) {
             }
         )
     metadata$address <- NULL
-
     # article metadata from DESCRIPTION
     article_metadata <- if (file.exists(file.path(
             dirname(markdown_file), "DESCRIPTION"))) {
@@ -187,13 +186,11 @@ generate_rmd <- function(article_dir) {
         } else {
             online_date[[1]]$date
         }
-
         list(
             slug = journal_details$slug,
             acknowledged = Filter(function(x) x$status == "acknowledged", art$status)[[1]]$date,
             online = online_date
         )
-
     } else {
         # Produce minimal article metadata for news
         issue_year <- volume + 2008
