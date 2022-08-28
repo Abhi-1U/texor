@@ -1,0 +1,8 @@
+pandoc: 2.14.2
+pkgdown: 2.0.6
+pkgdown_sha: ~
+articles:
+  01-Introduction: 01-Introduction.html
+  02-Dependencies: 02-Dependencies.html
+last_built: 2022-08-28T17:50Z
+
