@@ -19,6 +19,9 @@ knitr::opts_chunk$set(
 # texor : Tools for converting LaTeX source files into RJ-web-articles
 
 <!-- badges: start -->
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/Abhi-1U/texor/pkgdown/master?label=pkgdown&style=for-the-badge)](https://github.com/Abhi-1U/texor/actions/workflows/pkg_down.yaml)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Abhi-1U/texor/R_cmd_check?label=R-CMD-CHECK&style=for-the-badge)](https://github.com/Abhi-1U/texor/actions/workflows/cmdcheck.yaml)
+[![GitHub R package version (subdirectory of monorepo)](https://img.shields.io/github/r-package/v/Abhi-1U/texor?filename=DESCRIPTION&label=texor&style=for-the-badge)](https://github.com/Abhi-1U/texor/blob/master/DESCRIPTION)
 ![Github Issues](https://img.shields.io/github/issues/Abhi-1U/texor?color=orange&logo=github&logoColor=&style=for-the-badge)
 
 <!-- badges: end -->
@@ -92,8 +95,6 @@ texor::patch_table_env(wd)
 texor::patch_code_env(wd)
 # check for tikz if TRUE call tikz related functions(still under work)
 texor::article_has_tikz(wd)
-# convert pdf to png
-texor::pdf_to_png(wd)
 # copy files to a /web folder
 texor::copy_other_files(wd)
 # generate environment stats for tex file

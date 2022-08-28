@@ -1,7 +1,7 @@
 Package: texor
 Type: Package
 Title: tools for converting LaTeX source files into RJ-web-articles
-Version: 0.5.9
+Version: 0.6.7
 Author: Abhishek Ulayil
 Description: texor Converts tex files into Rmd which can then be exported as HTML
     This is for legacy R journals available only in pdfs.
@@ -16,12 +16,14 @@ Imports:
     tinytex,
     yaml,
     stringr,
-    rjtools,
     xfun,
     logger
 Authors@R: person("Abhishek", "Ulayil", email = "perricoq@outlook.com",
     role = c("aut", "cre"))
 Suggests: 
     knitr,
-    rebib
+    rjtools,
+    rebib,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3

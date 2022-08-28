@@ -1,0 +1,14 @@
+- data:
+  - \begin{figure}[htbp]
+  - '  \centering'
+  - '  \includegraphics{Rlogo-5}'
+  - '  \caption{The logo of R.}'
+  - '  \label{figure:rlogo}'
+  - \end{figure}
+  istikz: no
+  image_count: 1
+  image_pos: 3
+  caption: '{The logo of R.}'
+  label: figure:rlogo
+  path: Rlogo-5
+  extension: png

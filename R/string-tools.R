@@ -11,7 +11,6 @@ str_detect <- function(x, re) {
 str_match <- function(x, re) {
     return(stringr::str_match(x,re))
 }
-#' @export
 str_split <- function(x,patt) {
     return(stringr::str_split(x,patt))
 }

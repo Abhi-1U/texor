@@ -1,5 +1,5 @@
 ---
-title: "texor"
+title: "01-texor"
 subtitle: '**tools for converting LaTeX source files into RJ-web-articles**'
 output: rmarkdown::html_vignette
 vignette: >

@@ -1,0 +1,127 @@
+#' @title figure reader
+#'
+#' @param article_dir the directory path where the file and its dependencies are
+#' located
+#' @param file_name name of the LaTeX file
+#'
+#' @return figure blocks
+#' @export
+figure_reader <- function(article_dir, file_name) {
+    file_path <- paste(article_dir, file_name, sep = "/")
+    raw_lines <- readLines(file_path)
+    raw_lines <- comment_filter(raw_lines)
+    start_patt <- "\\s*\\\\begin\\{figure\\}"
+    end_patt <- "\\s*\\\\end\\{figure\\}"
+    figure_starts <- which(grepl(start_patt, raw_lines))
+    figure_ends <-  which(grepl(end_patt, raw_lines))
+    figure_blocks <- list()
+    # blocks of figure code
+    if (length(figure_starts) == length(figure_ends)) {
+        for (iterator in seq_along(figure_starts)) {
+            block_start <- figure_starts[iterator]
+            block_end <- figure_ends[iterator]
+            fig_data <- raw_lines[block_start:block_end]
+            figure_blocks <- append(figure_blocks,list(fig_block_reader(article_dir,
+                                                                        fig_data,
+                                                                        raw_lines,
+                                                                        iterator,
+                                                                        block_start,
+                                                                        block_end)))
+        }
+        image_yaml <- paste0(article_dir,"/texor-figure-meta.yaml")
+        yaml::write_yaml(x = figure_blocks, file = image_yaml)
+        return(figure_blocks)
+    } else {
+        message("problem with figure env starts and ends")
+        message("Check your tex file")
+        return(0)
+    }
+}
+
+fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos, end_pos){
+    # block of figure_data with extra meta data
+    f_block <- list()
+    # raw figure lines
+    f_block$data <- fig_data
+    # is the figure a tikz image
+    f_block$istikz <- find_tikz(fig_data)
+    if (find_tikz(fig_data)) {
+        # extract tikz libraries from RJwrapper
+        tikz_lib <- extract_tikz_lib(article_dir)
+        f_block$tikzlib <- tikz_lib
+        # caption
+        f_block$image_count <- 1
+        f_block$caption <- extract_caption(fig_data)
+        # label
+        f_block$label <- extract_label(fig_data)
+        # extract tikz image data
+        tikz_data <- extract_tikz_block(fig_data, article_dir)
+        f_block$tikzdata <- tikz_data
+        f_block$extension <- find_image_extension(article_dir, "" , is_tikz = TRUE)
+    } else {
+        f_block$image_count <- env_image_count(fig_data)
+        f_block$image_pos <- env_image_position(fig_data)
+        if (f_block$image_count > 1) {
+            paths <- list()
+            for(iterator in 1:f_block$image_count) {
+                paths[iterator] <- extract_path(fig_data[f_block$image_pos[iterator]])
+                #print(extract_path(fig_data[f_block$image_pos[iterator]]))
+            }
+            f_block$path <- unlist(paths)
+            f_block$caption <- extract_caption(fig_data)
+            f_block$label <- extract_label(fig_data)
+            extensions <- list()
+            for (iterator in 1:f_block$image_count) {
+                extensions[iterator] <- find_image_extension(article_dir, f_block$path[iterator])
+                if (extensions[iterator] == "pdf") {
+                    # convert the pdf to png
+                    #convert_to_png(paste0(article_dir, "/", extensions[iterator]))
+                }
+            }
+            f_block$extension <- unlist(extensions)
+        } else {
+            f_block$caption <- extract_caption(fig_data)
+            f_block$label <- extract_label(fig_data)
+            f_block$path <- extract_path(fig_data[f_block$image_pos])
+            f_block$extension <- find_image_extension(article_dir,f_block$path)
+            if (f_block$extension == "pdf") {
+                # convert the pdf to png
+                #convert_to_png(paste0(article_dir, "/", f_block$path))
+            }
+        }
+    }
+    return(f_block)
+}
+
+#' @title patch figure environments
+#' @description This function calls the stream editor to change
+#' figure* to figure
+#' 1. figure*
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return writes modified file and also backs up the old file before modification
+#' @export
+patch_figure_env <- function(article_dir) {
+    # find tex file
+    file_name <- get_texfile_name(article_dir)
+    file_path <- paste(article_dir, file_name, sep = "/")
+    # read Lines
+    raw_lines <- readLines(file_path)
+    raw_lines <- stream_editor(raw_lines,
+                               "\\s*\\\\begin\\{figure\\*\\}", "figure\\*", "figure")
+    print("Changed \\begin{figure\\*} to \\begin{figure}")
+    raw_lines <- stream_editor(raw_lines,
+                               "\\s*\\\\end\\{figure\\*\\}", "figure\\*", "figure")
+    print("Changed \\end{figure\\*} to \\end{figure}")
+    # testing functionality
+    #return(raw_lines)
+    # backup old file
+    src_file_data <- readLines(file_path)
+    backup_file <- paste(file_path, ".bk", sep = "")
+    write_external_file(backup_file, "w", src_file_data)
+    # remove old tex file
+    file.remove(file_path)
+    # write same tex file with new data
+    write_external_file(file_path, "w", raw_lines)
+}

@@ -1,5 +1,5 @@
 ---
-title: "Dependency List"
+title: "02-Dependency List"
 output: rmarkdown::html_vignette 
 vignette: >
   %\VignetteIndexEntry{02-texor dependencies}

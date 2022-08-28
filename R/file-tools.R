@@ -1,3 +1,114 @@
+#' Get the name of the wrapper file in the article dir
+#'
+#'This function gets the wrapper file name from the
+#'commonly named R-Journal wrapper files.
+#'@details
+#'Usually the R journal wrapper files are named either
+#'1. RJwrapper.tex
+#'2. RJwrap.tex
+#'3. wrapper.tex
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return String with name of wrapper file or empty
+#' @export
+#' @examples
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' texor::get_wrapper_type(article_dir)
+get_wrapper_type <- function(article_dir) {
+    wrapper_types <- c("wrapper.tex",
+                       "RJwrap.tex",
+                       "RJwrapper.tex")
+    wrapper_file <- ""
+    for (w_type in wrapper_types) {
+        if (file.exists(file.path(article_dir, w_type))) {
+            wrapper_file <- w_type
+        }
+    }
+    if (wrapper_file == "") {
+        print("Error : No Wrapper File Found in the article dir")
+    }
+    return(wrapper_file)
+}
+
+#' @title comment filter for latex lines data
+#'
+#' @description
+#' removes commented latex lines to avoid wrong reference data
+#' @param data block of data
+#'
+#' @return filtered data
+#' @export
+comment_filter <- function(data) {
+    comment_break_points <- which(grepl("^%", data))
+    for (pos in comment_break_points) {
+        data[pos] <- ""
+    }
+    comment_break_points <- which(grepl("^%%", data))
+    for (pos in comment_break_points) {
+        data[pos] <- ""
+    }
+    return(data[nzchar(data)])
+}
+
+#' quick function to writelines to a file
+#'
+#' @param file_path path of text file to write contents to
+#' @param mode mode of opening
+#' @param raw_text the text/ list of lines to be written
+#'
+#' @return create/append/write a new file
+#' @export
+write_external_file <- function(file_path, mode, raw_text) {
+    write_file <- file(file_path, mode)
+    writeLines(raw_text, write_file)
+    close(write_file)
+}
+
+#' Get the name of the tex file included within wrapper file
+#'
+#'The wrapper file refers to an external tex file which contains
+#'the actual document content.
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return String name of the tex-file name
+#' @export
+get_texfile_name <- function(article_dir) {
+    lookup_file <- get_wrapper_type(article_dir)
+    wrapper_file <- readLines(file.path(article_dir, lookup_file))
+    article_start <- which(grepl(
+        "^\\s*\\\\begin\\{article\\}",
+        wrapper_file))
+    pre_marker <- wrapper_file[seq_len(article_start)]
+    post_marker <- wrapper_file[seq_len(article_start) + 1]
+    source_line <- setdiff(post_marker, pre_marker)
+    tex_file <- gsub("[[:space:]]", "",
+                     gsub("\\\\input\\{|\\}", "", source_line))
+    if (!grepl(".tex$", tex_file)) {
+        tex_file <- paste0(tex_file, ".tex")
+    }
+    return(tex_file)
+}
+
+get_md_file_name <- function(article_dir) {
+    lookup_file <- get_wrapper_type(article_dir)
+    markdown_file <- gsub(".tex", ".md", lookup_file)
+}
+
+get_journal_details <- function(article_dir) {
+    journal_details <- list()
+    hierarchy <- str_split(article_dir, "/")[[1]]
+    journal_folder <- hierarchy[length(hierarchy)-1]
+    if (journal_folder == "") {
+        journal_folder <- hierarchy[length(hierarchy)-2]
+    }
+    journal_info <- str_split(journal_folder, "-")[[1]]
+    journal_details$volume <- strtoi(journal_info[1],10) - 2008
+    journal_details$issue <- strtoi(journal_info[2],10)
+    journal_details$slug <- hierarchy[length(hierarchy)]
+    return(journal_details)
+}
+
 #' Copy Supporting Documents like images,bib file,etc.
 #'
 #' Copies supporting documents like images,pdf,bib files into the output
@@ -16,52 +127,19 @@ copy_other_files <- function(from_path) {
     print(target_dir)
     dir.create("web/", showWarnings = FALSE)
     dir.create(paste("web/", target_dir, sep = ""),
-                showWarnings = FALSE)
+               showWarnings = FALSE)
     file.copy(list.dirs(
-            target_dir, full.names = TRUE),
-            paste("web/", target_dir, sep = ""), recursive = TRUE)
+        target_dir, full.names = TRUE),
+        paste("web/", target_dir, sep = ""), recursive = TRUE)
     file_list <- list.files(recursive = FALSE)
     extensions <- c("*.png", "*.jpg", "*.bib", "*.pdf",
                     "*.tex", "*.R", "*.bbl")
     target_files <- unique(grep(paste(
-            extensions, collapse = "|"), file_list, value = TRUE))
+        extensions, collapse = "|"), file_list, value = TRUE))
     print(target_files)
     file.copy(target_files,
               to = "web/",
               copy.mode = TRUE,
               recursive = FALSE, )
     setwd(old_working_directory)
-}
-
-#' call rmarkdown::render to generate html file
-#'
-#' @param article_dir path to the directory which contains tex article
-#'
-#' @return HTML output
-#' @export
-produce_html <- function(article_dir) {
-    input_file_path <- gsub(".tex", ".Rmd", paste(article_dir, "web",
-                        texor::get_wrapper_type(article_dir), sep = "/"))
-    rmarkdown::render(
-        input = input_file_path)
-}
-
-
-find_file <- function(article_dir, src_path) {
-    abs_img_path <- paste(article_dir,src_path,sep="/")
-    main_dir <- dirname(abs_img_path)
-    file_name <- basename(abs_img_path)
-    all_files <- list.files(main_dir)
-    target_extension <- ""
-    for (file in all_files) {
-        if (tools::file_path_sans_ext(file) == file_name) {
-            ext <- tools::file_ext(file)
-            if(ext == "pdf" | ext == "png" | ext == "jpg" | ext == "jpeg" ) {
-                target_extension <- tools::file_ext(file)
-            } else {
-                #skip
-            }
-        }
-    }
-    return(target_extension)
 }

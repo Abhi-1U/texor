@@ -1,3 +1,35 @@
+# Version 0.6.7
+
+## Feature Updates
+
+1. Equation labeling and numbering
+2. Code/table/equation/figure pre-processors
+3. fixed many meta data related issues
+4. We now use Mathjax V3
+5. New testthat test cases
+6. pkgdown website
+7. `texor::latex_to_web()` for a single article
+8. new stat tools for some metrics and conversion coverage check
+9. environment/word count for pandoc convert
+
+## Bug Fixes
+
+1. Support for absolute paths
+2. Fixed a lot of logic errors
+3. Fixed incompatibilities
+4. removed unnecessary code and features
+5. R-CMD-check passing
+6. Github workflows should work now
+7. Improved stat filter which exports pre and post conversion stats yaml file
+8. namespaces in logger
+9. URL fix for non http:// web Links
+10. Figure max width : 100% extra option added to figures.
+11. fixed pre processing of tikz
+12. fixed problems in journal volume
+13. comment filter mechanism for latex
+14. improved lua filter for numbering and centering figures
+15. fixed slug issue
+
 # Version 0.5.9
 
 ## Feature Updates

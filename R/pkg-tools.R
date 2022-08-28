@@ -14,7 +14,7 @@ find_pkg_references <- function(input_file){
         function(pos, line) {
             if (pos[1] == -1) return(NULL)
             substr(rep_len(line, length(pos)),
-            pos, pos + pos%@%"match.length" - 1)
+                   pos, pos + pos%@%"match.length" - 1)
         },
         pkgs, input,
         SIMPLIFY = FALSE
@@ -35,6 +35,4 @@ find_pkg_references <- function(input_file){
     write_external_file(pkg_yaml_path, "w", yaml::as.yaml(packages))
 }
 
-`%@%` <- function(x, attribute) {
-    attr(x, attribute)
-}
+

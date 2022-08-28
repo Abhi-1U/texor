@@ -18,7 +18,7 @@
 include_style_file <- function(article_dir) {
     # Copy over the Metafix.sty file to the article directory
     file.copy(
-            system.file("extdata/style/Metafix.sty", package = "texor"),
+            system.file("extdata/Metafix.sty", package = "texor"),
             file.path(article_dir),
         )
     # Modify LaTeX source to include the \include(Metafix) line
@@ -26,7 +26,7 @@ include_style_file <- function(article_dir) {
     wrapper_file_content <- readLines(file.path(article_dir, file_name))
     wrapper_path <- paste(article_dir, file_name, sep = "/")
     if (!identical(which(grepl("\\usepackage\\{Metafix\\}",wrapper_file_content)),integer(0))) {
-        print("Metafix style file already exists")
+        #print("Metafix style file already exists")
         return(NULL)
     }
     doc_start <- which(grepl("^\\s*\\\\begin\\{document\\}",
@@ -72,48 +72,42 @@ convert_to_markdown <- function(article_dir) {
     print(abs_file_path)
     # markdown equivalent filename
     md_file <- paste(toString(tools::file_path_sans_ext(input_file)),
-                             ".md", sep = "")
+                     ".md", sep = "")
     print(md_file)
     md_file_path <- paste(article_dir, md_file, sep = "/")
     print(md_file_path)
+    # a filter to remove new para character from article abstract
+    abs_filter <- system.file(
+        "abs_filter.lua", package = "texor")
     # a filter to remove embedded bibliography (if any)
     bib_filter <- system.file(
-                "extdata/filters/bib_filter.lua", package = "texor")
-    # a filter to handle Sinput/Soutput/Scode/example/example*
+        "bib_filter.lua", package = "texor")
+    # a filter to add r language param
     code_block_filter <- system.file(
-                "extdata/filters/R_code.lua", package = "texor")
+        "R_code.lua", package = "texor")
     # renames pdf images to png images (to be used with pdf_to_png())
     image_filter <- system.file(
-                "extdata/filters/image_filter.lua", package = "texor")
-    # replaces tikz placeholder with tikz image data/metadata
-    post_tikz_filter <- system.file(
-                "extdata/filters/reinstate_tikz_filter.lua", package = "texor")
-    # converts markdown images to knitr image blocks for R-markdown
-    #knitr_filter <- system.file(
-    #            "extdata/filters/knitr_filter.lua", package = "texor")
+        "image_filter.lua", package = "texor")
     # enables table numbering in captions
     table_filter <- system.file(
-        "extdata/filters/table_caption.lua", package = "texor")
+        "table_caption.lua", package = "texor")
     # enables figure numbering in captions
     figure_filter <- system.file(
-        "extdata/filters/image_caption.lua", package = "texor")
+        "image_caption.lua", package = "texor")
     stat_filter <- system.file(
-        "extdata/filters/conversion_compat_check.lua", package = "texor")
-    math_filter <- system.file(
-        "extdata/filters/math_filter.lua", package = "texor")
+        "conversion_compat_check.lua", package = "texor")
     equation_filter <- system.file(
-        "extdata/filters/equation_filter.lua", package = "texor")
+        "equation_filter.lua", package = "texor")
     pandoc_opt <- c("-s",
-                  "--resource-path", abs_file_path,
-                  "--lua-filter", bib_filter,
-                  "--lua-filter", image_filter,
-                  "--lua-filter", code_block_filter,
-                  "--lua-filter", figure_filter,
-                  "--lua-filter", table_filter,
-                  "--lua-filter", stat_filter,
-                  #"--lua-filter", math_filter,
-                  "--lua-filter", equation_filter,
-                  "--lua-filter", post_tikz_filter)
+                    "--resource-path", abs_file_path,
+                    "--lua-filter", abs_filter,
+                    "--lua-filter", bib_filter,
+                    "--lua-filter", image_filter,
+                    "--lua-filter", code_block_filter,
+                    "--lua-filter", figure_filter,
+                    "--lua-filter", table_filter,
+                    "--lua-filter", stat_filter,
+                    "--lua-filter", equation_filter)
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     rmarkdown::pandoc_convert(input_file_path,
@@ -125,8 +119,8 @@ convert_to_markdown <- function(article_dir) {
                               verbose = TRUE)
     # post conversion process
     tex_file_path <- paste(article_dir,
-                            get_texfile_name(article_dir),
-                            sep = "/")
+                           get_texfile_name(article_dir),
+                           sep = "/")
     find_pkg_references(tex_file_path)
 }
 
@@ -145,40 +139,40 @@ generate_rmd <- function(article_dir) {
     volume <- journal_details$volume
     issue <- journal_details$issue
     markdown_file <- gsub(".tex", ".md", paste(article_dir,
-                    texor::get_wrapper_type(article_dir), sep = "/"))
+                                               texor::get_wrapper_type(article_dir), sep = "/"))
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
     # reads the abstract from the second author field
     # reason : abstract is patched as author in metafix.sty
-    abstract <- gsub("¶"," ", metadata$author[2])
+    abstract <- metadata$author[2]
     metadata$abstract <- abstract
     metadata$author <- lapply(
-            strsplit(metadata$address, "\\\n", fixed = TRUE),
-            function(person) {
-                author <- list(
-                    name = person[1],
-                    affiliation = person[2]
-                )
-                if (any(orcid <- grepl("^ORCiD:", person))) {
-                    author$orcid <- sub("^ORCiD: ", "", person[orcid])
-                }
-                if (any(email <- grepl("^email:", person))) {
-                    author$email <- sub("^email:", "", person[email])
-                }
-                #if (!is.na(metadata$emails)) {
-                #    author$email <- metadata$emails[2+person]
-                #}
-                fields <- logical(length(person))
-                fields[1:2] <- TRUE
-                if (any(address <- !(fields | orcid | email))) {
-                    author$address <- person[address]
-                }
-                author
+        strsplit(metadata$address, "\\\n", fixed = TRUE),
+        function(person) {
+            author <- list(
+                name = person[1],
+                affiliation = person[2]
+            )
+            if (any(orcid <- grepl("^ORCiD:", person))) {
+                author$orcid <- sub("^ORCiD: ", "", person[orcid])
             }
-        )
+            if (any(email <- grepl("^email:", person))) {
+                author$email <- sub("^email:", "", person[email])
+            }
+            #if (!is.na(metadata$emails)) {
+            #    author$email <- metadata$emails[2+person]
+            #}
+            fields <- logical(length(person))
+            fields[1:2] <- TRUE
+            if (any(address <- !(fields | orcid | email))) {
+                author$address <- person[address]
+            }
+            author
+        }
+    )
     metadata$address <- NULL
     # article metadata from DESCRIPTION
     article_metadata <- if (file.exists(file.path(
-            dirname(markdown_file), "DESCRIPTION"))) {
+        dirname(markdown_file), "DESCRIPTION"))) {
         art <- load_article(file.path(dirname(markdown_file), "DESCRIPTION"))
         online_date <- Filter(function(x) x$status == "online", art$status)
         online_date <- if (length(online_date) == 0) {
@@ -198,7 +192,7 @@ generate_rmd <- function(article_dir) {
         list(
             slug = journal_details$slug,
             online = as.Date(paste(volume + 2008,
-            issue_month, "01"), format = "%Y %m %d")
+                                   issue_month, "01"), format = "%Y %m %d")
         )
     }
     # if article has no abstract
@@ -249,9 +243,9 @@ generate_rmd <- function(article_dir) {
 
     input_file <- basename(markdown_file)
     output_file_name <- paste(dirname(markdown_file),
-                                    "/web/",
-                            toString(tools::file_path_sans_ext(input_file)),
-                                    ".Rmd", sep = "")
+                              "/web/",
+                              toString(tools::file_path_sans_ext(input_file)),
+                              ".Rmd", sep = "")
     dir.create(dirname(output_file_name), showWarnings = FALSE)
     xfun::write_utf8(
         c("---", yaml::as.yaml(front_matter), "---", article_body),
@@ -281,43 +275,38 @@ convert_to_native <- function(article_dir) {
     md_file <- paste(toString(tools::file_path_sans_ext(input_file)),
                      ".txt", sep = "")
     md_file_path <- paste(article_dir, md_file, sep = "/")
+    # a filter to remove new para character from article abstract
+    abs_filter <- system.file(
+        "abs_filter.lua", package = "texor")
     # a filter to remove embedded bibliography (if any)
     bib_filter <- system.file(
-        "extdata/filters/bib_filter.lua", package = "texor")
-    # a filter to handle Sinput/Soutput/Scode/example/example*
+        "bib_filter.lua", package = "texor")
+    # a filter to add r language param
     code_block_filter <- system.file(
-        "extdata/filters/R_code.lua", package = "texor")
+        "R_code.lua", package = "texor")
     # renames pdf images to png images (to be used with pdf_to_png())
     image_filter <- system.file(
-        "extdata/filters/image_filter.lua", package = "texor")
-    # replaces tikz placeholder with tikz image data/metadata
-    post_tikz_filter <- system.file(
-        "extdata/filters/reinstate_tikz_filter.lua", package = "texor")
-    # converts markdown images to knitr image blocks for R-markdown
-    #knitr_filter <- system.file(
-    #   "extdata/filters/knitr_filter.lua", package = "texor")
+        "image_filter.lua", package = "texor")
     # enables table numbering in captions
     table_filter <- system.file(
-        "extdata/filters/table_caption.lua", package = "texor")
+        "table_caption.lua", package = "texor")
+    # enables figure numbering in captions
     figure_filter <- system.file(
-        "extdata/filters/image_caption.lua", package = "texor")
+        "image_caption.lua", package = "texor")
     stat_filter <- system.file(
-        "extdata/filters/conversion_compat_check.lua", package = "texor")
-    math_filter <- system.file(
-        "extdata/filters/math_filter.lua", package = "texor")
+        "conversion_compat_check.lua", package = "texor")
     equation_filter <- system.file(
-        "extdata/filters/equation_filter.lua", package = "texor")
+        "equation_filter.lua", package = "texor")
     pandoc_opt <- c("-s",
-                    "--resource-path", dirname(abs_file_path),
+                    "--resource-path", abs_file_path,
+                    "--lua-filter", abs_filter,
                     "--lua-filter", bib_filter,
                     "--lua-filter", image_filter,
                     "--lua-filter", code_block_filter,
                     "--lua-filter", figure_filter,
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
-                    #"--lua-filter", math_filter,
-                    "--lua-filter", equation_filter,
-                    "--lua-filter", post_tikz_filter)
+                    "--lua-filter", equation_filter)
     output_format <- "native"
     # This will generate a markdown file with YAML headers.
     rmarkdown::pandoc_convert(input_file_path,
@@ -332,4 +321,18 @@ convert_to_native <- function(article_dir) {
                            get_texfile_name(article_dir),
                            sep = "/")
     find_pkg_references(tex_file_path)
+}
+
+#' call rmarkdown::render to generate html file
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return HTML output
+#' @export
+produce_html <- function(article_dir) {
+    input_file_path <- gsub(".tex", ".Rmd", paste(article_dir, "web",
+                        texor::get_wrapper_type(article_dir), sep = "/"))
+    rmarkdown::render(
+        input = input_file_path,
+        output_format = "rjtools::rjournal_web_article")
 }
