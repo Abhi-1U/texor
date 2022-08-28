@@ -22,8 +22,6 @@ Authors@R: person("Abhishek", "Ulayil", email = "perricoq@outlook.com",
     role = c("aut", "cre"))
 Suggests: 
     knitr,
-    rjtools,
-    rebib,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
