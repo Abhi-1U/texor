@@ -64,7 +64,7 @@ extract_path <- function(figure_line) {
 #' @param is_tikz tikz image status, default is FALSE
 #' @return extension element
 find_image_extension <- function(article_dir, image_path, is_tikz = FALSE) {
-    # tikz images are isolated
+    # tikz/algorithm images are isolated
     # then compiled into a standalone PDF,
     # and converted back to PNG for inclusion in web articles
     if (is_tikz) {

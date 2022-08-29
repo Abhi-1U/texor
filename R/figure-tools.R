@@ -12,8 +12,16 @@ figure_reader <- function(article_dir, file_name) {
     raw_lines <- comment_filter(raw_lines)
     start_patt <- "\\s*\\\\begin\\{figure\\}"
     end_patt <- "\\s*\\\\end\\{figure\\}"
+    alg_start_patt <- "\\s*\\\\begin\\{algorithm\\}"
+    alg_end_patt <- "\\s*\\\\end\\{algorithm\\}"
     figure_starts <- which(grepl(start_patt, raw_lines))
     figure_ends <-  which(grepl(end_patt, raw_lines))
+    alg_figure_starts <- which(grepl(alg_start_patt, raw_lines))
+    alg_figure_ends <- which(grepl(alg_end_patt, raw_lines))
+    figure_starts <- c(figure_starts,alg_figure_starts)
+    figure_starts <- sort(figure_starts)
+    figure_ends <- c(figure_ends,alg_figure_ends)
+    figure_ends <- sort(figure_ends)
     figure_blocks <- list()
     # blocks of figure code
     if (length(figure_starts) == length(figure_ends)) {
@@ -28,23 +36,39 @@ figure_reader <- function(article_dir, file_name) {
                                                                         block_start,
                                                                         block_end)))
         }
-        image_yaml <- paste0(article_dir,"/texor-figure-meta.yaml")
-        yaml::write_yaml(x = figure_blocks, file = image_yaml)
-        return(figure_blocks)
     } else {
-        message("problem with figure env starts and ends")
-        message("Check your tex file")
-        return(0)
+        #pass
     }
+
+    image_yaml <- paste0(article_dir,"/texor-figure-meta.yaml")
+    yaml::write_yaml(x = figure_blocks, file = image_yaml)
+    return(figure_blocks)
 }
 
 fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos, end_pos){
     # block of figure_data with extra meta data
     f_block <- list()
+    f_block$doc_start_line <- start_pos
+    f_block$doc_end_line <- end_pos
     # raw figure lines
     f_block$data <- fig_data
     # is the figure a tikz image
     f_block$istikz <- find_tikz(fig_data)
+    # is an algorithm environment (treated like an image)
+    f_block$isalgoritm <- find_algorithm(fig_data)
+    if (find_algorithm(fig_data)) {
+        alg_lib <- "\\usepackage{algorithm2e}"
+        f_block$alglib <- alg_lib
+        f_block$image_count <- 1
+        # caption
+        f_block$caption <- extract_caption(fig_data)
+        # label
+        f_block$label <- extract_label(fig_data)
+        alg_data <- fig_data
+        f_block$algdata <- alg_data
+        f_block$extension <- find_image_extension(article_dir, "" , is_tikz = TRUE)
+        return(f_block)
+    }
     if (find_tikz(fig_data)) {
         # extract tikz libraries from RJwrapper
         tikz_lib <- extract_tikz_lib(article_dir)
