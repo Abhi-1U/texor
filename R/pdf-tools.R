@@ -26,3 +26,36 @@ convert_to_png <- function(file_path){
                           pages = 1,
                           filenames = png_file)
 }
+
+#' @title convert all pdf images to png
+#' @description reads figure object to deduce conversion and convert the PDF images
+#' into PNG
+#' @param article_dir path to the article working directory
+#' @param fig_block block of image data
+#'
+#' @return modified fig_block
+#' @export
+convert_all_pdf_png <- function(article_dir, fig_block) {
+    for (iterator in seq_along(fig_block)) {
+        if (fig_block[[iterator]]$image_count == 1){
+            if (fig_block[[iterator]]$extension == "pdf") {
+                image_path <- paste0(article_dir,"/",fig_block[[iterator]]$path)
+                convert_to_png(image_path)
+                fig_block[[iterator]]$pdf_to_png <- TRUE
+            } else {
+                # -- pass
+            }
+        } else {
+            for (iter_2 in seq_along(fig_block[[iterator]]$image_count)) {
+                if (fig_block[[iterator]]$extension[iter_2] == "pdf") {
+                    image_path <- paste0(article_dir,"/",fig_block[[iterator]]$path[iter_2])
+                    convert_to_png(image_path)
+                    fig_block[[iterator]]$pdf_to_png <- TRUE
+                } else {
+                    # -- pass
+                }
+            }
+        }
+    }
+    return(fig_block)
+}
