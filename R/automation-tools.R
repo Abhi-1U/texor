@@ -41,6 +41,7 @@ latex_to_web <- function(dir) {
     #            PDF to PNG based on condition
     texor_log(paste0("Stage-03 | ","converting pdf files to png"), "info", 2)
     data <- figure_reader(dir)
+    # copy images,convert tikz and algorithm images
     # to do work with figures
     texor_log(paste0("Stage-03 | ","converted pdf files to png"), "info", 2)
     # Step - 4 : patch code environments to verbatim

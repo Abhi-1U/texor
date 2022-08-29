@@ -1,4 +1,4 @@
-convert_tikz <- function(fig_block, article_dir,iterator) {
+convert_tikz <- function(fig_block, article_dir) {
     tikz_template <- c(
         "\\documentclass{standalone}",
         "\\usepackage{xcolor}",
@@ -7,26 +7,32 @@ convert_tikz <- function(fig_block, article_dir,iterator) {
         fig_block$tikzlib,
         "\\begin{document}",
         "\\nopagecolor",
-        fig_block$tikzdata,
+        fig_block$data,
         "\\end{document}"
     )
-    tikz_file_name <- paste0("tikz-",iterator,".tex")
+    tikz_file_name <- paste0(gsub(":","",x$label),".tex")
     # convert the tex file into pdf
     tikz_dir <- paste(article_dir,"tikz",sep="/")
     tikz_path <- paste(tikz_dir,tikz_file_name,sep="/")
-    dir.create(tikz_dir, showWarnings = FALSE)
+    if(! dir.exists(tikz_dir)) {
+        dir.create(tikz_dir, showWarnings = FALSE)
+    }
+    # write the template
     fileconn <- file(tikz_path)
     writeLines(tikz_template, fileconn)
     close(fileconn)
 
-    tinytex::latexmk("tikz/tikz.tex", engine = "pdflatex")
+    tinytex::latexmk(tikz_path, engine = "pdflatex")
     # run pdf to png
-    convert_to_png(gsub(
-        ".tex", ".pdf", tikz_path
+    tikz_png_file <- gsub(".pdf",".png",tikz_file_name)
+    texor::convert_to_png(gsub(
+        ".tex", ".pdf", tikz_png_path
     ))
-    web_tikz <- paste(article_dir,"web/tikz",sep="/")
-    dir.create(web_tikz)
-    #file.copy()
+    web_tikz_folder <- paste(article_dir,"web/tikz",sep="/")
+    if(! dir.exists(web_tikz_folder)) {
+        dir.create(web_tikz_folder)
+    }
+    file.copy(tikz_path, paste0(article_dir,"/web/tikz/",tikz_png_file))
 
 }
 

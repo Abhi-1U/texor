@@ -1,4 +1,6 @@
-- data:
+- doc_start_line: 12
+  doc_end_line: 17
+  data:
   - \begin{figure}[htbp]
   - '  \centering'
   - '  \includegraphics{Rlogo-5}'
@@ -6,6 +8,7 @@
   - '  \label{figure:rlogo}'
   - \end{figure}
   istikz: no
+  isalgoritm: no
   image_count: 1
   image_pos: 3
   caption: '{The logo of R.}'
