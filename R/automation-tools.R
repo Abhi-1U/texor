@@ -19,6 +19,7 @@ texor_orchestrate <- function(article_dir) {
 latex_to_web <- function(dir) {
     print(dir)
     date <- Sys.Date()
+    file_name <- get_texfile_name(dir)
     log_file <- paste0("texor-log-",date,".log")
     log_setup(dir, log_file, "texor" ,2)
     texor_log(paste0("working directory : ", dir), "info", 2)
@@ -36,11 +37,13 @@ latex_to_web <- function(dir) {
     texor_log(paste0("Stage-02 | ", "aggregating Bibliography using :  rebib"), "info", 2)
     texor_log(paste0("Stage-02 | ", "Check rebib logs for more info"), "info", 2)
     rebib::aggregate_bibliography(dir)
-    log_setup(dir, log_file, 2)
+    log_setup(dir, log_file, "texor", 2)
     # Step - 3 : Check for PDF and then convert
     #            PDF to PNG based on condition
     texor_log(paste0("Stage-03 | ","converting pdf files to png"), "info", 2)
-    data <- figure_reader(dir)
+    data <- figure_reader(dir, file_name)
+    data <- convert_all_pdf_png(dir, data)
+    #data <- copy_all_pdf_png(dir, data)
     # copy images,convert tikz and algorithm images
     # to do work with figures
     texor_log(paste0("Stage-03 | ","converted pdf files to png"), "info", 2)

@@ -1,3 +1,11 @@
+#' @title convert tikz diagrams to pdf,png
+#' @description this function will create tikz images to be included
+#' in the RJ-web-article
+#' @param fig_block the figure_block of algorithm
+#' @param article_dir path to the directory which contains RJ article
+#'
+#' @return tikz image
+#' @export
 convert_tikz <- function(fig_block, article_dir) {
     tikz_template <- c(
         "\\documentclass{standalone}",
@@ -7,10 +15,11 @@ convert_tikz <- function(fig_block, article_dir) {
         fig_block$tikzlib,
         "\\begin{document}",
         "\\nopagecolor",
+        fig_block$tikz_lib,
         fig_block$data,
         "\\end{document}"
     )
-    tikz_file_name <- paste0(gsub(":","",x$label),".tex")
+    tikz_file_name <- paste0(gsub(":","",fig_block$label),".tex")
     # convert the tex file into pdf
     tikz_dir <- paste(article_dir,"tikz",sep="/")
     tikz_path <- paste(tikz_dir,tikz_file_name,sep="/")
@@ -24,7 +33,7 @@ convert_tikz <- function(fig_block, article_dir) {
 
     tinytex::latexmk(tikz_path, engine = "pdflatex")
     # run pdf to png
-    tikz_png_file <- gsub(".pdf",".png",tikz_file_name)
+    tikz_png_file <- gsub(".tex",".png",tikz_file_name)
     texor::convert_to_png(gsub(
         ".tex", ".pdf", tikz_png_path
     ))

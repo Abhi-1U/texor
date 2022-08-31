@@ -143,3 +143,43 @@ copy_other_files <- function(from_path) {
               recursive = FALSE, )
     setwd(old_working_directory)
 }
+
+copy_to_web <- function(rel_path, ext, article_dir){
+    if (! grepl(paste0(".",ext,"$"),rel_path)) {
+        rel_path <- paste0(rel_path,".",ext)
+    }
+    web_dir <- paste0(article_dir,"/web")
+    if (! dir.exists(web_dir)){
+        dir.create(web_dir)
+    }
+    if (dirname(rel_path) == ".") {
+        image_target_file_path <- (paste0(article_dir,"/web/",rel_path))
+    }
+    image_folder <- paste0(article_dir,"/web/",dirname(rel_path))
+    if (! dir.exists(paste0(article_dir,"/web/",dirname(rel_path)))) {
+        dir.create(paste0(article_dir,"/web/",dirname(rel_path)))
+    }
+    file.copy()
+    png_file <- paste(toString(
+        tools::file_path_sans_ext(file_path)), ".png",
+        sep = "")
+
+}
+#' @title copy all images to web/
+#' @description reads figure object to read paths and copy them to /web folder.
+#' @param article_dir path to the article working directory
+#' @param fig_block block of image data
+#'
+#' @return modified fig_block
+#' @export
+copy_all_pdf_png <- function(article_dir, fig_block) {
+    for (iterator in seq_along(fig_block)) {
+        if (fig_block[[iterator]]$image_count == 1){
+            file_path <- paste0(article_dir,fig_block[[iterator]]$path)
+        } else {
+            for (iter_2 in seq_along(fig_block[[iterator]]$image_count)) {
+            }
+        }
+    }
+    return(fig_block)
+}
