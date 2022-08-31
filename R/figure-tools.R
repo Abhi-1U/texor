@@ -9,11 +9,11 @@
 figure_reader <- function(article_dir, file_name) {
     file_path <- paste(article_dir, file_name, sep = "/")
     raw_lines <- readLines(file_path)
-    raw_lines <- comment_filter(raw_lines)
-    start_patt <- "\\s*\\\\begin\\{figure\\}"
-    end_patt <- "\\s*\\\\end\\{figure\\}"
     alg_start_patt <- "\\s*\\\\begin\\{algorithm\\}"
     alg_end_patt <- "\\s*\\\\end\\{algorithm\\}"
+    start_patt <- "\\s*\\\\begin\\{figure\\}"
+    end_patt <- "\\s*\\\\end\\{figure\\}"
+    raw_lines <- comment_filter(raw_lines)
     figure_starts <- which(grepl(start_patt, raw_lines))
     figure_ends <-  which(grepl(end_patt, raw_lines))
     alg_figure_starts <- which(grepl(alg_start_patt, raw_lines))
@@ -28,13 +28,15 @@ figure_reader <- function(article_dir, file_name) {
         for (iterator in seq_along(figure_starts)) {
             block_start <- figure_starts[iterator]
             block_end <- figure_ends[iterator]
+
             fig_data <- raw_lines[block_start:block_end]
             figure_blocks <- append(figure_blocks,list(fig_block_reader(article_dir,
                                                                         fig_data,
                                                                         raw_lines,
                                                                         iterator,
                                                                         block_start,
-                                                                        block_end)))
+                                                                        block_end
+                                                                        )))
         }
     } else {
         #pass
@@ -45,19 +47,21 @@ figure_reader <- function(article_dir, file_name) {
     return(figure_blocks)
 }
 
-fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos, end_pos){
+fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos, end_pos, ac_start_pos, ac_end_pos){
     # block of figure_data with extra meta data
     f_block <- list()
+    f_block$image_number <- iterator
     f_block$doc_start_line <- start_pos
     f_block$doc_end_line <- end_pos
+
     # raw figure lines
     f_block$data <- fig_data
     # is the figure a tikz image
     f_block$istikz <- find_tikz(fig_data)
     # is an algorithm environment (treated like an image)
-    f_block$isalgoritm <- find_algorithm(fig_data)
+    f_block$isalgorithm <- find_algorithm(fig_data)
     if (find_algorithm(fig_data)) {
-        alg_lib <- "\\usepackage{algorithm2e}"
+        alg_lib <- extract_extra_lib(article_dir)
         f_block$alglib <- alg_lib
         f_block$image_count <- 1
         # caption
@@ -138,6 +142,13 @@ patch_figure_env <- function(article_dir) {
     raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\end\\{figure\\*\\}", "figure\\*", "figure")
     print("Changed \\end{figure\\*} to \\end{figure}")
+
+    raw_lines <- stream_editor(raw_lines,
+                               "\\s*\\\\begin\\{algorithm}", "algorithm\\*", "figure")
+    print("Changed \\begin{algorithm} to \\begin{figure}")
+    raw_lines <- stream_editor(raw_lines,
+                               "\\s*\\\\end\\{algorithm}", "algorithm\\*", "figure")
+    print("Changed \\end{algorithm} to \\end{figure}")
     # testing functionality
     #return(raw_lines)
     # backup old file

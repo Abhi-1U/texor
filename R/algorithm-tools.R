@@ -25,7 +25,10 @@ convert_algorithm <- function(alg_object, article_dir) {
     if (alg_object$data[1] != "\\begin{algorithm}[H]"){
         alg_object$data[1] <- "\\begin{algorithm}[H]"
     }
-
+    M <- which(grepl("\\\\usepackage\\{Metafix\\}", alg_object$alglib))
+    if (! identical(M,integer(0))) {
+        alg_object$alglib[M] <- ""
+    }
     algorithm_template <- c(
         "\\documentclass{standalone}",
         "\\usepackage{xcolor}",
@@ -52,19 +55,23 @@ convert_algorithm <- function(alg_object, article_dir) {
     fileconn <- file(alg_path)
     writeLines(algorithm_template, fileconn)
     close(fileconn)
+    alg_object$compiled <- TRUE
     tryCatch(tinytex::latexmk(alg_path, engine = "pdflatex"),
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
                  warning(c$message)
+                 alg_object$compiled <- FALSE
              }
     )
-    tinytex::latexmk(alg_path, engine = "pdflatex")
     # run pdf to png
     alg_png_file <- gsub(".pdf",".png",alg_file_name)
+    alg_object$path <- paste0("alg/",alg_png_file)
+    alg_object$converted <- TRUE
     tryCatch(texor::convert_to_png(gsub(".tex", ".pdf", alg_path)),
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
                  warning(c$message)
+                 alg_object$converted <- FALSE
              }
     )
 
@@ -78,5 +85,58 @@ convert_algorithm <- function(alg_object, article_dir) {
     if(! dir.exists(web_alg_folder)) {
         dir.create(web_alg_folder)
     }
-    file.copy(alg_png_path, web_alg_png_path)
+    alg_object$copied <- TRUE
+    tryCatch(file.copy(alg_png_path, web_alg_png_path),
+             error = function(c) {
+                 c$message <- paste0(c$message, " (in ", article_dir , ")")
+                 warning(c$message)
+                 alg_object$copied <- FALSE
+             }
+    )
+    alg_object$included_as_png <- TRUE
+    tryCatch(insert_algorithm_png(alg_object, article_dir),
+             error = function(c) {
+                 c$message <- paste0(c$message, " (in ", article_dir , ")")
+                 warning(c$message)
+                 alg_object$included_as_png <- FALSE
+             }
+    )
+    return(alg_object)
+}
+
+extract_extra_lib <- function(article_dir) {
+    wrapper_file <- get_wrapper_type(article_dir)
+    wrapper_path <- paste(article_dir,wrapper_file,sep = "/")
+    wrapper_lines <- readLines(wrapper_path)
+    rjournal_line <- which(grepl("\\usepackage\\{RJournal\\}",wrapper_lines))
+    begin_doc_line <- which(grepl("\\s*\\\\begin\\{document\\}",wrapper_lines))
+    alg_libs <- wrapper_lines[(rjournal_line+1):(begin_doc_line-1)]
+    alg_libs <- comment_filter(alg_libs)
+    return(alg_libs)
+}
+
+insert_algorithm_png <- function(fig_block,article_dir) {
+    file_name <- get_texfile_name(article_dir)
+    raw_lines <- readLines(file.path(article_dir, file_name))
+    file_path <- paste0(article_dir,"/",file_name)
+    alg_start_patt <- "\\s*\\\\begin\\{algorithm\\}"
+    start_patt <- "\\s*\\\\begin\\{figure\\}"
+    figure_starts <- which(grepl(start_patt, raw_lines))
+    alg_figure_starts <- which(grepl(alg_start_patt, raw_lines))
+    figure_starts <- c(figure_starts,alg_figure_starts)
+    figure_starts <- sort(figure_starts)
+    before_including_image <- raw_lines[1:figure_starts[fig_block$image_number]]
+    remaining_line <- raw_lines[((figure_starts[fig_block$image_number])+1):length(raw_lines)]
+    include_png_line <- paste0("\\includegraphics{alg/",gsub(":","",fig_block$label),".png}")
+    # Backup original wrapper file
+    file.rename(file_path, paste(file_path, ".bk", sep = ""))
+    # write to original wrapper file and save it as .new
+    xfun::write_utf8(c(
+        before_including_image,
+        include_png_line,
+        "",
+        remaining_line),
+        paste(file_path, ".new", sep = ""))
+    # remove .new from extension
+    file.rename(paste(file_path, ".new", sep = ""), file_path)
 }

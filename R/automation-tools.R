@@ -40,9 +40,20 @@ latex_to_web <- function(dir) {
     log_setup(dir, log_file, "texor", 2)
     # Step - 3 : Check for PDF and then convert
     #            PDF to PNG based on condition
-    texor_log(paste0("Stage-03 | ","converting pdf files to png"), "info", 2)
+    texor_log(paste0("Stage-03 | ","converting Images to png"), "info", 2)
     data <- figure_reader(dir, file_name)
-    data <- convert_all_pdf_png(dir, data)
+    for (fig_iter in seq_along(data)) {
+        if(data[[fig_iter]]$isalgorithm) {
+            data[[fig_iter]] <- convert_algorithm(data[[fig_iter]], dir)
+        }
+        if(data[[fig_iter]]$istikz) {
+            # to do add a tikz management function here
+        }
+        else {
+            # to do add a copy/conversion function here
+        }
+    }
+    #data <- convert_all_pdf_png(dir, data)
     #data <- copy_all_pdf_png(dir, data)
     # copy images,convert tikz and algorithm images
     # to do work with figures
@@ -64,12 +75,12 @@ latex_to_web <- function(dir) {
     # Step - 7 : Check for Tikz images and pre-process
     #            it based on condition.
     texor_log(paste0("Stage-07 | ","Checking For Tikz Images"), "info", 2)
-    if (article_has_tikz(dir)) {
-        # Add a note for tikz Process here
-        texor_log(paste0("Stage-07 | ","Tikz Image Found, Conversion will require manual intervention"), "info", 2)
-    } else {
-        texor_log(paste0("Stage-07 | ","No Tikz Image Found"), "info", 2)
-    }
+    #if (article_has_tikz(dir)) {
+    #    # Add a note for tikz Process here
+    #    texor_log(paste0("Stage-07 | ","Tikz Image Found, Conversion will require manual intervention"), "info", 2)
+    #} else {
+    #    texor_log(paste0("Stage-07 | ","No Tikz Image Found"), "info", 2)
+    #}
     # Step - 8 : Convert to markdown + find package
     #            references
     texor_log(paste0("Stage-08 | ","Converting LaTeX to Markdown"), "info", 2)

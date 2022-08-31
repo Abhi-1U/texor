@@ -1,4 +1,5 @@
-- doc_start_line: 12
+- image_number: 1
+  doc_start_line: 12
   doc_end_line: 17
   data:
   - \begin{figure}[htbp]
@@ -8,7 +9,7 @@
   - '  \label{figure:rlogo}'
   - \end{figure}
   istikz: no
-  isalgoritm: no
+  isalgorithm: no
   image_count: 1
   image_pos: 3
   caption: '{The logo of R.}'
