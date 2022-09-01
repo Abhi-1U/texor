@@ -162,3 +162,33 @@ patch_figure_env <- function(article_dir) {
     # write same tex file with new data
     write_external_file(file_path, "w", raw_lines)
 }
+
+handle_figures <- function(article_dir, file_name){
+    fig_data <- figure_reader(article_dir, file_name)
+    fig_data <- convert_all_pdf(article_dir, fig_data)
+    for (fig_iter in seq_along(fig_data)) {
+        if(fig_data[[fig_iter]]$isalgorithm) {
+            fig_data[[fig_iter]] <- convert_algorithm(fig_data[[fig_iter]], article_dir)
+        }
+        if(fig_data[[fig_iter]]$istikz) {
+            fig_data[[fig_iter]] <- convert_tikz(fig_data[[fig_iter]], article_dir)
+        }
+        if(fig_data[[fig_iter]]$extension == "pdf") {
+            # --pass
+        }
+        else {
+            if (fig_data[[fig_iter]]$image_count == 1){
+                copy_to_web(fig_data[[fig_iter]]$path,
+                            fig_data[[fig_iter]]$extension,
+                            article_dir)
+            } else {
+                for (iter_2 in seq_along(fig_data[[fig_iter]]$image_count)) {
+                    copy_to_web(fig_data[[fig_iter]]$path[iter_2],
+                                fig_data[[fig_iter]]$extension[iter_2],
+                                article_dir)
+                }
+            }
+        }
+    }
+    return(fig_data)
+}

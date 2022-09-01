@@ -35,13 +35,29 @@ convert_to_png <- function(file_path){
 #'
 #' @return modified fig_block
 #' @export
-convert_all_pdf_png <- function(article_dir, fig_block) {
+convert_all_pdf <- function(article_dir, fig_block) {
     for (iterator in seq_along(fig_block)) {
         if (fig_block[[iterator]]$image_count == 1){
             if (fig_block[[iterator]]$extension == "pdf") {
                 image_path <- paste0(article_dir,"/",fig_block[[iterator]]$path)
                 convert_to_png(image_path)
-                fig_block[[iterator]]$pdf_to_png <- TRUE
+                pdf_rel_path <- fig_block[[iterator]]$path
+                if (! grepl(".pdf$",pdf_rel_path)) {
+                    fig_block[[iterator]]$path <- paste0(pdf_rel_path,".png")
+                } else {
+                    fig_block[[iterator]]$path <- gsub(".pdf",".png",pdf_rel_path)
+                }
+                fig_block[[iterator]]$converted <- TRUE
+                fig_block[[iterator]]$copied <- TRUE
+                web_image_path <- paste0(article_dir,"/web/",fig_block[[iterator]]$path)
+                tryCatch(file.copy(image_path, web_image_path),
+                         error = function(c) {
+                             c$message <- paste0(c$message, " (in ", article_dir , ")")
+                             warning(c$message)
+                             fig_block[[iterator]]$copied <- FALSE
+                         }
+                )
+
             } else {
                 # -- pass
             }
@@ -50,7 +66,22 @@ convert_all_pdf_png <- function(article_dir, fig_block) {
                 if (fig_block[[iterator]]$extension[iter_2] == "pdf") {
                     image_path <- paste0(article_dir,"/",fig_block[[iterator]]$path[iter_2])
                     convert_to_png(image_path)
-                    fig_block[[iterator]]$pdf_to_png <- TRUE
+                    pdf_rel_path <- fig_block[[iterator]]$path[iter_2]
+                    if (! grepl(".pdf$",pdf_rel_path)) {
+                        fig_block[[iterator]]$path[iter_2] <- paste0(pdf_rel_path,".png")
+                    } else {
+                        fig_block[[iterator]]$path[iter_2] <- gsub(".pdf",".png",pdf_rel_path)
+                    }
+                    fig_block[[iterator]]$converted[iter_2] <- TRUE
+                    fig_block[[iterator]]$copied[iter_2] <- TRUE
+                    web_image_path <- paste0(article_dir,"/web/",fig_block[[iterator]]$path[iter_2])
+                    tryCatch(file.copy(image_path, web_image_path),
+                             error = function(c) {
+                                 c$message <- paste0(c$message, " (in ", article_dir , ")")
+                                 warning(c$message)
+                                 fig_block[[iterator]]$copied[iter_2] <- FALSE
+                             }
+                    )
                 } else {
                     # -- pass
                 }

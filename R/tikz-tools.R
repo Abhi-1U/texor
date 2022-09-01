@@ -54,7 +54,7 @@ convert_tikz <- function(fig_block, article_dir) {
     )
 
     # run pdf to png
-    tikz_png_file <- gsub(".pdf",".png", tikz_file_name)
+    tikz_png_file <- gsub(".tex",".png", tikz_file_name)
     fig_block$path <- paste0("tikz/",tikz_png_file)
     fig_block$converted <- TRUE
     tryCatch(texor::convert_to_png(gsub(".tex", ".pdf", tikz_path)),
@@ -68,14 +68,14 @@ convert_tikz <- function(fig_block, article_dir) {
         ".tex", ".png", tikz_path
     )
     web_tikz_folder <- paste(article_dir,"web/tikz",sep="/")
-    web_tikz_png_path <- paste0(web_tikz_folder,"/",gsub(
-        ".tex", ".png", tikz_file_name
-    ))
+    web_tikz_png_path <- paste0(web_tikz_folder,"/",tikz_png_file)
     if(! dir.exists(web_tikz_folder)) {
         dir.create(web_tikz_folder)
     }
     fig_block$copied <- TRUE
-    tryCatch(file.copy(tikz_png_path, web_tikz_png_path),
+    #print(paste0("tikz_png_path : ",tikz_png_path))
+    #print(paste0("web_tikz_png_path : ",web_tikz_png_path))
+    tryCatch(file.copy(tikz_png_path,web_tikz_png_path),
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
                  warning(c$message)

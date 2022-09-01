@@ -121,16 +121,16 @@ copy_other_files <- function(from_path) {
     old_working_directory <- getwd()
     setwd(from_path)
     dir_list <- list.dirs(recursive = FALSE)
-    possible_dirs <- c("*_files", "figures", "images", "tikz")
-    target_dir <- basename(dir_list[grep(
-        paste(possible_dirs, collapse = "|"), dir_list)])
-    print(target_dir)
-    dir.create("web/", showWarnings = FALSE)
-    dir.create(paste("web/", target_dir, sep = ""),
-               showWarnings = FALSE)
-    file.copy(list.dirs(
-        target_dir, full.names = TRUE),
-        paste("web/", target_dir, sep = ""), recursive = TRUE)
+    #possible_dirs <- c("*_files", "figures", "images", "tikz")
+    #target_dir <- basename(dir_list[grep(
+    #    paste(possible_dirs, collapse = "|"), dir_list)])
+    #print(target_dir)
+    if(! dir.exists("web")){
+        dir.create("web/", showWarnings = FALSE)
+    }
+    #file.copy(list.dirs(
+    #    target_dir, full.names = TRUE),
+    #    paste("web/", target_dir, sep = ""), recursive = TRUE)
     file_list <- list.files(recursive = FALSE)
     extensions <- c("*.png", "*.jpg", "*.bib", "*.pdf",
                     "*.tex", "*.R", "*.bbl")
@@ -154,32 +154,19 @@ copy_to_web <- function(rel_path, ext, article_dir){
     }
     if (dirname(rel_path) == ".") {
         image_target_file_path <- (paste0(article_dir,"/web/",rel_path))
+    } else {
+        image_target_file_path <- (paste0(article_dir,"/web/",rel_path))
     }
     image_folder <- paste0(article_dir,"/web/",dirname(rel_path))
     if (! dir.exists(paste0(article_dir,"/web/",dirname(rel_path)))) {
         dir.create(paste0(article_dir,"/web/",dirname(rel_path)))
     }
-    file.copy()
+    file_path <- paste0(article_dir,"/",rel_path)
+    web_file_path <- paste0(article_dir,"/web/",rel_path)
+    file.copy(file_path, web_file_path)
     png_file <- paste(toString(
         tools::file_path_sans_ext(file_path)), ".png",
         sep = "")
 
 }
-#' @title copy all images to web/
-#' @description reads figure object to read paths and copy them to /web folder.
-#' @param article_dir path to the article working directory
-#' @param fig_block block of image data
-#'
-#' @return modified fig_block
-#' @export
-copy_all_pdf_png <- function(article_dir, fig_block) {
-    for (iterator in seq_along(fig_block)) {
-        if (fig_block[[iterator]]$image_count == 1){
-            file_path <- paste0(article_dir,fig_block[[iterator]]$path)
-        } else {
-            for (iter_2 in seq_along(fig_block[[iterator]]$image_count)) {
-            }
-        }
-    }
-    return(fig_block)
-}
+

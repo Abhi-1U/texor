@@ -34,22 +34,18 @@ texor is a package that deals with multiple challenges that occour in conversion
 2. Reading Metadata from LaTeX file as well as DESCRIPTION.
 3. Reading bibliography from bibtex files and ignoring `\thebibliography`
 4. Supports code environments like `Sinput`,`Soutput`, `example` ,`example*`,`verbatim`, `smallverbatim`  with code highlight.
-5. Supports graphics included as PDF,PNG,JPG.
+5. Supports graphics included as PDF, PNG, JPG, tikz, algorithm2e graphics supported (some figures might not work).
 6. Functions to convert PDF graphics to PNG.
 7. Almost all tables are supported with a few exceptions.
-8. Other things like citations,links,footnotes,math,ctv,package references are also supported.
+8. Other things like citations,links,footnotes,math,CTV,package references are also supported.
 9. A parser to read and minimally convert inbuilt `\thebibliography` to bibtex (moved to [rebib](https://github.com/Abhi-1U/rebib))
 10. Figure/Table/Equation numbering
 11. Stream Editor to rename alien commands/environments to accepted defaults.
 12. Pre and Post conversion statistics of environments for verification.
 13. Bibliography aggregation.(moved to [rebib](https://github.com/Abhi-1U/rebib))
+14. Tikz,algorithm graphics supported (some figures might not work)
+15. Logging of events.
 
-### Work in Progress Features
-
-1. Tikz graphics compilation support functions
-2. Better Documentation as vignettes, man pages, articles, pkgdown
-3. Logging Events in Log Files
-4. Passing R-CMD-check
 ![texor features](man/figures/texor.svg)
 
 
