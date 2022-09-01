@@ -47,7 +47,7 @@ latex_to_web <- function(dir) {
             data[[fig_iter]] <- convert_algorithm(data[[fig_iter]], dir)
         }
         if(data[[fig_iter]]$istikz) {
-            # to do add a tikz management function here
+            data[[fig_iter]] <- convert_tikz(data[[fig_iter]], dir)
         }
         else {
             # to do add a copy/conversion function here

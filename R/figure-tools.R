@@ -1,3 +1,5 @@
+tikz_count_var <- 0
+
 #' @title figure reader
 #'
 #' @param article_dir the directory path where the file and its dependencies are
@@ -74,6 +76,7 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
         return(f_block)
     }
     if (find_tikz(fig_data)) {
+        tikz_count_var <- tikz_count_var + 1
         # extract tikz libraries from RJwrapper
         tikz_lib <- extract_tikz_lib(article_dir)
         f_block$tikzlib <- tikz_lib
@@ -83,8 +86,7 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
         # label
         f_block$label <- extract_label(fig_data)
         # extract tikz image data
-        tikz_data <- extract_tikz_block(fig_data, article_dir)
-        f_block$tikzdata <- tikz_data
+        f_block$tikzstyle <- extract_tikz_style(fig_data, article_dir, tikz_count_var)
         f_block$extension <- find_image_extension(article_dir, "" , is_tikz = TRUE)
     } else {
         f_block$image_count <- env_image_count(fig_data)

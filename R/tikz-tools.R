@@ -7,16 +7,30 @@
 #' @return tikz image
 #' @export
 convert_tikz <- function(fig_block, article_dir) {
+    caption_point <- which(grepl("\\\\captionsetup\\{",fig_block$data))
+    if (!identical(caption_point, integer(0))) {
+        fig_block$data[caption_point] <- ""
+    }
+    tikz_picture_end_point <- which(grepl("\\\\end\\{tikzpicture\\}",fig_block$data))
     tikz_template <- c(
         "\\documentclass{standalone}",
         "\\usepackage{xcolor}",
         "\\usepackage{verbatim}",
         "\\usepackage{tikz}",
+        "\\usepackage[T1]{fontenc}",
+        "\\usepackage{graphics}",
+        "\\usepackage{hyperref}",
+        "\\newcommand{\\code}[1]{\\texttt{#1}}",
+        "\\newcommand{\\R}{R}",
+        "\\newcommand{\\pkg}[1]{#1}",
+        "\\newcommand{\\CRANpkg}[1]{\\pkg{#1}}%",
+        "\\newcommand{\\BIOpkg}[1]{\\pkg{#1}}",
         fig_block$tikzlib,
         "\\begin{document}",
         "\\nopagecolor",
-        fig_block$tikz_lib,
-        fig_block$data,
+        fig_block$tikzstyle,
+        fig_block$data[2:tikz_picture_end_point],
+        #fig_block$data,
         "\\end{document}"
     )
     tikz_file_name <- paste0(gsub(":","",fig_block$label),".tex")
@@ -30,43 +44,74 @@ convert_tikz <- function(fig_block, article_dir) {
     fileconn <- file(tikz_path)
     writeLines(tikz_template, fileconn)
     close(fileconn)
+    fig_block$compiled <- TRUE
+    tryCatch(tinytex::latexmk(tikz_path, engine = "pdflatex"),
+             error = function(c) {
+                 c$message <- paste0(c$message, " (in ", article_dir , ")")
+                 warning(c$message)
+                 fig_block$compiled <- FALSE
+             }
+    )
 
-    tinytex::latexmk(tikz_path, engine = "pdflatex")
     # run pdf to png
-    tikz_png_file <- gsub(".tex",".png",tikz_file_name)
-    texor::convert_to_png(gsub(
-        ".tex", ".pdf", tikz_png_path
-    ))
+    tikz_png_file <- gsub(".pdf",".png", tikz_file_name)
+    fig_block$path <- paste0("tikz/",tikz_png_file)
+    fig_block$converted <- TRUE
+    tryCatch(texor::convert_to_png(gsub(".tex", ".pdf", tikz_path)),
+             error = function(c) {
+                 c$message <- paste0(c$message, " (in ", article_dir , ")")
+                 warning(c$message)
+                 fig_block$converted <- FALSE
+             }
+    )
+    tikz_png_path <- gsub(
+        ".tex", ".png", tikz_path
+    )
     web_tikz_folder <- paste(article_dir,"web/tikz",sep="/")
+    web_tikz_png_path <- paste0(web_tikz_folder,"/",gsub(
+        ".tex", ".png", tikz_file_name
+    ))
     if(! dir.exists(web_tikz_folder)) {
         dir.create(web_tikz_folder)
     }
-    file.copy(tikz_path, paste0(article_dir,"/web/tikz/",tikz_png_file))
-
+    fig_block$copied <- TRUE
+    tryCatch(file.copy(tikz_png_path, web_tikz_png_path),
+             error = function(c) {
+                 c$message <- paste0(c$message, " (in ", article_dir , ")")
+                 warning(c$message)
+                 fig_block$copied <- FALSE
+             }
+    )
+    fig_block$included_as_png <- TRUE
+    tryCatch(insert_tikz_png(fig_block, article_dir),
+             error = function(c) {
+                 c$message <- paste0(c$message, " (in ", article_dir , ")")
+                 warning(c$message)
+                 fig_block$included_as_png <- FALSE
+             }
+    )
+    return(fig_block)
 }
 
 #' a sub-function to isolate a single tikz image
 #'
 #' @param fig_data figure tikz block
 #' @param article_dir path to the article working directory
+#' @param iterator tikz image number
 #' @return tikz image data in a list of strings
-extract_tikz_block <- function(fig_data, article_dir) {
-    tikz_file_name <- "tikz_temp_data.txt"
+extract_tikz_style <- function(fig_data, article_dir, iterator) {
+    tikz_file_name <- "tikz_style_data.yaml"
     tikz_file_path <- paste(article_dir, tikz_file_name, sep = "/")
     if (! file.exists(tikz_file_path)) {
         pre_process_tikz(article_dir)
     }
     tikz_data <- readLines(tikz_file_path)
-    tikz_end_points <- which(grepl("\\s*\\\\end\\{tikzpicture", tikz_data))
+    tikz_start_point <- which(grepl(paste0("image: ",iterator), tikz_data))
+    tikz_end_point <- which(grepl(paste0("image-end: ",iterator), tikz_data))
     # delete tikz_data of first image from the temp file
-    un_processed_tikz <- tikz_data[(tikz_end_points[1]+1):length(tikz_data)]
-    #
-    file.rename(tikz_file_path, paste(tikz_file_path, ".bk", sep = ""))
-    # write to original wrapper file and save it as .new
-    write_external_file(tikz_file_path, "a", un_processed_tikz)
-    return(tikz_data[1:tikz_end_points[1]])
+    un_processed_tikz <- tikz_data[(tikz_start_point+1):(tikz_end_point-1)]
+    return(un_processed_tikz)
 }
-
 
 
 extract_tikz_lib <- function(article_dir) {
@@ -77,7 +122,9 @@ extract_tikz_lib <- function(article_dir) {
     begin_doc_line <- which(grepl("\\s*\\\\begin\\{document\\}",wrapper_lines))
     tikz_libs <- wrapper_lines[(rjournal_line+1):(begin_doc_line-1)]
     tikz_libs <- comment_filter(tikz_libs)
-    return(tikz_libs)
+    tikz_libs_pos <- which(grepl("\\\\usetikzlibrary\\{", tikz_libs))
+    tikz_libs[tikz_libs_pos]
+    return(tikz_libs[tikz_libs_pos])
 }
 
 find_tikz <- function(fig_lines) {
@@ -131,11 +178,11 @@ pre_process_tikz <- function(article_dir) {
     abs_file_path <- dirname(input_file_path)
     latex_template <- system.file("latex.template", package = "texor")
     tikz_filter <- system.file("extract_tikz.lua", package = "texor")
-    alg_filter <- system.file("extract_algo.lua", package = "texor")
+    #alg_filter <- system.file("extract_algo.lua", package = "texor")
     pandoc_opt <- c(
         "--resource-path", abs_file_path,
         "--lua-filter", tikz_filter,
-        "--lua-filter", alg_filter,
+        #"--lua-filter", alg_filter,
         "--template", latex_template)
     input_format <- "latex+raw_tex"
     output_format <- "latex"
@@ -167,4 +214,30 @@ article_has_tikz <- function(article_dir) {
     } else {
         return(TRUE)
     }
+}
+
+insert_tikz_png <- function(fig_block,article_dir) {
+    file_name <- get_texfile_name(article_dir)
+    raw_lines <- readLines(file.path(article_dir, file_name))
+    file_path <- paste0(article_dir,"/",file_name)
+    alg_start_patt <- "\\s*\\\\begin\\{algorithm\\}"
+    start_patt <- "\\s*\\\\begin\\{figure\\}"
+    figure_starts <- which(grepl(start_patt, raw_lines))
+    alg_figure_starts <- which(grepl(alg_start_patt, raw_lines))
+    figure_starts <- c(figure_starts,alg_figure_starts)
+    figure_starts <- sort(figure_starts)
+    before_including_image <- raw_lines[1:figure_starts[fig_block$image_number]]
+    remaining_line <- raw_lines[((figure_starts[fig_block$image_number])+1):length(raw_lines)]
+    include_png_line <- paste0("\\includegraphics{tikz/",gsub(":","",fig_block$label),".png}")
+    # Backup original wrapper file
+    file.rename(file_path, paste(file_path, ".bk", sep = ""))
+    # write to original wrapper file and save it as .new
+    xfun::write_utf8(c(
+        before_including_image,
+        include_png_line,
+        "",
+        remaining_line),
+        paste(file_path, ".new", sep = ""))
+    # remove .new from extension
+    file.rename(paste(file_path, ".new", sep = ""), file_path)
 }

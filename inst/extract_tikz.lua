@@ -5,15 +5,18 @@ Copyright: © 2022 Abhishek Ulayil
 License:   MIT – see LICENSE file for details
 --]]
 
+tikz_set_count = 0
 
 --[[
 Appends tikz related data in top-down sequence
 --]]
-function store_tikz(tikz_data)
-    local file,err = io.open("tikz_temp_data.txt",'a')
+function store_tikz(tikz_data, pos)
+    local file,err = io.open("tikz_style_data.yaml",'a')
     if file then
+        file:write("image: " .. pos .. "\n")
         file:write(tikz_data)
         file:write("\n")
+        file:write("image-end: " .. pos .. "\n")
         file:close()
     else
         print("error:", err)
@@ -32,34 +35,23 @@ Match RawBlocks for the specific tikz commands
 --]]
 function RawBlock(el)
   -- First Read the tikzset or tikzstyle data
-  if el.text:match'^\\tikzset' or el.text:match'^\\tikzstyle' or el.text:match('\\tikzstyle') or el.text:match'\\tikzset' then
+  if el.text:match'^\\tikzset' or  el.text:match'\\tikzset' then
     local tikz_dat=el.text
+    tikz_set_count = tikz_set_count + 1
     --Store the initial tikzset or tikzstyle data
     --print(tikz_dat)
-    store_tikz(tikz_dat)
+    store_tikz(tikz_dat, tikz_set_count)
     --return a placeholder replacement which will be later treated as div in markdown
     return latex_placeholder_replacement("\\begin{SetTikz}\\n\\end{SetTikz}")
   end
   -- In the second pass Read the tikzpicture part
   if el.text:match'^\\begin{tikzpicture}' or el.text:match'\\begin{tikzpicture}' then
-    local tikz_dat=el.text
+    --local tikz_dat=el.text
     -- Store the actual data (data gets appended to the temp_file)
-    store_tikz(tikz_dat)
+    --store_tikz(tikz_dat)
     -- return a placeholder replacement which will be later treated as div in markdown
-    return latex_placeholder_replacement("\\begin{StikzImage}\\n\\end{StikzImage}")
+    --return latex_placeholder_replacement("\\begin{StikzImage}\\n\\end{StikzImage}")
+    return el
   end
 end
 
-function Para(el)
-  local tikz_dat=pandoc.utils.stringify(el.content)
-  --local tikz_dat=pandoc.utils.stringify(el.text)print(tikz_dat)
-    -- First Read the tikzset or tikzstyle data
-  if tikz_dat:match'^\\tikzset' or tikz_dat:match'^\\tikzstyle' or tikz_dat:match('\\tikzstyle') or tikz_dat:match'\\tikzset' then
-    local tikz_dat=pandoc.utils.stringify(el.content)
-    --Store the initial tikzset or tikzstyle data
-    print(tikz_dat)
-    store_tikz(tikz_dat)
-    --return a placeholder replacement which will be later treated as div in markdown
-    return latex_placeholder_replacement("\\begin{SetTikz}\\n\\end{SetTikz}")
-  end
-end
