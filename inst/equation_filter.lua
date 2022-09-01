@@ -20,11 +20,15 @@ function Math(el)
         --label = string.gsub(text, "\\label{^\\{(.-)\\}$}", "%1")
         s, e, l =string.find(text,"\\label{(.-)}")
         table.insert(equation_labels,l)
-        -- Bookdown does not support period in equations hence substituting them as hyphen
+        -- Bookdown does not support . _ in equations hence substituting them as hyphen
         l = string.gsub(l, "%.", "-")
+        l = string.gsub(l, "_", "-")
+        if (not l:match("^eq:")) then
+            l = "eq:" .. l
+        end
         --label = string.gsub(label, "",)
         --print(l)
-        el.text = text .. [[ (\#]] .. l .. [[)]]
+        el.text = text .. [[  (\#]] .. l .. [[)  ]]
         --print(text)
     else
         --pass
@@ -49,7 +53,15 @@ function Link(el)
             print(el.target)
             local link_text = el.target
             link_text = string.gsub(link_text, "%.", "-")
+            link_text = string.gsub(link_text, "_", "-")
+            if (not link_text:match("^eq:")) then
+                link_text = "eq:" .. link_text
+            end
             label = string.gsub(label, "%.", "-")
+            label = string.gsub(label, "_", "-")
+            if (not label:match("^eq:")) then
+                label = "eq:" .. label
+            end
             el.target = link_text
             bkdwn = [[\@ref(]] .. label .. [[)]]
             is_bkdwn = true
