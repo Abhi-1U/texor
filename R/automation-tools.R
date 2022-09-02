@@ -18,6 +18,7 @@ texor_orchestrate <- function(article_dir) {
 #' @export
 latex_to_web <- function(dir) {
     print(dir)
+    dir <- normalizePath(dir)
     date <- Sys.Date()
     file_name <- get_texfile_name(dir)
     log_file <- paste0("texor-log-",date,".log")
@@ -109,6 +110,7 @@ latex_to_web <- function(dir) {
 #' @export
 convert_to_html <- function(dir) {
     wd <- getwd()
+    dir <- normalizePath(dir)
     texor::log_setup(wd,"texor-conversions.log","texor-stats",2)
     x<- FALSE
     x<- tryCatch(texor::latex_to_web(dir),

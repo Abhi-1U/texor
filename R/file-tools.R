@@ -16,6 +16,7 @@
 #'                  package = "texor")
 #' texor::get_wrapper_type(article_dir)
 get_wrapper_type <- function(article_dir) {
+    article_dir <- normalizePath(article_dir)
     wrapper_types <- c("wrapper.tex",
                        "RJwrap.tex",
                        "RJwrapper.tex")
@@ -60,6 +61,7 @@ comment_filter <- function(data) {
 #' @return create/append/write a new file
 #' @export
 write_external_file <- function(file_path, mode, raw_text) {
+    file_path <- normalizePath(file_path)
     write_file <- file(file_path, mode)
     writeLines(raw_text, write_file)
     close(write_file)
@@ -74,6 +76,7 @@ write_external_file <- function(file_path, mode, raw_text) {
 #' @return String name of the tex-file name
 #' @export
 get_texfile_name <- function(article_dir) {
+    article_dir <- normalizePath(article_dir)
     lookup_file <- get_wrapper_type(article_dir)
     wrapper_file <- readLines(file.path(article_dir, lookup_file))
     article_start <- which(grepl(
@@ -91,11 +94,13 @@ get_texfile_name <- function(article_dir) {
 }
 
 get_md_file_name <- function(article_dir) {
+    article_dir <- normalizePath(article_dir)
     lookup_file <- get_wrapper_type(article_dir)
     markdown_file <- gsub(".tex", ".md", lookup_file)
 }
 
 get_journal_details <- function(article_dir) {
+    article_dir <- normalizePath(article_dir)
     journal_details <- list()
     hierarchy <- str_split(article_dir, "/")[[1]]
     journal_folder <- hierarchy[length(hierarchy)-1]
@@ -145,6 +150,7 @@ copy_other_files <- function(from_path) {
 }
 
 copy_to_web <- function(rel_path, ext, article_dir){
+    article_dir <- normalizePath(article_dir)
     if (! grepl(paste0(".",ext,"$"),rel_path)) {
         rel_path <- paste0(rel_path,".",ext)
     }

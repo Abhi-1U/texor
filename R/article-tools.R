@@ -17,6 +17,7 @@
 #' texor::include_style_file(article_dir)
 include_style_file <- function(article_dir) {
     # Copy over the Metafix.sty file to the article directory
+    article_dir <- normalizePath(article_dir)
     file.copy(
             system.file("extdata/Metafix.sty", package = "texor"),
             file.path(article_dir),
@@ -63,6 +64,7 @@ include_style_file <- function(article_dir) {
 #' @export
 convert_to_markdown <- function(article_dir) {
     # wrapper file name
+    article_dir <- normalizePath(article_dir)
     input_file <- get_wrapper_type(article_dir)
     print(input_file)
     # resource path for pandoc
@@ -133,6 +135,7 @@ convert_to_markdown <- function(article_dir) {
 #' @return R-markdown file in the web folder
 #' @export
 generate_rmd <- function(article_dir) {
+    article_dir <- normalizePath(article_dir)
     volume <- 1 # placeholder value
     issue <- 1 # placeholder value
     journal_details <- get_journal_details(article_dir)
@@ -266,6 +269,7 @@ generate_rmd <- function(article_dir) {
 #' @return creates a converted markdown file, as well as a pkg_meta.yaml file
 #' @export
 convert_to_native <- function(article_dir) {
+    article_dir <- normalizePath(article_dir)
     # wrapper file name
     input_file <- get_wrapper_type(article_dir)
     # resource path for pandoc
@@ -330,6 +334,7 @@ convert_to_native <- function(article_dir) {
 #' @return HTML output
 #' @export
 produce_html <- function(article_dir) {
+    article_dir <- normalizePath(article_dir)
     input_file_path <- gsub(".tex", ".Rmd", paste(article_dir, "web",
                         texor::get_wrapper_type(article_dir), sep = "/"))
     rmarkdown::render(

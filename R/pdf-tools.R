@@ -20,6 +20,7 @@
 #'                  package = "texor")
 #' texor::convert_to_png(paste0(article_dir,"/normal.pdf"))
 convert_to_png <- function(file_path){
+    file_path <- normalizePath(file_path)
     if (! grepl(".pdf$",file_path)) {
         file_path <- paste0(file_path,".pdf")
     }
@@ -41,6 +42,7 @@ convert_to_png <- function(file_path){
 #' @return modified fig_block
 #' @export
 convert_all_pdf <- function(article_dir, fig_block) {
+    article_dir <- normalizePath(article_dir)
     for (iterator in seq_along(fig_block)) {
         if (fig_block[[iterator]]$image_count == 1){
             if (fig_block[[iterator]]$extension == "pdf") {
@@ -97,6 +99,7 @@ convert_all_pdf <- function(article_dir, fig_block) {
 }
 
 pdf_to_png <- function(article_dir) {
+    article_dir <- normalizePath(article_dir)
     input_files <- find_pdf_files(article_dir)
     input_file_paths <- lapply(input_files, function(file) {
         paste(article_dir, file, sep = "/")
@@ -105,6 +108,7 @@ pdf_to_png <- function(article_dir) {
 }
 
 find_pdf_files <- function(article_dir) {
+    article_dir <- normalizePath(article_dir)
     print("Finding inclusive PDF files")
     file_list <- list.files(article_dir, recursive = FALSE)
     extensions <- c("*.pdf")
@@ -126,6 +130,7 @@ find_pdf_files <- function(article_dir) {
 }
 
 make_png_files <- function(input_file_paths) {
+    input_file_paths <- normalizePath(input_file_paths)
     if (length(input_file_paths) == 1) {
         if (basename(input_file_paths[[1]]) == "NA") {
             print("No files to convert")

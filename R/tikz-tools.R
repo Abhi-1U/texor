@@ -7,6 +7,7 @@
 #' @return tikz image
 #' @export
 convert_tikz <- function(fig_block, article_dir) {
+    article_dir <- normalizePath(article_dir)
     caption_point <- which(grepl("\\\\captionsetup\\{",fig_block$data))
     if (!identical(caption_point, integer(0))) {
         fig_block$data[caption_point] <- ""
@@ -100,6 +101,7 @@ convert_tikz <- function(fig_block, article_dir) {
 #' @param iterator tikz image number
 #' @return tikz image data in a list of strings
 extract_tikz_style <- function(fig_data, article_dir, iterator) {
+    article_dir <- normalizePath(article_dir)
     tikz_file_name <- "tikz_style_data.yaml"
     tikz_file_path <- paste(article_dir, tikz_file_name, sep = "/")
     if (! file.exists(tikz_file_path)) {
@@ -125,6 +127,7 @@ extract_tikz_style <- function(fig_data, article_dir, iterator) {
 
 
 extract_tikz_lib <- function(article_dir) {
+    article_dir <- normalizePath(article_dir)
     wrapper_file <- get_wrapper_type(article_dir)
     wrapper_path <- paste(article_dir,wrapper_file,sep = "/")
     wrapper_lines <- readLines(wrapper_path)
@@ -138,9 +141,9 @@ extract_tikz_lib <- function(article_dir) {
 }
 
 find_tikz <- function(fig_lines) {
-    tikz_image_start <- which(grepl("^\\s*\\\\begin\\{tikzpicture",
+    tikz_image_start <- which(grepl("\\\\begin\\{tikzpicture",
                                     fig_lines))
-    tikz_image_end <-  which(grepl("^\\s*\\\\end\\{tikzpicture",
+    tikz_image_end <-  which(grepl("\\\\end\\{tikzpicture",
                                    fig_lines))
     if(length(tikz_image_end) == length(tikz_image_start) &
        (!identical(tikz_image_start,integer(0)))){
@@ -152,11 +155,12 @@ find_tikz <- function(fig_lines) {
 }
 
 tikz_count <- function(article_dir, file_name) {
+    article_dir <- normalizePath(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
     raw_lines <- readLines(file_path)
-    tikz_start_patt <- "\\s*\\\\begin\\{tikzpicture\\}"
-    tikz_end_patt <- "\\s*\\\\end\\{tikzpicture\\}"
+    tikz_start_patt <- "\\\\begin\\{tikzpicture\\}"
+    tikz_end_patt <- "\\\\end\\{tikzpicture\\}"
     begin_break_points <- which(grepl(tikz_start_patt, raw_lines))
     end_break_points <- which(grepl(tikz_end_patt, raw_lines))
     # to do (ignore commented code)
@@ -181,6 +185,7 @@ tikz_count <- function(article_dir, file_name) {
 #'
 #' @return outfile.tex a modified latex document
 pre_process_tikz <- function(article_dir) {
+    article_dir <- normalizePath(article_dir)
     # wrapper file name
     input_file <- get_texfile_name(article_dir)
     # resource path for pandoc
@@ -213,6 +218,7 @@ pre_process_tikz <- function(article_dir) {
 #' @return TRUE/FALSE(boolean)
 #' @export
 article_has_tikz <- function(article_dir) {
+    article_dir <- normalizePath(article_dir)
     # reads the complete file
     file_name <- get_texfile_name(article_dir)
     src_file_data <- readLines(file.path(article_dir, file_name))
@@ -227,6 +233,7 @@ article_has_tikz <- function(article_dir) {
 }
 
 insert_tikz_png <- function(fig_block,article_dir) {
+    article_dir <- normalizePath(article_dir)
     file_name <- get_texfile_name(article_dir)
     raw_lines <- readLines(file.path(article_dir, file_name))
     file_path <- paste0(article_dir,"/",file_name)
