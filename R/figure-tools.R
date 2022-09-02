@@ -103,10 +103,6 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
             extensions <- list()
             for (iterator in 1:f_block$image_count) {
                 extensions[iterator] <- find_image_extension(article_dir, f_block$path[iterator])
-                if (extensions[iterator] == "pdf") {
-                    # convert the pdf to png
-                    #convert_to_png(paste0(article_dir, "/", extensions[iterator]))
-                }
             }
             f_block$extension <- unlist(extensions)
         } else {
@@ -114,10 +110,6 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
             f_block$label <- extract_label(fig_data)
             f_block$path <- extract_path(fig_data[f_block$image_pos])
             f_block$extension <- find_image_extension(article_dir,f_block$path)
-            if (f_block$extension == "pdf") {
-                # convert the pdf to png
-                #convert_to_png(paste0(article_dir, "/", f_block$path))
-            }
         }
     }
     return(f_block)
@@ -172,23 +164,31 @@ handle_figures <- function(article_dir, file_name){
         }
         if(fig_data[[fig_iter]]$istikz) {
             fig_data[[fig_iter]] <- convert_tikz(fig_data[[fig_iter]], article_dir)
-        }
-        if(fig_data[[fig_iter]]$extension == "pdf") {
-            # --pass
-        }
-        else {
+        } else {
             if (fig_data[[fig_iter]]$image_count == 1){
+                if(fig_data[[fig_iter]]$extension == "pdf") {
+                    # --pass
+                } else {
+                    copy_to_web(fig_data[[fig_iter]]$path,
+                                fig_data[[fig_iter]]$extension,
+                                article_dir)
+                }
                 copy_to_web(fig_data[[fig_iter]]$path,
                             fig_data[[fig_iter]]$extension,
                             article_dir)
             } else {
-                for (iter_2 in seq_along(fig_data[[fig_iter]]$image_count)) {
+                for (iter_2 in 1:(fig_data[[fig_iter]]$image_count)) {
+                    if(fig_data[[fig_iter]]$extension[iter_2] == "pdf") {
+                        # --pass
+                    } else {
                     copy_to_web(fig_data[[fig_iter]]$path[iter_2],
                                 fig_data[[fig_iter]]$extension[iter_2],
                                 article_dir)
+                    }
                 }
             }
         }
     }
+    pdf_to_png(article_dir)
     return(fig_data)
 }

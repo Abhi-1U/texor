@@ -23,6 +23,7 @@ function Math(el)
         -- Bookdown does not support . _ in equations hence substituting them as hyphen
         l = string.gsub(l, "%.", "-")
         l = string.gsub(l, "_", "-")
+        l = string.gsub(l, " ", "-")
         if (not l:match("^eq:")) then
             l = "eq:" .. l
         end
@@ -54,11 +55,13 @@ function Link(el)
             local link_text = el.target
             link_text = string.gsub(link_text, "%.", "-")
             link_text = string.gsub(link_text, "_", "-")
+            link_text = string.gsub(link_text, " ", "-")
             if (not link_text:match("^eq:")) then
                 link_text = "eq:" .. link_text
             end
             label = string.gsub(label, "%.", "-")
             label = string.gsub(label, "_", "-")
+            label = string.gsub(label, " ", "-")
             if (not label:match("^eq:")) then
                 label = "eq:" .. label
             end

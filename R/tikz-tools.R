@@ -105,7 +105,11 @@ extract_tikz_style <- function(fig_data, article_dir, iterator) {
     if (! file.exists(tikz_file_path)) {
         pre_process_tikz(article_dir)
     }
-    tikz_data <- readLines(tikz_file_path)
+    if(file.exists(tikz_file_path)){
+        tikz_data <- readLines(tikz_file_path)
+    } else {
+        return("")
+    }
     tikz_start_point <- which(grepl(paste0("image: ",iterator), tikz_data))
     tikz_end_point <- which(grepl(paste0("image-end: ",iterator), tikz_data))
     # delete tikz_data of first image from the temp file
@@ -234,6 +238,10 @@ insert_tikz_png <- function(fig_block,article_dir) {
     figure_starts <- sort(figure_starts)
     before_including_image <- raw_lines[1:figure_starts[fig_block$image_number]]
     remaining_line <- raw_lines[((figure_starts[fig_block$image_number])+1):length(raw_lines)]
+    if (!identical(which(grepl("\\\\includegraphics\\{tikz/",remaining_line)),integer(0))) {
+        print("Image already included")
+        return(TRUE)
+    }
     include_png_line <- paste0("\\includegraphics{tikz/",gsub(":","",fig_block$label),".png}")
     # Backup original wrapper file
     file.rename(file_path, paste(file_path, ".bk", sep = ""))

@@ -82,9 +82,7 @@ convert_algorithm <- function(alg_object, article_dir) {
     web_alg_png_path <- paste0(web_alg_folder,"/",gsub(
         ".tex", ".png", alg_file_name
     ))
-    if(! dir.exists(web_alg_folder)) {
-        dir.create(web_alg_folder)
-    }
+    dir.create(web_alg_folder)
     alg_object$copied <- TRUE
     tryCatch(file.copy(alg_png_path, web_alg_png_path),
              error = function(c) {
@@ -127,6 +125,10 @@ insert_algorithm_png <- function(fig_block,article_dir) {
     figure_starts <- sort(figure_starts)
     before_including_image <- raw_lines[1:figure_starts[fig_block$image_number]]
     remaining_line <- raw_lines[((figure_starts[fig_block$image_number])+1):length(raw_lines)]
+    if (!identical(which(grepl("\\\\includegraphics\\{alg/",remaining_line)),integer(0))) {
+        print("Image already included")
+        return(TRUE)
+    }
     include_png_line <- paste0("\\includegraphics{alg/",gsub(":","",fig_block$label),".png}")
     # Backup original wrapper file
     file.rename(file_path, paste(file_path, ".bk", sep = ""))

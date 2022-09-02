@@ -85,4 +85,41 @@ latex_to_web <- function(dir) {
     texor_log(paste0("Stage-10 | ","Knitting Rmd to html"), "info", 2)
     texor::produce_html(dir)
     texor_log(paste0("Stage-10 | ","Knitted Rmd to html"), "info", 2)
+    post_data <- yaml::read_yaml(paste0(dir,"/post-conversion-meta.yaml"))
+    if (post_data$text$words == 0) {
+        texor_log(paste0("Pandoc produced an empty file"), "error", 2)
+    } else {
+        texor_log(paste0("Conversion Summary | ", "Pre-Conversion  ", "Post-Conversion"), "debug", 2)
+        texor_log(paste0("Tables | ", post_data$table, "  ", meta$table), "debug", 2)
+        texor_log(paste0("Figures | ", post_data$figure, "  ", meta$figure), "debug", 2)
+        texor_log(paste0("Math | ", post_data$math, "  ", meta$math), "debug", 2)
+        texor_log(paste0("Citations | ", post_data$citations, "  ", meta$citations), "debug", 2)
+        texor_log(paste0("Code Inline | ", post_data$code$inline, "  ", meta$code$inline), "debug", 2)
+        texor_log(paste0("Code Block | ", post_data$code$block, "  ", meta$code$block), "debug", 2)
+    }
+    return(TRUE)
+}
+
+#' @title conversion function with logging success and failure
+#' @description When applied to a list of article_dirs it will also log
+#' successful and failed slugs.
+#' @param dir absolute path to the article_dir
+#'
+#' @return Log file
+#' @export
+convert_to_html <- function(dir) {
+    wd <- getwd()
+    texor::log_setup(wd,"texor-conversions.log","texor-stats",2)
+    x<- FALSE
+    x<- tryCatch(texor::latex_to_web(dir),
+                 error = function(c) {
+                     c$message <- paste0(c$message, " (in ", basename(dir), ")")
+                     logger::log_error(paste("Conversion Failed",basename(dir), sep=" "),namespace = "texor-stats")
+                     logger::log_error(paste(c$message, sep=" "),namespace = "texor-stats")
+                     warning(c$message)
+                 }
+    )
+    if (identical(x,TRUE)) {
+        logger::log_success(paste("Conversion Success", basename(dir), sep=" "),namespace = "texor-stats")
+    }
 }

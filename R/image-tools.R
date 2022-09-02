@@ -13,7 +13,7 @@ extract_caption <- function(figure_lines) {
     caption_start_patt <- "\\s*\\\\caption\\{\\s*(.*?)\\s*\\}"
     caption_line <- stringr::str_extract(unified_line,caption_start_patt)
     caption_line <- trimws(caption_line, which = "both")
-    caption_with_brackets <- stringr::str_extract(caption_line,"\\{\\s*(.*?)\\s*\\}")
+    caption_with_brackets <- stringr::str_extract(caption_line,"\\{\\w+(.+?\\})")
     return(caption_with_brackets)
 }
 
@@ -32,7 +32,7 @@ extract_label <- function(figure_lines) {
     label_start_patt <- "\\s*\\\\label\\{\\s*(.*?)\\s*\\}"
     label_line <- stringr::str_extract(unified_line,label_start_patt)
     label_line <- trimws(label_line, which = "both")
-    label_with_brackets <- stringr::str_extract(label_line,"\\{\\s*(.*?)\\s*\\}")
+    label_with_brackets <- stringr::str_extract(label_line,"\\{\\w+(.+?\\})")
     label <- gsub("^\\{","", label_with_brackets)
     label <- gsub("\\}$","", label)
     return(label)
@@ -49,7 +49,7 @@ extract_path <- function(figure_line) {
     src_start_patt <- "\\s*\\\\includegraphics"
     src_line <- figure_line
     src_line <- trimws(src_line, which = "both")
-    src_with_brackets <- stringr::str_extract(src_line,"\\{\\s*(.*?)\\s*\\}")
+    src_with_brackets <- stringr::str_extract(src_line, "\\{\\w+(.+?\\})")
     src <- gsub("^\\{","", src_with_brackets)
     src <- gsub("\\}$","", src)
     return(src)

@@ -121,16 +121,16 @@ copy_other_files <- function(from_path) {
     old_working_directory <- getwd()
     setwd(from_path)
     dir_list <- list.dirs(recursive = FALSE)
-    #possible_dirs <- c("*_files", "figures", "images", "tikz")
-    #target_dir <- basename(dir_list[grep(
-    #    paste(possible_dirs, collapse = "|"), dir_list)])
-    #print(target_dir)
-    if(! dir.exists("web")){
-        dir.create("web/", showWarnings = FALSE)
-    }
-    #file.copy(list.dirs(
-    #    target_dir, full.names = TRUE),
-    #    paste("web/", target_dir, sep = ""), recursive = TRUE)
+    possible_dirs <- c("*_files", "figures", "images", "tikz")
+    target_dir <- basename(dir_list[grep(
+        paste(possible_dirs, collapse = "|"), dir_list)])
+    print(target_dir)
+    dir.create("web/", showWarnings = FALSE)
+    dir.create(paste("web/", target_dir, sep = ""),
+               showWarnings = FALSE)
+    file.copy(list.dirs(
+        target_dir, full.names = TRUE),
+        paste("web/", target_dir, sep = ""), recursive = TRUE)
     file_list <- list.files(recursive = FALSE)
     extensions <- c("*.png", "*.jpg", "*.bib", "*.pdf",
                     "*.tex", "*.R", "*.bbl")

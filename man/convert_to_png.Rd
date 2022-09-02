@@ -18,6 +18,10 @@ function to invoke `pdftools:pdf_convert()`
 This function is designed to be used internally and is called
 by `texor::pdf_to_png(file_dir)` function for converting individual of pdf
 image.
+
+Note : The extensions in LaTeX source code will
+automatically be changed during pandoc conversion
+by a lua filter (refer : inst/extdata/image_filter.lua)
 }
 \examples{
 article_dir <- system.file("examples/pdf_conversion",
