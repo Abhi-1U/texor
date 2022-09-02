@@ -48,6 +48,29 @@ web friendly RJ-web-article format.
 
 ![texor features](man/figures/texor.svg)
 
+### Note :
+
+    Please use absolute paths when working with texor/rebib !
+
+    The reason is that earlier texor used to work with relative paths by using 
+    setwd(), getwd() to handle working directories. However this was not an ideal
+    method to handle paths and working on files.
+
+    Hence I had to switch to absolute path system for almost all functions where
+    automation is possible and works well. As there was no changing of working
+    directories there is less risk of setting up a wrong working directory when 
+    failing certain function.
+
+    Use forward slashes (/) in paths and do not add a forward slash at the end of 
+    the path
+    for example 
+    Wrong usage : C:\projects\texor\main
+    wrong usage : C:/projects/texor/main/
+    wrong usage : C:\\projects\\texor\\main
+    wrong usage : C:\\projects\\texor\\main\\
+
+    Correct usage : C:/projects/texor/main
+
 ## Installation
 
 install these dependency packages (github development versions)
@@ -77,29 +100,5 @@ article (included with the package
 [inst/article](https://github.com/Abhi-1U/texor/tree/master/inst/examples/article))
 
 ``` r
-# similarly any file path
-wd <-  system.file("examples/article", package = "texor")
-# first include the style file
-texor::include_style_file(wd)
-# handle bibliography
-rebib::aggregate_bibliography(wd)
-# texor::handle_bibliography(wd)
-# will also work
-# patch table env using stream editor
-texor::patch_table_env(wd)
-# patch code env using stream editor
-texor::patch_code_env(wd)
-# check for tikz if TRUE call tikz related functions(still under work)
-texor::article_has_tikz(wd)
-# copy files to a /web folder
-texor::copy_other_files(wd)
-# generate environment stats for tex file
-texor::pre_conversion_statistics(wd)
-# convert to markdown
-texor::convert_to_markdown(wd)
-# the below function wont work on any article as it needs a folder structure
-# similar to RJournal style /YYYY-ZZ/YYYY-MMM where YYYY is the year, 
-# ZZ is the Journal issue number and MMM is the DOI referral(unique article number)
-texor::generate_rmd(wd)
-texor::produce_html(wd)
+texor::latex_to_web(article_dir)
 ```
