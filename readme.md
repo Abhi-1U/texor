@@ -52,7 +52,7 @@ web friendly RJ-web-article format.
 
     Please use absolute paths when working with texor/rebib !
 
-    The reason is that earlier texor used to work with relative paths by using 
+    The reason is that earlier rebib used to work with relative paths by using 
     setwd(), getwd() to handle working directories. However this was not an ideal
     method to handle paths and working on files.
 
@@ -66,8 +66,8 @@ web friendly RJ-web-article format.
     for example 
     Wrong usage : C:\projects\texor\main
     wrong usage : C:/projects/texor/main/
-    wrong usage : C:\\projects\\texor\\main
     wrong usage : C:\\projects\\texor\\main\\
+    wrong usage : C:\\projects\\texor\\main (this might workout in R but not sure)
 
     Correct usage : C:/projects/texor/main
 

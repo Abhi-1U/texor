@@ -109,7 +109,13 @@ extract_tikz_style <- function(fig_data, article_dir, iterator) {
     tikz_start_point <- which(grepl(paste0("image: ",iterator), tikz_data))
     tikz_end_point <- which(grepl(paste0("image-end: ",iterator), tikz_data))
     # delete tikz_data of first image from the temp file
-    un_processed_tikz <- tikz_data[(tikz_start_point+1):(tikz_end_point-1)]
+    un_processed_tikz <- ""
+    if(! identical(tikz_start_point,integer(0))) {
+        un_processed_tikz <- tikz_data[(tikz_start_point+1):(tikz_end_point-1)]
+    } else {
+        un_processed_tikz <- ""
+    }
+
     return(un_processed_tikz)
 }
 

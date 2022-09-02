@@ -67,8 +67,8 @@ the path
 for example 
 Wrong usage : C:\projects\texor\main
 wrong usage : C:/projects/texor/main/
-wrong usage : C:\\projects\\texor\\main
 wrong usage : C:\\projects\\texor\\main\\
+wrong usage : C:\\projects\\texor\\main (this might workout in R but not sure)
 
 Correct usage : C:/projects/texor/main
 
