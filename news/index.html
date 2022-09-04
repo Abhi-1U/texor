@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">texor</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/01-Introduction.html">01-texor</a>
-    <a class="dropdown-item" href="../articles/02-Dependencies.html">02-Dependency List</a>
+    <a class="dropdown-item" href="../articles/02-Dependencies.html">02 Dependency List</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -45,6 +45,25 @@
       
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.9" id="version-069">Version 0.6.9<a class="anchor" aria-label="anchor" href="#version-069"></a></h2>
+<div class="section level3">
+<h3 id="feature-updates-0-6-9">Feature Updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-6-9"></a></h3>
+<ol style="list-style-type: decimal"><li>Added algorithm2e graphics support (beta) (GitHub Issue #32)</li>
+<li>Added tikz graphics support (GitHub Issue #7)</li>
+<li>Added automation workflow with a separate logger for logging success and failure of conversion.</li>
+</ol></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-6-9">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-9"></a></h3>
+<ol style="list-style-type: decimal"><li>Fixing equation labeling issue with <code></code>, <code>.</code>, <code>_</code> in equations and also added <code>eq:</code> before equation starts if not present.</li>
+<li>Added support for relative paths</li>
+<li>Fixed bugs in figure parser with new regex.</li>
+<li>Fixed tikz lib extraction method</li>
+</ol></div>
+<div class="section level3">
+<h3 id="deprecated-features-0-6-9">Deprecated Features<a class="anchor" aria-label="anchor" href="#deprecated-features-0-6-9"></a></h3>
+<ol style="list-style-type: decimal"><li>Removing old bibliographic parser/converter from texor in favour of new implementation in <a href="https://abhi-1u.github.io/rebib/" class="external-link">rebib</a> which supports many more features.</li></ol></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.7" id="version-067">Version 0.6.7<a class="anchor" aria-label="anchor" href="#version-067"></a></h2>
 <div class="section level3">

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="index.html">texor</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/01-Introduction.html">01-texor</a>
-    <a class="dropdown-item" href="articles/02-Dependencies.html">02-Dependency List</a>
+    <a class="dropdown-item" href="articles/02-Dependencies.html">02 Dependency List</a>
   </div>
 </li>
 <li class="nav-item">
@@ -73,37 +73,31 @@
 </div>
 <div class="section level3">
 <h3 id="note-">Note :<a class="anchor" aria-label="anchor" href="#note-"></a></h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Please use absolute paths when working with texor<span class="sc">/</span>rebib <span class="sc">!</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>The reason is that earlier rebib used to work with relative paths by using </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(), <span class="fu">getwd</span>() to handle working directories. However this was not an ideal</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>method to handle paths and working on files.</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>Hence I had to <span class="cf">switch</span> to absolute path system <span class="cf">for</span> almost all functions where</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>automation is possible and works well. As there was no changing of working</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>directories there is less risk of setting up a wrong working directory when </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>failing certain function.</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>Use forward <span class="fu">slashes</span> (<span class="sc">/</span>) <span class="cf">in</span> paths and do not add a forward slash at the end of </span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>the path</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> example </span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>Wrong usage <span class="sc">:</span> C<span class="sc">:</span>\projects\texor\main</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>wrong usage <span class="sc">:</span> C<span class="sc">:</span><span class="er">/</span>projects<span class="sc">/</span>texor<span class="sc">/</span>main<span class="sc">/</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>wrong usage <span class="sc">:</span> C<span class="sc">:</span>\\projects\\texor\\main\\</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>wrong usage <span class="sc">:</span> C<span class="sc">:</span>\\projects\\texor\\<span class="fu">main</span> (this might workout <span class="cf">in</span> R but not sure)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>Correct usage <span class="sc">:</span> C<span class="sc">:</span><span class="er">/</span>projects<span class="sc">/</span>texor<span class="sc">/</span>main</span></code></pre></div>
-</div>
+<p>Update : relative paths should also work with current development version.</p>
+<p>Please use absolute paths when working with texor/rebib !</p>
+<p><del>The reason is that earlier texor used to work with relative paths by using setwd(), getwd() to handle working directories. However this was not an ideal method to handle paths and working on files.</del></p>
+<p><del>Hence I had to switch to absolute path system for almost all functions where automation is possible and works well. As there was no changing of working directories there is less risk of setting up a wrong working directory when failing certain function.</del></p>
+<p>Use forward slashes (/) in paths and do not add a forward slash at the end of the path for example</p>
+<ol style="list-style-type: decimal"><li>Wrong usage : <code>C:\projects\texor\main</code>
+</li>
+<li>wrong usage : <code>C:/projects/texor/main/</code>
+</li>
+<li>wrong usage : <code>C:\\projects\\texor\\main\\</code>
+</li>
+<li>wrong usage : <code>C:\\projects\\texor\\main</code> (this may work with R)</li>
+<li>Correct usage : <code>C:/projects/texor/main</code>
+</li>
+</ol></div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a></h2>
 <p>install these dependency packages (github development versions)</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"rstudio/distill"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Abhi-1U/rjtools"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Abhi-1U/rebib"</span><span class="op">)</span></span></code></pre></div>
 <p>install the development version from GitHub with:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Abhi-1U/texor"</span><span class="op">)</span></span>
 <span><span class="co"># install.packages("pak")</span></span>
@@ -114,7 +108,7 @@
 <div class="section level2">
 <h2 id="general-usage">General Usage<a class="anchor" aria-label="anchor" href="#general-usage"></a></h2>
 <p>here is a quick example to use texor package with a sample RJournal article (included with the package <a href="https://github.com/Abhi-1U/texor/tree/master/inst/examples/article" class="external-link">inst/article</a>)</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="reference/latex_to_web.html">latex_to_web</a></span><span class="op">(</span><span class="va">article_dir</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
