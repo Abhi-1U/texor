@@ -1,7 +1,7 @@
 Package: texor
 Type: Package
 Title: tools for converting LaTeX source files into RJ-web-articles
-Version: 0.6.7
+Version: 0.6.9
 Author: Abhishek Ulayil
 Description: texor Converts tex files into Rmd which can then be exported as HTML
     This is for legacy R journals available only in pdfs.

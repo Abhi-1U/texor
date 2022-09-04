@@ -1,3 +1,25 @@
+# Version 0.6.9
+
+## Feature Updates
+
+1. Added algorithm2e graphics support (beta) (GitHub Issue #32)
+2. Added tikz graphics support (GitHub Issue #7)
+3. Added automation workflow with a separate logger for logging success and failure of conversion.
+
+## Bug Fixes
+
+1. Fixing equation labeling issue with ` `, `.`, `_` in equations and also added
+`eq:` before equation starts if not present.
+2. Added support for relative paths
+3. Fixed bugs in figure parser with new regex.
+4. Fixed tikz lib extraction method
+
+## Deprecated Features
+
+1. Removing old bibliographic parser/converter from texor in favour of new 
+implementation in [rebib](https://abhi-1u.github.io/rebib/) which supports 
+many more features.
+
 # Version 0.6.7
 
 ## Feature Updates
