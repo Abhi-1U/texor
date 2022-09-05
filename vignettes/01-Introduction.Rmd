@@ -1,6 +1,6 @@
 ---
-title: "01-texor"
-subtitle: '**tools for converting LaTeX source files into RJ-web-articles**'
+title: "Introduction to texor"
+subtitle: 'tools for converting LaTeX source files into RJ-web-articles'
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{01-Introduction to texor}
