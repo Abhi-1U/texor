@@ -5,7 +5,7 @@
 #' @return conversion stat block
 #' @export
 pre_conversion_statistics <- function(article_dir){
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     con_stat <- list()
     con_stat$table <- count_env(article_dir, "table")
     con_stat$figure <- count_env(article_dir, "figure")
@@ -37,7 +37,7 @@ conversion_coverage_checK <- function(article_dir) {
 #' figures <- texor::count_env(article_dir, "figure")
 #' print(paste("figure count : ", figures))
 count_env <- function(article_dir, env_name) {
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     # find tex file
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
@@ -81,7 +81,7 @@ count_env <- function(article_dir, env_name) {
 #'             "code inlines : ", code, "\n",
 #'             "citations    : ", cite))
 count_inline <- function(article_dir, inline) {
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     # find tex file
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")

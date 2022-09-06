@@ -44,7 +44,7 @@ code_env <- c("example",
 #' @export
 patch_code_env <- function(article_dir) {
     # find tex file
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines

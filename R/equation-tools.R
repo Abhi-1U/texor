@@ -5,7 +5,7 @@
 #' @return modified equations in LaTeX file
 #' @export
 patch_equations <- function(article_dir) {
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     # find tex file
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")

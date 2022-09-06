@@ -22,7 +22,7 @@ find_algorithm <- function(fig_lines) {
 #' @return algorithm image
 #' @export
 convert_algorithm <- function(alg_object, article_dir) {
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     if (alg_object$data[1] != "\\begin{algorithm}[H]"){
         alg_object$data[1] <- "\\begin{algorithm}[H]"
     }
@@ -104,7 +104,7 @@ convert_algorithm <- function(alg_object, article_dir) {
 }
 
 extract_extra_lib <- function(article_dir) {
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     wrapper_file <- get_wrapper_type(article_dir)
     wrapper_path <- paste(article_dir,wrapper_file,sep = "/")
     wrapper_lines <- readLines(wrapper_path)
@@ -116,7 +116,7 @@ extract_extra_lib <- function(article_dir) {
 }
 
 insert_algorithm_png <- function(fig_block,article_dir) {
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)
     raw_lines <- readLines(file.path(article_dir, file_name))
     file_path <- paste0(article_dir,"/",file_name)

@@ -12,7 +12,7 @@
 #'  wd <-  system.file("examples/article", package = "texor")
 #'  texor::log_setup(wd, "log-file.log", "texor", 2)
 log_setup <- function(article_dir, file_name, namespace, idx) {
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     log_file_path <- paste(article_dir, file_name, sep = "/")
     if(! file.exists(log_file_path)) {
         file.create(log_file_path,showWarnings = T)

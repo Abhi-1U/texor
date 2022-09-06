@@ -9,7 +9,7 @@ tikz_count_var <- 0
 #' @return figure blocks
 #' @export
 figure_reader <- function(article_dir, file_name) {
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     raw_lines <- readLines(file_path)
     alg_start_patt <- "\\s*\\\\begin\\{algorithm\\}"
@@ -126,7 +126,7 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
 #' @return writes modified file and also backs up the old file before modification
 #' @export
 patch_figure_env <- function(article_dir) {
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     # find tex file
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")

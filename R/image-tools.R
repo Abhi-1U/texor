@@ -67,7 +67,7 @@ find_image_extension <- function(article_dir, image_path, is_tikz = FALSE) {
     # tikz/algorithm images are isolated
     # then compiled into a standalone PDF,
     # and converted back to PNG for inclusion in web articles
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     if (is_tikz) {
         return("png")
     } else {
@@ -110,7 +110,7 @@ find_image_extension <- function(article_dir, image_path, is_tikz = FALSE) {
 }
 
 find_file <- function(article_dir, src_path) {
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     abs_img_path <- paste(article_dir,src_path,sep="/")
     main_dir <- dirname(abs_img_path)
     file_name <- basename(abs_img_path)
@@ -130,7 +130,7 @@ find_file <- function(article_dir, src_path) {
 }
 
 figure_count <- function(article_dir) {
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     tex_file <- get_texfile_name(article_dir)
     figure <- 0
     fig_image_count <- list()
@@ -157,7 +157,7 @@ env_image_position <- function(fig_lines) {
 }
 
 image_count <- function(article_dir, file_name) {
-    article_dir <- normalizePath(article_dir)
+    article_dir <- xfun::normalize_path(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
     raw_lines <- readLines(file_path)
