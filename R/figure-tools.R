@@ -71,7 +71,7 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
         f_block$caption <- extract_caption(fig_data)
         # label
         f_block$label <- extract_label(fig_data)
-        alg_data <- fig_data
+        alg_data <- remove_alg_caption(fig_data)
         f_block$algdata <- alg_data
         f_block$extension <- find_image_extension(article_dir, "" , is_tikz = TRUE)
         return(f_block)

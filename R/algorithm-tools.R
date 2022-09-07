@@ -23,8 +23,8 @@ find_algorithm <- function(fig_lines) {
 #' @export
 convert_algorithm <- function(alg_object, article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
-    if (alg_object$data[1] != "\\begin{algorithm}[H]"){
-        alg_object$data[1] <- "\\begin{algorithm}[H]"
+    if (alg_object$algdata[1] != "\\begin{algorithm}[H]"){
+        alg_object$algdata[1] <- "\\begin{algorithm}[H]"
     }
     M <- which(grepl("\\\\usepackage\\{Metafix\\}", alg_object$alglib))
     if (! identical(M,integer(0))) {
@@ -45,7 +45,7 @@ convert_algorithm <- function(alg_object, article_dir) {
         alg_object$alglib,
         "\\begin{document}",
         "\\nopagecolor",
-        alg_object$data,
+        alg_object$algdata,
         "\\end{document}"
     )
     alg_file_name <- paste0(gsub(":","",alg_object$label),".tex")
@@ -144,4 +144,14 @@ insert_algorithm_png <- function(fig_block,article_dir) {
         paste(file_path, ".new", sep = ""))
     # remove .new from extension
     file.rename(paste(file_path, ".new", sep = ""), file_path)
+}
+
+remove_alg_caption <- function(fig_data) {
+    alg_start_regex <- which(grepl("^\\s*\\\\begin\\{algorithm",
+                                   fig_data))
+    caption_regex <- which(grepl("\\s*\\\\caption\\{",fig_data))
+    alg_end_regex <- which(grepl("^\\s*\\\\end\\{algorithm",
+                                 fig_data))
+    raw_lines <- c(fig_data[alg_start_regex:(caption_regex - 1)],fig_data[alg_end_regex])
+    return(raw_lines)
 }
