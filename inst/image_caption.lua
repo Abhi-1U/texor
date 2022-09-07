@@ -40,13 +40,19 @@ function Image(el)
         classes = {"center"}
     end
     el.classes = classes
-    local old_attr = el.attr
-    if not old_attr then
+    local old_attr = el.attributes[1]
+    if old_attr == nil then
       -- Figure has no attributes
-      el.attr.attributes[1] = {"max-width","100%"}
+      el.attributes[1] = {"width", "auto"}
     else
       -- Add label as plain block element
-      el.attr.attributes[2] = {"max-width","100%"}
+      attribute_1 = el.attributes
+      if attribute_1[1][1]:match("width") then
+        local width = tonumber(attribute_1[1][2]:match('%d.%d'))
+        el.attributes[1] = {"width",tostring(width*100)..[[%]]}
+      else
+        print_r(attribute_1)
+      end
     end
     return el
 end
