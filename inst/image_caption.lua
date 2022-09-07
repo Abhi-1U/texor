@@ -7,13 +7,22 @@ original License: CC0
 
 -- Image counter variable
 figures = 0
+-- Algorithm counter variable
+algorithms = 0
 --[[
 Applies the filter to Image elements
 --]]
 function Image(el)
-    figures = figures + 1
-    -- Figure Numbering to be appended
-    local label = "Figure " .. tostring(figures)
+    local label = ""
+    if el.src:match('alg/') then
+        algorithms = algorithms + 1
+        -- Figure Numbering to be appended
+        label = "Algorithm " .. tostring(algorithms)
+    else
+        figures = figures + 1
+        -- Figure Numbering to be appended
+        label = "Figure " .. tostring(figures)
+    end
     -- original caption
     local caption = pandoc.utils.stringify(el.caption)
     if not caption then

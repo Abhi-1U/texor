@@ -140,10 +140,10 @@ patch_figure_env <- function(article_dir) {
     print("Changed \\end{figure\\*} to \\end{figure}")
 
     raw_lines <- stream_editor(raw_lines,
-                               "\\s*\\\\begin\\{algorithm}", "algorithm\\*", "figure")
+                               "\\s*\\\\begin\\{algorithm}", "algorithm", "figure")
     print("Changed \\begin{algorithm} to \\begin{figure}")
     raw_lines <- stream_editor(raw_lines,
-                               "\\s*\\\\end\\{algorithm}", "algorithm\\*", "figure")
+                               "\\s*\\\\end\\{algorithm}", "algorithm", "figure")
     print("Changed \\end{algorithm} to \\end{figure}")
     # testing functionality
     #return(raw_lines)
