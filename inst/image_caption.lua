@@ -47,11 +47,12 @@ function Image(el)
     else
       -- Add label as plain block element
       attribute_1 = el.attributes
-      if attribute_1[1][1]:match("width") then
+      if el.attributes[1][2]:match('%\\') then
         local width = tonumber(attribute_1[1][2]:match('%d+.%d+'))
+        print(attribute_1[1][2])
         el.attributes[1] = {"width",tostring(width*100)..[[%]]}
       else
-        print_r(attribute_1)
+          --pass
       end
     end
     return el

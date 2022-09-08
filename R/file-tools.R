@@ -133,21 +133,31 @@ get_journal_details <- function(article_dir) {
 copy_other_files <- function(from_path) {
     old_working_directory <- getwd()
     setwd(from_path)
-    dir_list <- list.dirs(recursive = FALSE)
-    possible_dirs <- c("*_files", "figures", "images", "tikz")
-    target_dir <- basename(dir_list[grep(
-        paste(possible_dirs, collapse = "|"), dir_list)])
-    print(target_dir)
-    dir.create("web/", showWarnings = FALSE)
-    for (t_path in target_dir) {
-        dir.create(paste("web/", t_path, sep = ""),
-               showWarnings = FALSE)
+    image_paths <- generate_image_paths(from_path)
+    #dir_list <- list.dirs(recursive = FALSE)
+    #possible_dirs <- c("*_files", "figures", "images", "tikz")
+    #target_dir <- basename(dir_list[grep(
+    #    paste(possible_dirs, collapse = "|"), dir_list)])
+    #print(target_dir)
+    if (! dir.exists("web/")) {
+        dir.create("web/", showWarnings = FALSE)
     }
-    file.copy(list.dirs(
-        target_dir, full.names = TRUE),
-        paste("web/", target_dir, sep = ""), recursive = TRUE)
+    #for (t_path in target_dir) {
+    #    dir.create(paste("web/", t_path, sep = ""),
+    #           showWarnings = FALSE)
+    #}
+    for (path in image_paths) {
+        print(path)
+        print(paste0("web/", path))
+        if(!dir.exists(paste0("web/",dirname(path)))) {
+                dir.create(paste0("web/",dirname(path)),showWarnings = TRUE)
+        }
+        file.copy(path, paste0("web/", path), overwrite = TRUE)
+    }
+    #file.copy(image_paths,
+    #    paste("web/", target_dir, sep = ""), recursive = TRUE)
     file_list <- list.files(recursive = FALSE)
-    extensions <- c("*.png", "*.jpg", "*.bib", "*.pdf",
+    extensions <- c("*.bib", "*.pdf",
                     "*.tex", "*.R", "*.bbl")
     target_files <- unique(grep(paste(
         extensions, collapse = "|"), file_list, value = TRUE))
@@ -186,3 +196,29 @@ copy_to_web <- function(rel_path, ext, article_dir){
 
 }
 
+generate_image_paths <- function(article_dir) {
+    article_dir <- xfun::normalize_path(article_dir)
+    # wrapper file name
+    input_file <- get_wrapper_type(article_dir)
+    # resource path for pandoc
+    input_file_path <- paste(article_dir, input_file, sep = "/")
+    abs_file_path <- tools::file_path_as_absolute(input_file_path)
+    # markdown equivalent filename
+    temp_file <- "temp-native.txt"
+    temp_file_path <- paste(article_dir, temp_file, sep = "/")
+
+    image_list_filter <- system.file(
+        "image_list_filter.lua", package = "texor")
+    pandoc_opt <- c("-s",
+                    "--resource-path", abs_file_path,
+                    "--lua-filter", image_list_filter)
+    rmarkdown::pandoc_convert(input_file_path,
+                              from = "latex",
+                              to = "native",
+                              options = pandoc_opt,
+                              output = temp_file_path,
+                              citeproc = TRUE,
+                              verbose = TRUE)
+    image_paths <- readLines(paste0(article_dir,"/image_source.txt"))
+    return(image_paths)
+}

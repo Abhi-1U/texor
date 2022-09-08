@@ -228,7 +228,8 @@ generate_rmd <- function(article_dir) {
             `rjtools::rjournal_web_article` = list(
                 self_contained = FALSE,
                 toc = FALSE,
-                web_export = TRUE,
+                legacy_pdf = TRUE,
+                web_only = TRUE,
                 mathjax = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
 
                 #legacy_pdf = FALSE

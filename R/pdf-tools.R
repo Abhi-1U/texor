@@ -109,24 +109,29 @@ pdf_to_png <- function(article_dir) {
 
 find_pdf_files <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
-    print("Finding inclusive PDF files")
-    file_list <- list.files(article_dir, recursive = FALSE)
-    extensions <- c("*.pdf")
-    pdf_files <- unique(
-        grep(paste(extensions, collapse = "|"),
-             file_list, value = TRUE))
-    pdf_files_native <- c("RJwrapper.pdf",
-                          "RJwrap.pdf",
-                          "wrapper.pdf")
-    filtered_pdf_files <- setdiff(pdf_files, pdf_files_native)
-    if (identical(filtered_pdf_files, character(0))) {
-        print("Image : No PDF graphic files found !")
-        return("NA")
-    } else {
-        print(paste("Image : Found",
-                    length(filtered_pdf_files), "PDF graphic files"))
-        return(filtered_pdf_files)
-    }
+    # wrapper file name
+    input_file <- get_wrapper_type(article_dir)
+    # resource path for pandoc
+    input_file_path <- paste(article_dir, input_file, sep = "/")
+    abs_file_path <- tools::file_path_as_absolute(input_file_path)
+    # markdown equivalent filename
+    temp_file <- "temp-native.txt"
+    temp_file_path <- paste(article_dir, temp_file, sep = "/")
+
+    pdf_files_list_filter <- system.file(
+        "find_pdf_files.lua", package = "texor")
+    pandoc_opt <- c("-s",
+                    "--resource-path", abs_file_path,
+                    "--lua-filter", pdf_files_list_filter)
+    rmarkdown::pandoc_convert(input_file_path,
+                              from = "latex",
+                              to = "native",
+                              options = pandoc_opt,
+                              output = temp_file_path,
+                              citeproc = TRUE,
+                              verbose = TRUE)
+    pdf_image_paths <- readLines(paste0(article_dir,"/pdf_image_source.txt"))
+    return(pdf_image_paths)
 }
 
 make_png_files <- function(input_file_paths) {
