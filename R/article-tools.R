@@ -226,7 +226,7 @@ generate_rmd <- function(article_dir) {
         CTV = article_metadata$CTV_rev,
         output = list(
             `rjtools::rjournal_web_article` = list(
-                self_contained = FALSE,
+                self_contained = TRUE,
                 toc = FALSE,
                 legacy_pdf = TRUE,
                 web_only = TRUE,
