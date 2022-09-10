@@ -71,10 +71,18 @@ function Link(el)
             break
         end
     end
+
     if is_bkdwn then
         return pandoc.RawInline('markdown', bkdwn)
     else
-        return(el)
+        --if el.attributes[1] ~= nil then
+         --   if el.attributes[1][2] == "ref" then
+         --       print([[\@ref(]] .. el.target .. [[)]])
+          --      return pandoc.RawInline('markdown', [[\@ref(]] .. el.target .. [[)]])
+        --    end
+        --else
+           return(el)
+        --end
     end
 end
 

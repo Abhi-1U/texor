@@ -128,13 +128,20 @@ find_pdf_files <- function(article_dir) {
                               to = "native",
                               options = pandoc_opt,
                               output = temp_file_path,
-                              citeproc = TRUE,
                               verbose = TRUE)
-    pdf_image_paths <- readLines(paste0(article_dir,"/pdf_image_source.txt"))
+    if (file.exists(paste0(article_dir,"/pdf_image_source.txt"))){
+        pdf_image_paths <- readLines(paste0(article_dir,"/pdf_image_source.txt"))
+    } else {
+        pdf_image_paths <- NULL
+    }
+
     return(pdf_image_paths)
 }
 
 make_png_files <- function(input_file_paths) {
+        if (length(input_file_paths)==0) {
+        return()
+    }
     input_file_paths[[1]] <- xfun::normalize_path(input_file_paths[[1]])
     if (length(input_file_paths) == 1) {
         if (basename(input_file_paths[[1]]) == "NA") {

@@ -24,7 +24,8 @@ code_env <- c("example",
               "Scode",
               "Sinput",
               "Soutput",
-              "smallverbatim")
+              "smallverbatim",
+              "boxedverbatim")
 
 #' @title patch all code environments
 #' @description This function calls the `filter_code_env()` function

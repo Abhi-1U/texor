@@ -50,7 +50,11 @@ function Image(el)
       if el.attributes[1][2]:match('%\\') then
         local width = tonumber(attribute_1[1][2]:match('%d+.%d+'))
         print(attribute_1[1][2])
-        el.attributes[1] = {"width",tostring(width*100)..[[%]]}
+        if(attribute_1[1][2]:match('%d+.%d+') == nil) then
+           el.attributes[1] = {"width",[[100%]]}
+        else
+            el.attributes[1] = {"width",tostring(width*100)..[[%]]}
+        end
       else
           --pass
       end

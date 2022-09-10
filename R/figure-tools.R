@@ -159,7 +159,7 @@ patch_figure_env <- function(article_dir) {
 
 handle_figures <- function(article_dir, file_name){
     fig_data <- figure_reader(article_dir, file_name)
-    fig_data <- convert_all_pdf(article_dir, fig_data)
+    #fig_data <- convert_all_pdf(article_dir, fig_data)
     for (fig_iter in seq_along(fig_data)) {
         if(fig_data[[fig_iter]]$isalgorithm) {
             fig_data[[fig_iter]] <- convert_algorithm(fig_data[[fig_iter]], article_dir)
@@ -167,28 +167,7 @@ handle_figures <- function(article_dir, file_name){
         if(fig_data[[fig_iter]]$istikz) {
             fig_data[[fig_iter]] <- convert_tikz(fig_data[[fig_iter]], article_dir)
         } else {
-            if (fig_data[[fig_iter]]$image_count == 1){
-                if(fig_data[[fig_iter]]$extension == "pdf") {
-                    # --pass
-                } else {
-                    copy_to_web(fig_data[[fig_iter]]$path,
-                                fig_data[[fig_iter]]$extension,
-                                article_dir)
-                }
-                copy_to_web(fig_data[[fig_iter]]$path,
-                            fig_data[[fig_iter]]$extension,
-                            article_dir)
-            } else {
-                for (iter_2 in 1:(fig_data[[fig_iter]]$image_count)) {
-                    if(fig_data[[fig_iter]]$extension[iter_2] == "pdf") {
-                        # --pass
-                    } else {
-                    copy_to_web(fig_data[[fig_iter]]$path[iter_2],
-                                fig_data[[fig_iter]]$extension[iter_2],
-                                article_dir)
-                    }
-                }
-            }
+            #--pass
         }
     }
     pdf_to_png(article_dir)

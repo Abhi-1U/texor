@@ -157,8 +157,7 @@ copy_other_files <- function(from_path) {
     #file.copy(image_paths,
     #    paste("web/", target_dir, sep = ""), recursive = TRUE)
     file_list <- list.files(recursive = FALSE)
-    extensions <- c("*.bib", "*.pdf",
-                    "*.tex", "*.R", "*.bbl")
+    extensions <- c("*.bib", "*.pdf", "*.R", "*.bbl")
     target_files <- unique(grep(paste(
         extensions, collapse = "|"), file_list, value = TRUE))
     print(target_files)
@@ -217,8 +216,12 @@ generate_image_paths <- function(article_dir) {
                               to = "native",
                               options = pandoc_opt,
                               output = temp_file_path,
-                              citeproc = TRUE,
                               verbose = TRUE)
-    image_paths <- readLines(paste0(article_dir,"/image_source.txt"))
+    if (file.exists(paste0(article_dir,"/image_source.txt"))) {
+        image_paths <- readLines(paste0(article_dir,"/image_source.txt"))
+    } else {
+        image_paths <- NULL
+    }
+
     return(image_paths)
 }

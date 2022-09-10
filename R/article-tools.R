@@ -148,7 +148,11 @@ generate_rmd <- function(article_dir) {
     # reason : abstract is patched as author in metafix.sty
     abstract <- metadata$author[2]
     metadata$abstract <- abstract
-    metadata$author <- lapply(
+    # if metadata$address is NULL
+    if (is.null(metadata$address)) {
+        metadata$author <- metadata$author[1]
+    } else {
+        metadata$author <- lapply(
         strsplit(metadata$address, "\\\n", fixed = TRUE),
         function(person) {
             author <- list(
@@ -172,6 +176,7 @@ generate_rmd <- function(article_dir) {
             author
         }
     )
+    }
     metadata$address <- NULL
     # article metadata from DESCRIPTION
     article_metadata <- if (file.exists(file.path(
