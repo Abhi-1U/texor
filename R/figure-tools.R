@@ -122,10 +122,11 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
 #' 1. figure*
 #'
 #' @param article_dir path to the directory which contains tex article
+#' @param with_alg to include algorihtm environment or not
 #'
 #' @return writes modified file and also backs up the old file before modification
 #' @export
-patch_figure_env <- function(article_dir) {
+patch_figure_env <- function(article_dir, with_alg = TRUE) {
     article_dir <- xfun::normalize_path(article_dir)
     # find tex file
     file_name <- get_texfile_name(article_dir)
@@ -140,11 +141,21 @@ patch_figure_env <- function(article_dir) {
     print("Changed \\end{figure\\*} to \\end{figure}")
 
     raw_lines <- stream_editor(raw_lines,
-                               "\\s*\\\\begin\\{algorithm}", "algorithm", "figure")
-    print("Changed \\begin{algorithm} to \\begin{figure}")
+                               "\\s*\\\\begin\\{algorithmic}", "algorithmic", "algorithm")
+    print("Changed \\begin{algorithmic} to \\begin{algorithm}")
     raw_lines <- stream_editor(raw_lines,
-                               "\\s*\\\\end\\{algorithm}", "algorithm", "figure")
-    print("Changed \\end{algorithm} to \\end{figure}")
+                               "\\s*\\\\end\\{algorithmic}", "algorithmic", "algorithm")
+    print("Changed \\end{algorithmic} to \\end{algorithm}")
+
+    if (with_alg) {
+        raw_lines <- stream_editor(raw_lines,
+                                   "\\s*\\\\begin\\{algorithm}", "algorithm", "figure")
+        print("Changed \\begin{algorithm} to \\begin{figure}")
+        raw_lines <- stream_editor(raw_lines,
+                                   "\\s*\\\\end\\{algorithm}", "algorithm", "figure")
+        print("Changed \\end{algorithm} to \\end{figure}")
+    }
+
     # testing functionality
     #return(raw_lines)
     # backup old file
@@ -158,6 +169,7 @@ patch_figure_env <- function(article_dir) {
 }
 
 handle_figures <- function(article_dir, file_name){
+    patch_figure_env(article_dir,with_alg = FALSE)
     fig_data <- figure_reader(article_dir, file_name)
     #fig_data <- convert_all_pdf(article_dir, fig_data)
     for (fig_iter in seq_along(fig_data)) {

@@ -43,7 +43,7 @@ function Image(el)
     local old_attr = el.attributes[1]
     if old_attr == nil then
       -- Figure has no attributes
-      el.attributes[1] = {"width", "auto"}
+      el.attributes[1] = {"width", "100%"}
     else
       -- Add label as plain block element
       attribute_1 = el.attributes
