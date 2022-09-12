@@ -136,7 +136,28 @@
 </h2>
 <p>here is a quick example to use texor package with a sample RJournal article (included with the package <a href="https://github.com/Abhi-1U/texor/tree/master/inst/examples/article" class="external-link">inst/article</a>)</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="reference/latex_to_web.html">latex_to_web</a></span><span class="op">(</span><span class="va">article_dir</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># for a single LaTeX article </span></span>
+<span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="reference/latex_to_web.html">latex_to_web</a></span><span class="op">(</span><span class="va">article_dir</span><span class="op">)</span></span>
+<span><span class="co"># for multiple articles in RJ folder structure</span></span>
+<span></span>
+<span><span class="co">#base dir </span></span>
+<span><span class="va">article_dir</span> <span class="op">&lt;-</span> <span class="st">"C:/Users/abhis/Documents/projects/gsoc-2022/original"</span></span>
+<span><span class="co"># list of journal number directories</span></span>
+<span><span class="va">journal_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.dirs</a></span><span class="op">(</span><span class="va">article_dir</span>,recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co"># list of individual slug directories</span></span>
+<span><span class="va">slug_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">journal_dirs</span>,<span class="kw">function</span><span class="op">(</span><span class="va">journal_dir</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.dirs</a></span><span class="op">(</span><span class="va">journal_dir</span>,recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="co"># creating a single list of all slug directories</span></span>
+<span><span class="va">slug_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">slug_dirs</span><span class="op">)</span></span>
+<span><span class="co"># Calling </span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">dir</span> <span class="kw">in</span> <span class="va">slug_dirs</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co">#print(dir)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="co"># below function will create a log file of success/error in current</span></span>
+<span>    <span class="co"># working directory while running the texor::latex_to_web() function</span></span>
+<span>    <span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="reference/convert_to_html.html">convert_to_html</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
