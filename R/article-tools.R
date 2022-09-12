@@ -240,7 +240,8 @@ generate_rmd <- function(article_dir) {
                 toc = FALSE,
                 legacy_pdf = TRUE,
                 web_only = TRUE,
-                mathjax = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+                mathjax = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js",
+                md_extension = "-tex_math_single_backslash"
 
                 #legacy_pdf = FALSE
             )
