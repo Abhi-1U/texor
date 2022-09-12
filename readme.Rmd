@@ -101,5 +101,26 @@ remotes::install_github("Abhi-1U/rebib")
 (included with the package [inst/article](https://github.com/Abhi-1U/texor/tree/master/inst/examples/article))
 
 ``` r
+# for a single LaTeX article 
 texor::latex_to_web(article_dir)
+# for multiple articles in RJ folder structure
+
+#base dir 
+article_dir <- "C:/Users/abhis/Documents/projects/gsoc-2022/original"
+# list of journal number directories
+journal_dirs <- list.dirs(article_dir,recursive = FALSE)
+# list of individual slug directories
+slug_dirs <- lapply(journal_dirs,function(journal_dir) {
+    list.dirs(journal_dir,recursive = FALSE)
+})
+# creating a single list of all slug directories
+slug_dirs <- unlist(slug_dirs)
+# Calling 
+for (dir in slug_dirs) {
+    #print(dir)
+    getwd()
+    # below function will create a log file of success/error in current
+    # working directory while running the texor::latex_to_web() function
+    texor::convert_to_html(dir)
+}
 ```
