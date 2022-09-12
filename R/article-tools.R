@@ -16,8 +16,13 @@
 #'                  package = "texor")
 #' texor::include_style_file(article_dir)
 include_style_file <- function(article_dir) {
-    # Copy over the Metafix.sty file to the article directory
     article_dir <- xfun::normalize_path(article_dir)
+    # Remove the RJournal.sty file to the article directory
+    rj_style_path <- paste0(article_dir,"/RJournal.sty")
+    if (file.exists(rj_style_path)){
+        file.remove(rj_style_path)
+    }
+    # Copy over the Metafix.sty file to the article directory
     file.copy(
             system.file("extdata/Metafix.sty", package = "texor"),
             file.path(article_dir),
