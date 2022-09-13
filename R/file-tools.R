@@ -163,6 +163,9 @@ copy_other_files <- function(from_path) {
             if (file.exists(gsub(".JPEG",".jpeg",path))){
                 path <- gsub(".JPEG",".jpeg",path)
             }
+            if (file.exists(gsub(".png", ".pdf", path))){
+                convert_to_png(gsub(".png", ".pdf", path))
+            }
         }
         file.copy(path, paste0("web/", path), overwrite = TRUE)
     }
