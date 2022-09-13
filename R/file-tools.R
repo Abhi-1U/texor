@@ -152,6 +152,18 @@ copy_other_files <- function(from_path) {
         if(!dir.exists(paste0("web/",dirname(path)))) {
                 dir.create(paste0("web/",dirname(path)),showWarnings = TRUE)
         }
+        if (!file.exists(path)) {
+            # extension naming issue
+            if (file.exists(gsub(".PNG",".png",path))){
+                path <- gsub(".PNG",".png",path)
+            }
+            if (file.exists(gsub(".JPG",".jpg",path))) {
+                path <- gsub(".JPG",".jpg",path)
+            }
+            if (file.exists(gsub(".JPEG",".jpeg",path))){
+                path <- gsub(".JPEG",".jpeg",path)
+            }
+        }
         file.copy(path, paste0("web/", path), overwrite = TRUE)
     }
     #file.copy(image_paths,

@@ -171,6 +171,7 @@ patch_figure_env <- function(article_dir, with_alg = TRUE) {
 handle_figures <- function(article_dir, file_name){
     patch_figure_env(article_dir,with_alg = FALSE)
     fig_data <- figure_reader(article_dir, file_name)
+    seperate_multiple_figures(article_dir)
     #fig_data <- convert_all_pdf(article_dir, fig_data)
     for (fig_iter in seq_along(fig_data)) {
         if(fig_data[[fig_iter]]$isalgorithm) {
@@ -184,4 +185,33 @@ handle_figures <- function(article_dir, file_name){
     }
     pdf_to_png(article_dir)
     return(fig_data)
+}
+
+seperate_multiple_figures <- function(article_dir) {
+    article_dir <- xfun::normalize_path(article_dir)
+    file_name <- get_texfile_name(article_dir)
+    file_path <- paste(article_dir, file_name, sep = "/")
+    # readLines
+    raw_lines <- readLines(file_path)
+    inc_gr_patt <- "\\s*\\\\includegraphics"
+    breakpoints <- which(grepl(inc_gr_patt,raw_lines))
+    for (iter in seq_along(breakpoints)){
+        if(iter == length(breakpoints)){
+            break
+        }
+        if (breakpoints[iter] == (breakpoints[iter+1]-1)){
+            #print(breakpoints[iter])
+            raw_lines[breakpoints[iter]] <- paste0(raw_lines[breakpoints[iter]],"\n \n")
+        }
+    }
+    # testing functionality
+    #return(raw_lines)
+    # backup old file
+    src_file_data <- readLines(file_path)
+    backup_file <- paste(file_path, ".bk", sep = "")
+    write_external_file(backup_file, "w", src_file_data)
+    # remove old tex file
+    file.remove(file_path)
+    # write same tex file with new data
+    write_external_file(file_path, "w", raw_lines)
 }

@@ -105,6 +105,8 @@ convert_to_markdown <- function(article_dir) {
         "conversion_compat_check.lua", package = "texor")
     equation_filter <- system.file(
         "equation_filter.lua", package = "texor")
+    bookdown_ref_filter <- system.file(
+        "bookdown_ref.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
                     "--lua-filter", abs_filter,
@@ -114,7 +116,8 @@ convert_to_markdown <- function(article_dir) {
                     "--lua-filter", figure_filter,
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
-                    "--lua-filter", equation_filter)
+                    "--lua-filter", equation_filter,
+                    "--lua-filter", bookdown_ref_filter)
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     rmarkdown::pandoc_convert(input_file_path,
@@ -313,6 +316,8 @@ convert_to_native <- function(article_dir) {
         "conversion_compat_check.lua", package = "texor")
     equation_filter <- system.file(
         "equation_filter.lua", package = "texor")
+    bookdown_ref_filter <- system.file(
+        "bookdown_ref.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
                     "--lua-filter", abs_filter,
@@ -322,7 +327,8 @@ convert_to_native <- function(article_dir) {
                     "--lua-filter", figure_filter,
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
-                    "--lua-filter", equation_filter)
+                    "--lua-filter", equation_filter,
+                    "--lua-filter", bookdown_ref_filter)
     output_format <- "native"
     # This will generate a markdown file with YAML headers.
     rmarkdown::pandoc_convert(input_file_path,
