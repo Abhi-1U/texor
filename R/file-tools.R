@@ -119,6 +119,11 @@ get_journal_details <- function(article_dir) {
     journal_details$volume <- strtoi(journal_info[1],10) - 2008
     journal_details$issue <- strtoi(journal_info[2],10)
     journal_details$slug <- hierarchy[length(hierarchy)]
+    if (is.na(journal_details$issue)){
+        journal_details$sample <- TRUE
+    } else {
+        journal_details$sample <- FALSE
+    }
     return(journal_details)
 }
 

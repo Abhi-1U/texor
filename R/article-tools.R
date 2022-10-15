@@ -147,8 +147,11 @@ generate_rmd <- function(article_dir) {
     volume <- 1 # placeholder value
     issue <- 1 # placeholder value
     journal_details <- get_journal_details(article_dir)
-    volume <- journal_details$volume
-    issue <- journal_details$issue
+    if (! journal_details$sample) {
+        volume <- journal_details$volume
+        issue <- journal_details$issue
+    }
+
     markdown_file <- gsub(".tex", ".md", paste(article_dir,
                                                texor::get_wrapper_type(article_dir), sep = "/"))
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
@@ -189,16 +192,22 @@ generate_rmd <- function(article_dir) {
     # article metadata from DESCRIPTION
     article_metadata <- if (file.exists(file.path(
         dirname(markdown_file), "DESCRIPTION"))) {
-        art <- load_article(file.path(dirname(markdown_file), "DESCRIPTION"))
-        online_date <- Filter(function(x) x$status == "online", art$status)
+        if (! journal_details$sample) {
+            art <- load_article(file.path(dirname(markdown_file), "DESCRIPTION"))
+            online_date <- Filter(function(x) x$status == "online", art$status)
+            acknowledged_date <- Filter(function(x) x$status == "acknowledged", art$status)[[1]]$date
+        } else {
+            online_date <- list()
+            acknowledged_date <- Sys.Date()
+        }
         online_date <- if (length(online_date) == 0) {
             Sys.Date()
         } else {
             online_date[[1]]$date
         }
         list(
-            slug = journal_details$slug,
-            acknowledged = Filter(function(x) x$status == "acknowledged", art$status)[[1]]$date,
+            slug = if (journal_details$sample){'~'} else {journal_details$slug},
+            acknowledged = acknowledged_date,
             online = online_date
         )
     } else {
