@@ -4,3 +4,9 @@ template:
   bootswatch: lux
   bslib:
     pkgdown-nav-height: 100px
+authors:
+  footer:
+    roles: [cre]
+    text: "Put Together By"
+  sidebar:
+    roles: [aut, ctb]
