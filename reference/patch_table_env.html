@@ -29,6 +29,8 @@ These are due to the pandoc's limitations and ease in conversion."><!-- mathjax 
     <a class="dropdown-item" href="../articles/01-Introduction.html">Introduction to texor</a>
     <a class="dropdown-item" href="../articles/02-Dependencies.html">Dependency List</a>
     <a class="dropdown-item" href="../articles/03-Figure-Env.html">Figure-Environement</a>
+    <a class="dropdown-item" href="../articles/04-Table-Env.html">Table-Environment</a>
+    <a class="dropdown-item" href="../articles/05-Code-Env.html">Code-Environment</a>
   </div>
 </li>
 <li class="nav-item">
@@ -79,11 +81,11 @@ These are due to the pandoc's limitations and ease in conversion."><!-- mathjax 
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">wd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/article"</span>,</span></span>
 <span class="r-in"><span>                 package <span class="op">=</span> <span class="st">"texor"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu">patch_table_env</span><span class="op">(</span><span class="va">wd</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Found 0 Matches for target :  table\*</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Found  1 Matches for target : table\*</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Changed \\begin{table\\*} to \\begin{table}"</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Found 0 Matches for target :  table\*</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Found  1 Matches for target : table\*</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Changed \\end{table*} to \\end{table}"</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Found 0 Matches for target :  multicolumn</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Found  2 Matches for target : multicolumn</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "changed \\multicolumn to \\multicolumnx"</span>
 </code></pre></div>
     </div>
