@@ -362,7 +362,7 @@ convert_to_native <- function(article_dir) {
 produce_html <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     input_file_path <- paste(article_dir, "web",
-                    xfun::with_ext(get_wrapper_type(article_dir),"md"),sep="/")
+                    xfun::with_ext(get_wrapper_type(article_dir),"Rmd"),sep="/")
     rmarkdown::render(
         input = input_file_path,
         output_format = "rjtools::rjournal_web_article")
