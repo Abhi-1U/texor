@@ -152,8 +152,7 @@ generate_rmd <- function(article_dir) {
         issue <- journal_details$issue
     }
 
-    markdown_file <- gsub(".tex", ".md", paste(article_dir,
-                                               texor::get_wrapper_type(article_dir), sep = "/"))
+    markdown_file <- paste(article_dir,xfun::with_ext(get_wrapper_type(),"md"))
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
     # reads the abstract from the second author field
     # reason : abstract is patched as author in metafix.sty
