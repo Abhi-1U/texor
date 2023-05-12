@@ -96,7 +96,7 @@ get_texfile_name <- function(article_dir) {
 get_md_file_name <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     lookup_file <- get_wrapper_type(article_dir)
-    markdown_file <- gsub(".tex", ".md", lookup_file)
+    markdown_file <- xfun::with_ext(lookup_file,".md")
 }
 
 get_journal_details <- function(article_dir) {
@@ -119,6 +119,11 @@ get_journal_details <- function(article_dir) {
     journal_details$volume <- strtoi(journal_info[1],10) - 2008
     journal_details$issue <- strtoi(journal_info[2],10)
     journal_details$slug <- hierarchy[length(hierarchy)]
+    if (is.na(journal_details$issue)){
+        journal_details$sample <- TRUE
+    } else {
+        journal_details$sample <- FALSE
+    }
     return(journal_details)
 }
 
@@ -154,14 +159,14 @@ copy_other_files <- function(from_path) {
         }
         if (!file.exists(path)) {
             # extension naming issue
-            if (file.exists(gsub(".PNG",".png",path))){
-                path <- gsub(".PNG",".png",path)
+            if (file.exists(xfun::with_ext(path,".PNG"))){
+                path <- xfun::with_ext(path,".PNG")
             }
-            if (file.exists(gsub(".JPG",".jpg",path))) {
-                path <- gsub(".JPG",".jpg",path)
+            if (file.exists(xfun::with_ext(path,".JPG"))) {
+                path <- xfun::with_ext(path,".JPG")
             }
-            if (file.exists(gsub(".JPEG",".jpeg",path))){
-                path <- gsub(".JPEG",".jpeg",path)
+            if (file.exists(xfun::with_ext(path,".JPEG"))){
+                path <- xfun::with_ext(path,".JPEG")
             }
             if (file.exists(gsub(".png", ".pdf", path))){
                 convert_to_png(gsub(".png", ".pdf", path))

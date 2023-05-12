@@ -1,4 +1,3 @@
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # texor : Tools for converting LaTeX source files into RJ-web-articles

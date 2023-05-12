@@ -1,0 +1,27 @@
+ID: ~
+Title: A sample article title
+Slug: ~
+Suppl:
+  supplementary-script.R
+Authors:
+  "Author 1" <affiliation email>,
+  "Author 2",
+  "Author 3"
+Keywords: Social Sciences
+Editor: editor name
+AE: 
+Reviewers:
+  "Reviewer 1" <email address> [Revision-type date],
+  "Reviewer 2" <email address> [Revision-type date]
+Status: 
+  2019-12-26 submitted,
+  2020-04-04 acknowledged,
+  2020-05-20 out for review,
+  2020-06-28 major revision,
+  2021-02-08 revision received,
+  2021-03-07 out for review,
+  2021-11-03 minor revision,
+  2021-11-30 revision received,
+  2022-01-24 accepted,
+  2022-04-12 proofed,
+  2022-06-21 online

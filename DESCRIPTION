@@ -17,7 +17,8 @@ Imports:
     yaml,
     stringr,
     xfun,
-    logger
+    logger,
+    rjtools
 Authors@R: c(person("Abhishek", "Ulayil", email = "perricoq@outlook.com",
     role = c("aut", "cre")),
     person("Heather", "Turner", email = "ht@heatherturner.net", role = "ctb",
