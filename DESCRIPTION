@@ -17,9 +17,19 @@ Imports:
     yaml,
     stringr,
     xfun,
-    logger
-Authors@R: person("Abhishek", "Ulayil", email = "perricoq@outlook.com",
-    role = c("aut", "cre"))
+    logger,
+    rjtools
+Authors@R: c(person("Abhishek", "Ulayil", email = "perricoq@outlook.com",
+    role = c("aut", "cre")),
+    person("Heather", "Turner", email = "ht@heatherturner.net", role = "ctb",
+    comment = c(ORCID = "0000-0002-1256-3375")),
+    person("Christophe", "Dervieux", role = "ctb", email = "christophe.dervieux@gmail.com",
+    comment = c(ORCID = "0000-0003-4474-2498")),
+    person(given = "Mitchell", family = "O'Hara-Wild", role = c("aut", "ctb"),
+    email = "mail@mitchelloharawild.com", comment = c(ORCID = "0000-0001-6729-7695")),
+    person("Dianne", "Cook", email = "dicook@monash.edu", role = c("ctb"),
+    comment = c(ORCID = "0000-0002-3813-7155"))
+    )
 Suggests: 
     knitr,
     testthat (>= 3.0.0)
