@@ -66,7 +66,6 @@ extract_path <- function(figure_line) {
     src <- gsub("\\}$","", src)
     return(src)
 }
-
 #' @title find image extension
 #'
 #' @description this function will extract extension from LaTeX figure

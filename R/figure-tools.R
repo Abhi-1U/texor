@@ -104,6 +104,9 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
             extensions <- list()
             for (iterator in 1:f_block$image_count) {
                 extensions[iterator] <- find_image_extension(article_dir, f_block$path[iterator])
+                if(xfun::file_ext(f_block$path[iterator]) == ""){
+                    f_block$path[iterator] <- xfun::with_ext(f_block$path[iterator],f_block$extension[iterator])
+                }
             }
             f_block$extension <- unlist(extensions)
         } else {
@@ -111,6 +114,9 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
             f_block$label <- extract_label(fig_data)
             f_block$path <- extract_path(fig_data[f_block$image_pos])
             f_block$extension <- find_image_extension(article_dir,f_block$path)
+            if(xfun::file_ext(f_block$path) == ""){
+                f_block$path <- xfun::with_ext(f_block$path,f_block$extension)
+            }
         }
     }
     return(f_block)
