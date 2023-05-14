@@ -52,7 +52,7 @@ convert_all_pdf <- function(article_dir, fig_block) {
                 if (! grepl(".pdf$",pdf_rel_path)) {
                     fig_block[[iterator]]$path <- paste0(pdf_rel_path,".png")
                 } else {
-                    fig_block[[iterator]]$path <- gsub(".pdf",".png",pdf_rel_path)
+                    fig_block[[iterator]]$path <- xfun::with_ext(pdf_rel_path,"png")
                 }
                 fig_block[[iterator]]$converted <- TRUE
                 fig_block[[iterator]]$copied <- TRUE
@@ -77,7 +77,7 @@ convert_all_pdf <- function(article_dir, fig_block) {
                     if (! grepl(".pdf$",pdf_rel_path)) {
                         fig_block[[iterator]]$path[iter_2] <- paste0(pdf_rel_path,".png")
                     } else {
-                        fig_block[[iterator]]$path[iter_2] <- gsub(".pdf",".png",pdf_rel_path)
+                        fig_block[[iterator]]$path[iter_2] <- xfun::with_ext(pdf_rel_path,"png")
                     }
                     fig_block[[iterator]]$converted[iter_2] <- TRUE
                     fig_block[[iterator]]$copied[iter_2] <- TRUE

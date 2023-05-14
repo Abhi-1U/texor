@@ -168,8 +168,8 @@ copy_other_files <- function(from_path) {
             if (file.exists(xfun::with_ext(path,".JPEG"))){
                 path <- xfun::with_ext(path,".JPEG")
             }
-            if (file.exists(gsub(".png", ".pdf", path))){
-                convert_to_png(gsub(".png", ".pdf", path))
+            if (file.exists(xfun::with_ext(path,"pdf"))){
+                convert_to_png(xfun::with_ext(path,"pdf"))
             }
         }
         file.copy(path, paste0("web/", path), overwrite = TRUE)

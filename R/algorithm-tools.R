@@ -65,10 +65,10 @@ convert_algorithm <- function(alg_object, article_dir) {
              }
     )
     # run pdf to png
-    alg_png_file <- gsub(".pdf",".png",alg_file_name)
+    alg_png_file <- xfun::with_ext(alg_file_name,"png")
     alg_object$path <- paste0("alg/",alg_png_file)
     alg_object$converted <- TRUE
-    tryCatch(texor::convert_to_png(gsub(".tex", ".pdf", alg_path)),
+    tryCatch(texor::convert_to_png(xfun::with_ext(alg_path,"pdf")),
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
                  warning(c$message)
@@ -76,13 +76,9 @@ convert_algorithm <- function(alg_object, article_dir) {
              }
     )
 
-    alg_png_path <- gsub(
-        ".tex", ".png", alg_path
-    )
+    alg_png_path <- xfun::with_ext(alg_path,"png")
     web_alg_folder <- paste(article_dir,"web/alg",sep="/")
-    web_alg_png_path <- paste0(web_alg_folder,"/",gsub(
-        ".tex", ".png", alg_file_name
-    ))
+    web_alg_png_path <- paste0(web_alg_folder,"/",xfun::with_ext(alg_file_name,"png"))
     dir.create(web_alg_folder)
     alg_object$copied <- TRUE
     tryCatch(file.copy(alg_png_path, web_alg_png_path),
