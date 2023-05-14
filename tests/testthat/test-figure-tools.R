@@ -8,7 +8,7 @@ test_that("figure reader", {
   # extension test
   expect_equal(data[[1]]$extension, "png")
   # relative path test
-  expect_equal(data[[1]]$path, "Rlogo-5")
+  expect_equal(data[[1]]$path, "Rlogo-5.png")
   # label test
   expect_equal(data[[1]]$label, "figure:rlogo")
   # caption test
