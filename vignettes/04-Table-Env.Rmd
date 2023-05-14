@@ -46,10 +46,10 @@ Limited Multicolumn support is included.
 \end{center}
 \end{table*}
 ```
-The above example illustrates a complicated table, which the texor package can handle through a subroutine and preprocessing step to transform the LaTeX code.
+The above example illustrates a complicated table, which the texor package can handle through subroutines and pre-processing step to transform the LaTeX code.
 
-1. The Stream Editor modifies the \multicolumn{..} to \multicolumnx{..}
-2. Then a LaTeX macro redefines the \multicolumnx{..} to \multicolumn{---}, which is accepted by pandoc.
+1. The Stream Editor modifies the `\multicolumn{..}` to `\multicolumnx{..}`
+2. Then a LaTeX macro redefines the `\multicolumnx{..}` to `\multicolumn{---}`, which is accepted by pandoc.
 3. Finally pandoc reads the table and transforms it to markdown.
 
 
