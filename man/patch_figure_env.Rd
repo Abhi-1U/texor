@@ -4,10 +4,12 @@
 \alias{patch_figure_env}
 \title{patch figure environments}
 \usage{
-patch_figure_env(article_dir)
+patch_figure_env(article_dir, with_alg = TRUE)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
+
+\item{with_alg}{to include algorihtm environment or not}
 }
 \value{
 writes modified file and also backs up the old file before modification
