@@ -49,9 +49,6 @@
     <loc>/reference/comment_filter.html</loc>
   </url>
   <url>
-    <loc>/reference/convert_algorithm.html</loc>
-  </url>
-  <url>
     <loc>/reference/convert_all_pdf.html</loc>
   </url>
   <url>
@@ -94,9 +91,6 @@
     <loc>/reference/figure_reader.html</loc>
   </url>
   <url>
-    <loc>/reference/filter_code_env.html</loc>
-  </url>
-  <url>
     <loc>/reference/find_image_extension.html</loc>
   </url>
   <url>
@@ -122,12 +116,6 @@
   </url>
   <url>
     <loc>/reference/log_setup.html</loc>
-  </url>
-  <url>
-    <loc>/reference/patch_code_env.html</loc>
-  </url>
-  <url>
-    <loc>/reference/patch_equations.html</loc>
   </url>
   <url>
     <loc>/reference/patch_figure_env.html</loc>
