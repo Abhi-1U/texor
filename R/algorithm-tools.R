@@ -1,4 +1,9 @@
-
+#' @title Find Algorithm images
+#'
+#' @param fig_lines lines of code enclosing algorithm figure
+#' @keywords internal
+#' @return TRUE/FALSE
+#' @noRd
 find_algorithm <- function(fig_lines) {
     alg_image_start <- which(grepl("^\\s*\\\\begin\\{algorithm",
                                     fig_lines))
@@ -18,9 +23,9 @@ find_algorithm <- function(fig_lines) {
 #' in the RJ-web-article
 #' @param alg_object the figure_block of algorithm
 #' @param article_dir path to the directory which contains RJ article
-#'
+#' @keywords internal
 #' @return algorithm image
-#' @export
+#' @noRd
 convert_algorithm <- function(alg_object, article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     if (alg_object$algdata[1] != "\\begin{algorithm}[H]"){
@@ -99,6 +104,12 @@ convert_algorithm <- function(alg_object, article_dir) {
     return(alg_object)
 }
 
+#' @title extract extra algorithm libraries
+#'
+#' @param article_dir article directory
+#' @keywords internal
+#' @return string of libraries
+#' @noRd
 extract_extra_lib <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     wrapper_file <- get_wrapper_type(article_dir)
@@ -111,6 +122,13 @@ extract_extra_lib <- function(article_dir) {
     return(alg_libs)
 }
 
+#' @title insert algorithm image lines
+#'
+#' @param fig_block fig block of data
+#' @param article_dir article working directory
+#' @keywords internal
+#' @return TRUE/FALSE
+#' @noRd
 insert_algorithm_png <- function(fig_block,article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)
@@ -142,6 +160,12 @@ insert_algorithm_png <- function(fig_block,article_dir) {
     file.rename(paste(file_path, ".new", sep = ""), file_path)
 }
 
+#' @title remove algorithm caption from LaTeX file
+#'
+#' @param fig_data figure data block
+#' @keywords internal
+#' @return raw_lines
+#' @noRd
 remove_alg_caption <- function(fig_data) {
     alg_start_regex <- which(grepl("^\\s*\\\\begin\\{algorithm",
                                    fig_data))

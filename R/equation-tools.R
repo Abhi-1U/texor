@@ -1,9 +1,9 @@
 #' @title patch equations
 #' @description this function patches equations (particularly eqnarray)
 #' @param article_dir path to the directory which contains tex article
-#'
+#' @keywords internal
 #' @return modified equations in LaTeX file
-#' @export
+#' @noRd
 patch_equations <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # find tex file

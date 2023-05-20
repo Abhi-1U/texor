@@ -8,6 +8,10 @@
 #' @param replacement replacement string to be substituted
 #'
 #' @return raw_lines : modified  vector of lines
+#' @export
+#' @examples
+#' # TODO
+#'
 stream_editor <- function(raw_lines, pattern, target, replacement) {
     break_points <- which(grepl(pattern, raw_lines))
     #check for length of break_points to avoid no matches

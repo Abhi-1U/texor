@@ -2,13 +2,13 @@
 #' @title filter code environment
 #'
 #' @description use stream editor to find and replace
-#' cide environments
+#' code environments
 #' @param raw_lines a vector of lines from text file
 #' @param target target environment name
 #' @param replacement replacement environment name
-#'
+#' @keywords internal
 #' @return modified raw_lines
-#' @export
+#' @noRd
 filter_code_env <- function(raw_lines, target, replacement) {
     begin_patt <- paste("\\s*\\\\begin\\{", target, "\\}", sep = "")
     end_patt <- paste("\\s*\\\\end\\{", target, "\\}", sep = "")
@@ -16,16 +16,6 @@ filter_code_env <- function(raw_lines, target, replacement) {
     raw_lines <- stream_editor(raw_lines, end_patt, target, replacement)
     return(raw_lines)
 }
-
-code_env <- c("example",
-              "example\\*",
-              "Sin",
-              "Sout",
-              "Scode",
-              "Sinput",
-              "Soutput",
-              "smallverbatim",
-              "boxedverbatim")
 
 #' @title patch all code environments
 #' @description This function calls the `filter_code_env()` function
@@ -40,11 +30,20 @@ code_env <- c("example",
 #' 7. smallverbatim
 #'
 #' @param article_dir path to the directory which contains tex article
-#'
+#' @keywords internal
 #' @return writes modified file and also backs up the old file before modification
-#' @export
+#' @noRd
 patch_code_env <- function(article_dir) {
     # find tex file
+    code_env <- c("example",
+                  "example\\*",
+                  "Sin",
+                  "Sout",
+                  "Scode",
+                  "Sinput",
+                  "Soutput",
+                  "smallverbatim",
+                  "boxedverbatim")
     article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
