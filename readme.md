@@ -1,3 +1,4 @@
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # texor : Tools for converting LaTeX source files into RJ-web-articles
@@ -43,33 +44,6 @@ web friendly RJ-web-article format.
     [rebib](https://github.com/Abhi-1U/rebib))
 14. Tikz,algorithm graphics supported (some figures might not work)
 15. Logging of events.
-
-![texor features](man/figures/texor.svg)
-
-### Note :
-
-Update : relative paths should also work with current development
-version.
-
-Please use absolute paths when working with texor/rebib !
-
-~~The reason is that earlier texor used to work with relative paths by
-using setwd(), getwd() to handle working directories. However this was
-not an ideal method to handle paths and working on files.~~
-
-~~Hence I had to switch to absolute path system for almost all functions
-where automation is possible and works well. As there was no changing of
-working directories there is less risk of setting up a wrong working
-directory when failing certain function.~~
-
-Use forward slashes (/) in paths and do not add a forward slash at the
-end of the path for example
-
-1.  Wrong usage : `C:\projects\texor\main`
-2.  wrong usage : `C:/projects/texor/main/`
-3.  wrong usage : `C:\\projects\\texor\\main\\`
-4.  wrong usage : `C:\\projects\\texor\\main` (this may work with R)
-5.  Correct usage : `C:/projects/texor/main`
 
 ## Installation
 
