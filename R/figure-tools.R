@@ -1,3 +1,4 @@
+# global variable
 tikz_count_var <- 0
 
 #' @title figure reader

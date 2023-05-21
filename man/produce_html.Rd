@@ -4,14 +4,27 @@
 \alias{produce_html}
 \title{call rmarkdown::render to generate html file}
 \usage{
-produce_html(article_dir)
+produce_html(article_dir, example = FALSE)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
+
+\item{example}{only enabled for running examples for documentation and
+to enable export of this function.}
 }
 \value{
-HTML output
+HTML output/ TRUE
 }
 \description{
 call rmarkdown::render to generate html file
+}
+\examples{
+# Note This is a minimal example to execute this function
+article_dir <- system.file("examples/article",
+                 package = "texor")
+texor::include_style_file(article_dir)
+texor::convert_to_markdown(article_dir)
+texor::generate_rmd(article_dir)
+texor::copy_other_files(article_dir)
+texor::produce_html(article_dir,example = TRUE)
 }

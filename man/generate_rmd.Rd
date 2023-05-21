@@ -15,3 +15,11 @@ R-markdown file in the web folder
 \description{
 generate rmarkdown file in output folder
 }
+\examples{
+# Note This is a minimal example to execute this function
+article_dir <- system.file("examples/article",
+                 package = "texor")
+texor::include_style_file(article_dir)
+texor::convert_to_markdown(article_dir)
+texor::generate_rmd(article_dir)
+}

@@ -24,3 +24,10 @@ pandoc (along with lua interpreter) is already installed with
  R-studio, hence if not using R-studio you will need to install pandoc.
  https://pandoc.org/installing.html
 }
+\examples{
+# Note This is a minimal example to execute this function
+article_dir <- system.file("examples/article",
+                 package = "texor")
+texor::include_style_file(article_dir)
+texor::convert_to_markdown(article_dir)
+}

@@ -10,7 +10,8 @@
 #' @return raw_lines : modified  vector of lines
 #' @export
 #' @examples
-#' # TODO
+#' example_string <- "\\target{} \\not_a_target{}"
+#' texor::stream_editor(example_string,"\\s*\\\\target\\{\\}", "\\\\target", "\\\\hit")
 #'
 stream_editor <- function(raw_lines, pattern, target, replacement) {
     break_points <- which(grepl(pattern, raw_lines))

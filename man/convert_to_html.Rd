@@ -16,3 +16,7 @@ Log file
 When applied to a list of article_dirs it will also log
 successful and failed slugs.
 }
+\examples{
+# TODO
+
+}

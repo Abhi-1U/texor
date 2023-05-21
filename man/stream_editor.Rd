@@ -21,3 +21,8 @@ raw_lines : modified  vector of lines
 \description{
 R equivalent of GNU-sed
 }
+\examples{
+example_string <- "\\\\target{} \\\\not_a_target{}"
+texor::stream_editor(example_string,"\\\\s*\\\\\\\\target\\\\{\\\\}", "\\\\\\\\target", "\\\\\\\\hit")
+
+}

@@ -15,3 +15,7 @@ RJweb article document
 \description{
 automated function for converting a single RJarticle to web
 }
+\examples{
+# TODO
+
+}

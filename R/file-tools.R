@@ -37,9 +37,9 @@ get_wrapper_type <- function(article_dir) {
 #' @description
 #' removes commented latex lines to avoid wrong reference data
 #' @param data block of data
-#'
+#' @keywords internal
 #' @return filtered data
-#' @export
+#' @noRd
 comment_filter <- function(data) {
     comment_break_points <- which(grepl("^%", data))
     for (pos in comment_break_points) {
@@ -57,9 +57,9 @@ comment_filter <- function(data) {
 #' @param file_path path of text file to write contents to
 #' @param mode mode of opening
 #' @param raw_text the text/ list of lines to be written
-#'
+#' @keywords internal
 #' @return create/append/write a new file
-#' @export
+#' @noRd
 write_external_file <- function(file_path, mode, raw_text) {
     file_path <- xfun::normalize_path(file_path)
     write_file <- file(file_path, mode)

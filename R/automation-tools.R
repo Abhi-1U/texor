@@ -1,3 +1,4 @@
+#-----------------TODO: Might Deprecate this function --------------------------
 texor_orchestrate <- function(article_dir) {
     old_wd <- getwd()
     setwd(article_dir)
@@ -16,6 +17,9 @@ texor_orchestrate <- function(article_dir) {
 #' @return RJweb article document
 #'
 #' @export
+#' @examples
+#' # TODO
+#'
 latex_to_web <- function(dir) {
     print(dir)
     dir <- xfun::normalize_path(dir)
@@ -100,7 +104,7 @@ latex_to_web <- function(dir) {
     }
     return(TRUE)
 }
-
+#-----------------------------TODO: Make Logging Optional----------------------
 #' @title conversion function with logging success and failure
 #' @description When applied to a list of article_dirs it will also log
 #' successful and failed slugs.
@@ -108,6 +112,9 @@ latex_to_web <- function(dir) {
 #'
 #' @return Log file
 #' @export
+#' @examples
+#' # TODO
+#'
 convert_to_html <- function(dir) {
     wd <- getwd()
     dir <- xfun::normalize_path(dir)

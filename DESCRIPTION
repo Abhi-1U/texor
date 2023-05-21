@@ -1,6 +1,6 @@
 Package: texor
 Type: Package
-Title: tools for converting 'LaTeX' source files into 'RJ-web-articles'
+Title: Tools for converting 'LaTeX' source files into 'RJ-web-articles'
 Version: 0.6.9
 Authors@R: 
     c(person(given = "Abhishek",
@@ -31,6 +31,8 @@ Authors@R:
 Description: texor Converts tex files into Rmd which can then be exported as HTML.
     This is for legacy R journals available only in pdfs.
 License: MIT + file LICENSE
+URL: https://github.com/Abhi-1U/texor
+BugReports: https://github.com/Abhi-1U/texor/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
@@ -43,7 +45,8 @@ Imports:
     stringr,
     xfun,
     logger,
-    rjtools
+    rjtools,
+    rebib
 Suggests: 
     knitr,
     testthat (>= 3.0.0)

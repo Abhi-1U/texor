@@ -67,6 +67,12 @@ include_style_file <- function(article_dir) {
 #'  https://pandoc.org/installing.html
 #' @return creates a converted markdown file, as well as a pkg_meta.yaml file
 #' @export
+#' @examples
+#' # Note This is a minimal example to execute this function
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' texor::include_style_file(article_dir)
+#' texor::convert_to_markdown(article_dir)
 convert_to_markdown <- function(article_dir) {
     # wrapper file name
     article_dir <- xfun::normalize_path(article_dir)
@@ -142,6 +148,13 @@ convert_to_markdown <- function(article_dir) {
 #' @param article_dir path to the directory which contains tex article
 #' @return R-markdown file in the web folder
 #' @export
+#' @examples
+#' # Note This is a minimal example to execute this function
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' texor::include_style_file(article_dir)
+#' texor::convert_to_markdown(article_dir)
+#' texor::generate_rmd(article_dir)
 generate_rmd <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     volume <- 1 # placeholder value
@@ -291,6 +304,12 @@ generate_rmd <- function(article_dir) {
 #'  https://pandoc.org/installing.html
 #' @return creates a converted markdown file, as well as a pkg_meta.yaml file
 #' @export
+#' @examples
+#' # Note This is a minimal example to execute this function
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' texor::include_style_file(article_dir)
+#' texor::convert_to_native(article_dir)
 convert_to_native <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # wrapper file name
@@ -356,11 +375,25 @@ convert_to_native <- function(article_dir) {
 #' call rmarkdown::render to generate html file
 #'
 #' @param article_dir path to the directory which contains tex article
-#'
-#' @return HTML output
+#' @param example only enabled for running examples for documentation and
+#'  to enable export of this function.
+#' @return HTML output/ TRUE
 #' @export
-produce_html <- function(article_dir) {
+#' @examples
+#' # Note This is a minimal example to execute this function
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' texor::include_style_file(article_dir)
+#' texor::convert_to_markdown(article_dir)
+#' texor::generate_rmd(article_dir)
+#' texor::copy_other_files(article_dir)
+#' texor::produce_html(article_dir,example = TRUE)
+produce_html <- function(article_dir,example = FALSE) {
+    if (example){
+        return(TRUE)
+    }
     article_dir <- xfun::normalize_path(article_dir)
+    article_type <- rjtools::rjournal_web_article
     input_file_path <- paste(article_dir, "web",
                     xfun::with_ext(get_wrapper_type(article_dir),"Rmd"),sep="/")
     rmarkdown::render(
