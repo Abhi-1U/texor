@@ -1,6 +1,6 @@
 Package: texor
 Type: Package
-Title: Tools for converting 'LaTeX' source files into 'RJ-web-articles'
+Title: Converting 'LaTeX' `RJournal` Articles into 'RJ-web-articles'
 Version: 0.6.9
 Authors@R: 
     c(person(given = "Abhishek",
