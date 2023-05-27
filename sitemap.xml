@@ -46,9 +46,6 @@
     <loc>/reference/article_has_tikz.html</loc>
   </url>
   <url>
-    <loc>/reference/comment_filter.html</loc>
-  </url>
-  <url>
     <loc>/reference/convert_all_pdf.html</loc>
   </url>
   <url>
@@ -137,8 +134,5 @@
   </url>
   <url>
     <loc>/reference/texor_log.html</loc>
-  </url>
-  <url>
-    <loc>/reference/write_external_file.html</loc>
   </url>
 </urlset>
