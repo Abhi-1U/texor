@@ -1,8 +1,14 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^LICENSE\.md$
+^readme\.Rmd$
+^readme\.md$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-^.*\.Rmd$
-^.*\.md$
+^doc$
+^Meta$
 ^\.github$
+^CODE_OF_CONDUCT.md$
+^cran-comments\.md$
+^CRAN-SUBMISSION$

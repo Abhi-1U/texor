@@ -1,3 +1,28 @@
+# Version 1.0.0
+
+## Feature Updates
+
+1. Algorithm figures are now numbered.
+2. Added `boxedverbatim` support for code environments.
+3. Included `web_only` parameter for embedding PDF or using Rmarkdown to produce HTML.
+4. Updated to MathJax Version3 and added `-tex_math_single_backslash` extension to pandoc for better math handling.
+5. Support for sample articles without the directory structure as required for RJ articles.
+6. Updated Instructions and examples.
+7. Updated contributor information.
+8. More examples and test cases.
+
+## Bug Fixes
+
+1. Using `xfun::normalize_path()` instead of `normalizePath()` for relative/absolute path handling 
+2. Stream editor also works on algorithm environments.
+3. Fixed image sizing paramaters.
+4. New algorithm to find, convert and copy images appropriately.
+5. Fixed a bug where, if the `metadata$address` is missing then `metadata$author` will be used as author name.
+6. Removes `RJournal.sty` file as it conflicts with inner workings of pandoc.
+7. Fixed file extension editing using `xfun::with_ext()` instead of `gsub()`.
+8. More precise `title` and `description`.
+
+
 # Version 0.6.9
 
 ## Feature Updates

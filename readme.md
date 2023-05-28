@@ -47,13 +47,10 @@ web friendly RJ-web-article format.
 
 ## Installation
 
-install these dependency packages (github development versions)
+install the mainline version from CRAN with:
 
 ``` r
-# install.packages("remotes")
-remotes::install_github("rstudio/distill")
-remotes::install_github("Abhi-1U/rjtools")
-remotes::install_github("Abhi-1U/rebib")
+install.packages('texor')
 ```
 
 install the development version from GitHub with:
@@ -63,8 +60,6 @@ install the development version from GitHub with:
 remotes::install_github("Abhi-1U/texor")
 # install.packages("pak")
 pak::pak("Abhi-1U/texor")
-# also install rebib for bibliography
-remotes::install_github("Abhi-1U/rebib")
 ```
 
 ## General Usage
