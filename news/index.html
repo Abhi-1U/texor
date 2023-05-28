@@ -56,6 +56,31 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0" id="version-100">Version 1.0.0<a class="anchor" aria-label="anchor" href="#version-100"></a></h2>
+<div class="section level3">
+<h3 id="feature-updates-1-0-0">Feature Updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-0-0"></a></h3>
+<ol style="list-style-type: decimal"><li>Algorithm figures are now numbered.</li>
+<li>Added <code>boxedverbatim</code> support for code environments.</li>
+<li>Included <code>web_only</code> parameter for embedding PDF or using Rmarkdown to produce HTML.</li>
+<li>Updated to MathJax Version3 and added <code>-tex_math_single_backslash</code> extension to pandoc for better math handling.</li>
+<li>Support for sample articles without the directory structure as required for RJ articles.</li>
+<li>Updated Instructions and examples.</li>
+<li>Updated contributor information.</li>
+<li>More examples and test cases.</li>
+</ol></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-0-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-0"></a></h3>
+<ol style="list-style-type: decimal"><li>Using <code><a href="https://rdrr.io/pkg/xfun/man/normalize_path.html" class="external-link">xfun::normalize_path()</a></code> instead of <code><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath()</a></code> for relative/absolute path handling</li>
+<li>Stream editor also works on algorithm environments.</li>
+<li>Fixed image sizing paramaters.</li>
+<li>New algorithm to find, convert and copy images appropriately.</li>
+<li>Fixed a bug where, if the <code>metadata$address</code> is missing then <code>metadata$author</code> will be used as author name.</li>
+<li>Removes <code>RJournal.sty</code> file as it conflicts with inner workings of pandoc.</li>
+<li>Fixed file extension editing using <code><a href="https://rdrr.io/pkg/xfun/man/file_ext.html" class="external-link">xfun::with_ext()</a></code> instead of <code><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub()</a></code>.</li>
+<li>More precise <code>title</code> and <code>description</code>.</li>
+</ol></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.9" id="version-069">Version 0.6.9<a class="anchor" aria-label="anchor" href="#version-069"></a></h2>
 <div class="section level3">
 <h3 id="feature-updates-0-6-9">Feature Updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-6-9"></a></h3>
