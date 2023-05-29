@@ -112,9 +112,7 @@ latex_to_web <- function(dir) {
 #'
 #' @return Log file
 #' @export
-#' @examples
-#' # TODO
-#'
+#' @noRd
 convert_to_html <- function(dir) {
     wd <- getwd()
     dir <- xfun::normalize_path(dir)

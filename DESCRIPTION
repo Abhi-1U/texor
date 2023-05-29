@@ -28,8 +28,10 @@ Authors@R:
              email = "dicook@monash.edu",
              role = "ctb",
              comment = c(ORCID = "0000-0002-3813-7155")))
-Description: texor Converts tex files into Rmd which can then be exported as HTML.
-    This is for legacy R journals available only in pdfs.
+Description: Articles in the 'RJournal' were first authored in 'LaTeX', which performs 
+    admirably for 'PDF' files but is less than ideal for modern online interfaces.
+    The 'texor' package does all the transitional chores and conversions necessary
+    to move to the online versions.
 License: MIT + file LICENSE
 URL: https://github.com/Abhi-1U/texor
 BugReports: https://github.com/Abhi-1U/texor/issues

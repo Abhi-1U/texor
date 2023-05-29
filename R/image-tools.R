@@ -5,6 +5,7 @@
 #' @param figure_lines the block of raw figure data from LaTeX document
 #'
 #' @return caption element
+#' @noRd
 extract_caption <- function(figure_lines) {
     unified_line <- ""
     for (line in figure_lines) {
@@ -27,6 +28,7 @@ extract_caption <- function(figure_lines) {
 #' @param figure_lines the block of raw figure data from LaTeX document
 #'
 #' @return label element
+#' @noRd
 extract_label <- function(figure_lines) {
     unified_line <- ""
     for (line in figure_lines) {
@@ -51,6 +53,7 @@ extract_label <- function(figure_lines) {
 #' @param figure_line the block of raw figure data from LaTeX document
 #'
 #' @return path element
+#' @noRd
 extract_path <- function(figure_line) {
     src_start_patt <- "\\s*\\\\includegraphics"
     src_line <- figure_line
@@ -74,6 +77,7 @@ extract_path <- function(figure_line) {
 #' @param image_path the value from extract_path()
 #' @param is_tikz tikz image status, default is FALSE
 #' @return extension element
+#' @noRd
 find_image_extension <- function(article_dir, image_path, is_tikz = FALSE) {
     # tikz/algorithm images are isolated
     # then compiled into a standalone PDF,

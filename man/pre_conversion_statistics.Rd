@@ -15,3 +15,7 @@ conversion stat block
 \description{
 count common environments,inlines for debugging purposes
 }
+\examples{
+# TODO
+
+}

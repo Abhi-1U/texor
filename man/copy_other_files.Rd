@@ -16,3 +16,7 @@ copies dependency files into the output folder.
 Copies supporting documents like images,pdf,bib files into the output
 folder for building the HTML version of the R-Markdown file.
 }
+\examples{
+# ToDo
+
+}

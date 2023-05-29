@@ -8,7 +8,7 @@ tikz_count_var <- 0
 #' @param file_name name of the LaTeX file
 #'
 #' @return figure blocks
-#' @export
+#' @noRd
 figure_reader <- function(article_dir, file_name) {
     article_dir <- xfun::normalize_path(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
@@ -51,6 +51,19 @@ figure_reader <- function(article_dir, file_name) {
     return(figure_blocks)
 }
 
+#' Figure block Reader
+#'
+#' @param article_dir path to the directory which contains tex article
+#' @param fig_data a block of figure data
+#' @param raw_data raw text extracted from LaTeX document
+#' @param iterator current iterator position
+#' @param start_pos start position of image lines in LaTeX document
+#' @param end_pos end position of image lines in LaTeX document
+#' @param ac_start_pos Relative start position of image lines in LaTeX document
+#' @param ac_end_pos Relative end position of image lines in LaTeX document
+#'
+#' @return a block of figure data
+#' @noRd
 fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos, end_pos, ac_start_pos, ac_end_pos){
     # block of figure_data with extra meta data
     f_block <- list()
@@ -97,7 +110,6 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
             paths <- list()
             for(iterator in 1:f_block$image_count) {
                 paths[iterator] <- extract_path(fig_data[f_block$image_pos[iterator]])
-                #print(extract_path(fig_data[f_block$image_pos[iterator]]))
             }
             f_block$path <- unlist(paths)
             f_block$caption <- extract_caption(fig_data)
@@ -132,7 +144,7 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
 #' @param with_alg to include algorihtm environment or not
 #'
 #' @return writes modified file and also backs up the old file before modification
-#' @export
+#' @noRd
 patch_figure_env <- function(article_dir, with_alg = TRUE) {
     article_dir <- xfun::normalize_path(article_dir)
     # find tex file
@@ -162,9 +174,6 @@ patch_figure_env <- function(article_dir, with_alg = TRUE) {
                                    "\\s*\\\\end\\{algorithm}", "algorithm", "figure")
         print("Changed \\end{algorithm} to \\end{figure}")
     }
-
-    # testing functionality
-    #return(raw_lines)
     # backup old file
     src_file_data <- readLines(file_path)
     backup_file <- paste(file_path, ".bk", sep = "")
@@ -175,11 +184,17 @@ patch_figure_env <- function(article_dir, with_alg = TRUE) {
     write_external_file(file_path, "w", raw_lines)
 }
 
+#' handle figures
+#'
+#' @param article_dir path to the directory which contains tex article
+#' @param file_name name of the LaTeX file
+#'
+#' @return A block of figure data
+#' @noRd
 handle_figures <- function(article_dir, file_name){
     patch_figure_env(article_dir,with_alg = FALSE)
     fig_data <- figure_reader(article_dir, file_name)
     seperate_multiple_figures(article_dir)
-    #fig_data <- convert_all_pdf(article_dir, fig_data)
     for (fig_iter in seq_along(fig_data)) {
         if(fig_data[[fig_iter]]$isalgorithm) {
             fig_data[[fig_iter]] <- convert_algorithm(fig_data[[fig_iter]], article_dir)
@@ -194,6 +209,12 @@ handle_figures <- function(article_dir, file_name){
     return(fig_data)
 }
 
+#' seperate multiple figures
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return writes new data to the file
+#' @noRd
 seperate_multiple_figures <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)
@@ -207,12 +228,9 @@ seperate_multiple_figures <- function(article_dir) {
             break
         }
         if (breakpoints[iter] == (breakpoints[iter+1]-1)){
-            #print(breakpoints[iter])
             raw_lines[breakpoints[iter]] <- paste0(raw_lines[breakpoints[iter]],"\n \n")
         }
     }
-    # testing functionality
-    #return(raw_lines)
     # backup old file
     src_file_data <- readLines(file_path)
     backup_file <- paste(file_path, ".bk", sep = "")

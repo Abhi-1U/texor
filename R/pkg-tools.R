@@ -6,7 +6,7 @@
 #' @param input_file name of the input file
 #'
 #' @return pkg_meta.yaml file containing meta data
-#' @export
+#' @noRd
 find_pkg_references <- function(input_file){
     input_file <- xfun::normalize_path(input_file)
     input <- readLines(input_file)

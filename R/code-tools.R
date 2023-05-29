@@ -54,8 +54,6 @@ patch_code_env <- function(article_dir) {
     for (env in code_env) {
         raw_lines <- filter_code_env(raw_lines, env, replacement)
     }
-    # testing functionality
-    #return(raw_lines)
     # backup old file
     src_file_data <- readLines(file_path)
     backup_file <- paste(file_path, ".bk", sep = "")

@@ -4,6 +4,9 @@
 #'
 #' @return conversion stat block
 #' @export
+#' @examples
+#' # TODO
+#'
 pre_conversion_statistics <- function(article_dir){
     article_dir <- xfun::normalize_path(article_dir)
     con_stat <- list()
@@ -18,10 +21,6 @@ pre_conversion_statistics <- function(article_dir){
     return(con_stat)
 }
 
-
-conversion_coverage_checK <- function(article_dir) {
-
-}
 
 #' @title count latex environments
 #' @description count common environments like table,figure,verbatim etc..

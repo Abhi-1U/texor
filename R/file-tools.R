@@ -74,7 +74,7 @@ write_external_file <- function(file_path, mode, raw_text) {
 #' @param article_dir path to the directory which contains tex article
 #'
 #' @return String name of the tex-file name
-#' @export
+#' @noRd
 get_texfile_name <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     lookup_file <- get_wrapper_type(article_dir)
@@ -93,12 +93,25 @@ get_texfile_name <- function(article_dir) {
     return(tex_file)
 }
 
+#' get markdown file name
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return markdown file name
+#' @noRd
 get_md_file_name <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     lookup_file <- get_wrapper_type(article_dir)
     markdown_file <- xfun::with_ext(lookup_file,".md")
+    return (markdown_file)
 }
 
+#' get Journal details
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return journal details in an object
+#' @noRd
 get_journal_details <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     journal_details <- list()
@@ -135,22 +148,16 @@ get_journal_details <- function(article_dir) {
 #' @param from_path : String indicating base path for the working directory
 #' @return copies dependency files into the output folder.
 #' @export
+#' @examples
+#' # ToDo
+#'
 copy_other_files <- function(from_path) {
     old_working_directory <- getwd()
     setwd(from_path)
     image_paths <- generate_image_paths(from_path)
-    #dir_list <- list.dirs(recursive = FALSE)
-    #possible_dirs <- c("*_files", "figures", "images", "tikz")
-    #target_dir <- basename(dir_list[grep(
-    #    paste(possible_dirs, collapse = "|"), dir_list)])
-    #print(target_dir)
     if (! dir.exists("web/")) {
         dir.create("web/", showWarnings = FALSE)
     }
-    #for (t_path in target_dir) {
-    #    dir.create(paste("web/", t_path, sep = ""),
-    #           showWarnings = FALSE)
-    #}
     for (path in image_paths) {
         print(path)
         print(paste0("web/", path))
@@ -174,8 +181,6 @@ copy_other_files <- function(from_path) {
         }
         file.copy(path, paste0("web/", path), overwrite = TRUE)
     }
-    #file.copy(image_paths,
-    #    paste("web/", target_dir, sep = ""), recursive = TRUE)
     file_list <- list.files(recursive = FALSE)
     extensions <- c("*.bib", "*.pdf", "*.R", "*.bbl")
     target_files <- unique(grep(paste(
@@ -187,7 +192,7 @@ copy_other_files <- function(from_path) {
               recursive = FALSE, )
     setwd(old_working_directory)
 }
-
+#------------TODO: Deprecate this function if unused ---------------------------
 copy_to_web <- function(rel_path, ext, article_dir){
     article_dir <- xfun::normalize_path(article_dir)
     if (! grepl(paste0(".",ext,"$"),rel_path)) {
@@ -215,6 +220,12 @@ copy_to_web <- function(rel_path, ext, article_dir){
 
 }
 
+#' generate image paths
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return list of image paths
+#' @noRd
 generate_image_paths <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # wrapper file name
