@@ -1,0 +1,159 @@
+---
+title: "Environment Handling"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{environment-handling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo=FALSE}
+library(texor)
+```
+
+## Working with Figure Environments
+
+Images are an essential component in any article, However due to the differences in the support
+for various graphic formats between LaTeX and markdown/HTML we need to fallback on raster graphics. 
+
+```{r, echo = FALSE, results = 'asis'}
+library(knitr)
+table <- data.frame("Graphics-Format" = c("PNG", "JPG", "PDF", "SVG", "Tikz", "Algorithm"),
+              "LaTeX" = c("&#10003;", "&#10003;", "&#10003;", "&#10007;", "&#10003;", "&#10003;"),
+              "Markdown" = c("&#10003;", "&#10003;", "&#10007;", "&#10003;", "&#10007;", "&#10007;"),
+              "RMarkdown" = c("&#10003;", "&#10003;", "&#10007;", "&#10003;", "&#10003;(using tikz engine)", "&#10007;"),
+              "HTML" = c("&#10003;", "&#10003;", "&#10007;", "&#10003;", "&#10007;", "&#10007;"))
+kable(table, caption =  "Image Format support in various Markup/Typesetting Languages")
+```
+
+As we can observe from the above table, raster (PNG and JPG) images are relatively easy to handle and 
+do not require any additional pre-processing. Pandoc handles it well. 
+
+PNG,JPG images are easily included as markdown images with captions, labels and other parameters.
+
+For other image formats like tikz and algorithm, they are first isolated and compiled into a PDF,
+then to a PNG using pdftools package.
+
+#### For the best results after conversion : 
+
+
+1. Avoid using framebox or any other latex command to wrap the `\includegraphics{}` .
+This might interfere with the packages ability to properly read the path and copy the relevant image properly.
+2. Try to keep the actual content of the caption without any LaTeX markup (normal text), as it is not reflected in HTML properly.
+
+For example :
+``` latex
+\begin{figure}
+  \includegraphics{image/sample.png}
+  \caption{This is a sample caption}
+  \labeL{fig:image-1}
+\end{figure}
+```
+
+
+## Working with Table Environments
+
+
+Tables are commonly used in RJ articles to display data in a tabular format. However, there are differences in the way tables are handled by LaTeX and HTML. 
+
+LaTeX tables have more customization and are usually optimized for printing, whereas the web articles need tables optimized for varying sizes of media. 
+
+pandoc converts most of the tables somewhat easily, but is unable to do well with table customization packages and complex tables.
+
+Some pandoc extensions are used in order to tackle them, they are : `simple_tables`, `pipe_tables`
+
+Limited Multicolumn support is included.
+```latex
+\begin{table*}[t!]
+\begin{center}
+\begin{tabular}{l | llll }
+ \hline
+ \multicolumn{1}{c |}{EXAMPLE} & \multicolumn{2}{c}{$X$} &
+\multicolumn{2}{c}{$Y$} \\
+ \hline
+  & 1 & 2 & 1 & 2 \\
+ EX1  & X11 & X12 &  Y11  & Y12 \\
+ EX2  & X21 & X22 &  Y21  & Y22 \\
+ EX3  & X31 & X32 &  Y31  & Y32 \\
+ EX4  & X41 & X42 &  Y41  & Y42\\
+ EX5  & X51 & X52 &  Y51  & Y52 \\
+\hline
+\end{tabular}
+\label{table1} \caption{An Example Table with Multicolumn}
+\end{center}
+\end{table*}
+```
+The above example illustrates a complicated table, which the texor package can handle through subroutines and pre-processing step to transform the LaTeX code.
+
+1. The Stream Editor modifies the `\multicolumn{..}` to `\multicolumnx{..}`
+2. Then a LaTeX macro redefines the `\multicolumnx{..}` to `\multicolumn{---}`, which is accepted by pandoc.
+3. Finally pandoc reads the table and transforms it to markdown.
+
+
+Also note that the stream editor is used to rename `table*` environment to `table` environment because the markdown/HTML will not support the specific changes `table*` environment will bring.
+
+The Resulting Markdown Generated would look like :
+
+```markdown
+::: center
+::: {#table1}
+  -------------------------------------
+  EXAMPLE   \(X\)         \(Y\)   
+  --------- ------- ----- ------- -----
+            1       2     1       2
+
+  EX1       X11     X12   Y11     Y12
+
+  EX2       X21     X22   Y21     Y22
+
+  EX3       X31     X32   Y31     Y32
+
+  EX4       X41     X42   Y41     Y42
+
+  EX5       X51     X52   Y51     Y52
+  -------------------------------------
+
+  : Table 1: An Example Table with Multicolumn
+:::
+
+[]{#table1 label="table1"}
+:::
+```
+
+## Working with Code Environments
+
+Pandoc naturally converts verbatim environment easily, however the redefination 
+of other commands such as `example`, `example*`, `Sinput` etc to verbatim does not work well in pandoc.
+
+Hence Texor package uses the stream editor to search find and replace matching code environments to verbatim before pandoc touches it.
+
+This way the the code is not lost in conversion, also a pandoc extension is used to add attributes to the markdown code using 
+'fenced_code_attributes`
+
+### Supported RJ-article (LaTeX) code environment:
+
+```{r, echo = FALSE, results = 'asis'}
+library(knitr)
+table <- data.frame(
+              "example" = c("example, example*"),
+              "S-series" = c("Sin, Sout, Scode,Sinput,Soutput"),
+              "special-verbatim" = c("smallverbatim, boxedverbatim"))
+kable(table, caption =  "Code Environment support in texor")
+```
+Note that any special markup (like font-size, font-style) bought by any of these code environments will be lost,
+However the retained text will have syntax highlighting (for R by default, if you want to change the syntax highlighting, change the language in the markdown source code formed)
+
+## Working with Math Environments
+
+Math typesetting has always been LaTeX's highlight feature, making it a de facto choice among academicians and researchers globally. However, as we proceed to our humble web interfaces, math is hard to describe traditionally. There have been advancements in JavaScript libraries to better Typeset and present math in web pages but not all LaTeX commands/math functions are available.
+
+The texor package uses Mathjax version 3^[more info [here](https://www.mathjax.org/)] to enhance the visual look of the math content in HTML. There is support for equations, inline math, and equation numbering. 
+
+

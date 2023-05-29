@@ -1,13 +1,14 @@
 #' @title pre conversion statistics
 #' @description count common environments,inlines for debugging purposes
 #' @param article_dir path to the directory which contains RJ article
-#'
+#' @param write_yaml write to a yaml file (default = TRUE)
 #' @return conversion stat block
 #' @export
 #' @examples
-#' # TODO
-#'
-pre_conversion_statistics <- function(article_dir){
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' texor::pre_conversion_statistics(article_dir,write_yaml = FALSE)
+pre_conversion_statistics <- function(article_dir, write_yaml = TRUE){
     article_dir <- xfun::normalize_path(article_dir)
     con_stat <- list()
     con_stat$table <- count_env(article_dir, "table")
@@ -17,7 +18,12 @@ pre_conversion_statistics <- function(article_dir){
     con_stat$code$block <- count_env(article_dir, "verbatim")
     con_stat$code$inline <- count_inline(article_dir, "inlinecode")
     yaml_path <- paste0(article_dir,"/pre-conversion-meta.yaml")
-    yaml::write_yaml(con_stat,yaml_path)
+    if (write_yaml){
+        yaml::write_yaml(con_stat,yaml_path)
+    }
+    else {
+        #pass
+    }
     return(con_stat)
 }
 

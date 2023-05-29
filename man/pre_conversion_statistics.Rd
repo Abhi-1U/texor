@@ -4,10 +4,12 @@
 \alias{pre_conversion_statistics}
 \title{pre conversion statistics}
 \usage{
-pre_conversion_statistics(article_dir)
+pre_conversion_statistics(article_dir, write_yaml = TRUE)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains RJ article}
+
+\item{write_yaml}{write to a yaml file (default = TRUE)}
 }
 \value{
 conversion stat block
@@ -16,6 +18,7 @@ conversion stat block
 count common environments,inlines for debugging purposes
 }
 \examples{
-# TODO
-
+article_dir <- system.file("examples/article",
+                 package = "texor")
+texor::pre_conversion_statistics(article_dir,write_yaml = FALSE)
 }
