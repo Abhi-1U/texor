@@ -24,12 +24,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/01-Introduction.html">Introduction to texor</a>
-    <a class="dropdown-item" href="../articles/02-Dependencies.html">Dependency List</a>
-    <a class="dropdown-item" href="../articles/03-Figure-Env.html">Figure-Environement</a>
-    <a class="dropdown-item" href="../articles/04-Table-Env.html">Table-Environment</a>
-    <a class="dropdown-item" href="../articles/05-Code-Env.html">Code-Environment</a>
-    <a class="dropdown-item" href="../articles/06-Math-Env.html">Math-Environment</a>
+    <a class="dropdown-item" href="../articles/environment-handling.html">Environment Handling</a>
+    <a class="dropdown-item" href="../articles/introduction-to-texor.html">Introduction to texor</a>
   </div>
 </li>
 <li class="nav-item">
@@ -62,13 +58,17 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pre_conversion_statistics</span><span class="op">(</span><span class="va">article_dir</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pre_conversion_statistics</span><span class="op">(</span><span class="va">article_dir</span>, write_yaml <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>article_dir</dt>
 <dd><p>path to the directory which contains RJ article</p></dd>
+
+
+<dt>write_yaml</dt>
+<dd><p>write to a yaml file (default = TRUE)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -80,9 +80,29 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># TODO</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">article_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/article"</span>,</span></span>
+<span class="r-in"><span>                 package <span class="op">=</span> <span class="st">"texor"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu">pre_conversion_statistics</span><span class="op">(</span><span class="va">article_dir</span>,write_yaml <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $table</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $figure</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $math</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $citations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $code$block</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $code$inline</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

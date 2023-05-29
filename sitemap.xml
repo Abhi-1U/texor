@@ -10,25 +10,13 @@
     <loc>/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/articles/01-Introduction.html</loc>
-  </url>
-  <url>
-    <loc>/articles/02-Dependencies.html</loc>
-  </url>
-  <url>
-    <loc>/articles/03-Figure-Env.html</loc>
-  </url>
-  <url>
-    <loc>/articles/04-Table-Env.html</loc>
-  </url>
-  <url>
-    <loc>/articles/05-Code-Env.html</loc>
-  </url>
-  <url>
-    <loc>/articles/06-Math-Env.html</loc>
+    <loc>/articles/environment-handling.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/introduction-to-texor.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
