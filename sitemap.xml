@@ -76,6 +76,15 @@
     <loc>/reference/generate_rmd.html</loc>
   </url>
   <url>
+    <loc>/reference/get_journal_details.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_md_file_name.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_texfile_name.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_wrapper_type.html</loc>
   </url>
   <url>
