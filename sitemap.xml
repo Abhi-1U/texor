@@ -52,9 +52,6 @@
     <loc>/reference/convert_tikz.html</loc>
   </url>
   <url>
-    <loc>/reference/convert_to_html.html</loc>
-  </url>
-  <url>
     <loc>/reference/convert_to_markdown.html</loc>
   </url>
   <url>
@@ -73,31 +70,10 @@
     <loc>/reference/count_inline.html</loc>
   </url>
   <url>
-    <loc>/reference/extract_caption.html</loc>
-  </url>
-  <url>
-    <loc>/reference/extract_label.html</loc>
-  </url>
-  <url>
-    <loc>/reference/extract_path.html</loc>
-  </url>
-  <url>
     <loc>/reference/extract_tikz_style.html</loc>
   </url>
   <url>
-    <loc>/reference/figure_reader.html</loc>
-  </url>
-  <url>
-    <loc>/reference/find_image_extension.html</loc>
-  </url>
-  <url>
-    <loc>/reference/find_pkg_references.html</loc>
-  </url>
-  <url>
     <loc>/reference/generate_rmd.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_texfile_name.html</loc>
   </url>
   <url>
     <loc>/reference/get_wrapper_type.html</loc>
@@ -113,9 +89,6 @@
   </url>
   <url>
     <loc>/reference/log_setup.html</loc>
-  </url>
-  <url>
-    <loc>/reference/patch_figure_env.html</loc>
   </url>
   <url>
     <loc>/reference/patch_table_env.html</loc>

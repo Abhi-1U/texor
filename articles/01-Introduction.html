@@ -114,7 +114,7 @@ normalizing the path,extracting the file_name/ wrapper_name etc..</p>
 <span><span class="va">wrapper_file</span> <span class="op">&lt;-</span> <span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="../reference/get_wrapper_type.html">get_wrapper_type</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># getting the main LaTeX file name</span></span>
-<span><span class="va">file_name</span> <span class="op">&lt;-</span> <span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="../reference/get_texfile_name.html">get_texfile_name</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">file_name</span> <span class="op">&lt;-</span> <span class="fu">texor</span><span class="fu">::</span><span class="fu">get_texfile_name</span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="stage-1-copyingremoving-style-files">Stage 1 : Copying/Removing Style files<a class="anchor" aria-label="anchor" href="#stage-1-copyingremoving-style-files"></a>
@@ -170,7 +170,7 @@ environment).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu">patch_code_env</span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
 <span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="../reference/patch_table_env.html">patch_table_env</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
-<span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="../reference/patch_figure_env.html">patch_figure_env</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
+<span><span class="fu">texor</span><span class="fu">::</span><span class="fu">patch_figure_env</span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
 <span><span class="fu">texor</span><span class="fu">::</span><span class="fu">patch_equations</span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
