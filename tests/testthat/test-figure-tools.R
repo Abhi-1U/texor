@@ -1,6 +1,6 @@
 test_that("figure reader", {
   wd <- system.file("examples/article", package = "texor")
-  data <- texor::figure_reader(wd,texor::get_texfile_name(wd))
+  data <- texor:::figure_reader(wd,texor::get_texfile_name(wd))
   gen_yaml <- readLines(paste0(wd,"/texor-figure-meta.yaml"))
   exp_yaml <- readLines(paste0(wd,"/expected-texor-figure-meta.yaml"))
   # yaml test

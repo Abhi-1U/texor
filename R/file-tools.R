@@ -14,7 +14,11 @@
 #' @examples
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
-#' texor::get_wrapper_type(article_dir)
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::get_wrapper_type(your_article_path)
+#' unlink(your_article_folder,recursive = TRUE)
 get_wrapper_type <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     wrapper_types <- c("wrapper.tex",
@@ -27,7 +31,7 @@ get_wrapper_type <- function(article_dir) {
         }
     }
     if (wrapper_file == "") {
-        print("Error : No Wrapper File Found in the article dir")
+        warning(" No Wrapper File Found in the article dir")
     }
     return(wrapper_file)
 }
@@ -74,7 +78,15 @@ write_external_file <- function(file_path, mode, raw_text) {
 #' @param article_dir path to the directory which contains tex article
 #'
 #' @return String name of the tex-file name
-#' @noRd
+#' @export
+#' @examples
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::get_texfile_name(your_article_path)
+#' unlink(your_article_folder,recursive = TRUE)
 get_texfile_name <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     lookup_file <- get_wrapper_type(article_dir)
@@ -98,7 +110,15 @@ get_texfile_name <- function(article_dir) {
 #' @param article_dir path to the directory which contains tex article
 #'
 #' @return markdown file name
-#' @noRd
+#' @export
+#' @examples
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::get_md_file_name(your_article_path)
+#' unlink(your_article_folder,recursive = TRUE)
 get_md_file_name <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     lookup_file <- get_wrapper_type(article_dir)
@@ -111,7 +131,10 @@ get_md_file_name <- function(article_dir) {
 #' @param article_dir path to the directory which contains tex article
 #'
 #' @return journal details in an object
-#' @noRd
+#' @export
+#' @examples
+#' article_dir <- "/home/user/documents/2022-1/2020-36/"
+#' texor::get_journal_details(article_dir)
 get_journal_details <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     journal_details <- list()
@@ -149,18 +172,22 @@ get_journal_details <- function(article_dir) {
 #' @return copies dependency files into the output folder.
 #' @export
 #' @examples
-#' # ToDo
-#'
+#' article_dir <- system.file("examples/article", package = "texor")
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::copy_other_files(your_article_path)
+#' list.files(paste0(your_article_path,"/web/"))
+#' unlink(your_article_folder,recursive = TRUE)
 copy_other_files <- function(from_path) {
     old_working_directory <- getwd()
     setwd(from_path)
+    on.exit(setwd(old_working_directory))
     image_paths <- generate_image_paths(from_path)
     if (! dir.exists("web/")) {
         dir.create("web/", showWarnings = FALSE)
     }
     for (path in image_paths) {
-        print(path)
-        print(paste0("web/", path))
         if(!dir.exists(paste0("web/",dirname(path)))) {
                 dir.create(paste0("web/",dirname(path)),showWarnings = TRUE)
         }
@@ -185,14 +212,12 @@ copy_other_files <- function(from_path) {
     extensions <- c("*.bib", "*.pdf", "*.R", "*.bbl")
     target_files <- unique(grep(paste(
         extensions, collapse = "|"), file_list, value = TRUE))
-    print(target_files)
     file.copy(target_files,
               to = "web/",
               copy.mode = TRUE,
               recursive = FALSE, )
-    setwd(old_working_directory)
+
 }
-#------------TODO: Deprecate this function if unused ---------------------------
 copy_to_web <- function(rel_path, ext, article_dir){
     article_dir <- xfun::normalize_path(article_dir)
     if (! grepl(paste0(".",ext,"$"),rel_path)) {
@@ -219,6 +244,7 @@ copy_to_web <- function(rel_path, ext, article_dir){
         sep = "")
 
 }
+#-------------------------------------------------------------------------------
 
 #' generate image paths
 #'

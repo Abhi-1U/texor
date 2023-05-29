@@ -20,8 +20,12 @@ null
 a wrapper function for logging different types of log entries
 }
 \examples{
- wd <-  system.file("examples/article", package = "texor")
-texor::log_setup(wd, "log-file.log", "texor" , 2)
+dir.create(your_article_folder <- file.path(tempdir(), "exampledir"))
+example_files <- system.file("examples/article", package = "texor")
+x <- file.copy(from = example_files,to=your_article_folder,recursive = TRUE)
+your_article_path <- paste(your_article_folder,"article",sep="/")
+texor::log_setup(your_article_path, "log-file.log", "texor" , 2)
 texor::texor_log("Hello", "INFO", 2)
-cat(readLines(paste(wd,"/log-file.log",sep="")),sep="\n")
+cat(readLines(paste(your_article_path,"/log-file.log",sep="")),sep="\n")
+unlink(your_article_folder,recursive = TRUE)
 }

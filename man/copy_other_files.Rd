@@ -17,6 +17,11 @@ Copies supporting documents like images,pdf,bib files into the output
 folder for building the HTML version of the R-Markdown file.
 }
 \examples{
-# ToDo
-
+article_dir <- system.file("examples/article", package = "texor")
+dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+your_article_path <- paste(your_article_folder,"article",sep="/")
+texor::copy_other_files(your_article_path)
+list.files(paste0(your_article_path,"/web/"))
+unlink(your_article_folder,recursive = TRUE)
 }

@@ -145,7 +145,7 @@ make_png_files <- function(input_file_paths) {
     input_file_paths[[1]] <- xfun::normalize_path(input_file_paths[[1]])
     if (length(input_file_paths) == 1) {
         if (basename(input_file_paths[[1]]) == "NA") {
-            print("No files to convert")
+            warning("No files to convert")
             return("")
         }
     }
@@ -158,5 +158,5 @@ make_png_files <- function(input_file_paths) {
                               pages = 1,
                               filenames = png_file)
     }
-    print("made PNG graphics @ 600 dpi density")
+    message("made PNG graphics @ 600 dpi density")
 }

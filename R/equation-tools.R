@@ -24,7 +24,7 @@ patch_equations <- function(article_dir) {
             raw_lines[end_pos] <- mod_end_line
         }
     } else {
-        print("The equations do not align")
+        warning("The equations do not align")
     }
     src_file_data <- readLines(file_path)
     backup_file <- paste(file_path, ".bk", sep = "")

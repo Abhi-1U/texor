@@ -124,6 +124,13 @@ find_image_extension <- function(article_dir, image_path, is_tikz = FALSE) {
     }
 }
 
+#' find a file in the directory
+#'
+#' @param article_dir path to the directory which contains tex article
+#' @param src_path path of the file relative to article_dir
+#'
+#' @return image extension
+#' @noRd
 find_file <- function(article_dir, src_path) {
     article_dir <- xfun::normalize_path(article_dir)
     abs_img_path <- paste(article_dir,src_path,sep="/")
@@ -144,6 +151,12 @@ find_file <- function(article_dir, src_path) {
     return(target_extension)
 }
 
+#' Figure count
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return count of images
+#' @noRd
 figure_count <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     tex_file <- get_texfile_name(article_dir)
@@ -160,17 +173,36 @@ figure_count <- function(article_dir) {
     return(fig_image_count)
 }
 
+#' image count in an environment
+#'
+#' @param fig_lines the enclosed figure lines from LaTeX file
+#'
+#' @return Number of images in an environment block
+#' @noRd
 env_image_count <- function(fig_lines) {
     graphics_patt <- "\\s*\\\\includegraphics"
     begin_break_points <- which(grepl(graphics_patt, fig_lines))
     return(length(begin_break_points))
 }
+#' Relative image position in environment
+#'
+#' @param fig_lines the enclosed figure lines from LaTeX file
+#'
+#' @return the relative position(line no) of target image
+#' @noRd
 env_image_position <- function(fig_lines) {
     graphics_patt <- "\\s*\\\\includegraphics"
     begin_break_points <- which(grepl(graphics_patt, fig_lines))
     return(begin_break_points)
 }
 
+#' count for all the images in a LaTeX file
+#'
+#' @param article_dir path to the directory which contains tex article
+#' @param file_name name of the LaTeX file
+#'
+#' @return number of images in the LaTeX file
+#' @noRd
 image_count <- function(article_dir, file_name) {
     article_dir <- xfun::normalize_path(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")

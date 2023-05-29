@@ -26,13 +26,13 @@ patch_table_env <- function(article_dir) {
     raw_lines <- readLines(file_path)
     raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\begin\\{table\\*\\}", "table\\*", "table")
-    print("Changed \\begin{table\\*} to \\begin{table}")
+    warning("Changed \\begin{table\\*} to \\begin{table}")
     raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\end\\{table\\*\\}", "table\\*", "table")
-    print("Changed \\end{table*} to \\end{table}")
+    warning("Changed \\end{table*} to \\end{table}")
     raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\multicolumn", "multicolumn", "multicolumnx")
-    print("changed \\multicolumn to \\multicolumnx")
+    warning("changed \\multicolumn to \\multicolumnx")
     # testing functionality
     #return(raw_lines)
     # backup old file

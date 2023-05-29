@@ -1,4 +1,4 @@
-test_that("multiplication works", {
+test_that("pdf conversion", {
   article_dir <- system.file("examples/pdf_conversion",
                              package = "texor")
   file_path <- paste0(article_dir,"/normal.pdf")

@@ -154,25 +154,25 @@ patch_figure_env <- function(article_dir, with_alg = TRUE) {
     raw_lines <- readLines(file_path)
     raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\begin\\{figure\\*\\}", "figure\\*", "figure")
-    print("Changed \\begin{figure\\*} to \\begin{figure}")
+    warning("Changed \\begin{figure\\*} to \\begin{figure}")
     raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\end\\{figure\\*\\}", "figure\\*", "figure")
-    print("Changed \\end{figure\\*} to \\end{figure}")
+    warning("Changed \\end{figure\\*} to \\end{figure}")
 
     raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\begin\\{algorithmic}", "algorithmic", "algorithm")
-    print("Changed \\begin{algorithmic} to \\begin{algorithm}")
+    warning("Changed \\begin{algorithmic} to \\begin{algorithm}")
     raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\end\\{algorithmic}", "algorithmic", "algorithm")
-    print("Changed \\end{algorithmic} to \\end{algorithm}")
+    warning("Changed \\end{algorithmic} to \\end{algorithm}")
 
     if (with_alg) {
         raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\begin\\{algorithm}", "algorithm", "figure")
-        print("Changed \\begin{algorithm} to \\begin{figure}")
+        warning("Changed \\begin{algorithm} to \\begin{figure}")
         raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\end\\{algorithm}", "algorithm", "figure")
-        print("Changed \\end{algorithm} to \\end{figure}")
+        warning("Changed \\end{algorithm} to \\end{figure}")
     }
     # backup old file
     src_file_data <- readLines(file_path)
