@@ -22,5 +22,9 @@ the conversion process.
 \examples{
 article_dir <- system.file("examples/article",
                  package = "texor")
-texor::include_style_file(article_dir)
+dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+your_article_path <- paste(your_article_folder,"article",sep="/")
+texor::include_style_file(your_article_path)
+unlink(your_article_folder,recursive = TRUE)
 }

@@ -7,7 +7,15 @@
 #' @examples
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor:::patch_code_env(dir)
+#' texor:::patch_table_env(dir)
+#' texor:::patch_equations(dir)
+#' texor:::patch_figure_env(dir)
 #' texor::pre_conversion_statistics(article_dir,write_yaml = FALSE)
+#' unlink(your_article_folder,recursive = TRUE)
 pre_conversion_statistics <- function(article_dir, write_yaml = TRUE){
     article_dir <- xfun::normalize_path(article_dir)
     con_stat <- list()

@@ -14,7 +14,11 @@
 #' @examples
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
-#' texor::include_style_file(article_dir)
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::include_style_file(your_article_path)
+#' unlink(your_article_folder,recursive = TRUE)
 include_style_file <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # Remove the RJournal.sty file to the article directory
@@ -32,7 +36,6 @@ include_style_file <- function(article_dir) {
     wrapper_file_content <- readLines(file.path(article_dir, file_name))
     wrapper_path <- paste(article_dir, file_name, sep = "/")
     if (!identical(which(grepl("\\usepackage\\{Metafix\\}",wrapper_file_content)),integer(0))) {
-        #print("Metafix style file already exists")
         return(NULL)
     }
     doc_start <- which(grepl("^\\s*\\\\begin\\{document\\}",
@@ -71,24 +74,23 @@ include_style_file <- function(article_dir) {
 #' # Note This is a minimal example to execute this function
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
-#' texor::include_style_file(article_dir)
-#' texor::convert_to_markdown(article_dir)
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::include_style_file(your_article_path)
+#' texor::convert_to_markdown(your_article_path)
+#' unlink(your_article_folder,recursive = TRUE)
 convert_to_markdown <- function(article_dir) {
     # wrapper file name
     article_dir <- xfun::normalize_path(article_dir)
     input_file <- get_wrapper_type(article_dir)
-    print(input_file)
     # resource path for pandoc
     input_file_path <- paste(article_dir, input_file, sep = "/")
-    print(input_file_path)
     abs_file_path <- dirname(input_file_path)
-    print(abs_file_path)
     # markdown equivalent filename
     md_file <- paste(toString(tools::file_path_sans_ext(input_file)),
                      ".md", sep = "")
-    print(md_file)
     md_file_path <- paste(article_dir, md_file, sep = "/")
-    print(md_file_path)
     # a filter to remove new para character from article abstract
     abs_filter <- system.file(
         "abs_filter.lua", package = "texor")
@@ -152,9 +154,13 @@ convert_to_markdown <- function(article_dir) {
 #' # Note This is a minimal example to execute this function
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
-#' texor::include_style_file(article_dir)
-#' texor::convert_to_markdown(article_dir)
-#' texor::generate_rmd(article_dir)
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::include_style_file(your_article_path)
+#' texor::convert_to_markdown(your_article_path)
+#' texor::generate_rmd(your_article_path)
+#' unlink(your_article_folder,recursive = TRUE)
 generate_rmd <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     volume <- 1 # placeholder value
@@ -188,9 +194,6 @@ generate_rmd <- function(article_dir) {
             if (any(email <- grepl("^email:", person))) {
                 author$email <- sub("^email:", "", person[email])
             }
-            #if (!is.na(metadata$emails)) {
-            #    author$email <- metadata$emails[2+person]
-            #}
             fields <- logical(length(person))
             fields[1:2] <- TRUE
             if (any(address <- !(fields | orcid | email))) {
@@ -266,10 +269,7 @@ generate_rmd <- function(article_dir) {
                 web_only = TRUE,
                 mathjax = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js",
                 md_extension = "-tex_math_single_backslash"
-
-                #legacy_pdf = FALSE
             )
-            # `rjtools::rjournal_pdf_article` = pdf_args
         )
     )
     pandoc_md_contents <- readLines(markdown_file)
@@ -308,8 +308,12 @@ generate_rmd <- function(article_dir) {
 #' # Note This is a minimal example to execute this function
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
-#' texor::include_style_file(article_dir)
-#' texor::convert_to_native(article_dir)
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::include_style_file(your_article_path)
+#' texor::convert_to_native(your_article_path)
+#' unlink(your_article_folder,recursive = TRUE)
 convert_to_native <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # wrapper file name
@@ -383,11 +387,15 @@ convert_to_native <- function(article_dir) {
 #' # Note This is a minimal example to execute this function
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
-#' texor::include_style_file(article_dir)
-#' texor::convert_to_markdown(article_dir)
-#' texor::generate_rmd(article_dir)
-#' texor::copy_other_files(article_dir)
-#' texor::produce_html(article_dir,example = TRUE)
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::include_style_file(your_article_path)
+#' texor::convert_to_markdown(your_article_path)
+#' texor::generate_rmd(your_article_path)
+#' texor::copy_other_files(your_article_path)
+#' texor::produce_html(your_article_path,example = TRUE)
+#' unlink(your_article_folder,recursive = TRUE)
 produce_html <- function(article_dir,example = FALSE) {
     if (example){
         return(TRUE)

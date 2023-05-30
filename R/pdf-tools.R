@@ -18,7 +18,11 @@
 #' @examples
 #' article_dir <- system.file("examples/pdf_conversion",
 #'                  package = "texor")
-#' texor::convert_to_png(paste0(article_dir,"/normal.pdf"))
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"pdf_conversion",sep="/")
+#' texor::convert_to_png(paste0(your_article_path,"/normal.pdf"))
+#' unlink(your_article_folder,recursive = TRUE)
 convert_to_png <- function(file_path){
     file_path <- xfun::normalize_path(file_path)
     if (! grepl(".pdf$",file_path)) {
@@ -28,6 +32,7 @@ convert_to_png <- function(file_path){
         tools::file_path_sans_ext(file_path)), ".png",
         sep = "")
     pdftools::pdf_convert(file_path,
+                          format = "png",
                           dpi = 600,
                           pages = 1,
                           filenames = png_file)
@@ -40,7 +45,7 @@ convert_to_png <- function(file_path){
 #' @param fig_block block of image data
 #'
 #' @return modified fig_block
-#' @export
+#' @noRd
 convert_all_pdf <- function(article_dir, fig_block) {
     article_dir <- xfun::normalize_path(article_dir)
     for (iterator in seq_along(fig_block)) {
@@ -98,6 +103,12 @@ convert_all_pdf <- function(article_dir, fig_block) {
     return(fig_block)
 }
 
+#' convert pdf files to png
+#'
+#' @param article_dir path to the article working directory
+#'
+#' @return makes png files in the directory
+#' @noRd
 pdf_to_png <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     input_files <- find_pdf_files(article_dir)
@@ -107,6 +118,12 @@ pdf_to_png <- function(article_dir) {
     make_png_files(input_file_paths)
 }
 
+#' find pdf files in article_dir
+#'
+#' @param article_dir path to the article working directory
+#'
+#' @return image paths of pdf files
+#' @noRd
 find_pdf_files <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # wrapper file name
@@ -138,6 +155,12 @@ find_pdf_files <- function(article_dir) {
     return(pdf_image_paths)
 }
 
+#' Make png file out of pdf file
+#'
+#' @param input_file_paths a list of pdf file paths to be converted
+#'
+#' @return converts pdf to png
+#' @noRd
 make_png_files <- function(input_file_paths) {
         if (length(input_file_paths)==0) {
         return()
@@ -151,9 +174,10 @@ make_png_files <- function(input_file_paths) {
     }
     for (file in seq_along(input_file_paths)) {
         png_file <- paste(toString(
-            tools::file_path_sans_ext(input_file_paths[[file]][1])), ".png",
-            sep = "")
+            tools::file_path_sans_ext(input_file_paths[[file]][1]), ".png",
+            sep = ""))
         pdftools::pdf_convert(input_file_paths[[file]][1],
+                              format = "png",
                               dpi = 600,
                               pages = 1,
                               filenames = png_file)

@@ -4,10 +4,12 @@
 \alias{latex_to_web}
 \title{latex to web}
 \usage{
-latex_to_web(dir)
+latex_to_web(dir, log_steps = TRUE)
 }
 \arguments{
 \item{dir}{directory path}
+
+\item{log_steps}{Enable/Disable Logging of conversion steps}
 }
 \value{
 RJweb article document
@@ -16,6 +18,11 @@ RJweb article document
 automated function for converting a single RJarticle to web
 }
 \examples{
-# TODO
-
+article_dir <- system.file("examples/article",
+                 package = "texor")
+dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+your_article_path <- paste(your_article_folder,"article",sep="/")
+texor::latex_to_web(your_article_path,log_steps = FALSE)
+unlink(your_article_folder,recursive = TRUE)
 }

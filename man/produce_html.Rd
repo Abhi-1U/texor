@@ -22,9 +22,13 @@ call rmarkdown::render to generate html file
 # Note This is a minimal example to execute this function
 article_dir <- system.file("examples/article",
                  package = "texor")
-texor::include_style_file(article_dir)
-texor::convert_to_markdown(article_dir)
-texor::generate_rmd(article_dir)
-texor::copy_other_files(article_dir)
-texor::produce_html(article_dir,example = TRUE)
+dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+your_article_path <- paste(your_article_folder,"article",sep="/")
+texor::include_style_file(your_article_path)
+texor::convert_to_markdown(your_article_path)
+texor::generate_rmd(your_article_path)
+texor::copy_other_files(your_article_path)
+texor::produce_html(your_article_path,example = TRUE)
+unlink(your_article_folder,recursive = TRUE)
 }

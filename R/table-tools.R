@@ -16,9 +16,13 @@
 #' @export
 #'
 #' @examples
-#' wd <- system.file("examples/article",
+#' article_dir <- system.file("examples/article",
 #'                  package = "texor")
-#' texor::patch_table_env(wd)
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::patch_table_env(your_article_path)
+#' unlink(your_article_folder,recursive = TRUE)
 patch_table_env <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)

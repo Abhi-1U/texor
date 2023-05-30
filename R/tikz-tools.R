@@ -5,7 +5,7 @@
 #' @param article_dir path to the directory which contains RJ article
 #'
 #' @return tikz image
-#' @export
+#' @noRd
 convert_tikz <- function(fig_block, article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     caption_point <- which(grepl("\\\\captionsetup\\{",fig_block$data))
@@ -72,8 +72,6 @@ convert_tikz <- function(fig_block, article_dir) {
         dir.create(web_tikz_folder)
     }
     fig_block$copied <- TRUE
-    #print(paste0("tikz_png_path : ",tikz_png_path))
-    #print(paste0("web_tikz_png_path : ",web_tikz_png_path))
     tryCatch(file.copy(tikz_png_path,web_tikz_png_path),
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
@@ -98,6 +96,7 @@ convert_tikz <- function(fig_block, article_dir) {
 #' @param article_dir path to the article working directory
 #' @param iterator tikz image number
 #' @return tikz image data in a list of strings
+#' @noRd
 extract_tikz_style <- function(fig_data, article_dir, iterator) {
     article_dir <- xfun::normalize_path(article_dir)
     tikz_file_name <- "tikz_style_data.yaml"
@@ -124,6 +123,12 @@ extract_tikz_style <- function(fig_data, article_dir, iterator) {
 }
 
 
+#' extracts tikz libraries from the wrapper file
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return lines of tikz library data
+#' @noRd
 extract_tikz_lib <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     wrapper_file <- get_wrapper_type(article_dir)
@@ -138,6 +143,12 @@ extract_tikz_lib <- function(article_dir) {
     return(tikz_libs[tikz_libs_pos])
 }
 
+#' Search for Tikz image in a LaTeX file
+#'
+#' @param fig_lines block of figure lines from LaTeX file
+#'
+#' @return TRUE/FALSE
+#' @noRd
 find_tikz <- function(fig_lines) {
     tikz_image_start <- which(grepl("\\\\begin\\{tikzpicture",
                                     fig_lines))
@@ -152,6 +163,13 @@ find_tikz <- function(fig_lines) {
     return(FALSE)
 }
 
+#' Count tikz image instances
+#'
+#' @param article_dir path to the directory which contains tex article
+#' @param file_name name of the LaTeX file
+#'
+#' @return count of tikz images
+#' @noRd
 tikz_count <- function(article_dir, file_name) {
     article_dir <- xfun::normalize_path(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
@@ -182,6 +200,7 @@ tikz_count <- function(article_dir, file_name) {
 #' @param article_dir path to the directory which contains tex article
 #'
 #' @return outfile.tex a modified latex document
+#' @noRd
 pre_process_tikz <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # wrapper file name
@@ -215,6 +234,14 @@ pre_process_tikz <- function(article_dir) {
 #'
 #' @return TRUE/FALSE(boolean)
 #' @export
+#' @examples
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::article_has_tikz(your_article_path)
+#' unlink(your_article_folder,recursive = TRUE)
 article_has_tikz <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # reads the complete file
@@ -230,6 +257,13 @@ article_has_tikz <- function(article_dir) {
     }
 }
 
+#' include tikz image in the modified LaTeX file
+#'
+#' @param fig_block block of figure lines
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return adds a line to the file
+#' @noRd
 insert_tikz_png <- function(fig_block,article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)
@@ -244,7 +278,7 @@ insert_tikz_png <- function(fig_block,article_dir) {
     before_including_image <- raw_lines[1:figure_starts[fig_block$image_number]]
     remaining_line <- raw_lines[((figure_starts[fig_block$image_number])+1):length(raw_lines)]
     if (!identical(which(grepl("\\\\includegraphics\\{tikz/",remaining_line)),integer(0))) {
-        print("Image already included")
+        warning("Image already included")
         return(TRUE)
     }
     include_png_line <- paste0("\\includegraphics{tikz/",gsub(":","",fig_block$label),".png}")
