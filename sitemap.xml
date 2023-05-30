@@ -34,12 +34,6 @@
     <loc>/reference/article_has_tikz.html</loc>
   </url>
   <url>
-    <loc>/reference/convert_all_pdf.html</loc>
-  </url>
-  <url>
-    <loc>/reference/convert_tikz.html</loc>
-  </url>
-  <url>
     <loc>/reference/convert_to_markdown.html</loc>
   </url>
   <url>
@@ -56,9 +50,6 @@
   </url>
   <url>
     <loc>/reference/count_inline.html</loc>
-  </url>
-  <url>
-    <loc>/reference/extract_tikz_style.html</loc>
   </url>
   <url>
     <loc>/reference/generate_rmd.html</loc>
@@ -92,9 +83,6 @@
   </url>
   <url>
     <loc>/reference/pre_conversion_statistics.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pre_process_tikz.html</loc>
   </url>
   <url>
     <loc>/reference/produce_html.html</loc>

@@ -81,15 +81,19 @@ These are due to the pandoc's limitations and ease in conversion."><!-- mathjax 
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">wd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/article"</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">article_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/article"</span>,</span></span>
 <span class="r-in"><span>                 package <span class="op">=</span> <span class="st">"texor"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu">patch_table_env</span><span class="op">(</span><span class="va">wd</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">your_article_folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"tempdir"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">article_dir</span>, to <span class="op">=</span> <span class="va">your_article_folder</span>,recursive <span class="op">=</span> <span class="cn">TRUE</span>,<span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">your_article_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">your_article_folder</span>,<span class="st">"article"</span>,sep<span class="op">=</span><span class="st">"/"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu">patch_table_env</span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found  1 Matches for target : table\*</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Changed \begin{table\*} to \begin{table}</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found  1 Matches for target : table\*</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Changed \end{table*} to \end{table}</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found  2 Matches for target : multicolumn</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>changed \multicolumn to \multicolumnx</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">your_article_folder</span>,recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
