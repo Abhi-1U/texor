@@ -71,24 +71,39 @@ article (included with the package
 ``` r
 # for a single LaTeX article 
 texor::latex_to_web(article_dir)
-# for multiple articles in RJ folder structure
-
-#base dir 
-article_dir <- "C:/Users/abhis/Documents/projects/gsoc-2022/original"
-# list of journal number directories
-journal_dirs <- list.dirs(article_dir,recursive = FALSE)
-# list of individual slug directories
-slug_dirs <- lapply(journal_dirs,function(journal_dir) {
-    list.dirs(journal_dir,recursive = FALSE)
-})
-# creating a single list of all slug directories
-slug_dirs <- unlist(slug_dirs)
-# Calling 
-for (dir in slug_dirs) {
-    #print(dir)
-    getwd()
-    # below function will create a log file of success/error in current
-    # working directory while running the texor::latex_to_web() function
-    texor::convert_to_html(dir)
-}
 ```
+
+``` r
+# A running example
+article_dir <- system.file("examples/article", package = "texor")
+dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+your_article_path <- paste(your_article_folder,"article",sep="/")
+# view your original article at
+your_article_path
+texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE)
+# view  your converted and original article at
+paste0(your_article_path,"/web")
+```
+
+## Using texor over multiple files
+
+    # for multiple articles in RJ folder structure
+    #base dir 
+    article_dir <- "C:/Users/abhis/path/to/base"
+    # list of journal number directories
+    journal_dirs <- list.dirs(article_dir,recursive = FALSE)
+    # list of individual slug directories
+    slug_dirs <- lapply(journal_dirs,function(journal_dir) {
+        list.dirs(journal_dir,recursive = FALSE)
+    })
+    # creating a single list of all slug directories
+    slug_dirs <- unlist(slug_dirs)
+    # Calling 
+    for (dir in slug_dirs) {
+        #print(dir)
+        getwd()
+        # below function will create a log file of success/error in current
+        # working directory while running the texor::latex_to_web() function
+        texor::convert_to_html(dir)
+    }
