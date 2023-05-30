@@ -2,6 +2,7 @@
 #' @description automated function for converting a single RJarticle to web
 #' @param dir directory path
 #' @param log_steps Enable/Disable Logging of conversion steps
+#' @param example for examples only by default keep it FALSE.
 #' @return RJweb article document
 #'
 #' @export
@@ -11,9 +12,9 @@
 #' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
-#' texor::latex_to_web(your_article_path,log_steps = FALSE)
+#' texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE)
 #' unlink(your_article_folder,recursive = TRUE)
-latex_to_web <- function(dir,log_steps = TRUE) {
+latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
     print(dir)
     dir <- xfun::normalize_path(dir)
     date <- Sys.Date()
@@ -107,7 +108,13 @@ latex_to_web <- function(dir,log_steps = TRUE) {
         convert_to_markdown(dir) # Step 7
         copy_other_files(dir) # Step 8
         texor::generate_rmd(dir) # Step 9
-        texor::produce_html(dir) # Step 10
+        if(example){
+            texor::produce_html(dir,example = TRUE) # Step 10
+        }
+        else {
+            texor::produce_html(dir) # Step 10
+        }
+
         return(TRUE)
     }
 }
