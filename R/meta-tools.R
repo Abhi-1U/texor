@@ -84,19 +84,18 @@ c.status <- c.status_list <- function(..., recursive = FALSE) {
     status_list(unlist(statuses, recursive = FALSE))
 }
 
-#' @export
 format.status <- function(x, ...) {
     paste(format(x$date), " ", x$status,
           if (!empty(x$comments)) paste(" [", x$comments, "]", sep = ""),
           sep = ""
     )
 }
-#' @export
+
 print.status <- function(x, ...) cat(format(x), "\n")
 
-#' @importFrom utils adist
+
 amatch_status <- function(status) {
-    ldist <- adist(status, valid_status,
+    ldist <- utils::adist(status, valid_status,
                    ignore.case = TRUE, partial = FALSE,
                    costs = c(ins = 0.5, sub = 1, del = 2)
     )[1, ]
@@ -206,13 +205,10 @@ id <- function(year, seq) {
 
 is.id <- function(x) inherits(x, "id")
 
-#' @method format id
-#' @export
 format.id <- function(x, ...) {
     paste(x$year, sprintf("%02d", x$seq), sep = "-")
 }
-#' @method print id
-#' @export
+
 print.id <- function(x, ...) cat(format(x), "\n")
 
 year <- function() as.POSIXlt(Sys.Date())$year + 1900
@@ -221,8 +217,6 @@ is.number <- function(x) {
     suppressWarnings(!is.na(as.numeric(x)))
 }
 
-#' @method as.character id
-#' @export
 as.character.id <- function(x, ...)
     format.id(x)
 
@@ -251,7 +245,6 @@ address <- function(email = NULL, name = NULL, comment = NULL) {
     structure(list(name = name, email = email, comment = comment), class = "address")
 }
 
-#' @export
 format.address <- function(x, ...) {
     name <- if (!is.null(x$name)) paste('"', x$name, '"', sep = "")
     email <- if (!is.null(x$email)) paste("<", x$email, ">", sep = "")

@@ -63,6 +63,6 @@ load_article <- function(path, quiet = FALSE) {
 
 "%NA%" <- function(a, b) ifelse(is.na(a), b, a)
 
-`%@%` <- function(x, attribute) {
+"%@%" <- function(x, attribute) {
     attr(x, attribute)
 }

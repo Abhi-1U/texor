@@ -29,9 +29,5 @@ str_c <- function(x, sep) {
 empty <- function(x) UseMethod("empty")
 
 empty.character <- function(x) str_length(x) == 0
-#' @method empty address_list
-#' @export
 empty.address_list <- function(x) length(x) == 0
-#' @method empty NULL
-#' @export
 empty.NULL <- function(x) TRUE
