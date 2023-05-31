@@ -4,7 +4,7 @@ test_that("Include style file", {
     dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
     x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
     your_article_path <- paste(your_article_folder,"article",sep="/")
-    file_data <- readLines(paste0(test_wd,"/RJwrapper.tex"))
+    file_data <- readLines(paste0(your_article_path,"/RJwrapper.tex"))
     texor::include_style_file(your_article_path)
     expect_equal(file.exists(paste0(your_article_path,"/Metafix.sty")), TRUE)
     mod_file_data <- readLines(paste0(your_article_path,"/RJwrapper.tex"))
