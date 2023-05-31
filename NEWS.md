@@ -7,7 +7,7 @@
 3. Included `web_only` parameter for embedding PDF or using Rmarkdown to produce HTML.
 4. Updated to MathJax Version3 and added `-tex_math_single_backslash` extension to pandoc for better math handling.
 5. Support for sample articles without the directory structure as required for RJ articles.
-6. Updated Instructions and examples.
+6. Updated Instructions and examples (hence closing GitHub Issue #23).
 7. Updated contributor information.
 8. More examples and test cases.
 
@@ -21,6 +21,9 @@
 6. Removes `RJournal.sty` file as it conflicts with inner workings of pandoc.
 7. Fixed file extension editing using `xfun::with_ext()` instead of `gsub()`.
 8. More precise `title` and `description`.
+9. Added rebib as a dependency given it is now available on cran(hence closing #38)
+10. Fixed bugs related to copying files and images (Github Issue #36 and #34)
+
 
 
 # Version 0.6.9
