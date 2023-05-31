@@ -4,7 +4,7 @@ format \label{eq:xyz} to bookdown format (\#eq:xyz)
 pandoc generated sample : $\mbox{$\mathbf B$}$
 filter generated equivalent : [\(\mbox{$\mathbf B$}\)]
 Conversion type : LaTeX --> Markdown
-Copyright: © 2022 Abhishek Ulayil
+Copyright: © 2023 Abhishek Ulayil
 License:   MIT – see LICENSE file for details
 --]]
 
@@ -15,9 +15,7 @@ Applies the filter to Math elements
 --]]
 function Math(el)
     if el.text:match('label') then
-        --print("TRUE")
         local text = pandoc.utils.stringify(el.text)
-        --label = string.gsub(text, "\\label{^\\{(.-)\\}$}", "%1")
         s, e, l =string.find(text,"\\label{(.-)}")
         table.insert(equation_labels,l)
         -- Bookdown does not support . _ in equations hence substituting them as hyphen
@@ -27,18 +25,13 @@ function Math(el)
         if (not l:match("^eq:")) then
             l = "eq:" .. l
         end
-        --label = string.gsub(label, "",)
-        --print(l)
         el.text = text .. [[  (\#]] .. l .. [[)  ]]
-        --print(text)
     else
         --pass
     end
     local left = el.mathtype == 'InlineMath' and '\\(' or '\n$$'
     local right = el.mathtype == 'InlineMath' and '\\)' or '$$'
     return pandoc.RawInline('markdown', left .. el.text .. right)
-    --print(el.text)
-    --return(el)
 end
 
 function Link(el)
@@ -50,8 +43,6 @@ function Link(el)
     end
     for _,label in pairs(equation_labels) do
         if ("#"..label) == el.target then
-            print(label)
-            print(el.target)
             local link_text = el.target
             link_text = string.gsub(link_text, "%.", "-")
             link_text = string.gsub(link_text, "_", "-")
@@ -75,15 +66,7 @@ function Link(el)
     if is_bkdwn then
         return pandoc.RawInline('markdown', bkdwn)
     else
-        --if el.attributes[1] ~= nil then
-        --   if el.attributes[1][2] == "ref" then
-        --       print([[\@ref(]] .. el.target:gsub("^%#","") .. [[)]])
-        --      return pandoc.RawInline('markdown', [[\@ref(]] .. el.target:gsub("^%#","") .. [[)]])
-        --   end
-        --else
-           return(el)
-        --end
+        return(el)
     end
 end
 
---gsub("& ?= ?&?", "& =", x)

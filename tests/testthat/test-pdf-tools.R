@@ -1,7 +1,10 @@
 test_that("pdf conversion", {
-  article_dir <- system.file("examples/pdf_conversion",
-                             package = "texor")
-  file_path <- paste0(article_dir,"/normal.pdf")
-  texor::convert_to_png(file_path)
-  expect_equal(file.exists(paste0(article_dir,"/normal.png")), TRUE)
+    article_dir <- system.file("examples/pdf_conversion", package = "texor")
+    dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+    x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+    your_article_path <- paste(your_article_folder,"pdf_conversion",sep="/")
+    file_path <- paste0(your_article_path,"/normal.pdf")
+    texor::convert_to_png(file_path)
+    expect_equal(file.exists(paste0(your_article_path,"/normal.png")), TRUE)
+    unlink(your_article_folder,recursive = TRUE)
 })
