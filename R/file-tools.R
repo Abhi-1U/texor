@@ -209,13 +209,13 @@ copy_other_files <- function(from_path) {
         file.copy(path, paste0("web/", path), overwrite = TRUE)
     }
     file_list <- list.files(recursive = FALSE)
-    extensions <- c("*.bib", "*.pdf", "*.R", "*.bbl")
+    extensions <- c("*.bib$", "*.pdf$", "*.R$", "*.bbl$", "_files$")
     target_files <- unique(grep(paste(
         extensions, collapse = "|"), file_list, value = TRUE))
     file.copy(target_files,
               to = "web/",
               copy.mode = TRUE,
-              recursive = FALSE, )
+              recursive = TRUE, )
 
 }
 copy_to_web <- function(rel_path, ext, article_dir){

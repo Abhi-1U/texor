@@ -172,11 +172,11 @@ make_png_files <- function(input_file_paths) {
             return("")
         }
     }
-    for (file in seq_along(input_file_paths)) {
+    for (file_iter in seq_along(input_file_paths)) {
         png_file <- paste(toString(
-            tools::file_path_sans_ext(input_file_paths[[file]][1]), ".png",
-            sep = ""))
-        pdftools::pdf_convert(input_file_paths[[file]][1],
+            tools::file_path_sans_ext(input_file_paths[[file_iter]][1])), ".png",
+            sep = "")
+        pdftools::pdf_convert(input_file_paths[[file_iter]][1],
                               format = "png",
                               dpi = 600,
                               pages = 1,
