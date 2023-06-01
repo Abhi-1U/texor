@@ -1,4 +1,9 @@
-
+--[[
+find-pdf-files – extract list of pdf files paths.
+Note: In pandoc use --from as latex
+Copyright: © 2023 Abhishek Ulayil
+License:   MIT – see LICENSE file for details
+--]]
 
 image_path_list = {}
 old_session = false

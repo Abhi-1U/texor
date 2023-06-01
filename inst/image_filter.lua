@@ -1,4 +1,9 @@
-
+--[[
+image-filter – To correct image paths without extensions.
+Note: In pandoc use --from as latex
+Copyright: © 2023 Abhishek Ulayil
+License:   MIT – see LICENSE file for details
+--]]
 
 function removePDFExtensions(src)
   return src:gsub("%.pdf", "")

@@ -210,11 +210,9 @@ pre_process_tikz <- function(article_dir) {
     abs_file_path <- dirname(input_file_path)
     latex_template <- system.file("latex.template", package = "texor")
     tikz_filter <- system.file("extract_tikz.lua", package = "texor")
-    #alg_filter <- system.file("extract_algo.lua", package = "texor")
     pandoc_opt <- c(
         "--resource-path", abs_file_path,
         "--lua-filter", tikz_filter,
-        #"--lua-filter", alg_filter,
         "--template", latex_template)
     input_format <- "latex+raw_tex"
     output_format <- "latex"

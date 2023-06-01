@@ -49,7 +49,6 @@ function Image(el)
       attribute_1 = el.attributes
       if el.attributes[1][2]:match('%\\') then
         local width = tonumber(attribute_1[1][2]:match('%d+.%d+'))
-        print(attribute_1[1][2])
         if(attribute_1[1][2]:match('%d+.%d+') == nil) then
            el.attributes[1] = {"width",[[100%]]}
         else
@@ -67,7 +66,6 @@ function print_r(arr, indentLevel)
     local indentStr = "#"
 
     if(indentLevel == nil) then
-        print(print_r(arr, 0))
         return
     end
 

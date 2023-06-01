@@ -1,3 +1,9 @@
+--[[
+conversion-metdata – Generate a yaml report of metadata about file after conversion.
+Note: In pandoc use --from as latex
+Copyright: © 2023 Abhishek Ulayil
+License:   MIT – see LICENSE file for details
+--]]
 -- counts environments in a document
 tables = 0
 figure = 0

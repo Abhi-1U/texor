@@ -13,6 +13,13 @@ equation_labels = {}
 --[[
 Applies the filter to Math elements
 --]]
+--[[
+Equation filter – tries to correct and fix the equations and references.
+Note: In pandoc use --from as latex
+Copyright: © 2023 Abhishek Ulayil
+License:   MIT – see LICENSE file for details
+--]]
+
 function Math(el)
     if el.text:match('label') then
         local text = pandoc.utils.stringify(el.text)
