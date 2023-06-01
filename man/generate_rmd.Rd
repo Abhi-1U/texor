@@ -4,10 +4,12 @@
 \alias{generate_rmd}
 \title{Modify Markdown to R-markdown}
 \usage{
-generate_rmd(article_dir)
+generate_rmd(article_dir, example = FALSE)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
+
+\item{example}{To disable execution during examples}
 }
 \value{
 R-markdown file in the web folder
@@ -19,11 +21,12 @@ generate rmarkdown file in output folder
 # Note This is a minimal example to execute this function
 article_dir <- system.file("examples/article",
                  package = "texor")
-dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+dir.create(your_article_folder <- file.path(tempdir(), "tempdir2"))
 x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
-your_article_path <- paste(your_article_folder,"article",sep="/")
+your_article_path <-  xfun::normalize_path(paste(your_article_folder,"article",sep="/"))
 texor::include_style_file(your_article_path)
+rebib::aggregate_bibliography(your_article_path)
 texor::convert_to_markdown(your_article_path)
-texor::generate_rmd(your_article_path)
+texor::generate_rmd(your_article_path, example = TRUE)
 unlink(your_article_folder,recursive = TRUE)
 }

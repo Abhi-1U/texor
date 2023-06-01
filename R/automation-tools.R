@@ -13,7 +13,7 @@
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
 #' texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE)
-#' unlink(your_article_folder,recursive = TRUE)
+#' unlink(your_article_folder, recursive = TRUE)
 latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
     print(dir)
     dir <- xfun::normalize_path(dir)
@@ -107,11 +107,12 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
         meta <- pre_conversion_statistics(dir) # Step 6.5
         convert_to_markdown(dir) # Step 7
         copy_other_files(dir) # Step 8
-        texor::generate_rmd(dir) # Step 9
         if(example){
+            texor::generate_rmd(dir,example = TRUE) # Step 9
             texor::produce_html(dir,example = TRUE) # Step 10
         }
         else {
+            texor::generate_rmd(dir) # Step 9
             texor::produce_html(dir) # Step 10
         }
 

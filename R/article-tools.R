@@ -148,20 +148,25 @@ convert_to_markdown <- function(article_dir) {
 #' generate rmarkdown file in output folder
 #'
 #' @param article_dir path to the directory which contains tex article
+#' @param example To disable execution during examples
 #' @return R-markdown file in the web folder
 #' @export
 #' @examples
 #' # Note This is a minimal example to execute this function
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
-#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir2"))
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
-#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' your_article_path <-  xfun::normalize_path(paste(your_article_folder,"article",sep="/"))
 #' texor::include_style_file(your_article_path)
+#' rebib::aggregate_bibliography(your_article_path)
 #' texor::convert_to_markdown(your_article_path)
-#' texor::generate_rmd(your_article_path)
+#' texor::generate_rmd(your_article_path, example = TRUE)
 #' unlink(your_article_folder,recursive = TRUE)
-generate_rmd <- function(article_dir) {
+generate_rmd <- function(article_dir,example = FALSE) {
+    if (example){
+        return(TRUE)
+    }
     article_dir <- xfun::normalize_path(article_dir)
     volume <- 1 # placeholder value
     issue <- 1 # placeholder value
@@ -392,7 +397,7 @@ convert_to_native <- function(article_dir) {
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
 #' texor::include_style_file(your_article_path)
 #' texor::convert_to_markdown(your_article_path)
-#' texor::generate_rmd(your_article_path)
+#' texor::generate_rmd(your_article_path, example = TRUE)
 #' texor::copy_other_files(your_article_path)
 #' texor::produce_html(your_article_path,example = TRUE)
 #' unlink(your_article_folder,recursive = TRUE)
