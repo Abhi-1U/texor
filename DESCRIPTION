@@ -1,6 +1,6 @@
 Package: texor
 Type: Package
-Title: Converting 'LaTeX' `rjournal` Articles into 'RJ-web-articles'
+Title: Converting 'LaTeX' 'R Journal' Articles into 'RJ-web-articles'
 Version: 0.6.9
 Authors@R: 
     c(person(given = "Abhishek",
@@ -28,7 +28,7 @@ Authors@R:
              email = "dicook@monash.edu",
              role = "ctb",
              comment = c(ORCID = "0000-0002-3813-7155")))
-Description: Articles in the 'rjournal' were first authored in 'LaTeX', which performs 
+Description: Articles in the 'R Journal' were first authored in 'LaTeX', which performs 
     admirably for 'PDF' files but is less than ideal for modern online interfaces.
     The 'texor' package does all the transitional chores and conversions necessary
     to move to the online versions.
