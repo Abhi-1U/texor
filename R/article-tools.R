@@ -62,6 +62,7 @@ include_style_file <- function(article_dir) {
 #' convert latex(wrapper) file to markdown
 #'
 #' @param article_dir path to the directory which contains tex article
+#' @param example for examples only by default keep it FALSE.
 #' @description
 #' Uses pandoc along with several lua filters
 #' found at inst/extdata/filters in texor package
@@ -78,9 +79,12 @@ include_style_file <- function(article_dir) {
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
 #' texor::include_style_file(your_article_path)
-#' texor::convert_to_markdown(your_article_path)
+#' texor::convert_to_markdown(your_article_path, example = TRUE)
 #' unlink(your_article_folder,recursive = TRUE)
-convert_to_markdown <- function(article_dir) {
+convert_to_markdown <- function(article_dir, example = FALSE) {
+    if (example){
+        return(TRUE)
+    }
     # wrapper file name
     article_dir <- xfun::normalize_path(article_dir)
     input_file <- get_wrapper_type(article_dir)
@@ -148,7 +152,7 @@ convert_to_markdown <- function(article_dir) {
 #' generate rmarkdown file in output folder
 #'
 #' @param article_dir path to the directory which contains tex article
-#' @param example To disable execution during examples
+#' @param example for examples only by default keep it FALSE.
 #' @return R-markdown file in the web folder
 #' @export
 #' @examples
@@ -301,13 +305,14 @@ generate_rmd <- function(article_dir,example = FALSE) {
 #' convert latex(wrapper) file to pandoc AST
 #'
 #' @param article_dir path to the directory which contains tex article
+#' @param example for examples only by default keep it FALSE.
 #' @description
 #' Uses pandoc along with several lua filters
 #' found at inst/extdata/filters in texor package
 #' @note  pandoc (along with lua interpreter) is already installed with
 #'  R-studio, hence if not using R-studio you will need to install pandoc.
 #'  https://pandoc.org/installing.html
-#' @return creates a converted markdown file, as well as a pkg_meta.yaml file
+#' @return creates a converted native AST file, as well as a pkg_meta.yaml file
 #' @export
 #' @examples
 #' # Note This is a minimal example to execute this function
@@ -317,9 +322,12 @@ generate_rmd <- function(article_dir,example = FALSE) {
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
 #' texor::include_style_file(your_article_path)
-#' texor::convert_to_native(your_article_path)
+#' texor::convert_to_native(your_article_path, example = TRUE)
 #' unlink(your_article_folder,recursive = TRUE)
-convert_to_native <- function(article_dir) {
+convert_to_native <- function(article_dir, example = FALSE) {
+    if (example){
+        return(TRUE)
+    }
     article_dir <- xfun::normalize_path(article_dir)
     # wrapper file name
     input_file <- get_wrapper_type(article_dir)

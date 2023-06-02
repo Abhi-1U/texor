@@ -105,13 +105,15 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
         patch_equations(dir) # Step 5.5
         patch_figure_env(dir) # Step 6
         meta <- pre_conversion_statistics(dir) # Step 6.5
-        convert_to_markdown(dir) # Step 7
-        copy_other_files(dir) # Step 8
         if(example){
+            copy_other_files(dir) # Step 8
+            convert_to_markdown(dir, example = TRUE) # Step 7
             texor::generate_rmd(dir,example = TRUE) # Step 9
             texor::produce_html(dir,example = TRUE) # Step 10
         }
         else {
+            copy_other_files(dir) # Step 8
+            convert_to_markdown(dir) # Step 7
             texor::generate_rmd(dir) # Step 9
             texor::produce_html(dir) # Step 10
         }

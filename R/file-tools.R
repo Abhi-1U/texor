@@ -8,7 +8,6 @@
 #'2. RJwrap.tex
 #'3. wrapper.tex
 #' @param article_dir path to the directory which contains tex article
-#'
 #' @return String with name of wrapper file or empty
 #' @export
 #' @examples
@@ -168,7 +167,8 @@ get_journal_details <- function(article_dir) {
 #' Copies supporting documents like images,pdf,bib files into the output
 #' folder for building the HTML version of the R-Markdown file.
 #'
-#' @param from_path : String indicating base path for the working directory
+#' @param from_path String indicating base path for the working directory
+#' @param example for examples only by default keep it FALSE.
 #' @return copies dependency files into the output folder.
 #' @export
 #' @examples
@@ -176,14 +176,19 @@ get_journal_details <- function(article_dir) {
 #' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
-#' texor::copy_other_files(your_article_path)
+#' texor::copy_other_files(your_article_path, example = TRUE)
 #' list.files(paste0(your_article_path,"/web/"))
 #' unlink(your_article_folder,recursive = TRUE)
-copy_other_files <- function(from_path) {
+copy_other_files <- function(from_path, example = FALSE) {
     old_working_directory <- getwd()
     setwd(from_path)
     on.exit(setwd(old_working_directory))
-    image_paths <- generate_image_paths(from_path)
+    if (example) {
+        image_paths <- NULL
+    }
+    else {
+        image_paths <- generate_image_paths(from_path)
+    }
     if (! dir.exists("web/")) {
         dir.create("web/", showWarnings = FALSE)
     }
@@ -206,7 +211,12 @@ copy_other_files <- function(from_path) {
                 convert_to_png(xfun::with_ext(path,"pdf"))
             }
         }
-        file.copy(path, paste0("web/", path), overwrite = TRUE)
+        if (is.null(path)){
+            #pass
+        }
+        else {
+            file.copy(path, paste0("web/", path), overwrite = TRUE)
+        }
     }
     file_list <- list.files(recursive = FALSE)
     extensions <- c("*.bib$", "*.pdf$", "*.R$", "*.bbl$", "_files$")

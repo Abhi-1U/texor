@@ -9,7 +9,7 @@ generate_rmd(article_dir, example = FALSE)
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
 
-\item{example}{To disable execution during examples}
+\item{example}{for examples only by default keep it FALSE.}
 }
 \value{
 R-markdown file in the web folder
