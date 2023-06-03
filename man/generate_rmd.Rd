@@ -26,7 +26,7 @@ x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 your_article_path <-  xfun::normalize_path(paste(your_article_folder,"article",sep="/"))
 texor::include_style_file(your_article_path)
 rebib::aggregate_bibliography(your_article_path)
-texor::convert_to_markdown(your_article_path)
+texor::convert_to_markdown(your_article_path, example = TRUE)
 texor::generate_rmd(your_article_path, example = TRUE)
 unlink(your_article_folder,recursive = TRUE)
 }
