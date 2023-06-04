@@ -24,6 +24,12 @@ x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 your_article_path <-  xfun::normalize_path(paste(your_article_folder,"article",sep="/"))
 texor::include_style_file(your_article_path)
 rebib::aggregate_bibliography(your_article_path)
+data <- texor:::handle_figures(your_article_path,
+                    texor::get_texfile_name(your_article_path))
+texor:::patch_code_env(your_article_path) # Step 4
+texor:::patch_table_env(your_article_path) # Step 5
+texor:::patch_equations(your_article_path) # Step 5.5
+texor:::patch_figure_env(your_article_path)
 rmarkdown::pandoc_version()
 list.files(your_article_path)
 texor::convert_to_markdown(your_article_path)
