@@ -61,17 +61,13 @@ folder for building the HTML version of the R-Markdown file.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">copy_other_files</span><span class="op">(</span><span class="va">from_path</span>, example <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">copy_other_files</span><span class="op">(</span><span class="va">from_path</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>from_path</dt>
 <dd><p>String indicating base path for the working directory</p></dd>
-
-
-<dt>example</dt>
-<dd><p>for examples only by default keep it FALSE.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -87,10 +83,20 @@ folder for building the HTML version of the R-Markdown file.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">your_article_folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"tempdir"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">article_dir</span>, to <span class="op">=</span> <span class="va">your_article_folder</span>,recursive <span class="op">=</span> <span class="cn">TRUE</span>,<span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">your_article_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">your_article_folder</span>,<span class="st">"article"</span>,sep<span class="op">=</span><span class="st">"/"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu">copy_other_files</span><span class="op">(</span><span class="va">your_article_path</span>, example <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> logical(0)</span>
+<span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="include_style_file.html">include_style_file</a></span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="fu">rebib</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rebib/man/aggregate_bibliography.html" class="external-link">aggregate_bibliography</a></span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>No Bib files found !</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Cannot aggregate bibliography as there is no BibTeX bibliography</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>No Bib files found !</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> BibTeX file does not exist</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> will parse for bibliography</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> bibtex file created</span>
+<span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu">copy_other_files</span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpN489C7/tempdir/article/RJwrapper.tex --to native --from latex --output /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpN489C7/tempdir/article/temp-native.txt -s --resource-path /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpN489C7/tempdir/article/RJwrapper.tex --lua-filter /Users/runner/work/_temp/Library/texor/image_list_filter.lua </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">your_article_path</span>,<span class="st">"/web/"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> character(0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Rlogo-5.png" "example.bib"</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">your_article_folder</span>,recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
