@@ -4,12 +4,10 @@
 \alias{copy_other_files}
 \title{Copy Supporting Documents like images,bib file,etc.}
 \usage{
-copy_other_files(from_path, example = FALSE)
+copy_other_files(from_path)
 }
 \arguments{
 \item{from_path}{String indicating base path for the working directory}
-
-\item{example}{for examples only by default keep it FALSE.}
 }
 \value{
 copies dependency files into the output folder.
@@ -23,7 +21,7 @@ article_dir <- system.file("examples/article", package = "texor")
 dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 your_article_path <- paste(your_article_folder,"article",sep="/")
-texor::copy_other_files(your_article_path, example = TRUE)
+texor::copy_other_files(your_article_path)
 list.files(paste0(your_article_path,"/web/"))
 unlink(your_article_folder,recursive = TRUE)
 }

@@ -62,7 +62,6 @@ include_style_file <- function(article_dir) {
 #' convert latex(wrapper) file to markdown
 #'
 #' @param article_dir path to the directory which contains tex article
-#' @param example for examples only by default keep it FALSE.
 #' @description
 #' Uses pandoc along with several lua filters
 #' found at inst/extdata/filters in texor package
@@ -79,12 +78,10 @@ include_style_file <- function(article_dir) {
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
 #' texor::include_style_file(your_article_path)
-#' texor::convert_to_markdown(your_article_path, example = TRUE)
+#' rebib::aggregate_bibliography(your_article_path)
+#' texor::convert_to_markdown(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-convert_to_markdown <- function(article_dir, example = FALSE) {
-    if (example){
-        return(TRUE)
-    }
+convert_to_markdown <- function(article_dir) {
     # wrapper file name
     article_dir <- xfun::normalize_path(article_dir)
     input_file <- get_wrapper_type(article_dir)
@@ -152,7 +149,6 @@ convert_to_markdown <- function(article_dir, example = FALSE) {
 #' generate rmarkdown file in output folder
 #'
 #' @param article_dir path to the directory which contains tex article
-#' @param example for examples only by default keep it FALSE.
 #' @return R-markdown file in the web folder
 #' @export
 #' @examples
@@ -164,13 +160,14 @@ convert_to_markdown <- function(article_dir, example = FALSE) {
 #' your_article_path <-  xfun::normalize_path(paste(your_article_folder,"article",sep="/"))
 #' texor::include_style_file(your_article_path)
 #' rebib::aggregate_bibliography(your_article_path)
-#' texor::convert_to_markdown(your_article_path, example = TRUE)
-#' texor::generate_rmd(your_article_path, example = TRUE)
+#' rmarkdown::pandoc_version()
+#' list.files(your_article_path)
+#' texor::convert_to_markdown(your_article_path)
+#' list.files(your_article_path)
+#' cat(readLines(paste(your_article_path,"/RJwrapper.md",sep="")),sep="\n")
+#' texor::generate_rmd(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-generate_rmd <- function(article_dir,example = FALSE) {
-    if (example){
-        return(TRUE)
-    }
+generate_rmd <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     volume <- 1 # placeholder value
     issue <- 1 # placeholder value
@@ -305,7 +302,6 @@ generate_rmd <- function(article_dir,example = FALSE) {
 #' convert latex(wrapper) file to pandoc AST
 #'
 #' @param article_dir path to the directory which contains tex article
-#' @param example for examples only by default keep it FALSE.
 #' @description
 #' Uses pandoc along with several lua filters
 #' found at inst/extdata/filters in texor package
@@ -322,12 +318,10 @@ generate_rmd <- function(article_dir,example = FALSE) {
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
 #' texor::include_style_file(your_article_path)
-#' texor::convert_to_native(your_article_path, example = TRUE)
+#' rebib::aggregate_bibliography(your_article_path)
+#' texor::convert_to_native(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-convert_to_native <- function(article_dir, example = FALSE) {
-    if (example){
-        return(TRUE)
-    }
+convert_to_native <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # wrapper file name
     input_file <- get_wrapper_type(article_dir)
@@ -404,9 +398,9 @@ convert_to_native <- function(article_dir, example = FALSE) {
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
 #' texor::include_style_file(your_article_path)
-#' texor::convert_to_markdown(your_article_path, example = TRUE)
-#' texor::generate_rmd(your_article_path, example = TRUE)
-#' texor::copy_other_files(your_article_path, example = TRUE)
+#' texor::convert_to_markdown(your_article_path)
+#' texor::generate_rmd(your_article_path)
+#' texor::copy_other_files(your_article_path)
 #' texor::produce_html(your_article_path,example = TRUE)
 #' unlink(your_article_folder,recursive = TRUE)
 produce_html <- function(article_dir,example = FALSE) {

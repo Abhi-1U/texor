@@ -5,6 +5,7 @@
 * Windows Server 2022, R-devel, 64 bit (RHub)
 * Fedora Linux, R-devel, clang, gfortran (RHub)
 * Ubuntu Linux 20.04.1 LTS, R-release, GCC (RHub)
+* macOS 13.3.1 (22E261),Mac mini,Apple M1,R 4.3.0,clang-1403.0.22.14.1,GNU Fortran (GCC) 12.2.0 (mac-r-project) 
 
 ## Notes
 There are no references to works/articles in my package that discuss the methods.  

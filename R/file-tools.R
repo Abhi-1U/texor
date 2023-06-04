@@ -168,7 +168,6 @@ get_journal_details <- function(article_dir) {
 #' folder for building the HTML version of the R-Markdown file.
 #'
 #' @param from_path String indicating base path for the working directory
-#' @param example for examples only by default keep it FALSE.
 #' @return copies dependency files into the output folder.
 #' @export
 #' @examples
@@ -176,19 +175,14 @@ get_journal_details <- function(article_dir) {
 #' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
-#' texor::copy_other_files(your_article_path, example = TRUE)
+#' texor::copy_other_files(your_article_path)
 #' list.files(paste0(your_article_path,"/web/"))
 #' unlink(your_article_folder,recursive = TRUE)
-copy_other_files <- function(from_path, example = FALSE) {
+copy_other_files <- function(from_path) {
     old_working_directory <- getwd()
     setwd(from_path)
     on.exit(setwd(old_working_directory))
-    if (example) {
-        image_paths <- NULL
-    }
-    else {
-        image_paths <- generate_image_paths(from_path)
-    }
+    image_paths <- generate_image_paths(from_path)
     if (! dir.exists("web/")) {
         dir.create("web/", showWarnings = FALSE)
     }

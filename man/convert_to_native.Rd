@@ -4,12 +4,10 @@
 \alias{convert_to_native}
 \title{convert LaTeX wrapper to native pandoc AST}
 \usage{
-convert_to_native(article_dir, example = FALSE)
+convert_to_native(article_dir)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
-
-\item{example}{for examples only by default keep it FALSE.}
 }
 \value{
 creates a converted native AST file, as well as a pkg_meta.yaml file
@@ -34,6 +32,7 @@ dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 your_article_path <- paste(your_article_folder,"article",sep="/")
 texor::include_style_file(your_article_path)
-texor::convert_to_native(your_article_path, example = TRUE)
+rebib::aggregate_bibliography(your_article_path)
+texor::convert_to_native(your_article_path)
 unlink(your_article_folder,recursive = TRUE)
 }
