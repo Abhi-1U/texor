@@ -434,6 +434,13 @@ produce_html <- function(article_dir,example = FALSE) {
     if (example){
         return(TRUE)
     }
+    if (! pandoc_version_check()){
+        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
+        return(FALSE)
+    }
+    else {
+        #pass
+    }
     article_dir <- xfun::normalize_path(article_dir)
     article_type <- rjtools::rjournal_web_article
     input_file_path <- paste(article_dir, "web",

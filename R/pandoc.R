@@ -15,7 +15,10 @@ pandoc_version_check <- function(){
         return(FALSE)
     }
 
-    if (as.integer(version_list[1]) >= 2 && as.integer(version_list[2]) >= 17) {
+    if (as.integer(version_list[1]) == 2 && as.integer(version_list[2]) >= 17) {
+        return(TRUE)
+    }
+    if (as.integer(version_list[1]) > 2){
         return(TRUE)
     }
     else {
