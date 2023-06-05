@@ -10,7 +10,11 @@ name: R_cmd_check
 
 jobs:
   rcmdcheck:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
