@@ -16,6 +16,13 @@
 #' unlink(your_article_folder, recursive = TRUE)
 latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
     print(dir)
+    if (! pandoc_version_check()){
+        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
+        return(FALSE)
+    }
+    else {
+        #pass
+    }
     dir <- xfun::normalize_path(dir)
     date <- Sys.Date()
     file_name <- get_texfile_name(dir)
@@ -81,6 +88,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
         texor_log(paste0("Stage-10 | ","Knitting Rmd to html"), "info", 2)
         texor::produce_html(dir)
         texor_log(paste0("Stage-10 | ","Knitted Rmd to html"), "info", 2)
+
         post_data <- yaml::read_yaml(paste0(dir,"/post-conversion-meta.yaml"))
         if (post_data$text$words == 0) {
             texor_log(paste0("Pandoc produced an empty file"), "error", 2)
