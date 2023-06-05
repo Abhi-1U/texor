@@ -31,6 +31,7 @@ article_dir <- system.file("examples/article",
 dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 your_article_path <- paste(your_article_folder,"article",sep="/")
+rmarkdown::pandoc_version()
 texor::include_style_file(your_article_path)
 rebib::aggregate_bibliography(your_article_path)
 texor::convert_to_markdown(your_article_path)

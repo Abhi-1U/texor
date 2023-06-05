@@ -17,7 +17,7 @@
 latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
     print(dir)
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version()," required-v : >=2.17"))
         return(FALSE)
     }
     else {

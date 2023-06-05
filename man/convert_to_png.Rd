@@ -29,6 +29,7 @@ article_dir <- system.file("examples/pdf_conversion",
 dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 your_article_path <- paste(your_article_folder,"pdf_conversion",sep="/")
+rmarkdown::pandoc_version()
 texor::convert_to_png(paste0(your_article_path,"/normal.pdf"))
 unlink(your_article_folder,recursive = TRUE)
 }

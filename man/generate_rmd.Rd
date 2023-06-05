@@ -34,7 +34,6 @@ rmarkdown::pandoc_version()
 list.files(your_article_path)
 texor::convert_to_markdown(your_article_path)
 list.files(your_article_path)
-cat(readLines(paste(your_article_path,"/RJwrapper.md",sep="")),sep="\n")
 texor::generate_rmd(your_article_path)
 unlink(your_article_folder,recursive = TRUE)
 }

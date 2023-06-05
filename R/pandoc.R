@@ -8,7 +8,7 @@
 pandoc_version_check <- function(){
     current_version <- pandoc::pandoc_version()
     if (toString(current_version) != ""){
-        version_list <- unlist(strsplit(toString(pandoc::pandoc_version()),split = "\\."))
+        version_list <- unlist(strsplit(toString(rmarkdown::pandoc_version()),split = "\\."))
     }
     else {
         warning("Pandoc not installed !, please install pandoc >= v2.17 ")

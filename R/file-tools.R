@@ -175,6 +175,7 @@ get_journal_details <- function(article_dir) {
 #' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' rmarkdown::pandoc_version()
 #' texor::include_style_file(your_article_path)
 #' rebib::aggregate_bibliography(your_article_path)
 #' texor::copy_other_files(your_article_path)
@@ -275,7 +276,7 @@ generate_image_paths <- function(article_dir) {
                     "--resource-path", abs_file_path,
                     "--lua-filter", image_list_filter)
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version()," required-v : >=2.17"))
         pdf_image_paths <- NULL
         return(pdf_image_paths)
     }

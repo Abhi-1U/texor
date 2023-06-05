@@ -77,6 +77,7 @@ include_style_file <- function(article_dir) {
 #' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' rmarkdown::pandoc_version()
 #' texor::include_style_file(your_article_path)
 #' rebib::aggregate_bibliography(your_article_path)
 #' texor::convert_to_markdown(your_article_path)
@@ -130,7 +131,7 @@ convert_to_markdown <- function(article_dir) {
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version()," required-v : >=2.17"))
         return(FALSE)
     }
     else {
@@ -177,13 +178,12 @@ convert_to_markdown <- function(article_dir) {
 #' list.files(your_article_path)
 #' texor::convert_to_markdown(your_article_path)
 #' list.files(your_article_path)
-#' cat(readLines(paste(your_article_path,"/RJwrapper.md",sep="")),sep="\n")
 #' texor::generate_rmd(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
 generate_rmd <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version()," required-v : >=2.17"))
         return(FALSE)
     }
     else {
@@ -337,6 +337,7 @@ generate_rmd <- function(article_dir) {
 #' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' rmarkdown::pandoc_version()
 #' texor::include_style_file(your_article_path)
 #' rebib::aggregate_bibliography(your_article_path)
 #' texor::convert_to_native(your_article_path)
@@ -425,6 +426,7 @@ convert_to_native <- function(article_dir) {
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
 #' texor::include_style_file(your_article_path)
+#' rmarkdown::pandoc_version()
 #' texor::convert_to_markdown(your_article_path)
 #' texor::generate_rmd(your_article_path)
 #' texor::copy_other_files(your_article_path)
@@ -435,7 +437,7 @@ produce_html <- function(article_dir,example = FALSE) {
         return(TRUE)
     }
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version()," required-v : >=2.17"))
         return(FALSE)
     }
     else {
