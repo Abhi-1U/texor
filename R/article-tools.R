@@ -129,6 +129,13 @@ convert_to_markdown <- function(article_dir) {
                     "--lua-filter", bookdown_ref_filter)
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
+    if (pandoc_version_check()){
+        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
+        return(FALSE)
+    }
+    else {
+        #pass
+    }
     rmarkdown::pandoc_convert(input_file_path,
                               from = "latex",
                               to = output_format,
@@ -175,6 +182,13 @@ convert_to_markdown <- function(article_dir) {
 #' unlink(your_article_folder,recursive = TRUE)
 generate_rmd <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
+    if (pandoc_version_check()){
+        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
+        return(FALSE)
+    }
+    else {
+        #pass
+    }
     volume <- 1 # placeholder value
     issue <- 1 # placeholder value
     journal_details <- get_journal_details(article_dir)
@@ -375,6 +389,13 @@ convert_to_native <- function(article_dir) {
                     "--lua-filter", bookdown_ref_filter)
     output_format <- "native"
     # This will generate a markdown file with YAML headers.
+    if (pandoc_version_check()){
+        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
+        return(FALSE)
+    }
+    else {
+        #pass
+    }
     rmarkdown::pandoc_convert(input_file_path,
                               from = "latex",
                               to = output_format,

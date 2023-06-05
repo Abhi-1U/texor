@@ -1,0 +1,24 @@
+#' check texor pandoc compatibility
+#' minimum pandoc version required is 2.17
+#' @return TRUE if v >= 2.17, else FALSE
+#' @export
+#'
+#' @examples
+#' texor::pandoc_version_check()
+pandoc_version_check <- function(){
+    current_version <- pandoc::pandoc_version()
+    if (current_version != ''){
+        version_list <- unlist(strsplit(toString(pandoc::pandoc_version()),split = "\\."))
+    }
+    else {
+        warning("Pandoc not installed !, please install pandoc >= v2.17 ")
+        return(FALSE)
+    }
+
+    if (as.integer(version_list[1]) >= 2 && as.integer(version_list[2]) >= 17) {
+        return(TRUE)
+    }
+    else {
+        return(FALSE)
+    }
+}

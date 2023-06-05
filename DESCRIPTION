@@ -48,7 +48,8 @@ Imports:
     xfun,
     logger,
     rjtools,
-    rebib
+    rebib,
+    pandoc
 Suggests: 
     knitr,
     spelling,
