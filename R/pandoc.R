@@ -7,7 +7,7 @@
 #' texor::pandoc_version_check()
 pandoc_version_check <- function(){
     current_version <- pandoc::pandoc_version()
-    if (current_version != ''){
+    if (toString(current_version) != ""){
         version_list <- unlist(strsplit(toString(pandoc::pandoc_version()),split = "\\."))
     }
     else {

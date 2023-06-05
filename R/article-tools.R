@@ -129,7 +129,7 @@ convert_to_markdown <- function(article_dir) {
                     "--lua-filter", bookdown_ref_filter)
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
-    if (pandoc_version_check()){
+    if (! pandoc_version_check()){
         warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
         return(FALSE)
     }
@@ -182,7 +182,7 @@ convert_to_markdown <- function(article_dir) {
 #' unlink(your_article_folder,recursive = TRUE)
 generate_rmd <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
-    if (pandoc_version_check()){
+    if (! pandoc_version_check()){
         warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
         return(FALSE)
     }
@@ -389,7 +389,7 @@ convert_to_native <- function(article_dir) {
                     "--lua-filter", bookdown_ref_filter)
     output_format <- "native"
     # This will generate a markdown file with YAML headers.
-    if (pandoc_version_check()){
+    if (! pandoc_version_check()){
         warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
         return(FALSE)
     }
