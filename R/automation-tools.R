@@ -17,7 +17,7 @@
 #' texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE)
 #' unlink(your_article_folder, recursive = TRUE)
 latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
-    print(dir)
+    message(dir)
     if (! pandoc_version_check()){
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17"))
         return(FALSE)
@@ -118,8 +118,8 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
         if(example){
             copy_other_files(dir) # Step 8
             convert_to_markdown(dir) # Step 7
-            texor::generate_rmd(dir, example = TRUE) # Step 9
-            texor::produce_html(dir, example = TRUE) # Step 10
+            texor::generate_rmd(dir) # Step 9
+            texor::produce_html(dir,example = TRUE) # Step 10
         }
         else {
             copy_other_files(dir) # Step 8

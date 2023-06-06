@@ -12,6 +12,9 @@ There are no references to works/articles in my package that discuss the methods
 This is because this package is built to convert legacy 'LaTeX` article to 
 'Rmarkdown' based 'RJ-web-article' format.
 
+Also there is a general requirement of pandoc >= v2.17. In case its lower than v2.17
+the package will not execute the function, informing the user to upgrade pandoc.
+
 ## R CMD check results
 
 0 errors | 0 warnings | 1 note

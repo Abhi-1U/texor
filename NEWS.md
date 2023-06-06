@@ -10,6 +10,8 @@
 6. Updated Instructions and examples (hence closing GitHub Issue #23).
 7. Updated contributor information.
 8. More examples and test cases.
+9. Pandoc Version checker for better compatibility and experience.
+10. CRAN release.
 
 ## Bug Fixes
 

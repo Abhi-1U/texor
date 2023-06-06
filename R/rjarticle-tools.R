@@ -28,7 +28,7 @@ article <- function(..., quiet = FALSE) {
                  article <- unparsed(...)
                  if (!quiet) {
                      message("Failed to parse: ")
-                     print(article)
+                     message(article)
                      message(e, "\n")
                  }
                  article

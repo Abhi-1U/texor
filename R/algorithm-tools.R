@@ -143,7 +143,7 @@ insert_algorithm_png <- function(fig_block,article_dir) {
     before_including_image <- raw_lines[1:figure_starts[fig_block$image_number]]
     remaining_line <- raw_lines[((figure_starts[fig_block$image_number])+1):length(raw_lines)]
     if (!identical(which(grepl("\\\\includegraphics\\{alg/",remaining_line)),integer(0))) {
-        print("Image already included")
+        message("Image already included")
         return(TRUE)
     }
     include_png_line <- paste0("\\includegraphics{alg/",gsub(":","",fig_block$label),".png}")
