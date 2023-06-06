@@ -118,7 +118,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
         if(example){
             copy_other_files(dir) # Step 8
             convert_to_markdown(dir) # Step 7
-            texor::generate_rmd(dir) # Step 9
+            texor::generate_rmd(dir, example = TRUE) # Step 9
             texor::produce_html(dir,example = TRUE) # Step 10
         }
         else {
