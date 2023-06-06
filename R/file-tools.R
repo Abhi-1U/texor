@@ -276,7 +276,7 @@ generate_image_paths <- function(article_dir) {
                     "--resource-path", abs_file_path,
                     "--lua-filter", image_list_filter)
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version()," required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
         pdf_image_paths <- NULL
         return(pdf_image_paths)
     }

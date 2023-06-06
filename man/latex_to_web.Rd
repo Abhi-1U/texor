@@ -20,6 +20,8 @@ RJweb article document
 automated function for converting a single RJarticle to web
 }
 \examples{
+# Checking for pandoc version
+# texor works with pandoc version >= 2.17
 article_dir <- system.file("examples/article",
                  package = "texor")
 dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))

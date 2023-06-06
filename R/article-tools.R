@@ -72,6 +72,8 @@ include_style_file <- function(article_dir) {
 #' @export
 #' @examples
 #' # Note This is a minimal example to execute this function
+#' # Checking for pandoc version
+#' # texor works with pandoc version >= 2.17
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
 #' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
@@ -131,7 +133,7 @@ convert_to_markdown <- function(article_dir) {
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version()," required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
         return(FALSE)
     }
     else {
@@ -183,7 +185,7 @@ convert_to_markdown <- function(article_dir) {
 generate_rmd <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version()," required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
         return(FALSE)
     }
     else {
@@ -391,7 +393,7 @@ convert_to_native <- function(article_dir) {
     output_format <- "native"
     # This will generate a markdown file with YAML headers.
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version(),"required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
         return(FALSE)
     }
     else {
@@ -437,7 +439,7 @@ produce_html <- function(article_dir,example = FALSE) {
         return(TRUE)
     }
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version()," required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
         return(FALSE)
     }
     else {

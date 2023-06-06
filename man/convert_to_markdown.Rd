@@ -26,6 +26,8 @@ pandoc (along with lua interpreter) is already installed with
 }
 \examples{
 # Note This is a minimal example to execute this function
+# Checking for pandoc version
+# texor works with pandoc version >= 2.17
 article_dir <- system.file("examples/article",
                  package = "texor")
 dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))

@@ -7,6 +7,8 @@
 #'
 #' @export
 #' @examples
+#' # Checking for pandoc version
+#' # texor works with pandoc version >= 2.17
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
 #' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
@@ -17,7 +19,7 @@
 latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
     print(dir)
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",pandoc::pandoc_version()," required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17"))
         return(FALSE)
     }
     else {
