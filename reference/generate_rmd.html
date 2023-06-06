@@ -58,13 +58,18 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_rmd</span><span class="op">(</span><span class="va">article_dir</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_rmd</span><span class="op">(</span><span class="va">article_dir</span>, example <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>article_dir</dt>
 <dd><p>path to the directory which contains tex article</p></dd>
+
+
+<dt>example</dt>
+<dd><p>only enabled for running examples for documentation and
+to enable export of this function.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -101,7 +106,7 @@
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Changed \begin{algorithmic} to \begin{algorithm}</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found 0 Matches for target :  algorithmic</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Changed \end{algorithmic} to \end{algorithm}</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmppfl42c/tempdir2/article/RJwrapper.tex --to native --from latex --output /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmppfl42c/tempdir2/article/temp-native.txt -s --resource-path /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmppfl42c/tempdir2/article/RJwrapper.tex --lua-filter /Users/runner/work/_temp/Library/texor/find_pdf_files.lua </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpbw9dt8/tempdir2/article/RJwrapper.tex --to native --from latex --output /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpbw9dt8/tempdir2/article/temp-native.txt -s --resource-path /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpbw9dt8/tempdir2/article/RJwrapper.tex --lua-filter /Users/runner/work/_temp/Library/texor/find_pdf_files.lua </span>
 <span class="r-in"><span><span class="fu">texor</span><span class="fu">:::</span><span class="fu">patch_code_env</span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span> <span class="co"># Step 4</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found  1 Matches for target : example</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found  1 Matches for target : example</span>
@@ -152,7 +157,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "expected-texor-figure-meta.yaml" "temp-native.txt"                </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [11] "texor-figure-meta.yaml"         </span>
 <span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="convert_to_markdown.html">convert_to_markdown</a></span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmppfl42c/tempdir2/article/RJwrapper.tex --to markdown-simple_tables-pipe_tables-fenced_code_attributes --from latex --output /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmppfl42c/tempdir2/article/RJwrapper.md -s --resource-path /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmppfl42c/tempdir2/article --lua-filter /Users/runner/work/_temp/Library/texor/abs_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/bib_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/image_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/R_code.lua --lua-filter /Users/runner/work/_temp/Library/texor/image_caption.lua --lua-filter /Users/runner/work/_temp/Library/texor/table_caption.lua --lua-filter /Users/runner/work/_temp/Library/texor/conversion_compat_check.lua --lua-filter /Users/runner/work/_temp/Library/texor/equation_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/bookdown_ref.lua --citeproc </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpbw9dt8/tempdir2/article/RJwrapper.tex --to markdown-simple_tables-pipe_tables-fenced_code_attributes --from latex --output /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpbw9dt8/tempdir2/article/RJwrapper.md -s --resource-path /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpbw9dt8/tempdir2/article --lua-filter /Users/runner/work/_temp/Library/texor/abs_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/bib_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/image_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/R_code.lua --lua-filter /Users/runner/work/_temp/Library/texor/image_caption.lua --lua-filter /Users/runner/work/_temp/Library/texor/table_caption.lua --lua-filter /Users/runner/work/_temp/Library/texor/conversion_compat_check.lua --lua-filter /Users/runner/work/_temp/Library/texor/equation_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/bookdown_ref.lua --citeproc </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Detected the following packages from article:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CRAN: </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Bioconductor: </span>
@@ -164,7 +169,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "example.tex.bk"                  "expected-texor-figure-meta.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [11] "pkg_meta.yaml"                   "post-conversion-meta.yaml"      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13] "temp-native.txt"                 "texor-figure-meta.yaml"         </span>
-<span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu">generate_rmd</span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu">generate_rmd</span><span class="op">(</span><span class="va">your_article_path</span>, example <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">your_article_folder</span>,recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
