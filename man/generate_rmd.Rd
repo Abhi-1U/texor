@@ -4,10 +4,13 @@
 \alias{generate_rmd}
 \title{Modify Markdown to R-markdown}
 \usage{
-generate_rmd(article_dir)
+generate_rmd(article_dir, example = FALSE)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
+
+\item{example}{only enabled for running examples for documentation and
+to enable export of this function.}
 }
 \value{
 R-markdown file in the web folder
@@ -34,6 +37,6 @@ rmarkdown::pandoc_version()
 list.files(your_article_path)
 texor::convert_to_markdown(your_article_path)
 list.files(your_article_path)
-texor::generate_rmd(your_article_path)
+texor::generate_rmd(your_article_path, example = TRUE)
 unlink(your_article_folder,recursive = TRUE)
 }

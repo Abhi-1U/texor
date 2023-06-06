@@ -159,6 +159,8 @@ convert_to_markdown <- function(article_dir) {
 #' generate rmarkdown file in output folder
 #'
 #' @param article_dir path to the directory which contains tex article
+#' @param example only enabled for running examples for documentation and
+#'  to enable export of this function.
 #' @return R-markdown file in the web folder
 #' @export
 #' @examples
@@ -180,12 +182,16 @@ convert_to_markdown <- function(article_dir) {
 #' list.files(your_article_path)
 #' texor::convert_to_markdown(your_article_path)
 #' list.files(your_article_path)
-#' texor::generate_rmd(your_article_path)
+#' texor::generate_rmd(your_article_path, example = TRUE)
 #' unlink(your_article_folder,recursive = TRUE)
-generate_rmd <- function(article_dir) {
+generate_rmd <- function(article_dir, example = FALSE) {
     article_dir <- xfun::normalize_path(article_dir)
     if (! pandoc_version_check()){
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
+        return(FALSE)
+    }
+    if (grepl(pattern = "windows",tolower(utils::osVersion)) && example){
+        warning(paste0("This example using temporary folder does not work on windows as of now."))
         return(FALSE)
     }
     else {
@@ -430,7 +436,7 @@ convert_to_native <- function(article_dir) {
 #' texor::include_style_file(your_article_path)
 #' rmarkdown::pandoc_version()
 #' texor::convert_to_markdown(your_article_path)
-#' texor::generate_rmd(your_article_path)
+#' texor::generate_rmd(your_article_path, example = TRUE)
 #' texor::copy_other_files(your_article_path)
 #' texor::produce_html(your_article_path,example = TRUE)
 #' unlink(your_article_folder,recursive = TRUE)

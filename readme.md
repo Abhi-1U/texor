@@ -47,13 +47,25 @@ web friendly RJ-web-article format.
 
 ## Installation
 
-install the mainline version from CRAN with:
+Install Pandoc v2.17 or greater, ideally latest version. If you are
+using Rstudio, it should be pre-installed.
+
+``` r
+# To check the version of pandoc
+rmarkdown::pandoc_version()
+# or to simply check if you are good to go in terms of pandoc
+texor::pandoc_version_check()
+# TRUE if pandoc is good to go
+# FALSE if pandoc is too old for texor
+```
+
+Install the mainline version from CRAN with:
 
 ``` r
 install.packages('texor')
 ```
 
-install the development version from GitHub with:
+Install the development version from GitHub with:
 
 ``` r
 # install.packages("remotes")

@@ -4,6 +4,8 @@
 #' @export
 #'
 #' @examples
+#' rmarkdown::pandoc_version()
+#'
 #' texor::pandoc_version_check()
 pandoc_version_check <- function(){
     current_version <- rmarkdown::pandoc_version()

@@ -15,5 +15,7 @@ check texor pandoc compatibility
 minimum pandoc version required is 2.17
 }
 \examples{
+rmarkdown::pandoc_version()
+
 texor::pandoc_version_check()
 }
