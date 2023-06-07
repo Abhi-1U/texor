@@ -34,6 +34,9 @@
     <loc>/reference/article_has_tikz.html</loc>
   </url>
   <url>
+    <loc>/reference/check_markdown_file.html</loc>
+  </url>
+  <url>
     <loc>/reference/convert_to_markdown.html</loc>
   </url>
   <url>
@@ -67,6 +70,9 @@
     <loc>/reference/get_wrapper_type.html</loc>
   </url>
   <url>
+    <loc>/reference/handle_figures.html</loc>
+  </url>
+  <url>
     <loc>/reference/include_style_file.html</loc>
   </url>
   <url>
@@ -80,6 +86,15 @@
   </url>
   <url>
     <loc>/reference/pandoc_version_check.html</loc>
+  </url>
+  <url>
+    <loc>/reference/patch_code_env.html</loc>
+  </url>
+  <url>
+    <loc>/reference/patch_equations.html</loc>
+  </url>
+  <url>
+    <loc>/reference/patch_figure_env.html</loc>
   </url>
   <url>
     <loc>/reference/patch_table_env.html</loc>

@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">texor</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,10 +93,9 @@ HTML export was not available and hence modern compatibility to export a
 HTML file was missed out. To bring these documents online HTML based
 webpages are a much better alternative as opposed to PDFs and to solve
 the lack of web versions texor will provide a mechanism.</p>
-</div>
-<div class="section level2">
-<h2 id="conversion-workflow">Conversion Workflow:<a class="anchor" aria-label="anchor" href="#conversion-workflow"></a>
-</h2>
+<div class="section level3">
+<h3 id="conversion-workflow">Conversion Workflow:<a class="anchor" aria-label="anchor" href="#conversion-workflow"></a>
+</h3>
 <div class="section level4">
 <h4 id="stage-0-preparing-to-convert">Stage 0 : preparing to convert<a class="anchor" aria-label="anchor" href="#stage-0-preparing-to-convert"></a>
 </h4>
@@ -149,7 +148,7 @@ article_tex_file as well (if not linked).</p>
 including tikz, algorithm2e images. There is also a logical function
 which uses pandoc’s Image data for converting PDF images to PNG.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">handle_figures</span><span class="op">(</span><span class="va">dir</span>, <span class="va">file_name</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="../reference/handle_figures.html">handle_figures</a></span><span class="op">(</span><span class="va">dir</span>, <span class="va">file_name</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="stage-4-patching-environments">Stage 4 : Patching Environments<a class="anchor" aria-label="anchor" href="#stage-4-patching-environments"></a>
@@ -164,10 +163,10 @@ the default types <code>figure</code>,<code>table</code> and
 <p>There is also a function to patch equations (especially eqnarray
 environment).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">texor</span><span class="fu">:::</span><span class="fu">patch_code_env</span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
-<span><span class="fu">texor</span><span class="fu">:::</span><span class="fu"><a href="../reference/patch_table_env.html">patch_table_env</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
-<span><span class="fu">texor</span><span class="fu">:::</span><span class="fu">patch_figure_env</span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
-<span><span class="fu">texor</span><span class="fu">:::</span><span class="fu">patch_equations</span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="../reference/patch_code_env.html">patch_code_env</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
+<span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="../reference/patch_table_env.html">patch_table_env</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
+<span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="../reference/patch_figure_env.html">patch_figure_env</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
+<span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="../reference/patch_equations.html">patch_equations</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="stage-5-converting-the-latex-document-to-markdown">Stage 5 : Converting the LaTeX document to Markdown<a class="anchor" aria-label="anchor" href="#stage-5-converting-the-latex-document-to-markdown"></a>
@@ -211,6 +210,7 @@ metadata, title, abstract,etc..</p>
 </h4>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="../reference/produce_html.html">produce_html</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="note-on-dependencies">Note on Dependencies<a class="anchor" aria-label="anchor" href="#note-on-dependencies"></a>
