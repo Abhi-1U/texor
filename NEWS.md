@@ -11,7 +11,8 @@
 7. Updated contributor information.
 8. More examples and test cases.
 9. Pandoc Version checker for better compatibility and experience.
-10. CRAN release.
+10. Markdown checker for better compatibility and experience.
+11. CRAN release.
 
 ## Bug Fixes
 
@@ -112,6 +113,7 @@ many more features.
 6. More vignettes
 
 # Version 0.5.2 
+
 This package matures at this point where almost all features are working, and soon will be ready for CRAN deployment.
 The following are the features working:
 
