@@ -117,5 +117,5 @@ paste0(your_article_path,"/web")
         getwd()
         # below function will create a log file of success/error in current
         # working directory while running the texor::latex_to_web() function
-        texor::convert_to_html(dir)
+        texor:::convert_to_html(dir)
     }

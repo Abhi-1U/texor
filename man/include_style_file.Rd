@@ -10,7 +10,7 @@ include_style_file(article_dir)
 \item{article_dir}{path to the directory which contains tex article}
 }
 \value{
-Metafix.sty file in the article_dir
+adds Metafix.sty file in the article_dir also includes it in RJwrapper file.
 }
 \description{
 Includes the Metafix.sty style file

@@ -230,7 +230,7 @@ pre_process_tikz <- function(article_dir) {
 #'This simple utiliy function will check for tikzpicture environment
 #' @param article_dir path to the directory which contains tex article
 #'
-#' @return TRUE/FALSE(boolean)
+#' @return TRUE if tikz image is present else FALSE
 #' @export
 #' @examples
 #' article_dir <- system.file("examples/article",

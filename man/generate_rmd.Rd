@@ -4,19 +4,19 @@
 \alias{generate_rmd}
 \title{Modify Markdown to R-markdown}
 \usage{
-generate_rmd(article_dir, example = FALSE)
+generate_rmd(article_dir)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
-
-\item{example}{only enabled for running examples for documentation and
-to enable export of this function.}
 }
 \value{
 R-markdown file in the web folder
 }
 \description{
 generate rmarkdown file in output folder
+}
+\note{
+Use pandoc version greater than or equal to 2.17
 }
 \examples{
 # Note This is a minimal example to execute this function
@@ -27,16 +27,17 @@ x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 your_article_path <-  xfun::normalize_path(paste(your_article_folder,"article",sep="/"))
 texor::include_style_file(your_article_path)
 rebib::aggregate_bibliography(your_article_path)
-data <- texor:::handle_figures(your_article_path,
+data <- texor::handle_figures(your_article_path,
                     texor::get_texfile_name(your_article_path))
-texor:::patch_code_env(your_article_path) # Step 4
-texor:::patch_table_env(your_article_path) # Step 5
-texor:::patch_equations(your_article_path) # Step 5.5
-texor:::patch_figure_env(your_article_path)
+texor::patch_code_env(your_article_path) # Step 4
+texor::patch_table_env(your_article_path) # Step 5
+texor::patch_equations(your_article_path) # Step 5.5
+texor::patch_figure_env(your_article_path)
 rmarkdown::pandoc_version()
 list.files(your_article_path)
 texor::convert_to_markdown(your_article_path)
+cat(readLines(paste(your_article_path,"RJwrapper.md",sep="/")),sep = "\n")
 list.files(your_article_path)
-texor::generate_rmd(your_article_path, example = TRUE)
+texor::generate_rmd(your_article_path)
 unlink(your_article_folder,recursive = TRUE)
 }

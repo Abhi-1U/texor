@@ -31,8 +31,17 @@ filter_code_env <- function(raw_lines, target, replacement) {
 #'
 #' @param article_dir path to the directory which contains tex article
 #' @keywords internal
-#' @return writes modified file and also backs up the old file before modification
-#' @noRd
+#' @return patches code environments in LaTeX file and also backs up the old file before modification
+#' @export
+#' @examples
+#' # Note This is a minimal example to execute this function
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir2"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <-  xfun::normalize_path(paste(your_article_folder,"article",sep="/"))
+#' texor::patch_code_env(your_article_path)
+#' unlink(your_article_folder,recursive = TRUE)
 patch_code_env <- function(article_dir) {
     # find tex file
     code_env <- c("example",

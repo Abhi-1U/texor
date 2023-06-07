@@ -132,7 +132,7 @@ parse_status <- function(x) {
     re <- "^(\\d{4}-\\d{2}-\\d{2}) ([^\\[]*)(?: \\[([^\\[]+)\\])?$"
     if (!stringr::str_detect(x, re)) {
         # NM added line
-        cat("bad status:", x, "\n")
+        message("bad status:", x, "\n")
         stop("Status must have form 'yyyy-mm-dd status [optional comments]'",
              call. = FALSE
         )
@@ -303,7 +303,7 @@ parse_status <- function(x) {
     re <- "^(\\d{4}-\\d{2}-\\d{2}) ([^\\[]*)(?: \\[([^\\[]+)\\])?$"
     if (!stringr::str_detect(x, re)) {
         # NM added line
-        cat("bad status:", x, "\n")
+        message("bad status:", x, "\n")
         stop("Status must have form 'yyyy-mm-dd status [optional comments]'",
              call. = FALSE
         )

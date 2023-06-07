@@ -2,8 +2,7 @@
 % Please edit documentation in R/pandoc.R
 \name{pandoc_version_check}
 \alias{pandoc_version_check}
-\title{check texor pandoc compatibility
-minimum pandoc version required is 2.17}
+\title{check texor pandoc compatibility}
 \usage{
 pandoc_version_check()
 }
@@ -11,8 +10,8 @@ pandoc_version_check()
 TRUE if v >= 2.17, else FALSE
 }
 \description{
-check texor pandoc compatibility
-minimum pandoc version required is 2.17
+texor package requires minimum pandoc version above or equal to 2.17,
+ hence this utility will check for the installation and version status.
 }
 \examples{
 rmarkdown::pandoc_version()

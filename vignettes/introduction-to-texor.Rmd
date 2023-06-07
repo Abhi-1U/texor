@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 texor is a proposed package that can help in converting old LaTeX based documents, research papers to HTML through intermediate conversions. This is particularly a problem for  R Research papers where HTML export was not available and hence modern compatibility to export a HTML file was missed out.
     To bring these documents online HTML based webpages are a much better alternative as opposed to PDFs and to solve the lack of web versions texor will provide a mechanism.  
     
-# Conversion Workflow:
+## Conversion Workflow:
 
 ### Stage 0 : preparing to convert
 
@@ -67,7 +67,7 @@ rebib::aggregate_bibliography(dir)
 Texor package creates a yaml report about the figure environments, including tikz, algorithm2e images. There is also a logical function which uses pandoc's Image data for converting PDF images to PNG.
 
 ```r
-data <- handle_figures(dir, file_name)
+data <- texor::handle_figures(dir, file_name)
 ```
 
 ### Stage 4 : Patching Environments
@@ -81,10 +81,10 @@ Here, texor will use the stream editor to patch these environments to the defaul
 
 There is also a function to patch equations (especially eqnarray environment).
 ```r
-texor:::patch_code_env(dir)
-texor:::patch_table_env(dir)
-texor:::patch_figure_env(dir)
-texor:::patch_equations(dir)
+texor::patch_code_env(dir)
+texor::patch_table_env(dir)
+texor::patch_figure_env(dir)
+texor::patch_equations(dir)
 ```
 
 ### Stage 5 : Converting the LaTeX document to Markdown

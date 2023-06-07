@@ -23,6 +23,7 @@ convert latex(wrapper) file to markdown
 pandoc (along with lua interpreter) is already installed with
  R-studio, hence if not using R-studio you will need to install pandoc.
  https://pandoc.org/installing.html
+ @note Use pandoc version greater than or equal to 2.17
 }
 \examples{
 # Note This is a minimal example to execute this function

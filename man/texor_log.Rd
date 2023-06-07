@@ -14,7 +14,7 @@ texor_log(message, category, idx)
 \item{idx}{index of log level}
 }
 \value{
-null
+NUll, but also appends message to the log file in article_dir
 }
 \description{
 a wrapper function for logging different types of log entries

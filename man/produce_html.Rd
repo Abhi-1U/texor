@@ -13,10 +13,16 @@ produce_html(article_dir, example = FALSE)
 to enable export of this function.}
 }
 \value{
-HTML output/ TRUE
+Renders a RJwrapper.html file in the /web folder, in example it will
+return TRUE
 }
 \description{
 call rmarkdown::render to generate html file
+}
+\note{
+Use pandoc version greater than or equal to 2.17
+
+Do not use example = TRUE param when working with conversions.
 }
 \examples{
 # Note This is a minimal example to execute this function
@@ -28,7 +34,7 @@ your_article_path <- paste(your_article_folder,"article",sep="/")
 texor::include_style_file(your_article_path)
 rmarkdown::pandoc_version()
 texor::convert_to_markdown(your_article_path)
-texor::generate_rmd(your_article_path, example = TRUE)
+texor::generate_rmd(your_article_path)
 texor::copy_other_files(your_article_path)
 texor::produce_html(your_article_path,example = TRUE)
 unlink(your_article_folder,recursive = TRUE)

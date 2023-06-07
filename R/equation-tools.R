@@ -2,8 +2,17 @@
 #' @description this function patches equations (particularly eqnarray)
 #' @param article_dir path to the directory which contains tex article
 #' @keywords internal
-#' @return modified equations in LaTeX file
-#' @noRd
+#' @return patches equations environments in LaTeX file and also backs up the old file before modification
+#' @export
+#'
+#' @examples
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::patch_equations(your_article_path)
+#' unlink(your_article_folder,recursive = TRUE)
 patch_equations <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # find tex file

@@ -12,7 +12,7 @@
 #' \\renewcommand{\\multicolumnx}[3]{\\multicolumn{#1}{c}{#3}}
 #' @param article_dir path to the directory which contains tex article
 #'
-#' @return NULL
+#' @return patches table environments in LaTeX file and also backs up the old file before modification
 #' @export
 #'
 #' @examples

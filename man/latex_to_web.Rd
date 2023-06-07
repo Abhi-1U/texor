@@ -14,10 +14,15 @@ latex_to_web(dir, log_steps = TRUE, example = FALSE)
 \item{example}{for examples only by default keep it FALSE.}
 }
 \value{
-RJweb article document
+RJweb article document in /web folder
 }
 \description{
 automated function for converting a single RJarticle to web
+}
+\note{
+Use pandoc version greater than or equal to 2.17
+
+Do not use example = TRUE param when working with conversions.
 }
 \examples{
 # Checking for pandoc version

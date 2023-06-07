@@ -1,3 +1,8 @@
+## Resubmission 
+1. Added value tags to rd files
+2. removed usage of ::: from examples
+3. used message() instead of cat() in non print functions
+
 ## Test environments
 * local ubuntu 22.04 install, R 4.1.2, 4.3.0
 * local Windows 11   install, R 4.3.0

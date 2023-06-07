@@ -3,7 +3,9 @@
 #' @param dir directory path
 #' @param log_steps Enable/Disable Logging of conversion steps
 #' @param example for examples only by default keep it FALSE.
-#' @return RJweb article document
+#' @note Use pandoc version greater than or equal to 2.17
+#' @note Do not use example = TRUE param when working with conversions.
+#' @return RJweb article document in /web folder
 #'
 #' @export
 #' @examples
@@ -118,7 +120,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
         if(example){
             copy_other_files(dir) # Step 8
             convert_to_markdown(dir) # Step 7
-            texor::generate_rmd(dir, example = TRUE) # Step 9
+            texor::generate_rmd(dir) # Step 9
             texor::produce_html(dir,example = TRUE) # Step 10
         }
         else {

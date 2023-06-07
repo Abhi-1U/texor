@@ -8,7 +8,7 @@
 #' @details
 #' This style file helps texor and pandoc to retain metadata and ease
 #' the conversion process.
-#' @return Metafix.sty file in the article_dir
+#' @return adds Metafix.sty file in the article_dir also includes it in RJwrapper file.
 #' @export
 #'
 #' @examples
@@ -68,6 +68,8 @@ include_style_file <- function(article_dir) {
 #' @note  pandoc (along with lua interpreter) is already installed with
 #'  R-studio, hence if not using R-studio you will need to install pandoc.
 #'  https://pandoc.org/installing.html
+#'  @note Use pandoc version greater than or equal to 2.17
+#'
 #' @return creates a converted markdown file, as well as a pkg_meta.yaml file
 #' @export
 #' @examples
@@ -159,8 +161,7 @@ convert_to_markdown <- function(article_dir) {
 #' generate rmarkdown file in output folder
 #'
 #' @param article_dir path to the directory which contains tex article
-#' @param example only enabled for running examples for documentation and
-#'  to enable export of this function.
+#' @note Use pandoc version greater than or equal to 2.17
 #' @return R-markdown file in the web folder
 #' @export
 #' @examples
@@ -172,26 +173,27 @@ convert_to_markdown <- function(article_dir) {
 #' your_article_path <-  xfun::normalize_path(paste(your_article_folder,"article",sep="/"))
 #' texor::include_style_file(your_article_path)
 #' rebib::aggregate_bibliography(your_article_path)
-#' data <- texor:::handle_figures(your_article_path,
+#' data <- texor::handle_figures(your_article_path,
 #'                     texor::get_texfile_name(your_article_path))
-#' texor:::patch_code_env(your_article_path) # Step 4
-#' texor:::patch_table_env(your_article_path) # Step 5
-#' texor:::patch_equations(your_article_path) # Step 5.5
-#' texor:::patch_figure_env(your_article_path)
+#' texor::patch_code_env(your_article_path) # Step 4
+#' texor::patch_table_env(your_article_path) # Step 5
+#' texor::patch_equations(your_article_path) # Step 5.5
+#' texor::patch_figure_env(your_article_path)
 #' rmarkdown::pandoc_version()
 #' list.files(your_article_path)
 #' texor::convert_to_markdown(your_article_path)
+#' cat(readLines(paste(your_article_path,"RJwrapper.md",sep="/")),sep = "\n")
 #' list.files(your_article_path)
-#' texor::generate_rmd(your_article_path, example = TRUE)
+#' texor::generate_rmd(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-generate_rmd <- function(article_dir, example = FALSE) {
+generate_rmd <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     if (! pandoc_version_check()){
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
         return(FALSE)
     }
-    if (grepl(pattern = "windows",tolower(utils::osVersion)) && example){
-        warning(paste0("This example using temporary folder does not work on windows as of now."))
+    if (! check_markdown_file(article_dir)){
+        warning(paste0("There seems to be a problem with converted markdown file, Please check again !"))
         return(FALSE)
     }
     else {
@@ -336,6 +338,7 @@ generate_rmd <- function(article_dir, example = FALSE) {
 #' @note  pandoc (along with lua interpreter) is already installed with
 #'  R-studio, hence if not using R-studio you will need to install pandoc.
 #'  https://pandoc.org/installing.html
+#' @note Use pandoc version greater than or equal to 2.17
 #' @return creates a converted native AST file, as well as a pkg_meta.yaml file
 #' @export
 #' @examples
@@ -424,7 +427,10 @@ convert_to_native <- function(article_dir) {
 #' @param article_dir path to the directory which contains tex article
 #' @param example only enabled for running examples for documentation and
 #'  to enable export of this function.
-#' @return HTML output/ TRUE
+#' @note Use pandoc version greater than or equal to 2.17
+#' @note Do not use example = TRUE param when working with conversions.
+#' @return Renders a RJwrapper.html file in the /web folder, in example it will
+#' return TRUE
 #' @export
 #' @examples
 #' # Note This is a minimal example to execute this function
@@ -436,7 +442,7 @@ convert_to_native <- function(article_dir) {
 #' texor::include_style_file(your_article_path)
 #' rmarkdown::pandoc_version()
 #' texor::convert_to_markdown(your_article_path)
-#' texor::generate_rmd(your_article_path, example = TRUE)
+#' texor::generate_rmd(your_article_path)
 #' texor::copy_other_files(your_article_path)
 #' texor::produce_html(your_article_path,example = TRUE)
 #' unlink(your_article_folder,recursive = TRUE)

@@ -143,8 +143,17 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
 #' @param article_dir path to the directory which contains tex article
 #' @param with_alg to include algorihtm environment or not
 #'
-#' @return writes modified file and also backs up the old file before modification
-#' @noRd
+#' @return patches figure environments in LaTeX file and also backs up the old file before modification
+#' @export
+#'
+#' @examples
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::patch_figure_env(your_article_path)
+#' unlink(your_article_folder,recursive = TRUE)
 patch_figure_env <- function(article_dir, with_alg = TRUE) {
     article_dir <- xfun::normalize_path(article_dir)
     # find tex file
@@ -189,8 +198,18 @@ patch_figure_env <- function(article_dir, with_alg = TRUE) {
 #' @param article_dir path to the directory which contains tex article
 #' @param file_name name of the LaTeX file
 #'
-#' @return A block of figure data
-#' @noRd
+#' @return A block of figure data for better conversion.
+#'
+#' @export
+#'
+#' @examples
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+#' your_article_path <- paste(your_article_folder,"article",sep="/")
+#' texor::handle_figures(your_article_path,texor::get_texfile_name(your_article_path))
+#' unlink(your_article_folder,recursive = TRUE)
 handle_figures <- function(article_dir, file_name){
     patch_figure_env(article_dir,with_alg = FALSE)
     fig_data <- figure_reader(article_dir, file_name)

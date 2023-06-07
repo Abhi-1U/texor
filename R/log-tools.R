@@ -5,7 +5,7 @@
 #' @param file_name name of the log file
 #' @param namespace namespace of log file
 #' @param idx index of log level
-#' @return null
+#' @return NULL but also creates a log file in the article_dir
 #' @export
 #'
 #' @examples
@@ -36,7 +36,7 @@ log_setup <- function(article_dir, file_name, namespace, idx) {
 #' @param message message to be sent
 #' @param category category of the log message
 #' @param idx index of log level
-#' @return null
+#' @return NUll, but also appends message to the log file in article_dir
 #' @export
 #'
 #' @examples

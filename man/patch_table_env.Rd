@@ -9,6 +9,9 @@ patch_table_env(article_dir)
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
 }
+\value{
+patches table environments in LaTeX file and also backs up the old file before modification
+}
 \description{
 function to modify env and commands in TeX using GNU sed
 

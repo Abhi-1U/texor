@@ -16,7 +16,7 @@ log_setup(article_dir, file_name, namespace, idx)
 \item{idx}{index of log level}
 }
 \value{
-null
+NULL but also creates a log file in the article_dir
 }
 \description{
 a wrapper function for logger package to set up log file for
