@@ -56,7 +56,12 @@ check_markdown_file <- function(article_dir) {
     file_name <- get_md_file_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
-    raw_lines <- readLines(file_path)
+    if (file.exists(file_path)){
+        raw_lines <- readLines(file_path)
+    }
+    else {
+        return(FALSE)
+    }
     failed_conversion_doc_2 <- c("::: article",
                                  ":::")
     if (identical(failed_conversion_doc_2,raw_lines)){

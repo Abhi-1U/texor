@@ -34,10 +34,7 @@ texor::patch_table_env(your_article_path) # Step 5
 texor::patch_equations(your_article_path) # Step 5.5
 texor::patch_figure_env(your_article_path)
 rmarkdown::pandoc_version()
-list.files(your_article_path)
 texor::convert_to_markdown(your_article_path)
-cat(readLines(paste(your_article_path,"RJwrapper.md",sep="/")),sep = "\n")
-list.files(your_article_path)
 texor::generate_rmd(your_article_path)
 unlink(your_article_folder,recursive = TRUE)
 }
