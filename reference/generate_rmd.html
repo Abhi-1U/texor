@@ -105,7 +105,7 @@
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Changed \begin{algorithmic} to \begin{algorithm}</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found 0 Matches for target :  algorithmic</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Changed \end{algorithmic} to \end{algorithm}</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpEs7HLa/tempdir2/article/RJwrapper.tex --to native --from latex --output /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpEs7HLa/tempdir2/article/temp-native.txt -s --resource-path /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpEs7HLa/tempdir2/article/RJwrapper.tex --lua-filter /Users/runner/work/_temp/Library/texor/find_pdf_files.lua </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpxmEnBf/tempdir2/article/RJwrapper.tex --to native --from latex --output /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpxmEnBf/tempdir2/article/temp-native.txt -s --resource-path /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpxmEnBf/tempdir2/article/RJwrapper.tex --lua-filter /Users/runner/work/_temp/Library/texor/find_pdf_files.lua </span>
 <span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="patch_code_env.html">patch_code_env</a></span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span> <span class="co"># Step 4</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found  1 Matches for target : example</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found  1 Matches for target : example</span>
@@ -148,111 +148,11 @@
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Changed \end{algorithm} to \end{figure}</span>
 <span class="r-in"><span><span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/pandoc_available.html" class="external-link">pandoc_version</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] ‘2.19.2’</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "DESCRIPTION"                     "Metafix.sty"                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "RJwrapper.tex"                   "RJwrapper.tex.bk"               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "Rlogo-5.png"                     "example.bib"                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "example.tex"                     "example.tex.bk"                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "expected-texor-figure-meta.yaml" "temp-native.txt"                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "texor-figure-meta.yaml"         </span>
 <span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="convert_to_markdown.html">convert_to_markdown</a></span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpEs7HLa/tempdir2/article/RJwrapper.tex --to markdown-simple_tables-pipe_tables-fenced_code_attributes --from latex --output /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpEs7HLa/tempdir2/article/RJwrapper.md -s --resource-path /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpEs7HLa/tempdir2/article --lua-filter /Users/runner/work/_temp/Library/texor/abs_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/bib_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/image_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/R_code.lua --lua-filter /Users/runner/work/_temp/Library/texor/image_caption.lua --lua-filter /Users/runner/work/_temp/Library/texor/table_caption.lua --lua-filter /Users/runner/work/_temp/Library/texor/conversion_compat_check.lua --lua-filter /Users/runner/work/_temp/Library/texor/equation_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/bookdown_ref.lua --citeproc </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpxmEnBf/tempdir2/article/RJwrapper.tex --to markdown-simple_tables-pipe_tables-fenced_code_attributes --from latex --output /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpxmEnBf/tempdir2/article/RJwrapper.md -s --resource-path /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpxmEnBf/tempdir2/article --lua-filter /Users/runner/work/_temp/Library/texor/abs_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/bib_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/image_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/R_code.lua --lua-filter /Users/runner/work/_temp/Library/texor/image_caption.lua --lua-filter /Users/runner/work/_temp/Library/texor/table_caption.lua --lua-filter /Users/runner/work/_temp/Library/texor/conversion_compat_check.lua --lua-filter /Users/runner/work/_temp/Library/texor/equation_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/bookdown_ref.lua --citeproc </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Detected the following packages from article:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   CRAN: </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Bioconductor: </span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">your_article_path</span>,<span class="st">"RJwrapper.md"</span>,sep<span class="op">=</span><span class="st">"/"</span><span class="op">)</span><span class="op">)</span>,sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> address:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Author One\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Affiliation\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Address\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Country\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   (ORCiD if desired)\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Author Two\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Affiliation\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Address\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Country\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   (ORCiD if desired)\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Author Three\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Affiliation\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Address\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Country\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   (ORCiD if desired)\</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> author:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - by Author One, Author Two and Author Three</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - An abstract of less than 150 words.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> bibliography:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - example.bib</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> title: Capitalized Title Here</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ::: article</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Section title in sentence case</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Introductory section which may include references in parentheses [@R],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> or cite a reference such as @R in the text.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Another section</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This section may contain a figure such as Figure [1](#figure:rlogo).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ![Figure 1 The logo of R.](Rlogo-5.png){#figure:rlogo .center</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> width="100%"}</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Table example section</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ::: center</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ::: {#table1}</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   EXAMPLE   \(X\)         \(Y\)   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   --------- ------- ----- ------- -----</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             1       2     1       2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   EX1       X11     X12   Y11     Y12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   EX2       X21     X22   Y21     Y22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   EX3       X31     X32   Y31     Y32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   EX4       X41     X42   Y41     Y42</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   EX5       X51     X52   Y51     Y52</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   : Table 1: An Example Table with Multicolumn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> :::</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> []{#table1 label="table1"}</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> :::</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Another section</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> There will likely be several sections, perhaps including code snippets,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> such as:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ``` r</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   x &lt;- 1:10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   result &lt;- myFunction(x)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ```</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Summary</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This file is only a basic article template. For full details of *The R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Journal* style and information on how to prepare your article for</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> submission, see the [Instructions for</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Authors](https://journal.r-project.org/share/author-guide.pdf).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> :::</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "DESCRIPTION"                     "Metafix.sty"                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "RJwrapper.md"                    "RJwrapper.tex"                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "RJwrapper.tex.bk"                "Rlogo-5.png"                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "example.bib"                     "example.tex"                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "example.tex.bk"                  "expected-texor-figure-meta.yaml"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "pkg_meta.yaml"                   "post-conversion-meta.yaml"      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "temp-native.txt"                 "texor-figure-meta.yaml"         </span>
 <span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu">generate_rmd</span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">your_article_folder</span>,recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
