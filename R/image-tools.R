@@ -201,13 +201,19 @@ env_image_position <- function(fig_lines) {
 #' @param article_dir path to the directory which contains tex article
 #' @param file_name name of the LaTeX file
 #'
-#' @return number of images in the LaTeX file
+#' @return number of images in the LaTeX file, FALSE otherwise
 #' @noRd
 image_count <- function(article_dir, file_name) {
     article_dir <- xfun::normalize_path(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
-    raw_lines <- readLines(file_path)
+    if (file.exists(file_path)){
+        raw_lines <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     graphics_patt <- "\\s*\\\\includegraphics"
     begin_break_points <- which(grepl(graphics_patt, raw_lines))
     return(length(begin_break_points))

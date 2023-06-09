@@ -133,7 +133,13 @@ extract_tikz_lib <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     wrapper_file <- get_wrapper_type(article_dir)
     wrapper_path <- paste(article_dir,wrapper_file,sep = "/")
-    wrapper_lines <- readLines(wrapper_path)
+    if (file.exists(wrapper_path)){
+        wrapper_lines <- readLines(wrapper_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     rjournal_line <- which(grepl("\\usepackage\\{RJournal\\}",wrapper_lines))
     begin_doc_line <- which(grepl("\\s*\\\\begin\\{document\\}",wrapper_lines))
     tikz_libs <- wrapper_lines[(rjournal_line+1):(begin_doc_line-1)]
@@ -174,7 +180,13 @@ tikz_count <- function(article_dir, file_name) {
     article_dir <- xfun::normalize_path(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
-    raw_lines <- readLines(file_path)
+    if (file.exists(file_path)){
+        raw_lines <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     tikz_start_patt <- "\\\\begin\\{tikzpicture\\}"
     tikz_end_patt <- "\\\\end\\{tikzpicture\\}"
     begin_break_points <- which(grepl(tikz_start_patt, raw_lines))
@@ -244,7 +256,13 @@ article_has_tikz <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # reads the complete file
     file_name <- get_texfile_name(article_dir)
-    src_file_data <- readLines(file.path(article_dir, file_name))
+    if (file.exists(file.path(article_dir,file_name))){
+        src_file_data <- readLines(file.path(article_dir, file_name))
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     # all possibke values of tikz start points
     tikz_image_list <- which(grepl("^\\s*\\\\begin\\{tikzpicture",
                                    src_file_data))
@@ -265,7 +283,13 @@ article_has_tikz <- function(article_dir) {
 insert_tikz_png <- function(fig_block,article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)
-    raw_lines <- readLines(file.path(article_dir, file_name))
+    if (file.exists(file.path(article_dir,file_name))){
+        raw_lines <- readLines(file.path(article_dir, file_name))
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     file_path <- paste0(article_dir,"/",file_name)
     alg_start_patt <- "\\s*\\\\begin\\{algorithm\\}"
     start_patt <- "\\s*\\\\begin\\{figure\\}"

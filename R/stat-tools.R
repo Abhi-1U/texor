@@ -41,7 +41,7 @@ pre_conversion_statistics <- function(article_dir, write_yaml = TRUE){
 #' @param article_dir path to the directory which contains RJ article
 #' @param env_name name of the environment
 #'
-#' @return count of the environment
+#' @return count of the environment, FALSE otherwise
 #' @export
 #'
 #' @examples
@@ -55,7 +55,13 @@ count_env <- function(article_dir, env_name) {
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
-    raw_lines <- readLines(file_path)
+    if (file.exists(file_path)){
+        raw_lines <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     begin_patt <- paste("\\s*\\\\begin\\{", env_name, "\\}", sep = "")
     end_patt <- paste("\\s*\\\\end\\{", env_name, "\\}", sep = "")
     begin_break_points <- which(grepl(begin_patt, raw_lines))
@@ -81,7 +87,7 @@ count_env <- function(article_dir, env_name) {
 #' @param article_dir path to the directory which contains RJ article
 #' @param inline name of the inline element
 #'
-#' @return count of the inline element
+#' @return count of the inline element, FALSE otherwise
 #' @export
 #'
 #' @examples
@@ -99,7 +105,13 @@ count_inline <- function(article_dir, inline) {
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
-    raw_lines <- readLines(file_path)
+    if (file.exists(file_path)){
+        raw_lines <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     raw_words <- str_split(raw_lines," ")
     # filters comments in the given tex file
     comments <- which(grepl("\\%",raw_lines))

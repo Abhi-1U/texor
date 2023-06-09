@@ -32,6 +32,7 @@ filter_code_env <- function(raw_lines, target, replacement) {
 #' @param article_dir path to the directory which contains tex article
 #' @keywords internal
 #' @return patches code environments in LaTeX file and also backs up the old file before modification
+#' , FALSE otherwise
 #' @export
 #' @examples
 #' # Note This is a minimal example to execute this function
@@ -57,14 +58,26 @@ patch_code_env <- function(article_dir) {
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
-    raw_lines <- readLines(file_path)
+    if (file.exists(file_path)){
+        raw_lines <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     replacement <- "verbatim"
     # apply filter_code_env over all the env's
     for (env in code_env) {
         raw_lines <- filter_code_env(raw_lines, env, replacement)
     }
     # backup old file
-    src_file_data <- readLines(file_path)
+    if (file.exists(file_path)){
+        src_file_data <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     backup_file <- paste(file_path, ".bk", sep = "")
     write_external_file(backup_file, "w", src_file_data)
     # remove old tex file

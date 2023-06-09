@@ -20,7 +20,13 @@ patch_equations <- function(article_dir) {
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
     delimiter <- "$$"
-    raw_lines <- readLines(file_path)
+    if (file.exists(file_path)){
+        raw_lines <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     eqn_arr_begin_bps <- which(grepl("\\s*\\\\begin\\{eqnarray\\}",raw_lines))
     eqn_arr_end_bps <- which(grepl("\\s*\\\\end\\{eqnarray\\}",raw_lines))
     if (length(eqn_arr_begin_bps) == length(eqn_arr_end_bps)) {
@@ -35,7 +41,13 @@ patch_equations <- function(article_dir) {
     } else {
         warning("The equations do not align")
     }
-    src_file_data <- readLines(file_path)
+    if (file.exists(file_path)){
+        src_file_data <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     backup_file <- paste(file_path, ".bk", sep = "")
     write_external_file(backup_file, "w", src_file_data)
     # remove old tex file

@@ -5,11 +5,17 @@
 #' need to add one more step to pre-process.
 #' @param input_file name of the input file
 #'
-#' @return pkg_meta.yaml file containing meta data
+#' @return pkg_meta.yaml file containing meta data, FALSE otherwise
 #' @noRd
 find_pkg_references <- function(input_file){
     input_file <- xfun::normalize_path(input_file)
-    input <- readLines(input_file)
+    if(file.exists(input_file)){
+        input <- readLines(input_file)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     pkgs <- gregexpr("\\\\(CRAN|BIO)pkg\\{.+?\\}", input)
     pkgs <- mapply(
         function(pos, line) {

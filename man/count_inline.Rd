@@ -12,7 +12,7 @@ count_inline(article_dir, inline)
 \item{inline}{name of the inline element}
 }
 \value{
-count of the inline element
+count of the inline element, FALSE otherwise
 }
 \description{
 counts inline elements embedded within the latex file

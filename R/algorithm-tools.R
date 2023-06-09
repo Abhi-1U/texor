@@ -114,7 +114,13 @@ extract_extra_lib <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     wrapper_file <- get_wrapper_type(article_dir)
     wrapper_path <- paste(article_dir,wrapper_file,sep = "/")
-    wrapper_lines <- readLines(wrapper_path)
+    if (file.exists(wrapper_path)){
+        wrapper_lines <- readLines(wrapper_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     rjournal_line <- which(grepl("\\usepackage\\{RJournal\\}",wrapper_lines))
     begin_doc_line <- which(grepl("\\s*\\\\begin\\{document\\}",wrapper_lines))
     alg_libs <- wrapper_lines[(rjournal_line+1):(begin_doc_line-1)]
@@ -132,7 +138,12 @@ extract_extra_lib <- function(article_dir) {
 insert_algorithm_png <- function(fig_block,article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)
-    raw_lines <- readLines(file.path(article_dir, file_name))
+    if (file.exists(file.path(article_dir,file_name))) {
+        raw_lines <- readLines(file.path(article_dir, file_name))
+    } else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     file_path <- paste0(article_dir,"/",file_name)
     alg_start_patt <- "\\s*\\\\begin\\{algorithm\\}"
     start_patt <- "\\s*\\\\begin\\{figure\\}"

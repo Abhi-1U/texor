@@ -305,7 +305,13 @@ generate_rmd <- function(article_dir) {
             )
         )
     )
-    pandoc_md_contents <- readLines(markdown_file)
+    if (file.exists(markdown_file)){
+        pandoc_md_contents <- readLines(markdown_file)
+    }
+    else{
+        warning("Markdown file not found/Unreadable !")
+        return(FALSE)
+    }
     delimiters <- grep("^(---|\\.\\.\\.)\\s*$", pandoc_md_contents)
     article_body <- c()
     if (delimiters[1] > 1)

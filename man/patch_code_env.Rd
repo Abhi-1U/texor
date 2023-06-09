@@ -11,6 +11,7 @@ patch_code_env(article_dir)
 }
 \value{
 patches code environments in LaTeX file and also backs up the old file before modification
+, FALSE otherwise
 }
 \description{
 This function calls the `filter_code_env()` function

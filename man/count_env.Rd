@@ -12,7 +12,7 @@ count_env(article_dir, env_name)
 \item{env_name}{name of the environment}
 }
 \value{
-count of the environment
+count of the environment, FALSE otherwise
 }
 \description{
 count common environments like table,figure,verbatim etc..

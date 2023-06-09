@@ -12,7 +12,13 @@ tikz_count_var <- 0
 figure_reader <- function(article_dir, file_name) {
     article_dir <- xfun::normalize_path(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
-    raw_lines <- readLines(file_path)
+    if (file.exists(file_path)){
+        raw_lines <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     alg_start_patt <- "\\s*\\\\begin\\{algorithm\\}"
     alg_end_patt <- "\\s*\\\\end\\{algorithm\\}"
     start_patt <- "\\s*\\\\begin\\{figure\\}"
@@ -160,7 +166,13 @@ patch_figure_env <- function(article_dir, with_alg = TRUE) {
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # read Lines
-    raw_lines <- readLines(file_path)
+    if (file.exists(file_path)){
+        raw_lines <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\begin\\{figure\\*\\}", "figure\\*", "figure")
     warning("Changed \\begin{figure\\*} to \\begin{figure}")
@@ -184,7 +196,13 @@ patch_figure_env <- function(article_dir, with_alg = TRUE) {
         warning("Changed \\end{algorithm} to \\end{figure}")
     }
     # backup old file
-    src_file_data <- readLines(file_path)
+    if (file.exists(file_path)){
+        src_file_data <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     backup_file <- paste(file_path, ".bk", sep = "")
     write_external_file(backup_file, "w", src_file_data)
     # remove old tex file
@@ -239,7 +257,13 @@ seperate_multiple_figures <- function(article_dir) {
     file_name <- get_texfile_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
-    raw_lines <- readLines(file_path)
+    if (file.exists(file_path)){
+        raw_lines <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     inc_gr_patt <- "\\s*\\\\includegraphics"
     breakpoints <- which(grepl(inc_gr_patt,raw_lines))
     for (iter in seq_along(breakpoints)){
@@ -251,7 +275,13 @@ seperate_multiple_figures <- function(article_dir) {
         }
     }
     # backup old file
-    src_file_data <- readLines(file_path)
+    if (file.exists(file_path)){
+        src_file_data <- readLines(file_path)
+    }
+    else {
+        warning("LaTeX file not found !")
+        return(FALSE)
+    }
     backup_file <- paste(file_path, ".bk", sep = "")
     write_external_file(backup_file, "w", src_file_data)
     # remove old tex file
