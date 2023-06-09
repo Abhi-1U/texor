@@ -10,6 +10,13 @@
 #'
 #' texor::pandoc_version_check()
 pandoc_version_check <- function(){
+    pandoc_installation_check <- rmarkdown::pandoc_available()
+    if (! pandoc_installation_check) {
+        return(FALSE)
+    }
+    else {
+        # pass
+    }
     current_version <- rmarkdown::pandoc_version()
     if (toString(current_version) != ""){
         version_list <- unlist(strsplit(toString(current_version),split = "\\."))
