@@ -96,6 +96,7 @@ get_texfile_name <- function(article_dir) {
         warning("LaTeX file not found !")
         return(FALSE)
     }
+    wrapper_file <- stringr::str_subset(wrapper_file, ".+")
     article_start <- which(grepl(
         "^\\s*\\\\begin\\{article\\}",
         wrapper_file))
@@ -303,3 +304,4 @@ generate_image_paths <- function(article_dir) {
 
     return(image_paths)
 }
+

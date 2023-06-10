@@ -1,3 +1,9 @@
+# Version 1.0.2
+
+## Bug Fixes
+
+1. Added a pre-check before reading a file in `texor::check_markdown_file()`. 
+
 # Version 1.0.1
 
 ## Feature Updates
