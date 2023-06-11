@@ -3,6 +3,8 @@
 ## Bug Fixes
 
 1. Added a pre-check before reading a file in `texor::check_markdown_file()`. 
+2. Fixed a bug where empty lines could not be filtered out.
+3. Usage of `file.exists()` before actual `readLines()`.
 
 # Version 1.0.1
 

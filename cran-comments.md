@@ -1,7 +1,5 @@
 ## Resubmission 
-1. Added value tags to rd files
-2. removed usage of ::: from examples
-3. used message() instead of cat() in non print functions
+1. Fixed Pandoc version checks in examples, to avoid failures in CRAN tests.
 
 ## Test environments
 * local ubuntu 22.04 install, R 4.1.2, 4.3.0
