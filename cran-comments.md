@@ -1,5 +1,5 @@
 ## Resubmission 
-1. Fixed Pandoc version checks in examples, to avoid failures in CRAN tests.
+1. Fixed a test case where it was attempting to write in user-library
 
 ## Test environments
 * local ubuntu 22.04 install, R 4.1.2, 4.3.0

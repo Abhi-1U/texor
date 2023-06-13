@@ -1,3 +1,9 @@
+# Version 1.0.3
+
+## Bug Fixes
+
+1. Fixed a test case where it was attempting to write in user-library. 
+
 # Version 1.0.2
 
 ## Bug Fixes
