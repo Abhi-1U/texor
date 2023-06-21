@@ -121,8 +121,11 @@ convert_to_markdown <- function(article_dir) {
         "equation_filter.lua", package = "texor")
     bookdown_ref_filter <- system.file(
         "bookdown_ref.lua", package = "texor")
+    error_checker_filter <- system.file(
+        "issue_checker.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
+                    "--lua-filter", error_checker_filter,
                     "--lua-filter", abs_filter,
                     "--lua-filter", bib_filter,
                     "--lua-filter", image_filter,
@@ -131,7 +134,8 @@ convert_to_markdown <- function(article_dir) {
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
                     "--lua-filter", equation_filter,
-                    "--lua-filter", bookdown_ref_filter)
+                    "--lua-filter", bookdown_ref_filter
+                    )
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     if (! pandoc_version_check()){
