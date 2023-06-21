@@ -41,8 +41,7 @@ include_style_file <- function(article_dir) {
     doc_start <- which(grepl("^\\s*\\\\begin\\{document\\}",
                         wrapper_file_content))
     before_doc_start <- wrapper_file_content[1:(doc_start - 1)]
-    after_doc_start <- wrapper_file_content[doc_start:
-                            length(wrapper_file_content)]
+    after_doc_start <- wrapper_file_content[doc_start:length(wrapper_file_content)]
     usepackage_metafix <- "\\usepackage{Metafix}"
     # Backup original wrapper file
     file.rename(wrapper_path, paste(wrapper_path, ".bk", sep = ""))
@@ -138,7 +137,7 @@ convert_to_markdown <- function(article_dir) {
                     )
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
-    if (! pandoc_version_check()){
+    if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
         return(FALSE)
     }
@@ -157,6 +156,7 @@ convert_to_markdown <- function(article_dir) {
                            get_texfile_name(article_dir),
                            sep = "/")
     find_pkg_references(tex_file_path)
+    check_for_errors(article_dir)
 }
 
 #' @title Modify Markdown to R-markdown

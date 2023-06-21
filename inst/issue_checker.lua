@@ -23,12 +23,15 @@ characters_and_spaces = 0
 process_anyway = false
 
 bm_usage = 0
-
-
+boldmath_usage = 0
+file = 0
 --[[
 Appends tikz related data in top-down sequence
 --]]
 function store_errors(err_data, err_text)
+    if (file == 0) then
+        io.open("potential_errors.yaml",'w'):close()
+    end
     local file,err = io.open("potential_errors.yaml",'a')
     if file then
         file:write(err_data .. ": " .. err_text)
@@ -46,17 +49,26 @@ potential_errors = {
         if (el.text:match('\\bm')) then
             bm_usage = bm_usage + 1
         end
+        if (el.text:match('\\boldmath')) then
+            boldmath_usage = boldmath_usage + 1
+        end
     end,
 
     DisplayMath = function(el)
         if (el.text:match('\\bm')) then
             bm_usage = bm_usage + 1
         end
+        if (el.text:match('\\boldmath')) then
+            boldmath_usage = boldmath_usage + 1
+        end
     end,
 
     Math = function(el)
         if (el.text:match('\\bm')) then
             bm_usage = bm_usage + 1
+        end
+        if (el.text:match('\\boldmath')) then
+            boldmath_usage = boldmath_usage + 1
         end
     end
 }
@@ -74,5 +86,7 @@ function Pandoc(el)
     -- skip metadata, just count body:
     pandoc.walk_block(pandoc.Div(el.blocks), potential_errors)
     store_errors("bm", bm_usage)
+    file = file + 1
+    store_errors("boldmath", boldmath_usage)
 
 end

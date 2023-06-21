@@ -202,3 +202,21 @@ count_inline <- function(article_dir, inline) {
     }
 
 }
+
+
+check_for_errors <- function(article_dir) {
+    issue_file <- paste0(article_dir,"/potential_errors.yaml")
+    if (file.exists(issue_file)) {
+        error_report <- yaml::read_yaml(issue_file)
+    }
+    else {
+        return(FALSE)
+    }
+    if (error_report$bm > 0) {
+        message("Usage of \\bm command in article found !")
+    }
+    if (error_report$boldmath > 0) {
+        message("Usage of \\boldmath command in article found !")
+    }
+    return(TRUE)
+}
