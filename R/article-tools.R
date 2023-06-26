@@ -23,7 +23,7 @@ include_style_file <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # Remove the RJournal.sty file to the article directory
     rj_style_path <- paste0(article_dir,"/RJournal.sty")
-    if (file.exists(rj_style_path)){
+    if (file.exists(rj_style_path)) {
         file.remove(rj_style_path)
     }
     # Copy over the Metafix.sty file to the article directory
