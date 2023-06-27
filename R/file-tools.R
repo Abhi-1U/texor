@@ -89,7 +89,7 @@ write_external_file <- function(file_path, mode, raw_text) {
 get_texfile_name <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     lookup_file <- get_wrapper_type(article_dir)
-    if (file.exists(file.path(article_dir,lookup_file))){
+    if (file.exists(file.path(article_dir,lookup_file))) {
         wrapper_file <- readLines(file.path(article_dir, lookup_file))
     }
     else {
