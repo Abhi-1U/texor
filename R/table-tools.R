@@ -41,7 +41,7 @@ patch_table_env <- function(article_dir) {
                                "\\s*\\\\end\\{table\\*\\}", "table\\*", "table")
     warning("Changed \\end{table*} to \\end{table}")
     raw_lines <- stream_editor(raw_lines,
-                               "\\s*\\\\multicolumn", "multicolumn", "multicolumnx")
+                               "\\s*\\\\multicolumn\\{", "multicolumn", "multicolumnx")
     warning("changed \\multicolumn to \\multicolumnx")
     # testing functionality
     #return(raw_lines)
