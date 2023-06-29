@@ -24,7 +24,13 @@ function Image(el)
         label = "Figure " .. tostring(figures)
     end
     -- original caption
-    local caption = pandoc.utils.stringify(el.caption)
+    if not el.caption then
+        local caption = pandoc.utils.stringify(el.caption)
+    else
+        local caption = ""
+    end
+
+
     if not caption then
       -- Figure has no caption, just add the label
       caption = label
@@ -50,7 +56,7 @@ function Image(el)
       if el.attributes[1][2]:match('%\\') then
         local width = tonumber(attribute_1[1][2]:match('%d+.%d+'))
         if(attribute_1[1][2]:match('%d+.%d+') == nil) then
-           el.attributes[1] = {"width",[[100%]]}
+           el.attributes[1] = {"width", "100%"}
         else
             el.attributes[1] = {"width",tostring(width*100)..[[%]]}
         end
