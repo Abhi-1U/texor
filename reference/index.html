@@ -51,9 +51,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="pre-processing-articles">Pre-Processing Articles<a class="anchor" aria-label="anchor" href="#pre-processing-articles"></a></h2>
       
-      
+      <p class="section-desc"></p><p>Functions using Regular Expressions and Stream Editor to pre-process LaTeX files</p>
 
       
     </div><div id="" class="section level2">
@@ -63,15 +63,41 @@
 
       <dl><dt>
           
-          <code><a href="article_has_tikz.html">article_has_tikz()</a></code> 
+          <code><a href="stream_editor.html">stream_editor()</a></code> 
         </dt>
-        <dd>Check if article has tikz images or not</dd>
+        <dd>stream editor</dd>
       </dl><dl><dt>
           
-          <code><a href="check_markdown_file.html">check_markdown_file()</a></code> 
+          <code><a href="patch_code_env.html">patch_code_env()</a></code> 
         </dt>
-        <dd>check markdown file</dd>
+        <dd>patch all code environments</dd>
       </dl><dl><dt>
+          
+          <code><a href="patch_equations.html">patch_equations()</a></code> 
+        </dt>
+        <dd>patch equations</dd>
+      </dl><dl><dt>
+          
+          <code><a href="patch_figure_env.html">patch_figure_env()</a></code> 
+        </dt>
+        <dd>patch figure environments</dd>
+      </dl><dl><dt>
+          
+          <code><a href="patch_table_env.html">patch_table_env()</a></code> 
+        </dt>
+        <dd>patch table environment</dd>
+      </dl></div><div class="section level2">
+      <h2 id="conversion">Conversion<a class="anchor" aria-label="anchor" href="#conversion"></a></h2>
+      
+      <p class="section-desc"></p><p>Functions to convert articles from one form or the other</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="convert_to_markdown.html">convert_to_markdown()</a></code> 
         </dt>
@@ -83,9 +109,82 @@
         <dd>convert LaTeX wrapper to native pandoc AST</dd>
       </dl><dl><dt>
           
+          <code><a href="generate_rmd.html">generate_rmd()</a></code> 
+        </dt>
+        <dd>Modify Markdown to R-markdown</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_html.html">produce_html()</a></code> 
+        </dt>
+        <dd>call rmarkdown::render to generate html file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="latex_to_web.html">latex_to_web()</a></code> 
+        </dt>
+        <dd>latex to web</dd>
+      </dl></div><div class="section level2">
+      <h2 id="graphics">Graphics<a class="anchor" aria-label="anchor" href="#graphics"></a></h2>
+      
+      <p class="section-desc"></p><p>Methods to work with Figures</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
           <code><a href="convert_to_png.html">convert_to_png()</a></code> 
         </dt>
         <dd>convert one single pdf file to png</dd>
+      </dl><dl><dt>
+          
+          <code><a href="handle_figures.html">handle_figures()</a></code> 
+        </dt>
+        <dd>handle figures</dd>
+      </dl><dl><dt>
+          
+          <code><a href="article_has_tikz.html">article_has_tikz()</a></code> 
+        </dt>
+        <dd>Check if article has tikz images or not</dd>
+      </dl></div><div class="section level2">
+      <h2 id="logger">Logger<a class="anchor" aria-label="anchor" href="#logger"></a></h2>
+      
+      <p class="section-desc"></p><p>Methods to work with Logging using Logger package</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="log_setup.html">log_setup()</a></code> 
+        </dt>
+        <dd>texor log setup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="texor_log.html">texor_log()</a></code> 
+        </dt>
+        <dd>log messages for various categories</dd>
+      </dl></div><div class="section level2">
+      <h2 id="utility">Utility<a class="anchor" aria-label="anchor" href="#utility"></a></h2>
+      
+      <p class="section-desc"></p><p>Utility and Stat tools for various tasks</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="check_markdown_file.html">check_markdown_file()</a></code> 
+        </dt>
+        <dd>check markdown file</dd>
       </dl><dl><dt>
           
           <code><a href="copy_other_files.html">copy_other_files()</a></code> 
@@ -101,11 +200,6 @@
           <code><a href="count_inline.html">count_inline()</a></code> 
         </dt>
         <dd>count inline elements</dd>
-      </dl><dl><dt>
-          
-          <code><a href="generate_rmd.html">generate_rmd()</a></code> 
-        </dt>
-        <dd>Modify Markdown to R-markdown</dd>
       </dl><dl><dt>
           
           <code><a href="get_journal_details.html">get_journal_details()</a></code> 
@@ -128,24 +222,9 @@
         <dd>Get the name of the wrapper file in the article dir</dd>
       </dl><dl><dt>
           
-          <code><a href="handle_figures.html">handle_figures()</a></code> 
-        </dt>
-        <dd>handle figures</dd>
-      </dl><dl><dt>
-          
           <code><a href="include_style_file.html">include_style_file()</a></code> 
         </dt>
         <dd>Include Style file</dd>
-      </dl><dl><dt>
-          
-          <code><a href="latex_to_web.html">latex_to_web()</a></code> 
-        </dt>
-        <dd>latex to web</dd>
-      </dl><dl><dt>
-          
-          <code><a href="log_setup.html">log_setup()</a></code> 
-        </dt>
-        <dd>texor log setup</dd>
       </dl><dl><dt>
           
           <code><a href="pandoc_version_check.html">pandoc_version_check()</a></code> 
@@ -153,36 +232,12 @@
         <dd>check texor pandoc compatibility</dd>
       </dl><dl><dt>
           
-          <code><a href="patch_figure_env.html">patch_figure_env()</a></code> 
-        </dt>
-        <dd>patch figure environments</dd>
-      </dl><dl><dt>
-          
-          <code><a href="patch_table_env.html">patch_table_env()</a></code> 
-        </dt>
-        <dd>patch table environment</dd>
-      </dl><dl><dt>
-          
           <code><a href="pre_conversion_statistics.html">pre_conversion_statistics()</a></code> 
         </dt>
         <dd>pre conversion statistics</dd>
-      </dl><dl><dt>
-          
-          <code><a href="produce_html.html">produce_html()</a></code> 
-        </dt>
-        <dd>call rmarkdown::render to generate html file</dd>
-      </dl><dl><dt>
-          
-          <code><a href="stream_editor.html">stream_editor()</a></code> 
-        </dt>
-        <dd>stream editor</dd>
-      </dl><dl><dt>
-          
-          <code><a href="texor_log.html">texor_log()</a></code> 
-        </dt>
-        <dd>log messages for various categories</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
