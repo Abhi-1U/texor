@@ -3,10 +3,60 @@ template:
   bootstrap: 5
   bootswatch: lux
   bslib:
-    pkgdown-nav-height: 100px
+    pkgdown-nav-height: 70px
 authors:
   footer:
     roles: [cre]
     text: "Put Together By"
   sidebar:
     roles: [aut, ctb]
+reference:
+- title: Pre-Processing Articles
+  desc: >
+    Functions using Regular Expressions and Stream Editor to pre-process LaTeX files
+  contents:
+    - stream_editor
+    - patch_code_env
+    - patch_equations
+    - patch_figure_env
+    - patch_table_env
+- title: Conversion
+  desc: >
+    Functions to convert articles from one form or the other
+  contents:
+    - convert_to_markdown
+    - convert_to_native
+    - generate_rmd
+    - produce_html
+    - latex_to_web
+
+- title: Graphics
+  desc: >
+    Methods to work with Figures
+  contents:
+    - convert_to_png
+    - handle_figures
+    - article_has_tikz
+
+- title: Logger
+  desc: >
+    Methods to work with Logging using Logger package
+  contents:
+    - log_setup
+    - texor_log
+
+- title: Utility
+  desc: >
+    Utility and Stat tools for various tasks
+  contents:
+    - check_markdown_file
+    - copy_other_files
+    - count_env
+    - count_inline
+    - get_journal_details
+    - get_md_file_name
+    - get_texfile_name
+    - get_wrapper_type
+    - include_style_file
+    - pandoc_version_check
+    - pre_conversion_statistics
