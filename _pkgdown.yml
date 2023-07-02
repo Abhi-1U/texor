@@ -1,9 +1,8 @@
 url: ~
 template:
   bootstrap: 5
-  bootswatch: lux
-  bslib:
-    pkgdown-nav-height: 70px
+  bootswatch: pulse
+  theme: github-light
 authors:
   footer:
     roles: [cre]
