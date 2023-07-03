@@ -1,8 +1,11 @@
 url: ~
 template:
   bootstrap: 5
-  bootswatch: pulse
-  theme: github-light
+  bootswatch: zephyr
+  theme: dracula
+  bslib:
+    pkgdown-nav-height: 100px
+    primary: "#14014a"
 authors:
   footer:
     roles: [cre]
