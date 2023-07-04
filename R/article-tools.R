@@ -133,8 +133,7 @@ convert_to_markdown <- function(article_dir) {
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
                     "--lua-filter", equation_filter,
-                    "--lua-filter", bookdown_ref_filter
-                    )
+                    "--lua-filter", bookdown_ref_filter)
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     if (!pandoc_version_check()) {
@@ -189,11 +188,11 @@ convert_to_markdown <- function(article_dir) {
 #' unlink(your_article_folder,recursive = TRUE)
 generate_rmd <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
-    if (! pandoc_version_check()){
+    if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
         return(FALSE)
     }
-    if (! check_markdown_file(article_dir)){
+    if (!check_markdown_file(article_dir)) {
         warning(paste0("There seems to be a problem with converted markdown file, Please check again !"))
         return(FALSE)
     }
@@ -203,12 +202,12 @@ generate_rmd <- function(article_dir) {
     volume <- 1 # placeholder value
     issue <- 1 # placeholder value
     journal_details <- get_journal_details(article_dir)
-    if (! journal_details$sample) {
+    if (!journal_details$sample) {
         volume <- journal_details$volume
         issue <- journal_details$issue
     }
 
-    markdown_file <- paste(article_dir,xfun::with_ext(get_wrapper_type(article_dir),"md"),sep="/")
+    markdown_file <- paste(article_dir,xfun::with_ext(get_wrapper_type(article_dir),"md"),sep = "/")
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
     # reads the abstract from the second author field
     # reason : abstract is patched as author in metafix.sty
@@ -244,7 +243,7 @@ generate_rmd <- function(article_dir) {
     # article metadata from DESCRIPTION
     article_metadata <- if (file.exists(file.path(
         dirname(markdown_file), "DESCRIPTION"))) {
-        if (! journal_details$sample) {
+        if (!journal_details$sample) {
             art <- load_article(file.path(dirname(markdown_file), "DESCRIPTION"))
             online_date <- Filter(function(x) x$status == "online", art$status)
             acknowledged_date <- Filter(function(x) x$status == "acknowledged", art$status)[[1]]$date
