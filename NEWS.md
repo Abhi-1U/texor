@@ -1,3 +1,16 @@
+# Version 1.0.5
+
+## Feature Updates
+
+1. A new Lua Filter to check for possible issues in LaTeX file during conversion
+2. New function to check multiple labels used in an environment
+
+## Bug Fixes
+
+1. Updated Image caption Lua filter which was broken by pandoc v3 (Figure update)
+2. Updated pkgdown website theme
+3. Fixed a Lua Filter to add extensions to some LaTeX Figure elements
+
 # Version 1.0.3
 
 ## Bug Fixes

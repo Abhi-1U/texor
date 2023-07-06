@@ -14,7 +14,6 @@ function checkPDFextension(src)
 end
 
 function GetFileExtension(src)
-  print("No Extension")
   return src:match("^.+(%..+)$")
 end
 
