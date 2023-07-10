@@ -48,7 +48,9 @@ Imports:
     xfun,
     logger,
     rjtools,
-    rebib
+    rebib,
+    cli,
+    whisker
 Suggests: 
     knitr,
     spelling,

@@ -3,6 +3,7 @@
 #' @param dir directory path
 #' @param log_steps Enable/Disable Logging of conversion steps
 #' @param example for examples only by default keep it FALSE.
+#' @param auto_wrapper automatically creates a wrapper if TRUE, else asks user. default value TRUE
 #' @note Use pandoc version greater than or equal to 2.17
 #' @note Do not use example = TRUE param when working with conversions.
 #' @return RJweb article document in /web folder
@@ -18,9 +19,9 @@
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
 #' texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE)
 #' unlink(your_article_folder, recursive = TRUE)
-latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
+latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = TRUE) {
     message(dir)
-    if (! pandoc_version_check()){
+    if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17"))
         return(FALSE)
     }
@@ -30,7 +31,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
     dir <- xfun::normalize_path(dir)
     date <- Sys.Date()
     file_name <- get_texfile_name(dir)
-    if(log_steps){
+    if (log_steps) {
         log_file <- paste0("texor-log-",date,".log")
         log_setup(dir, log_file, "texor" ,2)
         texor_log(paste0("working directory : ", dir), "info", 2)
@@ -38,7 +39,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
         # Step - 0 : Set working directory
         #            pdf directory
         # Step - 1 : Include Meta-fix style file
-        wrapper <- get_wrapper_type(dir)
+        wrapper <- get_wrapper_type(dir, auto_wrapper = auto_wrapper)
         texor_log(paste0("Stage-01 | ", "including Style File to : ", wrapper), "info", 2)
         texor_log(paste0("Stage-01 | ", "Style File :  Metafix.sty"), "info", 2)
         include_style_file(dir)
@@ -108,7 +109,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
         return(TRUE)
     }
     else{
-        wrapper <- get_wrapper_type(dir) #wrapper file name
+        wrapper <- get_wrapper_type(dir, auto_wrapper = auto_wrapper) #wrapper file name
         include_style_file(dir) # Step 1
         rebib::aggregate_bibliography(dir) # Step 2
         data <- handle_figures(dir, file_name) # Step 3
@@ -117,7 +118,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE) {
         patch_equations(dir) # Step 5.5
         patch_figure_env(dir) # Step 6
         meta <- pre_conversion_statistics(dir) # Step 6.5
-        if(example){
+        if (example) {
             copy_other_files(dir) # Step 8
             convert_to_markdown(dir) # Step 7
             texor::generate_rmd(dir) # Step 9

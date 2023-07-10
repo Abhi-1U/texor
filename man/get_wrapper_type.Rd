@@ -4,10 +4,12 @@
 \alias{get_wrapper_type}
 \title{Get the name of the wrapper file in the article dir}
 \usage{
-get_wrapper_type(article_dir)
+get_wrapper_type(article_dir, auto_wrapper = FALSE)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
+
+\item{auto_wrapper}{automatically creates a wrapper if TRUE, else asks user. default value FALSE}
 }
 \value{
 String with name of wrapper file or empty

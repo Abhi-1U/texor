@@ -4,7 +4,7 @@
 \alias{latex_to_web}
 \title{latex to web}
 \usage{
-latex_to_web(dir, log_steps = TRUE, example = FALSE)
+latex_to_web(dir, log_steps = TRUE, example = FALSE, auto_wrapper = TRUE)
 }
 \arguments{
 \item{dir}{directory path}
@@ -12,6 +12,8 @@ latex_to_web(dir, log_steps = TRUE, example = FALSE)
 \item{log_steps}{Enable/Disable Logging of conversion steps}
 
 \item{example}{for examples only by default keep it FALSE.}
+
+\item{auto_wrapper}{automatically creates a wrapper if TRUE, else asks user. default value TRUE}
 }
 \value{
 RJweb article document in /web folder
