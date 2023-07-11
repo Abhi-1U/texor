@@ -59,6 +59,7 @@ reference:
     - get_md_file_name
     - get_texfile_name
     - get_wrapper_type
+    - find_wrapper
     - include_style_file
     - pandoc_version_check
     - pre_conversion_statistics
