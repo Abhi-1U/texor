@@ -26,37 +26,54 @@
 patch_table_env <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)
-    file_path <- paste(article_dir, file_name, sep = "/")
-    if (file.exists(file_path)){
-        raw_lines <- readLines(file_path)
+    if (check_sub_sec_files(article_dir)) {
+        ## include sub files
+        file_paths <- get_sub_sec_files(article_dir)
+        ## include original file
+        append(file_paths, texor::get_texfile_name(article_dir))
     }
     else {
-        warning("LaTeX file not found !")
-        return(FALSE)
+        ## include only original file
+        file_paths <- file_name
     }
-    raw_lines <- stream_editor(raw_lines,
+    for (file_path in file_paths) {
+        file_path <- paste(article_dir, file_path, sep = "/")
+        if (file.exists(file_path)) {
+            raw_lines <- readLines(file_path)
+        }
+        else {
+            warning("LaTeX file not found !")
+            return(FALSE)
+        }
+        raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\begin\\{table\\*\\}", "table\\*", "table")
-    warning("Changed \\begin{table\\*} to \\begin{table}")
-    raw_lines <- stream_editor(raw_lines,
+        warning("Changed \\begin{table\\*} to \\begin{table}")
+        raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\end\\{table\\*\\}", "table\\*", "table")
-    warning("Changed \\end{table*} to \\end{table}")
-    raw_lines <- stream_editor(raw_lines,
+        warning("Changed \\end{table*} to \\end{table}")
+        raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\multicolumn\\{", "multicolumn", "multicolumnx")
-    warning("changed \\multicolumn to \\multicolumnx")
-    # testing functionality
-    #return(raw_lines)
-    # backup old file
-    if (file.exists(file_path)){
+        warning("changed \\multicolumn to \\multicolumnx")
+        #raw_lines <- stream_editor(raw_lines,
+        #                           "\\s*\\\\toprule", "toprule", "hline")
+        #raw_lines <- stream_editor(raw_lines,
+        #                           "\\s*\\\\midrule", "midrule", "hline")
+        #raw_lines <- stream_editor(raw_lines,
+        #                           "\\s*\\\\bottomrule", "bottomrule", "hline")
+        # testing functionality
+        # backup old file
+        if (file.exists(file_path)) {
         src_file_data <- readLines(file_path)
+        }
+        else {
+            warning("LaTeX file not found !")
+            return(FALSE)
+        }
+        backup_file <- paste(file_path, ".bk", sep = "")
+        write_external_file(backup_file, "w", src_file_data)
+        #remove old tex file
+        file.remove(file_path)
+        # write same tex file with new data
+        write_external_file(file_path, "w", raw_lines)
     }
-    else {
-        warning("LaTeX file not found !")
-        return(FALSE)
-    }
-    backup_file <- paste(file_path, ".bk", sep = "")
-    write_external_file(backup_file, "w", src_file_data)
-    # remove old tex file
-    file.remove(file_path)
-    # write same tex file with new data
-    write_external_file(file_path, "w", raw_lines)
 }

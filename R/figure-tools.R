@@ -164,51 +164,61 @@ patch_figure_env <- function(article_dir, with_alg = TRUE) {
     article_dir <- xfun::normalize_path(article_dir)
     # find tex file
     file_name <- get_texfile_name(article_dir)
-    file_path <- paste(article_dir, file_name, sep = "/")
-    # read Lines
-    if (file.exists(file_path)){
-        raw_lines <- readLines(file_path)
+    if (check_sub_sec_files(article_dir)) {
+        ## include sub files
+        file_paths <- get_sub_sec_files(article_dir)
+        ## include original file
+        append(file_paths, texor::get_texfile_name(article_dir))
     }
     else {
-        warning("LaTeX file not found !")
-        return(FALSE)
+        ## include only original file
+        file_paths <- file_name
     }
-    raw_lines <- stream_editor(raw_lines,
+    for (file_path in file_paths) {
+        file_path <- paste(article_dir, file_path, sep = "/")
+        # read Lines
+        if (file.exists(file_path)) {
+            raw_lines <- readLines(file_path)
+        }
+        else {
+            warning("LaTeX file not found !")
+            return(FALSE)
+        }
+        raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\begin\\{figure\\*\\}", "figure\\*", "figure")
-    warning("Changed \\begin{figure\\*} to \\begin{figure}")
-    raw_lines <- stream_editor(raw_lines,
+        warning("Changed \\begin{figure\\*} to \\begin{figure}")
+        raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\end\\{figure\\*\\}", "figure\\*", "figure")
-    warning("Changed \\end{figure\\*} to \\end{figure}")
-
-    raw_lines <- stream_editor(raw_lines,
+        warning("Changed \\end{figure\\*} to \\end{figure}")
+        raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\begin\\{algorithmic}", "algorithmic", "algorithm")
-    warning("Changed \\begin{algorithmic} to \\begin{algorithm}")
-    raw_lines <- stream_editor(raw_lines,
+        warning("Changed \\begin{algorithmic} to \\begin{algorithm}")
+        raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\end\\{algorithmic}", "algorithmic", "algorithm")
-    warning("Changed \\end{algorithmic} to \\end{algorithm}")
-
-    if (with_alg) {
-        raw_lines <- stream_editor(raw_lines,
+        warning("Changed \\end{algorithmic} to \\end{algorithm}")
+        if (with_alg) {
+            raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\begin\\{algorithm}", "algorithm", "figure")
-        warning("Changed \\begin{algorithm} to \\begin{figure}")
-        raw_lines <- stream_editor(raw_lines,
+            warning("Changed \\begin{algorithm} to \\begin{figure}")
+            raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\end\\{algorithm}", "algorithm", "figure")
-        warning("Changed \\end{algorithm} to \\end{figure}")
+            warning("Changed \\end{algorithm} to \\end{figure}")
+        }
+        # backup old file
+        if (file.exists(file_path)){
+            src_file_data <- readLines(file_path)
+        }
+        else {
+            warning("LaTeX file not found !")
+            return(FALSE)
+        }
+        backup_file <- paste(file_path, ".bk", sep = "")
+        write_external_file(backup_file, "w", src_file_data)
+        # remove old tex file
+        file.remove(file_path)
+        # write same tex file with new data
+        write_external_file(file_path, "w", raw_lines)
     }
-    # backup old file
-    if (file.exists(file_path)){
-        src_file_data <- readLines(file_path)
-    }
-    else {
-        warning("LaTeX file not found !")
-        return(FALSE)
-    }
-    backup_file <- paste(file_path, ".bk", sep = "")
-    write_external_file(backup_file, "w", src_file_data)
-    # remove old tex file
-    file.remove(file_path)
-    # write same tex file with new data
-    write_external_file(file_path, "w", raw_lines)
 }
 
 #' handle figures

@@ -17,41 +17,54 @@ patch_equations <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # find tex file
     file_name <- get_texfile_name(article_dir)
-    file_path <- paste(article_dir, file_name, sep = "/")
-    # readLines
-    delimiter <- "$$"
-    if (file.exists(file_path)){
-        raw_lines <- readLines(file_path)
+    if (check_sub_sec_files(article_dir)) {
+        ## include sub files
+        file_paths <- get_sub_sec_files(article_dir)
+        ## include original file
+        append(file_paths, texor::get_texfile_name(article_dir))
     }
     else {
-        warning("LaTeX file not found !")
-        return(FALSE)
+        ## include only original file
+        file_paths <- file_name
     }
-    eqn_arr_begin_bps <- which(grepl("\\s*\\\\begin\\{eqnarray\\}",raw_lines))
-    eqn_arr_end_bps <- which(grepl("\\s*\\\\end\\{eqnarray\\}",raw_lines))
-    if (length(eqn_arr_begin_bps) == length(eqn_arr_end_bps)) {
-        for (iterator in seq_along(eqn_arr_begin_bps)) {
-            begin_pos <- eqn_arr_begin_bps[iterator]
-            end_pos <- eqn_arr_end_bps[iterator]
-            mod_begin_line <- gsub("\\\\begin\\{eqnarray(\\*?)\\}", "\\n\\$\\$\\\\begin\\{eqnarray\\1\\}",raw_lines[begin_pos])
-            mod_end_line <- gsub("\\\\end\\{eqnarray(\\*?)\\}", "\\\\end\\{eqnarray\\1\\}\\$\\$", raw_lines[end_pos])
-            raw_lines[begin_pos] <- mod_begin_line
-            raw_lines[end_pos] <- mod_end_line
+    for (file_path in file_paths) {
+        file_path <- paste(article_dir, file_path, sep = "/")
+        # readLines
+        delimiter <- "$$"
+        if (file.exists(file_path)) {
+            raw_lines <- readLines(file_path)
         }
-    } else {
-        warning("The equations do not align")
+        else {
+            warning("LaTeX file not found !")
+            return(FALSE)
+        }
+        eqn_arr_begin_bps <- which(grepl("\\s*\\\\begin\\{eqnarray\\}",raw_lines))
+        eqn_arr_end_bps <- which(grepl("\\s*\\\\end\\{eqnarray\\}",raw_lines))
+        if (length(eqn_arr_begin_bps) == length(eqn_arr_end_bps)) {
+            for (iterator in seq_along(eqn_arr_begin_bps)) {
+                begin_pos <- eqn_arr_begin_bps[iterator]
+                end_pos <- eqn_arr_end_bps[iterator]
+                mod_begin_line <- gsub("\\\\begin\\{eqnarray(\\*?)\\}", "\\n\\$\\$\\\\begin\\{eqnarray\\1\\}",raw_lines[begin_pos])
+                mod_end_line <- gsub("\\\\end\\{eqnarray(\\*?)\\}", "\\\\end\\{eqnarray\\1\\}\\$\\$", raw_lines[end_pos])
+                raw_lines[begin_pos] <- mod_begin_line
+                raw_lines[end_pos] <- mod_end_line
+            }
+        }
+        else {
+            warning("The equations do not align")
+        }
+        if (file.exists(file_path)) {
+            src_file_data <- readLines(file_path)
+        }
+        else {
+            warning("LaTeX file not found !")
+            return(FALSE)
+        }
+        backup_file <- paste(file_path, ".bk", sep = "")
+        write_external_file(backup_file, "w", src_file_data)
+        # remove old tex file
+        file.remove(file_path)
+        # write same tex file with new data
+        write_external_file(file_path, "w", raw_lines)
     }
-    if (file.exists(file_path)){
-        src_file_data <- readLines(file_path)
-    }
-    else {
-        warning("LaTeX file not found !")
-        return(FALSE)
-    }
-    backup_file <- paste(file_path, ".bk", sep = "")
-    write_external_file(backup_file, "w", src_file_data)
-    # remove old tex file
-    file.remove(file_path)
-    # write same tex file with new data
-    write_external_file(file_path, "w", raw_lines)
 }

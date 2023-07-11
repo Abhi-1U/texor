@@ -56,32 +56,44 @@ patch_code_env <- function(article_dir) {
                   "boxedverbatim")
     article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)
-    file_path <- paste(article_dir, file_name, sep = "/")
-    # readLines
-    if (file.exists(file_path)){
-        raw_lines <- readLines(file_path)
+    if (check_sub_sec_files(article_dir)) {
+        ## include sub files
+        file_paths <- get_sub_sec_files(article_dir)
+        ## include original file
+        append(file_paths, texor::get_texfile_name(article_dir))
     }
     else {
-        warning("LaTeX file not found !")
-        return(FALSE)
+        ## include only original file
+        file_paths <- file_name
     }
-    replacement <- "verbatim"
-    # apply filter_code_env over all the env's
-    for (env in code_env) {
-        raw_lines <- filter_code_env(raw_lines, env, replacement)
+    for (file_path in file_paths) {
+        file_path <- paste(article_dir, file_path, sep = "/")
+        # readLines
+        if (file.exists(file_path)) {
+            raw_lines <- readLines(file_path)
+        }
+        else {
+            warning("LaTeX file not found !")
+            return(FALSE)
+        }
+        replacement <- "verbatim"
+        # apply filter_code_env over all the env's
+        for (env in code_env) {
+            raw_lines <- filter_code_env(raw_lines, env, replacement)
+        }
+        # backup old file
+        if (file.exists(file_path)){
+            src_file_data <- readLines(file_path)
+        }
+        else {
+            warning("LaTeX file not found !")
+            return(FALSE)
+        }
+        backup_file <- paste(file_path, ".bk", sep = "")
+        write_external_file(backup_file, "w", src_file_data)
+        # remove old tex file
+        file.remove(file_path)
+        # write same tex file with new data
+        write_external_file(file_path, "w", raw_lines)
     }
-    # backup old file
-    if (file.exists(file_path)){
-        src_file_data <- readLines(file_path)
-    }
-    else {
-        warning("LaTeX file not found !")
-        return(FALSE)
-    }
-    backup_file <- paste(file_path, ".bk", sep = "")
-    write_external_file(backup_file, "w", src_file_data)
-    # remove old tex file
-    file.remove(file_path)
-    # write same tex file with new data
-    write_external_file(file_path, "w", raw_lines)
 }
