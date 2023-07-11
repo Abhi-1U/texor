@@ -268,3 +268,47 @@ generate_image_paths <- function(article_dir) {
     return(image_paths)
 }
 
+#' Check article for sub-files
+#'
+#' There are some articles which include sub-section as seperate files, this
+#' function checks for the existence of such files.
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return TRUE if article has multiple sub files else FALSE
+#' @noRd
+check_sub_sec_files <- function(article_dir) {
+    root_article <- texor::get_texfile_name(article_dir)
+    article_data <- readLines(paste0(article_dir,"/",root_article))
+    sub_sec_file <- article_data[grepl("\\\\input\\{",article_data)]
+    if (length(sub_sec_file) > 0) {
+        return(TRUE)
+    }
+    return(FALSE)
+}
+
+#' Ge paths of sub-files from article
+#'
+#' There are some articles which include sub-section as seperate files, this
+#' function fetches the paths of these included files and returns them as a list.
+#'
+#' @param article_dir path to the directory which contains tex article
+#'
+#' @return a list of file names/ relative paths of included files
+#' @noRd
+get_sub_sec_files <- function(article_dir) {
+    if (!check_sub_sec_files(article_dir)) {
+        return(FALSE)
+    }
+    root_article <- texor::get_texfile_name(article_dir)
+    sub_sec_file <- readLines(paste0(article_dir,"/",root_article))
+    sub_sec_file <- sub_sec_file[grepl("\\\\input\\{",sub_sec_file)]
+    tex_files <- gsub("[[:space:]]", "",
+                     gsub("\\\\input\\{|\\}", "", sub_sec_file))
+    for (i in 1:length(tex_files)) {
+        if (!grepl(".tex$", tex_files[i])) {
+            tex_files[i] <- paste0(tex_files[i], ".tex")
+        }
+    }
+    return(tex_files)
+}
