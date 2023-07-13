@@ -38,13 +38,12 @@ texor is a package that deals with multiple challenges that occour in conversion
 6. Functions to convert PDF graphics to PNG.
 7. Almost all tables are supported with a few exceptions.
 8. Other things like citations,links,footnotes,math,CTV,package references are also supported.
-9. A parser to read and minimally convert inbuilt `\thebibliography` to bibtex (moved to [rebib](https://github.com/Abhi-1U/rebib))
+9.  Bibliography management and aggregation.(moved to [rebib](https://github.com/Abhi-1U/rebib))
 10. Figure/Table/Equation numbering
 11. Stream Editor to rename alien commands/environments to accepted defaults.
 12. Pre and Post conversion statistics of environments for verification.
-13. Bibliography aggregation.(moved to [rebib](https://github.com/Abhi-1U/rebib))
-14. Tikz,algorithm graphics supported (some figures might not work)
-15. Logging of events.
+13. Support for included files (1 degree related to main article only).
+14. Logging of events.
 
 ## Installation
 

@@ -30,7 +30,7 @@ filter = {
 }
 
 function Figure(el)
-    local label = "Figure 1 :"
+    local label = ""
     pandoc.walk_block(el,filter)
     if is_alg == 1 then
     	algorithms = algorithms + 1

@@ -53,7 +53,8 @@ patch_code_env <- function(article_dir) {
                   "Sinput",
                   "Soutput",
                   "smallverbatim",
-                  "boxedverbatim")
+                  "boxedverbatim",
+                  "smallexample")
     article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)
     if (check_sub_sec_files(article_dir)) {
