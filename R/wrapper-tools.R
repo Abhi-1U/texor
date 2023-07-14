@@ -21,7 +21,7 @@
 #' unlink(your_article_folder,recursive = TRUE)
 get_wrapper_type <- function(article_dir, auto_wrapper = FALSE) {
     article_dir <- xfun::normalize_path(article_dir)
-    article_files <- list.files(article_dir, recursive = TRUE)
+    article_files <- list.files(article_dir, recursive = FALSE)
     ignore_files <- basename(article_files) %in% c("RJournal.sty", "DESCRIPTION", "RJwrapper.pdf", "supplementaries.zip")
     top_dir <- function(x) {
         is_top <- dirname(x) == "."
