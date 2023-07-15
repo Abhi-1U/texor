@@ -34,11 +34,11 @@ function Figure(el)
     pandoc.walk_block(el,filter)
     if is_alg == 1 then
     	algorithms = algorithms + 1
-    	label = "Algorithm " .. tostring(algorithms)
+    	label = "Algorithm " .. tostring(algorithms) .. ":"
     end
     if is_fig == 1 then
     	figures = figures + 1
-    	label = "Figure " .. tostring(figures)
+    	label = "Figure " .. tostring(figures) .. ":"
     end
     local caption = pandoc.utils.stringify(el.caption)
     if not caption then

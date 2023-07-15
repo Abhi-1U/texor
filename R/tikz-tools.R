@@ -35,10 +35,11 @@ convert_tikz <- function(fig_block, article_dir) {
         "\\end{document}"
     )
     tikz_file_name <- paste0(gsub(":","",fig_block$label),".tex")
+    tikz_template <- gsub(paste0("\\\\includegraphics\\{tikz/",gsub(":","",fig_block$label),".png\\}"),"",tikz_template)
     # convert the tex file into pdf
-    tikz_dir <- paste(article_dir,"tikz",sep="/")
-    tikz_path <- paste(tikz_dir,tikz_file_name,sep="/")
-    if(! dir.exists(tikz_dir)) {
+    tikz_dir <- paste(article_dir,"tikz",sep = "/")
+    tikz_path <- paste(tikz_dir,tikz_file_name,sep = "/")
+    if (!dir.exists(tikz_dir)) {
         dir.create(tikz_dir, showWarnings = FALSE)
     }
     # write the template
@@ -66,9 +67,9 @@ convert_tikz <- function(fig_block, article_dir) {
              }
     )
     tikz_png_path <- xfun::with_ext(tikz_path,"png")
-    web_tikz_folder <- paste(article_dir,"web/tikz",sep="/")
+    web_tikz_folder <- paste(article_dir,"web/tikz",sep = "/")
     web_tikz_png_path <- paste0(web_tikz_folder,"/",tikz_png_file)
-    if(! dir.exists(web_tikz_folder)) {
+    if (!dir.exists(web_tikz_folder)) {
         dir.create(web_tikz_folder)
     }
     fig_block$copied <- TRUE
@@ -256,14 +257,14 @@ article_has_tikz <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     # reads the complete file
     file_name <- get_texfile_name(article_dir)
-    if (file.exists(file.path(article_dir,file_name))){
+    if (file.exists(file.path(article_dir,file_name))) {
         src_file_data <- readLines(file.path(article_dir, file_name))
     }
     else {
         warning("LaTeX file not found !")
         return(FALSE)
     }
-    # all possibke values of tikz start points
+    # all possible values of tikz start points
     tikz_image_list <- which(grepl("^\\s*\\\\begin\\{tikzpicture",
                                    src_file_data))
     if (identical(tikz_image_list, integer(0))) {
@@ -283,7 +284,7 @@ article_has_tikz <- function(article_dir) {
 insert_tikz_png <- function(fig_block,article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     file_name <- get_texfile_name(article_dir)
-    if (file.exists(file.path(article_dir,file_name))){
+    if (file.exists(file.path(article_dir,file_name))) {
         raw_lines <- readLines(file.path(article_dir, file_name))
     }
     else {
@@ -298,7 +299,7 @@ insert_tikz_png <- function(fig_block,article_dir) {
     figure_starts <- c(figure_starts,alg_figure_starts)
     figure_starts <- sort(figure_starts)
     before_including_image <- raw_lines[1:figure_starts[fig_block$image_number]]
-    remaining_line <- raw_lines[((figure_starts[fig_block$image_number])+1):length(raw_lines)]
+    remaining_line <- raw_lines[((figure_starts[fig_block$image_number]) + 1):length(raw_lines)]
     if (!identical(which(grepl("\\\\includegraphics\\{tikz/",remaining_line)),integer(0))) {
         warning("Image already included")
         return(TRUE)
