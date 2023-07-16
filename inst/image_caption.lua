@@ -14,6 +14,21 @@ algorithms = 0
 is_alg = 0
 -- temp variable to check for figure image
 is_fig = 0
+tikz_syle = 0
+-- para filter
+p_filter = {
+    Para = function(el)
+        string_el = pandoc.utils.stringify(el)
+        if string_el:find('^(= %[)') then
+            print("removing leftover tikz style")
+            print(el.content)
+            el.content = pandoc.Plain( pandoc.Space())
+            print(el.content)
+            return el
+        end
+        return el
+    end
+}
 --[[
 Applies the filter to Image elements
 --]]
@@ -25,8 +40,14 @@ filter = {
     else
         is_fig = 1
         is_alg = 0
- 	end
- end
+    end
+ end,
+ Para = function(el)
+        string_el = pandoc.utils.stringify(el)
+        if string_el:find('^(= %[)') then
+            tikz_style = 1
+        end
+    end
 }
 
 function Figure(el)
@@ -46,6 +67,15 @@ function Figure(el)
       caption = label
     else
       caption = label .. " " .. caption
+    end
+    if tikz_style == 1 then
+        print(el.content[2])
+        if pandoc.utils.stringify(el.content[2]):match('^(= %[)') then
+            print("removing leftover tikz style")
+            el.content[2] = pandoc.Plain( pandoc.Space())
+        end
+        print(el.content[2])
+        tikz_style = 0
     end
     el.caption.long[1] = caption
     is_fig = 0
