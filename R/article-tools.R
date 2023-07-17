@@ -164,6 +164,7 @@ convert_to_markdown <- function(article_dir) {
 #' generate rmarkdown file in output folder
 #'
 #' @param article_dir path to the directory which contains tex article
+#' @param web_dir option to create a new web directory, default TRUE
 #' @note Use pandoc version greater than or equal to 2.17
 #' @return R-markdown file in the web folder
 #' @export
@@ -186,7 +187,7 @@ convert_to_markdown <- function(article_dir) {
 #' texor::convert_to_markdown(your_article_path)
 #' texor::generate_rmd(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-generate_rmd <- function(article_dir) {
+generate_rmd <- function(article_dir, web_dir= TRUE) {
     article_dir <- xfun::normalize_path(article_dir)
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
@@ -323,14 +324,21 @@ generate_rmd <- function(article_dir) {
         article_body <- c(article_body, pandoc_md_contents[-(1:delimiters[2])])
 
     input_file <- basename(markdown_file)
-    output_file_name <- paste(dirname(markdown_file),
+    if (web_dir) {
+        output_file_name <- paste(dirname(markdown_file),
                               "/web/",
                               toString(tools::file_path_sans_ext(input_file)),
                               ".Rmd", sep = "")
-    dir.create(dirname(output_file_name), showWarnings = FALSE)
+        dir.create(dirname(output_file_name), showWarnings = FALSE)
+    }
+    else {
+        output_file_name <- paste(dirname(markdown_file),"/",
+                                  toString(tools::file_path_sans_ext(input_file)),
+                                  ".Rmd", sep = "")
+    }
     xfun::write_utf8(
-        c("---", yaml::as.yaml(front_matter), "---", article_body),
-        output_file_name)
+            c("---", yaml::as.yaml(front_matter), "---", article_body),
+            output_file_name)
 }
 
 #' @title convert LaTeX wrapper to native pandoc AST
@@ -433,6 +441,7 @@ convert_to_native <- function(article_dir) {
 #' @param article_dir path to the directory which contains tex article
 #' @param example only enabled for running examples for documentation and
 #'  to enable export of this function.
+#' @param web_dir option to create a new web directory, default TRUE
 #' @note Use pandoc version greater than or equal to 2.17
 #' @note Do not use example = TRUE param when working with conversions.
 #' @return Renders a RJwrapper.html file in the /web folder, in example it will
@@ -452,7 +461,7 @@ convert_to_native <- function(article_dir) {
 #' texor::copy_other_files(your_article_path)
 #' texor::produce_html(your_article_path,example = TRUE)
 #' unlink(your_article_folder,recursive = TRUE)
-produce_html <- function(article_dir,example = FALSE) {
+produce_html <- function(article_dir,example = FALSE, web_dir = TRUE) {
     if (example){
         return(TRUE)
     }
@@ -465,8 +474,14 @@ produce_html <- function(article_dir,example = FALSE) {
     }
     article_dir <- xfun::normalize_path(article_dir)
     article_type <- rjtools::rjournal_web_article
-    input_file_path <- paste(article_dir, "web",
-                    xfun::with_ext(get_wrapper_type(article_dir),"Rmd"),sep="/")
+    if (web_dir) {
+        input_file_path <- paste(article_dir, "web",
+                                 xfun::with_ext(get_wrapper_type(article_dir),"Rmd"),sep="/")
+    }
+    else {
+        input_file_path <- paste(article_dir,
+                                 xfun::with_ext(get_wrapper_type(article_dir),"Rmd"),sep="/")
+    }
     rmarkdown::render(
         input = input_file_path,
         output_format = "rjtools::rjournal_web_article")

@@ -4,10 +4,12 @@
 \alias{generate_rmd}
 \title{Modify Markdown to R-markdown}
 \usage{
-generate_rmd(article_dir)
+generate_rmd(article_dir, web_dir = TRUE)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
+
+\item{web_dir}{option to create a new web directory, default TRUE}
 }
 \value{
 R-markdown file in the web folder

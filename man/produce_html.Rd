@@ -4,13 +4,15 @@
 \alias{produce_html}
 \title{call rmarkdown::render to generate html file}
 \usage{
-produce_html(article_dir, example = FALSE)
+produce_html(article_dir, example = FALSE, web_dir = TRUE)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
 
 \item{example}{only enabled for running examples for documentation and
 to enable export of this function.}
+
+\item{web_dir}{option to create a new web directory, default TRUE}
 }
 \value{
 Renders a RJwrapper.html file in the /web folder, in example it will
