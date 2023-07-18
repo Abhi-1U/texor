@@ -4,7 +4,14 @@
 \alias{latex_to_web}
 \title{latex to web}
 \usage{
-latex_to_web(dir, log_steps = TRUE, example = FALSE, auto_wrapper = TRUE)
+latex_to_web(
+  dir,
+  log_steps = TRUE,
+  example = FALSE,
+  auto_wrapper = TRUE,
+  temp_mode = TRUE,
+  web_dir = FALSE
+)
 }
 \arguments{
 \item{dir}{directory path}
@@ -14,6 +21,11 @@ latex_to_web(dir, log_steps = TRUE, example = FALSE, auto_wrapper = TRUE)
 \item{example}{for examples only by default keep it FALSE.}
 
 \item{auto_wrapper}{automatically creates a wrapper if TRUE, else asks user. default value TRUE}
+
+\item{temp_mode}{temp mode will convert the document in a temporary folder and keep the original
+article untouched. default value = TRUE}
+
+\item{web_dir}{option to create a new web directory, default FALSE}
 }
 \value{
 RJweb article document in /web folder
@@ -34,6 +46,6 @@ article_dir <- system.file("examples/article",
 dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 your_article_path <- paste(your_article_folder,"article",sep="/")
-texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE)
+texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE, temp_mode =FALSE)
 unlink(your_article_folder, recursive = TRUE)
 }

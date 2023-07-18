@@ -4,6 +4,9 @@
 #' @param log_steps Enable/Disable Logging of conversion steps
 #' @param example for examples only by default keep it FALSE.
 #' @param auto_wrapper automatically creates a wrapper if TRUE, else asks user. default value TRUE
+#' @param temp_mode temp mode will convert the document in a temporary folder and keep the original
+#' article untouched. default value = TRUE
+#' @param web_dir option to create a new web directory, default FALSE
 #' @note Use pandoc version greater than or equal to 2.17
 #' @note Do not use example = TRUE param when working with conversions.
 #' @return RJweb article document in /web folder
@@ -17,9 +20,9 @@
 #' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
-#' texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE)
+#' texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE, temp_mode =FALSE)
 #' unlink(your_article_folder, recursive = TRUE)
-latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = TRUE) {
+latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = TRUE, temp_mode = TRUE, web_dir = FALSE) {
     message(dir)
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17"))
@@ -30,7 +33,36 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
     }
     dir <- xfun::normalize_path(dir)
     date <- Sys.Date()
+    wrapper <- get_wrapper_type(dir, auto_wrapper = auto_wrapper) #wrapper file name
     file_name <- get_texfile_name(dir)
+
+    # temp mode
+    if (temp_mode) {
+        dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+        dir.create(your_article_folder_2 <- paste(your_article_folder, basename(dirname(dir)),sep = '/'))
+        x <- file.copy(from = dir, to = your_article_folder_2,recursive = TRUE,)
+        your_article_path <- paste(your_article_folder_2, basename(dir),"",sep = "/")
+
+        # run latex to web recursively on a temp folder
+        x <- tryCatch(texor::latex_to_web(your_article_path,
+                                          auto_wrapper = auto_wrapper,
+                                          temp_mode = FALSE,
+                                          web_dir = web_dir),
+                      error = function(c) {
+                          warning(c)
+                      })
+        all_files <- list.files(your_article_path)
+        exculde_files <- c("*.bk","*.tex","*.yaml","*.sty","*.log","*.txt")
+        for (exp in exculde_files) {
+            all_files <- all_files[!grepl(exp,all_files)]
+        }
+        y <- file.copy(from = paste(your_article_path,all_files,sep="/"),
+                       to = xfun::normalize_path(dir),
+                       recursive = TRUE,
+                       )
+        unlink(your_article_folder, recursive = TRUE)
+        return(TRUE)
+    }
     if (log_steps) {
         log_file <- paste0("texor-log-",date,".log")
         log_setup(dir, log_file, "texor" ,2)
@@ -77,7 +109,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
         # Step - 8 : Create a new directory and copy
         #            dependent files/folders
         texor_log(paste0("Stage-08 | ","Copying Dependencies to /web"), "info", 2)
-        copy_other_files(dir)
+        #copy_other_files(dir)
         texor_log(paste0("Stage-08 | ","Copied Dependencies to /web"), "info", 2)
         # Step - 9 : generate R markdown file with
         #             metadata from DESCRIPTION, tex file
@@ -87,11 +119,11 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
         # YYYY is the year, ZZ is the Journal issue number and MMM is the DOI
         # referral(unique article number).
         texor_log(paste0("Stage-09 | ","Creating R-markdown File to /web"), "info", 2)
-        texor::generate_rmd(dir)
+        texor::generate_rmd(dir,web_dir = web_dir)
         texor_log(paste0("Stage-09 | ","Created R-markdown File to /web"), "info", 2)
         # Step - 10 : produce html (using rj_web_article) format
         texor_log(paste0("Stage-10 | ","Knitting Rmd to html"), "info", 2)
-        texor::produce_html(dir)
+        texor::produce_html(dir, web_dir = web_dir)
         texor_log(paste0("Stage-10 | ","Knitted Rmd to html"), "info", 2)
 
         post_data <- yaml::read_yaml(paste0(dir,"/post-conversion-meta.yaml"))
@@ -119,16 +151,20 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
         patch_figure_env(dir) # Step 6
         meta <- pre_conversion_statistics(dir) # Step 6.5
         if (example) {
-            copy_other_files(dir) # Step 8
+            if (web_dir) {
+                copy_other_files(dir) # Step 8
+            }
             convert_to_markdown(dir) # Step 7
-            texor::generate_rmd(dir) # Step 9
-            texor::produce_html(dir,example = TRUE) # Step 10
+            texor::generate_rmd(dir,web_dir = web_dir) # Step 9
+            texor::produce_html(dir,example = TRUE, web_dir = web_dir) # Step 10
         }
         else {
-            copy_other_files(dir) # Step 8
+            if (web_dir){
+                copy_other_files(dir) # Step 8
+            }
             convert_to_markdown(dir) # Step 7
-            texor::generate_rmd(dir) # Step 9
-            texor::produce_html(dir) # Step 10
+            texor::generate_rmd(dir,web_dir=web_dir) # Step 9
+            texor::produce_html(dir,web_dir = web_dir) # Step 10
         }
 
         return(TRUE)
