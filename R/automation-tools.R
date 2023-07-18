@@ -109,7 +109,9 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
         # Step - 8 : Create a new directory and copy
         #            dependent files/folders
         texor_log(paste0("Stage-08 | ","Copying Dependencies to /web"), "info", 2)
-        #copy_other_files(dir)
+        if (web_dir){
+            copy_other_files(dir)
+        }
         texor_log(paste0("Stage-08 | ","Copied Dependencies to /web"), "info", 2)
         # Step - 9 : generate R markdown file with
         #             metadata from DESCRIPTION, tex file
