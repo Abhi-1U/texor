@@ -7,10 +7,10 @@
 pandoc_version_check()
 }
 \value{
-TRUE if v >= 2.17, else FALSE
+TRUE if v >= 3.1, else FALSE
 }
 \description{
-texor package requires minimum pandoc version above or equal to 2.17,
+texor package requires minimum pandoc version above or equal to 3.1,
  hence this utility will check for the installation and version status.
 }
 \examples{

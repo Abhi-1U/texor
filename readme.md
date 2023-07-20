@@ -46,8 +46,8 @@ web friendly RJ-web-article format.
 
 ## Installation
 
-Install Pandoc v2.17 or greater, ideally latest version. If you are
-using Rstudio, it should be pre-installed.
+Install Pandoc v3.1 or greater, ideally latest version. If you are using
+Rstudio, it should be pre-installed.
 
 ``` r
 # To check the version of pandoc

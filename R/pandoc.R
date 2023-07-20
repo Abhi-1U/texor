@@ -1,8 +1,8 @@
 #' @title check texor pandoc compatibility
 #' @description
-#'  texor package requires minimum pandoc version above or equal to 2.17,
+#'  texor package requires minimum pandoc version above or equal to 3.1,
 #'  hence this utility will check for the installation and version status.
-#' @return TRUE if v >= 2.17, else FALSE
+#' @return TRUE if v >= 3.1, else FALSE
 #' @export
 #'
 #' @examples
@@ -11,27 +11,31 @@
 #' texor::pandoc_version_check()
 pandoc_version_check <- function(){
     pandoc_installation_check <- rmarkdown::pandoc_available()
-    if (! pandoc_installation_check) {
+    if (!pandoc_installation_check) {
+        warning("Pandoc not installed !, please install pandoc >= v3.1 ")
         return(FALSE)
     }
     else {
         # pass
     }
     current_version <- rmarkdown::pandoc_version()
-    if (toString(current_version) != ""){
+    if (toString(current_version) != "") {
         version_list <- unlist(strsplit(toString(current_version),split = "\\."))
     }
+    ## Pandoc Not Installed
     else {
-        warning("Pandoc not installed !, please install pandoc >= v2.17 ")
+        warning("Pandoc not installed !, please install pandoc >= v3.1 ")
         return(FALSE)
     }
-
-    if (as.integer(version_list[1]) == 2 && as.integer(version_list[2]) >= 17) {
+    # Pandoc Installed with version 3.1 exactly or above
+    if (as.integer(version_list[1]) == 3 && as.integer(version_list[2]) >= 1) {
         return(TRUE)
     }
-    if (as.integer(version_list[1]) > 2){
+    # Pandoc Installed above 3.1 (eg v4)
+    if (as.integer(version_list[1]) > 3) {
         return(TRUE)
     }
+    # Pandoc Installed but older than 3.1
     else {
         return(FALSE)
     }
@@ -63,7 +67,7 @@ check_markdown_file <- function(article_dir) {
     file_name <- get_md_file_name(article_dir)
     file_path <- paste(article_dir, file_name, sep = "/")
     # readLines
-    if (file.exists(file_path)){
+    if (file.exists(file_path)) {
         raw_lines <- readLines(file_path)
     }
     else {
@@ -71,7 +75,7 @@ check_markdown_file <- function(article_dir) {
     }
     failed_conversion_doc_2 <- c("::: article",
                                  ":::")
-    if (identical(failed_conversion_doc_2,raw_lines)){
+    if (identical(failed_conversion_doc_2,raw_lines)) {
         return(FALSE)
     }
     else {

@@ -58,4 +58,4 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Language: en-US
-SystemRequirements: pandoc (>= 2.17) - https://pandoc.org
+SystemRequirements: pandoc (>= 3.1) - https://pandoc.org
