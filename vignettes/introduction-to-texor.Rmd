@@ -134,7 +134,7 @@ texor::produce_html(dir)
 This package is involved with solving conversion problems on multiple fronts, thus has to rely on multiple 
 software tools. A list with reasoning is included here:
 
-1. Pandoc (min: V2.17) ^[included in Rstudio] : To convert the basic LaTeX to rmarkdown.
+1. Pandoc (min: V3.1) ^[included in Rstudio] : To convert the basic LaTeX to rmarkdown.
 2. poppler pdfutils : To convert embedded PDF to PNG.
 3. LaTeX/TinyTex^[read more [here](https://yihui.org/tinytex/)] : For Tikz and PDF article generation.
 4. rebib : For bibliography conversions/aggregations.

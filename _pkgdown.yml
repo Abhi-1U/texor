@@ -2,7 +2,7 @@ url: ~
 template:
   bootstrap: 5
   bootswatch: zephyr
-  theme: dracula
+  theme: breeze-light
   bslib:
     pkgdown-nav-height: 100px
     primary: "#14014a"
