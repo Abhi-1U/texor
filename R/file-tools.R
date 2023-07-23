@@ -108,24 +108,33 @@ get_journal_details <- function(article_dir) {
     article_dir <- xfun::normalize_path(article_dir)
     journal_details <- list()
     # windows
-    if( grepl("\\\\",article_dir)){
+    if (grepl("\\\\",article_dir)) {
         hierarchy <- str_split(article_dir, "\\\\")[[1]]
     }
-    if( grepl("/",article_dir)){
+    if (grepl("/",article_dir)) {
         hierarchy <- str_split(article_dir, "/")[[1]]
     } else {
         #--pass
     }
-    journal_folder <- hierarchy[length(hierarchy)-1]
+    journal_folder <- hierarchy[length(hierarchy) - 1]
     if (journal_folder == "") {
-        journal_folder <- hierarchy[length(hierarchy)-2]
+        journal_folder <- hierarchy[length(hierarchy) - 2]
     }
     journal_info <- str_split(journal_folder, "-")[[1]]
     journal_details$volume <- strtoi(journal_info[1],10) - 2008
     journal_details$issue <- strtoi(journal_info[2],10)
     journal_details$slug <- hierarchy[length(hierarchy)]
-    if (is.na(journal_details$issue)){
-        journal_details$sample <- TRUE
+    if (is.na(journal_details$issue)) {
+        journal_details$sample <- FALSE
+        journal_info <- str_split(Sys.Date(), "-")[[1]]
+        journal_details$volume <- strtoi(journal_info[1],10) - 2008
+        if ( strtoi(journal_info[1],10) < 2022) {
+            journal_details$issue <- floor(strtoi(journal_info[2],10) / 6)
+        }
+        else {
+            journal_details$issue <- floor(strtoi(journal_info[2],10) / 3)
+            journal_details$slug <- {'~'}
+        }
     } else {
         journal_details$sample <- FALSE
     }
