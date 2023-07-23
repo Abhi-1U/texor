@@ -203,11 +203,6 @@ generate_rmd <- function(article_dir, web_dir= TRUE) {
     volume <- 1 # placeholder value
     issue <- 1 # placeholder value
     journal_details <- get_journal_details(article_dir)
-    if (!journal_details$sample) {
-        volume <- journal_details$volume
-        issue <- journal_details$issue
-    }
-
     markdown_file <- paste(article_dir,xfun::with_ext(get_wrapper_type(article_dir),"md"),sep = "/")
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
     # reads the abstract from the second author field

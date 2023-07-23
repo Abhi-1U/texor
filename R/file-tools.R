@@ -125,7 +125,7 @@ get_journal_details <- function(article_dir) {
     journal_details$issue <- strtoi(journal_info[2],10)
     journal_details$slug <- hierarchy[length(hierarchy)]
     if (is.na(journal_details$issue)) {
-        journal_details$sample <- FALSE
+        journal_details$sample <- TRUE
         journal_info <- str_split(Sys.Date(), "-")[[1]]
         journal_details$volume <- strtoi(journal_info[1],10) - 2008
         if ( strtoi(journal_info[1],10) < 2022) {
