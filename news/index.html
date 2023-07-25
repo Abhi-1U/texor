@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">texor</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,29 @@
       <small>Source: <a href="https://github.com/Abhi-1U/texor/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.0" id="version-110">Version 1.1.0<a class="anchor" aria-label="anchor" href="#version-110"></a></h2>
+<div class="section level3">
+<h3 id="feature-updates-1-1-0">Feature Updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-1-0"></a></h3>
+<ol style="list-style-type: decimal"><li>New mechanism to convert articles without wrapper files.</li>
+<li>Support for non-standard named RJwrapper files.</li>
+<li>Support for files with inclusive articles, however only articles included in the main article are included.</li>
+<li>Support for <code>smallexample</code> code environment</li>
+<li>Enhancement <a href="https://github.com/Abhi-1U/texor/issues/47" class="external-link">#47</a> : temporary mode for conversions to keep the original LaTeX article untouched.</li>
+<li>Bumped up pandoc version requirement from 2.17 to 3.1 (minimum), latest (recommended)</li>
+</ol></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-1-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-0"></a></h3>
+<ol style="list-style-type: decimal"><li>Figure Environment wont be numbered if there is no Image in it.</li>
+<li>Now tikz images can be hot reloaded, no need to remove <code>\includegraphics{}</code> line manually.</li>
+<li>Fixed <a href="https://github.com/Abhi-1U/texor/issues/46" class="external-link">#46</a> where tikz style blocks would persist.</li>
+<li>Fixed <a href="https://github.com/Abhi-1U/texor/issues/45" class="external-link">#45</a> with Enhancement <a href="https://github.com/Abhi-1U/texor/issues/47" class="external-link">#47</a>.</li>
+<li>Closed <a href="https://github.com/Abhi-1U/texor/issues/41" class="external-link">#41</a> momentarily.</li>
+<li>Default issue and year is now based on current date.</li>
+<li>Fixed <a href="https://github.com/Abhi-1U/texor/issues/48" class="external-link">#48</a> - in Lua filter added check for <code>DisplayMath</code> for equation numbering.</li>
+<li>Closed <a href="https://github.com/Abhi-1U/texor/issues/40" class="external-link">#40</a> as most of the issues have been fixed.</li>
+</ol></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.5" id="version-105">Version 1.0.5<a class="anchor" aria-label="anchor" href="#version-105"></a></h2>
 <div class="section level3">
