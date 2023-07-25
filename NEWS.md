@@ -1,3 +1,25 @@
+# Version 1.1.0
+
+## Feature Updates
+
+1. New mechanism to convert articles without wrapper files.
+2. Support for non-standard named RJwrapper files.
+3. Support for files with inclusive articles, however only articles included in the main article are included.
+4. Support for `smallexample` code environment
+5. Enhancement #47 : temporary mode for conversions to keep the original LaTeX article untouched.
+6. Bumped up pandoc version requirement from 2.17 to 3.1 (minimum), latest (recommended)
+
+## Bug Fixes
+
+1. Figure Environment wont be numbered if there is no Image in it.
+2. Now tikz images can be hot reloaded, no need to remove `\includegraphics{}` line manually.
+3. Fixed #46 where tikz style blocks would persist.
+4. Fixed #45 with Enhancement #47.
+5. Closed #41 momentarily.
+6. Default issue and year is now based on current date.
+7. Fixed #48 - in Lua filter added check for `DisplayMath` for equation numbering.
+8. Closed #40  as most of the issues have been fixed.
+
 # Version 1.0.5
 
 ## Feature Updates
