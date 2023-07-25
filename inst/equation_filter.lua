@@ -21,24 +21,28 @@ License:   MIT – see LICENSE file for details
 --]]
 
 function Math(el)
-    if el.text:match('label') then
-        local text = pandoc.utils.stringify(el.text)
-        s, e, l =string.find(text,"\\label{(.-)}")
-        table.insert(equation_labels,l)
-        -- Bookdown does not support . _ in equations hence substituting them as hyphen
-        l = string.gsub(l, "%.", "-")
-        l = string.gsub(l, "_", "-")
-        l = string.gsub(l, " ", "-")
-        if (not l:match("^eq:")) then
-            l = "eq:" .. l
+    if el.mathtype == "DisplayMath" then
+        if el.text:match('label') then
+            local text = pandoc.utils.stringify(el.text)
+            s, e, l =string.find(text,"\\label{(.-)}")
+            table.insert(equation_labels,l)
+            -- Bookdown does not support . _ in equations hence substituting them as hyphen
+            l = string.gsub(l, "%.", "-")
+            l = string.gsub(l, "_", "-")
+            l = string.gsub(l, " ", "-")
+            if (not l:match("^eq:")) then
+                l = "eq:" .. l
+            end
+            el.text = text .. [[  (\#]] .. l .. [[)  ]]
+        else
+            --pass
         end
-        el.text = text .. [[  (\#]] .. l .. [[)  ]]
+        local left = el.mathtype == 'InlineMath' and '\\(' or '\n$$'
+        local right = el.mathtype == 'InlineMath' and '\\)' or '$$'
+        return pandoc.RawInline('markdown', left .. el.text .. right)
     else
-        --pass
+        return el
     end
-    local left = el.mathtype == 'InlineMath' and '\\(' or '\n$$'
-    local right = el.mathtype == 'InlineMath' and '\\)' or '$$'
-    return pandoc.RawInline('markdown', left .. el.text .. right)
 end
 
 function Link(el)
