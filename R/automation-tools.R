@@ -81,19 +81,19 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
         texor_log(paste0("Stage-02 | ", "Check rebib logs for more info"), "info", 2)
         rebib::aggregate_bibliography(dir)
         log_setup(dir, log_file, "texor", 2)
-        # Step - 3 : Check for PDF and then convert
-        #            PDF to PNG based on condition
-        texor_log(paste0("Stage-03 | ","converting Images to png"), "info", 2)
-        data <- handle_figures(dir, file_name)
-        texor_log(paste0("Stage-03 | ","converted pdf files to png"), "info", 2)
-        # Step - 4 : patch code environments to verbatim
-        texor_log(paste0("Stage-04 | ","Patching Code Env"), "info", 2)
+        # Step - 3 : patch code environments to verbatim
+        texor_log(paste0("Stage-03| ","Patching Code Env"), "info", 2)
         patch_code_env(dir)
-        texor_log(paste0("Stage-04 | ","Patched Code Env"), "info", 2)
-        # Step - 5 : patch custom table environments to table
-        texor_log(paste0("Stage-05 | ","Patching Table Env"), "info", 2)
+        texor_log(paste0("Stage-03 | ","Patched Code Env"), "info", 2)
+        # Step - 4 : patch custom table environments to table
+        texor_log(paste0("Stage-04 | ","Patching Table Env"), "info", 2)
         patch_table_env(dir)
-        texor_log(paste0("Stage-05 | ","Patched Table Env"), "info", 2)
+        texor_log(paste0("Stage-04 | ","Patched Table Env"), "info", 2)
+        # Step - 5 : Check for PDF and then convert
+        #            PDF to PNG based on condition
+        texor_log(paste0("Stage-05 | ","converting Images to png"), "info", 2)
+        data <- handle_figures(dir, file_name)
+        texor_log(paste0("Stage-05 | ","converted pdf files to png"), "info", 2)
         # Step - 5.5 : patch math or  latex commands
         patch_equations(dir)
         # Step - 6 : patch figure environments to figure
@@ -146,9 +146,9 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
         wrapper <- get_wrapper_type(dir, auto_wrapper = auto_wrapper) #wrapper file name
         include_style_file(dir) # Step 1
         rebib::aggregate_bibliography(dir) # Step 2
-        data <- handle_figures(dir, file_name) # Step 3
-        patch_code_env(dir) # Step 4
-        patch_table_env(dir) # Step 5
+        patch_code_env(dir) # Step 3
+        patch_table_env(dir) # Step 4
+        data <- handle_figures(dir, file_name) # Step 5
         patch_equations(dir) # Step 5.5
         patch_figure_env(dir) # Step 6
         meta <- pre_conversion_statistics(dir) # Step 6.5
