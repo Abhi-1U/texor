@@ -10,12 +10,17 @@ Pandoc : > 3.0
 figures = 0
 -- Algorithm counter variable
 algorithms = 0
--- temp variable to check for algorithm image
+-- codeblock counter variable
+codes = 0
+-- equations counter variable
 is_alg = 0
 -- temp variable to check for figure image
 is_fig = 0
+-- temp variable to check for code block
+is_code = 0
+
 tikz_syle = 0
--- para filter
+-- para filter for tikz content
 p_filter = {
     Para = function(el)
         string_el = pandoc.utils.stringify(el)
@@ -47,7 +52,10 @@ filter = {
         if string_el:find('^(= %[)') then
             tikz_style = 1
         end
-    end
+ end,
+CodeBlock = function(el)
+        is_code = 1
+end
 }
 
 function Figure(el)
@@ -57,9 +65,13 @@ function Figure(el)
     	algorithms = algorithms + 1
     	label = "Algorithm " .. tostring(algorithms) .. ":"
     end
-    if is_fig == 1 then
+    if is_fig == 1 and is_alg == 0 then
     	figures = figures + 1
     	label = "Figure " .. tostring(figures) .. ":"
+    end
+    if is_code == 1 and is_fig == 0 and is_alg == 0 then
+        codes = codes + 1
+    	label = "CodeBlock " .. tostring(codes) .. ":"
     end
     local caption = pandoc.utils.stringify(el.caption)
     if not caption then
