@@ -8,7 +8,6 @@ Copyright: © 2023 Abhishek Ulayil
 License:   MIT – see LICENSE file for details
 --]]
 
-equation_labels = {}
 
 --[[
 Applies the filter to Math elements
@@ -24,8 +23,7 @@ function Math(el)
     if el.mathtype == "DisplayMath" then
         if el.text:match('label') then
             local text = pandoc.utils.stringify(el.text)
-            s, e, l =string.find(text,"\\label{(.-)}")
-            table.insert(equation_labels,l)
+            s, e, l = string.find(text,"\\label{(.-)}")
             -- Bookdown does not support . _ in equations hence substituting them as hyphen
             l = string.gsub(l, "%.", "-")
             l = string.gsub(l, "_", "-")
@@ -52,32 +50,16 @@ function Link(el)
         resource = [[http://]] .. resource
         el.target = resource
     end
-    for _,label in pairs(equation_labels) do
-        if ("#"..label) == el.target then
-            local link_text = el.target
-            link_text = string.gsub(link_text, "%.", "-")
-            link_text = string.gsub(link_text, "_", "-")
-            link_text = string.gsub(link_text, " ", "-")
-            if (not link_text:match("^eq:")) then
-                link_text = "eq:" .. link_text
-            end
-            label = string.gsub(label, "%.", "-")
-            label = string.gsub(label, "_", "-")
-            label = string.gsub(label, " ", "-")
-            if (not label:match("^eq:")) then
-                label = "eq:" .. label
-            end
-            el.target = link_text
-            bkdwn = [[\@ref(]] .. label .. [[)]]
-            is_bkdwn = true
-            break
-        end
+    if (el.target:match("^#eq:")) then
+        l = el.target
+        l = string.gsub(l, "%.", "-")
+        l = string.gsub(l, "_", "-")
+        l = string.gsub(l, " ", "-")
+        el.content = l:gsub("#","")
+        bkdown = [[\@ref(]] .. l:gsub("#","") .. [[)]]
+        return pandoc.RawInline('markdown', bkdown)
     end
-
-    if is_bkdwn then
-        return pandoc.RawInline('markdown', bkdwn)
-    else
-        return(el)
-    end
+    return el
 end
+
 
