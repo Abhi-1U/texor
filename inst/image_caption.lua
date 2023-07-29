@@ -12,12 +12,15 @@ figures = 0
 algorithms = 0
 -- codeblock counter variable
 codes = 0
--- equations counter variable
+-- widetables counter variable
+wdtables = 0
 is_alg = 0
 -- temp variable to check for figure image
 is_fig = 0
 -- temp variable to check for code block
 is_code = 0
+-- temp variable to check for widetable
+is_wdtable = 0
 
 tikz_syle = 0
 -- para filter for tikz content
@@ -55,6 +58,9 @@ filter = {
  end,
 CodeBlock = function(el)
         is_code = 1
+end,
+Table = function(el)
+        is_wdtable = 1
 end
 }
 
@@ -72,6 +78,10 @@ function Figure(el)
     if is_code == 1 and is_fig == 0 and is_alg == 0 then
         codes = codes + 1
     	label = "CodeBlock " .. tostring(codes) .. ":"
+    end
+    if is_wdtable == 1 and is_code == 0 and is_fig == 0 and is_alg == 0 then
+        wdtables = wdtables + 1
+    	label = "WideTable " .. tostring(wdtables) .. ":"
     end
     local caption = pandoc.utils.stringify(el.caption)
     if not caption then
@@ -92,6 +102,8 @@ function Figure(el)
     el.caption.long[1] = caption
     is_fig = 0
     is_alg = 0
+    is_code = 0
+    is_wdtable = 0
     return el
 end
 
