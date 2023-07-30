@@ -20,9 +20,14 @@ function Table(el)
       -- Table has no caption, just add the label
       caption = pandoc.Blocks{label}
     elseif caption[1].tag == 'Plain' or caption[1].tag == 'Para' then
-      -- Prepend label to paragraph
-      label:extend{pandoc.Str ':', pandoc.Space()}
-      caption[1].content = label .. caption[1].content
+      -- skip numbering widetables
+      if pandoc.utils.stringify(caption[1].content) == "widetable" then
+        caption[1].content = pandoc.Space()
+      else
+         -- Prepend label to paragraph
+         label:extend{pandoc.Str ':', pandoc.Space()}
+        caption[1].content = label .. caption[1].content
+      end
     else
       -- Add label as plain block element
       label:extend{pandoc.Str ':', pandoc.Space()}

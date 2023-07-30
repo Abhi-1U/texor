@@ -81,6 +81,11 @@ function Figure(el)
     end
     if is_wdtable == 1 and is_code == 0 and is_fig == 0 and is_alg == 0 then
         wdtables = wdtables + 1
+        for i = 1,#el.content,1  do
+            if el.content[i].tag == 'Table' then
+                el.content[i].caption.long = "widetable"
+            end
+        end
     	label = "WideTable " .. tostring(wdtables) .. ":"
     end
     local caption = pandoc.utils.stringify(el.caption)
