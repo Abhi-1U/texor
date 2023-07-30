@@ -70,6 +70,14 @@ function Figure(el)
     if is_alg == 1 then
     	algorithms = algorithms + 1
     	label = "Algorithm " .. tostring(algorithms) .. ":"
+    	for i = 1,#el.content,1 do
+    	    if el.content[i].tag == 'Para' or el.content[i].tag == 'Plain' then
+    	        if el.content[i].content[1].tag ~= "Image" then
+    	            -- remove any leftover string from algorithm Images
+    	            el.content[i] = pandoc.Space()
+    	        end
+    	    end
+    	 end
     end
     if is_fig == 1 and is_alg == 0 then
     	figures = figures + 1
@@ -96,11 +104,13 @@ function Figure(el)
       caption = label .. " " .. caption
     end
     if tikz_style == 1 then
-        print(el.content[2])
-        if pandoc.utils.stringify(el.content[2]):match('^(= %[)') then
-            print("removing leftover tikz style")
-            el.content[2] = pandoc.Plain( pandoc.Space())
-        end
+        for i = 1,#el.content,1 do
+    	    if el.content[i].tag == 'Para' or el.content[i].tag == 'Plain' then
+                if pandoc.utils.stringify(el.content[i]):match('^(= %[)') then
+                    el.content[2] = pandoc.Plain( pandoc.Space())
+                end
+    	    end
+          end
         print(el.content[2])
         tikz_style = 0
     end
@@ -108,6 +118,7 @@ function Figure(el)
     is_fig = 0
     is_alg = 0
     is_code = 0
+    tikz_style = 0
     is_wdtable = 0
     return el
 end
