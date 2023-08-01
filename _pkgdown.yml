@@ -51,6 +51,7 @@ reference:
   desc: >
     Utility and Stat tools for various tasks
   contents:
+    - create_article
     - check_markdown_file
     - copy_other_files
     - count_env
