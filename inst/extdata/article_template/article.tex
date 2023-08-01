@@ -1,0 +1,71 @@
+% !TeX root = RJwrapper.tex
+\title{A LaTeX article compatible with texor}
+\author{by Name}
+
+\maketitle
+
+\abstract{
+This is a small abstract upto 150 words.
+}
+
+\section{To Compile}
+
+Install a LaTeX distribution/\CRANpkg{tinytex} in your system.
+
+Compile this file using LaTeX by opening it in a compatible editor like RStudio.
+Click on the compile button twice  for the best results.
+
+To install tinytex into your system, use these commands:
+\begin{verbatim}
+install.packages('tinytex')
+tinytex::install_tinytex()
+# to uninstall TinyTeX, run tinytex::uninstall_tinytex()
+
+tinytex::pdflatex('your_article_name')
+\end{verbatim}
+These Instructions are referenced in \citep{tinytex}.
+
+
+\section{To Convert}
+
+Install \href{https://pandoc.org/installing.html}{Pandoc} v3.1 or greater, ideally latest version. If you are using
+Rstudio, it should be pre-installed.
+
+\begin{verbatim}
+# To check the version of pandoc
+rmarkdown::pandoc_version()
+# or to simply check if you are good to go in terms of pandoc
+texor::pandoc_version_check()
+# TRUE if pandoc is good to go
+# FALSE if pandoc is too old for texor
+\end{verbatim}
+
+To convert an article simply use this command and provide article path
+
+\begin{verbatim}
+# for a single LaTeX article
+texor::latex_to_web(path_to_your_article)
+\end{verbatim}
+
+\begin{thebibliography}{99}
+    \providecommand{\natexlab}[1]{#1}
+    \providecommand{\url}[1]{\texttt{#1}}
+    \expandafter\ifx\csname urlstyle\endcsname\relax
+      \providecommand{\doi}[1]{doi: #1}\else
+      \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Xie (2023)]{tinytex}
+Yihui Xie
+\newblock tinytex: A lightweight, cross-platform, portable, and easy-to-maintain LaTeX distribution based on TeX Live
+\newblock \emph{package} \penalty0 2023
+\newblock URL \url{https://yihui.org/tinytex/}
+
+\end{thebibliography}
+
+
+\address{%
+Name\\
+Dept,Org,Post\\%
+City, Country\\
+ORCiD: 0000-0000-0000-0000\\
+}

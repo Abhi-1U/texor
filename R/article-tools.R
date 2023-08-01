@@ -484,3 +484,41 @@ produce_html <- function(article_dir,example = FALSE, web_dir = TRUE) {
         input = input_file_path,
         output_format = "rjtools::rjournal_web_article")
 }
+
+#' Create an R Journal article with a modified template for texor.
+#'
+#' @details
+#' Outputs an LaTeX R Journal paper template set of files in the project directory.
+#'
+#' @param name the name of the tex file, will default to "test"
+#' @param edit Opens the file for editing in RStudio/R GUI.
+#' @export
+create_article <- function(name="test", edit = TRUE){
+    file = xfun::with_ext(name, "tex")
+    current_dir <- getwd()
+    files <- c(system.file( "extdata/article_template/article.tex", package = "texor"),
+               system.file( "extdata/article_template/RJournal.sty", package = "texor"))
+    file.copy(from = files,to = current_dir, recursive = TRUE)
+    file.rename(from = "article.tex", to = paste0(xfun::sans_ext(name),".tex"))
+    rjwrapper <- whisker::whisker.render(
+        xfun::read_utf8(system.file("RJwrapper_template.tex", package = "texor")),
+        data = list(article_input = sprintf("\\input{%s}", xfun::sans_ext(name)))
+    )
+    xfun::write_utf8(rjwrapper, file.path("RJwrapper.tex"))
+    if (edit) {
+        path <- file
+        path <- normalizePath(path)
+        has_rstudio <- if (requireNamespace("rstudioapi", quietly = TRUE)) {
+            rstudioapi::hasFun("navigateToFile")
+        } else {
+            FALSE
+        }
+        if (has_rstudio) {
+            rstudioapi::navigateToFile(path)
+        } else {
+            utils::file.edit(path)
+        }
+    }
+
+    message("Success: your paper is ready to edit!")
+}
