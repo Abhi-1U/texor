@@ -291,6 +291,7 @@ generate_rmd <- function(article_dir, web_dir= TRUE) {
         volume = as.integer(volume),
         issue = as.integer(issue),
         slug = article_metadata$slug,
+        citation_url = "https://rjournal.github.io/",
         packages = yaml::read_yaml(pkg_yaml_path),
         preview = "preview.png",
         bibliography = metadata$bibliography,

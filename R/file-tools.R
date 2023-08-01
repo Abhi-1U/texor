@@ -123,7 +123,7 @@ get_journal_details <- function(article_dir) {
     journal_info <- str_split(journal_folder, "-")[[1]]
     journal_details$volume <- strtoi(journal_info[1],10) - 2008
     journal_details$issue <- strtoi(journal_info[2],10)
-    journal_details$slug <- hierarchy[length(hierarchy)]
+    journal_details$slug <- paste("RJ", hierarchy[length(hierarchy)], sep = "-")
     if (is.na(journal_details$issue)) {
         journal_details$sample <- TRUE
         journal_info <- str_split(Sys.Date(), "-")[[1]]
@@ -133,7 +133,7 @@ get_journal_details <- function(article_dir) {
         }
         else {
             journal_details$issue <- floor(strtoi(journal_info[2],10) / 3)
-            journal_details$slug <- {'~'}
+            journal_details$slug <- paste('RJ', strtoi(journal_info[1],10), "000", sep = "-")
         }
     } else {
         journal_details$sample <- FALSE
