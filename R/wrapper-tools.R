@@ -9,6 +9,7 @@
 #'3. wrapper.tex
 #' @param article_dir path to the directory which contains tex article
 #' @param auto_wrapper automatically creates a wrapper if TRUE, else asks user. default value FALSE
+#' @param interactive_mode interactive mode for converting articles with options.
 #' @return String with name of wrapper file or empty
 #' @export
 #' @examples
@@ -19,7 +20,7 @@
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
 #' texor::get_wrapper_type(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-get_wrapper_type <- function(article_dir, auto_wrapper = FALSE) {
+get_wrapper_type <- function(article_dir, auto_wrapper = FALSE, interactive_mode = FALSE) {
     article_dir <- xfun::normalize_path(article_dir)
     article_files <- list.files(article_dir, recursive = FALSE)
     ignore_files <- basename(article_files) %in% c("RJournal.sty", "DESCRIPTION", "RJwrapper.pdf", "supplementaries.zip")
@@ -53,7 +54,14 @@ get_wrapper_type <- function(article_dir, auto_wrapper = FALSE) {
             }
         }
         wrapper_input <- xfun::sans_ext(article_files[xfun::file_ext(article_files) == "tex"])
-        if (length(wrapper_input) != 1) {
+        if (interactive_mode && (length(wrapper_input) > 1)) {
+            wrapper_input <- utils::select.list(xfun::with_ext(wrapper_input,"tex"), preselect = NULL, multiple = FALSE,
+                    title = "Which is the main article file ?", graphics = getOption("menu.graphics"))
+        }
+        if (wrapper_input == ""){
+            cli::cli_abort("Could not automatically identify appropriate article tex file. Check that exactly 1 input tex file exists for the wrapper.")
+        }
+        else{
             cli::cli_abort("Could not automatically identify appropriate article tex file. Check that exactly 1 input tex file exists for the wrapper.")
         }
         rjwrapper <- whisker::whisker.render(

@@ -33,7 +33,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
     }
     dir <- xfun::normalize_path(dir)
     date <- Sys.Date()
-    wrapper <- get_wrapper_type(dir, auto_wrapper = auto_wrapper) #wrapper file name
+    wrapper <- get_wrapper_type(dir, auto_wrapper = auto_wrapper, interactive_mode = auto_wrapper) #wrapper file name
     file_name <- get_texfile_name(dir)
 
     # temp mode
