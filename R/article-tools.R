@@ -165,6 +165,7 @@ convert_to_markdown <- function(article_dir) {
 #'
 #' @param article_dir path to the directory which contains tex article
 #' @param web_dir option to create a new web directory, default TRUE
+#' @param interactive_mode interactive mode for converting articles with options. default FALSE
 #' @note Use pandoc version greater than or equal to 2.17
 #' @return R-markdown file in the web folder
 #' @export
@@ -187,7 +188,7 @@ convert_to_markdown <- function(article_dir) {
 #' texor::convert_to_markdown(your_article_path)
 #' texor::generate_rmd(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-generate_rmd <- function(article_dir, web_dir= TRUE) {
+generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
     article_dir <- xfun::normalize_path(article_dir)
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
@@ -255,7 +256,7 @@ generate_rmd <- function(article_dir, web_dir= TRUE) {
             online_date[[1]]$date
         }
         list(
-            slug = if (journal_details$sample){'~'} else {journal_details$slug},
+            slug = if (journal_details$sample) {'~'} else {journal_details$slug},
             acknowledged = acknowledged_date,
             online = online_date
         )
@@ -270,7 +271,7 @@ generate_rmd <- function(article_dir, web_dir= TRUE) {
         )
     }
     # if article has no abstract
-    if (toString(metadata$abstract) =="NA") {
+    if (toString(metadata$abstract) == "NA") {
         issue_year <- volume + 2008
         issue_month <- if (issue_year < 2022) issue * 6 else issue * 3
         metadata$abstract <- paste0("The '", metadata$title,
@@ -278,6 +279,16 @@ generate_rmd <- function(article_dir, web_dir= TRUE) {
                                     "-", issue, " issue.")
     }
     pkg_yaml_path <- paste(dirname(markdown_file), "pkg_meta.yaml", sep = "/" )
+    if (interactive_mode) {
+        cli::cli_alert_warning(paste0("Currently the slug is : ",
+                                      article_metadata$slug,
+                                      "\nfor the article titled : ",
+                                      metadata$title,
+                                      "\nDo you want to update the slug"))
+        if (utils::menu(c("Yes", "No")) == 1) {
+            article_metadata$slug = toString(readline("Enter the new Slug : "))
+        }
+    }
     front_matter <- list(
         title = metadata$title,
         abstract = metadata$abstract, #%||% ,
@@ -322,18 +333,33 @@ generate_rmd <- function(article_dir, web_dir= TRUE) {
         article_body <- c(article_body, pandoc_md_contents[-(1:delimiters[2])])
 
     input_file <- basename(markdown_file)
-    if (web_dir) {
+    if ((web_dir) && (interactive_mode)) {
         output_file_name <- paste(dirname(markdown_file),
                               "/web/",
-                              toString(tools::file_path_sans_ext(input_file)),
+                              article_metadata$slug,
                               ".Rmd", sep = "")
         dir.create(dirname(output_file_name), showWarnings = FALSE)
+        xfun::write_utf8(front_matter$slug,xfun::with_ext(output_file_name,"txt"))
     }
-    else {
+    if (!interactive_mode && !web_dir) {
         output_file_name <- paste(dirname(markdown_file),"/",
                                   toString(tools::file_path_sans_ext(input_file)),
                                   ".Rmd", sep = "")
     }
+    if (interactive_mode) {
+        output_file_name <- paste(dirname(markdown_file),"/",
+                                  article_metadata$slug,
+                                  ".Rmd", sep = "")
+        xfun::write_utf8(front_matter$slug,xfun::with_ext(output_file_name,"txt"))
+    }
+    if (web_dir) {
+        output_file_name <- paste(dirname(markdown_file),
+                                  "/web/",
+                                  toString(tools::file_path_sans_ext(input_file)),
+                                  ".Rmd", sep = "")
+        dir.create(dirname(output_file_name), showWarnings = FALSE)
+    }
+
     xfun::write_utf8(
             c("---", yaml::as.yaml(front_matter), "---", article_body),
             output_file_name)
@@ -440,6 +466,7 @@ convert_to_native <- function(article_dir) {
 #' @param example only enabled for running examples for documentation and
 #'  to enable export of this function.
 #' @param web_dir option to create a new web directory, default TRUE
+#' @param interactive_mode interactive mode for converting articles with options. default FALSE
 #' @note Use pandoc version greater than or equal to 2.17
 #' @note Do not use example = TRUE param when working with conversions.
 #' @return Renders a RJwrapper.html file in the /web folder, in example it will
@@ -459,11 +486,11 @@ convert_to_native <- function(article_dir) {
 #' texor::copy_other_files(your_article_path)
 #' texor::produce_html(your_article_path,example = TRUE)
 #' unlink(your_article_folder,recursive = TRUE)
-produce_html <- function(article_dir,example = FALSE, web_dir = TRUE) {
-    if (example){
+produce_html <- function(article_dir,example = FALSE, web_dir = TRUE, interactive_mode = FALSE) {
+    if (example) {
         return(TRUE)
     }
-    if (! pandoc_version_check()){
+    if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
         return(FALSE)
     }
@@ -472,13 +499,36 @@ produce_html <- function(article_dir,example = FALSE, web_dir = TRUE) {
     }
     article_dir <- xfun::normalize_path(article_dir)
     article_type <- rjtools::rjournal_web_article
+    wrapper <- get_wrapper_type(article_dir)
+    article_files <- list.files(article_dir, recursive = FALSE)
+    rmd_files <- article_files[grep(pattern = ".Rmd$", article_files)]
+    if (interactive_mode && web_dir) {
+        for (file in rmd_files) {
+            if (xfun::sans_ext(basename(file)) == xfun::sans_ext(get_wrapper_type(article_dir))) {
+                rmd_files <- file
+                break
+            }
+        }
+        input_file_path <- paste(article_dir, "web",
+                                 xfun::with_ext(xfun::sans_ext(rmd_files),"Rmd"),sep = "/")
+    }
+    if (!interactive_mode && !web_dir) {
+        input_file_path <- paste(article_dir,
+                                 xfun::with_ext(wrapper,"Rmd"),sep = "/")
+    }
+    if (interactive_mode) {
+        for (file in rmd_files) {
+            if (xfun::sans_ext(basename(file)) != xfun::sans_ext(get_wrapper_type(article_dir))) {
+                rmd_files <- file
+                break
+            }
+        }
+        input_file_path <- paste(article_dir,
+                                 xfun::with_ext(xfun::sans_ext(rmd_files),"Rmd"),sep = "/")
+    }
     if (web_dir) {
         input_file_path <- paste(article_dir, "web",
-                                 xfun::with_ext(get_wrapper_type(article_dir),"Rmd"),sep="/")
-    }
-    else {
-        input_file_path <- paste(article_dir,
-                                 xfun::with_ext(get_wrapper_type(article_dir),"Rmd"),sep="/")
+                                 xfun::with_ext(wrapper,"Rmd"),sep = "/")
     }
     rmarkdown::render(
         input = input_file_path,

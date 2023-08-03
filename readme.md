@@ -58,6 +58,9 @@ texor::pandoc_version_check()
 # FALSE if pandoc is too old for texor
 ```
 
+For included PDF conversions also install poppler-utils (used with
+pdftools package) Ideally install the latest version of poppler-utils.
+
 Install the mainline version from CRAN with:
 
 ``` r

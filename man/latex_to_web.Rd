@@ -10,7 +10,8 @@ latex_to_web(
   example = FALSE,
   auto_wrapper = TRUE,
   temp_mode = TRUE,
-  web_dir = FALSE
+  web_dir = FALSE,
+  interactive_mode = FALSE
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ latex_to_web(
 article untouched. default value = TRUE}
 
 \item{web_dir}{option to create a new web directory, default FALSE}
+
+\item{interactive_mode}{interactive mode for converting articles with options. default FALSE}
 }
 \value{
 RJweb article document in /web folder
