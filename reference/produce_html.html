@@ -58,7 +58,12 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">produce_html</span><span class="op">(</span><span class="va">article_dir</span>, example <span class="op">=</span> <span class="cn">FALSE</span>, web_dir <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">produce_html</span><span class="op">(</span></span>
+<span>  <span class="va">article_dir</span>,</span>
+<span>  example <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  web_dir <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  interactive_mode <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -74,6 +79,10 @@ to enable export of this function.</p></dd>
 
 <dt>web_dir</dt>
 <dd><p>option to create a new web directory, default TRUE</p></dd>
+
+
+<dt>interactive_mode</dt>
+<dd><p>interactive mode for converting articles with options. default FALSE</p></dd>
 
 </dl></div>
     <div class="section level2">
