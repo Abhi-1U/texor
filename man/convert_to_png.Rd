@@ -23,6 +23,10 @@ Note : The extensions in LaTeX source code will
 automatically be changed during pandoc conversion
 by a lua filter (refer : inst/extdata/image_filter.lua)
 }
+\note{
+If you find inconsistencies in the raster image generated from PDF using this
+ function. Please update poppler utils to newer versions (possibly latest one).
+}
 \examples{
 article_dir <- system.file("examples/pdf_conversion",
                  package = "texor")

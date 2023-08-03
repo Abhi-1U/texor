@@ -10,6 +10,9 @@
 #' automatically be changed during pandoc conversion
 #' by a lua filter (refer : inst/extdata/image_filter.lua)
 #'
+#' @note
+#'  If you find inconsistencies in the raster image generated from PDF using this
+#'  function. Please update poppler utils to newer versions (possibly latest one).
 #' @param file_path path to the pdf file
 #'
 #' @return png file of the same
@@ -26,17 +29,33 @@
 #' unlink(your_article_folder,recursive = TRUE)
 convert_to_png <- function(file_path){
     file_path <- xfun::normalize_path(file_path)
-    if (! grepl(".pdf$",file_path)) {
+    if (!grepl(".pdf$",file_path)) {
         file_path <- paste0(file_path,".pdf")
     }
     png_file <- paste(toString(
         tools::file_path_sans_ext(file_path)), ".png",
         sep = "")
-    pdftools::pdf_convert(file_path,
-                          format = "png",
-                          dpi = 600,
-                          pages = 1,
-                          filenames = png_file)
+    poppler_version = pdftools::poppler_config()$version
+    if (toString(poppler_version) != "") {
+        version_list <- unlist(strsplit(toString(poppler_version), split = "\\."))
+    }
+    if ((as.integer(version_list[1])  < 22) && ( as.integer(version_list[2]) < 2 )) {
+        warning("Older version of poppler utils detected, please update poppler if you find Inconsistencies in the Generated Images.")
+    }
+    if (pdftools::pdf_length(file_path) > 1) {
+        warning("This PDF contains multiple pages. The texor package will treat this file as a single Image")
+        pdftools::pdf_convert(file_path,
+                              format = "png",
+                              dpi = 600,
+                              pages = 1,
+                              filenames = png_file)
+    }
+    else {
+        pdftools::pdf_convert(file_path,
+                              format = "png",
+                              dpi = 600,
+                              filenames = png_file)
+    }
 }
 
 #' @title convert all pdf images to png
@@ -50,12 +69,12 @@ convert_to_png <- function(file_path){
 convert_all_pdf <- function(article_dir, fig_block) {
     article_dir <- xfun::normalize_path(article_dir)
     for (iterator in seq_along(fig_block)) {
-        if (fig_block[[iterator]]$image_count == 1){
+        if (fig_block[[iterator]]$image_count == 1) {
             if (fig_block[[iterator]]$extension == "pdf") {
                 image_path <- paste0(article_dir,"/",fig_block[[iterator]]$path)
                 convert_to_png(image_path)
                 pdf_rel_path <- fig_block[[iterator]]$path
-                if (! grepl(".pdf$",pdf_rel_path)) {
+                if (!grepl(".pdf$",pdf_rel_path)) {
                     fig_block[[iterator]]$path <- paste0(pdf_rel_path,".png")
                 } else {
                     fig_block[[iterator]]$path <- xfun::with_ext(pdf_rel_path,"png")
@@ -80,7 +99,7 @@ convert_all_pdf <- function(article_dir, fig_block) {
                     image_path <- paste0(article_dir,"/",fig_block[[iterator]]$path[iter_2])
                     convert_to_png(image_path)
                     pdf_rel_path <- fig_block[[iterator]]$path[iter_2]
-                    if (! grepl(".pdf$",pdf_rel_path)) {
+                    if (!grepl(".pdf$",pdf_rel_path)) {
                         fig_block[[iterator]]$path[iter_2] <- paste0(pdf_rel_path,".png")
                     } else {
                         fig_block[[iterator]]$path[iter_2] <- xfun::with_ext(pdf_rel_path,"png")
@@ -141,7 +160,7 @@ find_pdf_files <- function(article_dir) {
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
                     "--lua-filter", pdf_files_list_filter)
-    if (! pandoc_version_check()){
+    if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
         pdf_image_paths <- NULL
         return(pdf_image_paths)
@@ -155,7 +174,7 @@ find_pdf_files <- function(article_dir) {
                               options = pandoc_opt,
                               output = temp_file_path,
                               verbose = TRUE)
-    if (file.exists(paste0(article_dir,"/pdf_image_source.txt"))){
+    if (file.exists(paste0(article_dir,"/pdf_image_source.txt"))) {
         pdf_image_paths <- readLines(paste0(article_dir,"/pdf_image_source.txt"))
     } else {
         pdf_image_paths <- NULL
@@ -171,7 +190,7 @@ find_pdf_files <- function(article_dir) {
 #' @return converts pdf to png
 #' @noRd
 make_png_files <- function(input_file_paths) {
-        if (length(input_file_paths)==0) {
+        if (length(input_file_paths) == 0) {
         return()
     }
     input_file_paths[[1]] <- xfun::normalize_path(input_file_paths[[1]])
