@@ -61,9 +61,6 @@ get_wrapper_type <- function(article_dir, auto_wrapper = FALSE, interactive_mode
         if (wrapper_input == ""){
             cli::cli_abort("Could not automatically identify appropriate article tex file. Check that exactly 1 input tex file exists for the wrapper.")
         }
-        else{
-            cli::cli_abort("Could not automatically identify appropriate article tex file. Check that exactly 1 input tex file exists for the wrapper.")
-        }
         rjwrapper <- whisker::whisker.render(
             xfun::read_utf8(system.file("RJwrapper_template.tex", package = "texor")),
             data = list(article_input = sprintf("\\input{%s}", wrapper_input))
