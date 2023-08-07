@@ -90,12 +90,26 @@ function Figure(el)
     if is_wdtable == 1 and is_code == 0 and is_fig == 0 and is_alg == 0 then
         wdtables = wdtables + 1
         for i = 1,#el.content,1  do
+            print(el.content[i].tag)
             if el.content[i].tag == 'Table' then
+                print(el.content[i].caption.long)
                 el.content[i].caption.long = "widetable"
+                print(el.content[i].caption.long)
             end
         end
     	label = "WideTable " .. tostring(wdtables) .. ":"
     end
+    -- Figure has some math in it
+    for i = 1,#el.content,1 do
+        if el.content[i].tag == 'Para' or el.content[i].tag == 'Plain' then
+    	    for j = 1,#el.content[i].content,1 do
+    	        if el.content[i].content[j].tag == 'Math' then
+    	            print(el.content[i].content[j].text)
+    	            el.content[i].content[j].text = [[$]] .. el.content[i].content[j].text .. [[$]]
+    	       end
+    	    end
+        end
+   end
     local caption = pandoc.utils.stringify(el.caption)
     if not caption then
       -- Figure has no caption, just add the label
@@ -111,7 +125,6 @@ function Figure(el)
                 end
     	    end
           end
-        print(el.content[2])
         tikz_style = 0
     end
     el.caption.long[1] = caption

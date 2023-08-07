@@ -127,12 +127,12 @@ convert_to_markdown <- function(article_dir) {
                     "--lua-filter", error_checker_filter,
                     "--lua-filter", abs_filter,
                     "--lua-filter", bib_filter,
+                    "--lua-filter", equation_filter,
                     "--lua-filter", image_filter,
                     "--lua-filter", figure_filter,
                     "--lua-filter", code_block_filter,
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
-                    "--lua-filter", equation_filter,
                     "--lua-filter", bookdown_ref_filter)
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
@@ -287,6 +287,13 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
                                       "\nDo you want to update the slug"))
         if (utils::menu(c("Yes", "No")) == 1) {
             article_metadata$slug = toString(readline("Enter the new Slug : "))
+        }
+        cli::cli_alert_warning(paste0("Do you want to set the firstpage,lastpage ?",
+                                      "\nfor the article titled : ",
+                                      metadata$title))
+        if (utils::menu(c("Yes", "No")) == 1) {
+            article_metadata$pages[1] = toString(readline("Enter the firstpage : "))
+            article_metadata$pages[2] = toString(readline("Enter the lastpage : "))
         }
     }
     front_matter <- list(

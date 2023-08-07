@@ -22,6 +22,7 @@ function Table(el)
     elseif caption[1].tag == 'Plain' or caption[1].tag == 'Para' then
       -- skip numbering widetables
       if pandoc.utils.stringify(caption[1].content) == "widetable" then
+          print("widetable")
         caption[1].content = pandoc.Space()
       else
          -- Prepend label to paragraph
@@ -30,8 +31,7 @@ function Table(el)
       end
     else
       -- Add label as plain block element
-      label:extend{pandoc.Str ':', pandoc.Space()}
-      caption:insert(1, pandoc.Plain(label))
+
     end
     el.caption.long = caption
     return el
