@@ -20,8 +20,11 @@ License:   MIT – see LICENSE file for details
 --]]
 
 function Math(el)
+    if el.text:match('\\bm') then
+        el.text= el.text:gsub('\\bm','\\mathbf')
+    end
+    print(el.text)
     if el.mathtype == "DisplayMath" then
-        print(el.text)
         if el.text:match('label') then
             local text = pandoc.utils.stringify(el.text)
             s, e, l = string.find(text,"\\label{(.-)}")
