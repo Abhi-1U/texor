@@ -43,12 +43,13 @@ convert_to_png <- function(file_path){
         warning("Older version of poppler utils detected, please update poppler if you find Inconsistencies in the Generated Images.")
     }
     if (pdftools::pdf_length(file_path) > 1) {
-        warning("This PDF contains multiple pages. The texor package will treat this file as a single Image")
+        oldwd <- getwd()
+        setwd(dirname(file_path))
+        on.exit(setwd(oldwd))
+        warning("This PDF contains multiple pages. Please change the file_paths according to the page numbers manually.")
         pdftools::pdf_convert(file_path,
                               format = "png",
-                              dpi = 600,
-                              pages = 1,
-                              filenames = png_file)
+                              dpi = 600)
     }
     else {
         pdftools::pdf_convert(file_path,
@@ -204,11 +205,22 @@ make_png_files <- function(input_file_paths) {
         png_file <- paste(toString(
             tools::file_path_sans_ext(input_file_paths[[file_iter]][1])), ".png",
             sep = "")
-        pdftools::pdf_convert(input_file_paths[[file_iter]][1],
+        if (pdftools::pdf_length(input_file_paths[[file_iter]][1]) > 1) {
+            warning("This PDF contains multiple pages. Please change the file_paths according to the page numbers manually.")
+            oldwd <- getwd()
+            setwd(dirname(input_file_paths[[file_iter]][1]))
+            on.exit(setwd(oldwd))
+            pdftools::pdf_convert(input_file_paths[[file_iter]][1],
+                                  format = "png",
+                                  dpi = 600)
+        }
+        else {
+            pdftools::pdf_convert(input_file_paths[[file_iter]][1],
                               format = "png",
                               dpi = 600,
                               pages = 1,
                               filenames = png_file)
+        }
     }
     message("made PNG graphics @ 600 dpi density")
 }

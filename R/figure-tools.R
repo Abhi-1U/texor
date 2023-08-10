@@ -191,6 +191,18 @@ patch_figure_env <- function(article_dir, with_alg = TRUE) {
                                "\\s*\\\\end\\{figure\\*\\}", "figure\\*", "figure")
         warning("Changed \\end{figure\\*} to \\end{figure}")
         raw_lines <- stream_editor(raw_lines,
+                                   "\\s*\\\\begin\\{widefigure\\}", "widefigure", "figure")
+        warning("Changed \\begin{widefigure} to \\begin{figure}")
+        raw_lines <- stream_editor(raw_lines,
+                                   "\\s*\\\\end\\{widefigure\\}", "widefigure", "figure")
+        warning("Changed \\end{widefigure} to \\end{figure}")
+        raw_lines <- stream_editor(raw_lines,
+                                   "\\s*\\\\begin\\{widefigure\\*\\}", "widefigure\\*", "figure")
+        warning("Changed \\begin{widefigure\\*} to \\begin{figure}")
+        raw_lines <- stream_editor(raw_lines,
+                                   "\\s*\\\\end\\{widefigure\\*\\}", "widefigure\\*", "figure")
+        warning("Changed \\end{widefigure\\*} to \\end{figure}")
+        raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\begin\\{algorithmic}", "algorithmic", "algorithm")
         warning("Changed \\begin{algorithmic} to \\begin{algorithm}")
         raw_lines <- stream_editor(raw_lines,
