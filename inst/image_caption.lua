@@ -110,12 +110,12 @@ function Figure(el)
     	    end
         end
    end
-    local caption = pandoc.utils.stringify(el.caption)
+    local caption = el.caption
     if not caption then
       -- Figure has no caption, just add the label
-      caption = label
+      caption = {pandoc.Str(label)}
     else
-      caption = label .. " " .. caption
+      caption = {pandoc.Str(label),pandoc.Space()}
     end
     if tikz_style == 1 then
         for i = 1,#el.content,1 do
@@ -127,7 +127,7 @@ function Figure(el)
           end
         tikz_style = 0
     end
-    el.caption.long[1] = caption
+    el.caption.long[1].content = caption .. el.caption.long[1].content
     is_fig = 0
     is_alg = 0
     is_code = 0
