@@ -1,3 +1,24 @@
+# Version 1.2.0
+
+## Feature Updates
+
+1. `CodeBlock` and `WideTable` get their own numbering (but they share references with figures), Enhancement #51.
+2. added support for `\command{..}` macro.
+3. Included dummy `slug` and `citation_url`, Issue #50.
+4. Included a constructor for sample article, Enhancement #52.
+5. Added support for `\file{}`,`\var{}`,`\env{}`,`\option{}`,`\dfn{}`, `\cpkg{}` and `\samp{}`  macro.
+6. Asking user for Inputs in `interactive_mode`, Enhancement #53.
+
+## Bug Fixes
+
+1. Modified the workflow to avoid missing Images.
+2. Modified Lua filters to suppress numbering widetables in captions.
+3. Fixed Issue #49 where some text of algorithms were left behind.
+4. Updated pdf conversion functions with poppler version check and note in man pages.
+5. Fixed copying markdown files back in temp_mode.
+6. Set `unlink()` as `on.exit()` function in temp_mode
+7. Removed table Numbering for images gridded in a table environment within a Figure environment.
+
 # Version 1.1.0
 
 ## Feature Updates
