@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">texor</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,29 @@
       <small>Source: <a href="https://github.com/Abhi-1U/texor/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.0" id="version-120">Version 1.2.0<a class="anchor" aria-label="anchor" href="#version-120"></a></h2>
+<div class="section level3">
+<h3 id="feature-updates-1-2-0">Feature Updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-2-0"></a></h3>
+<ol style="list-style-type: decimal"><li>
+<code>CodeBlock</code> and <code>WideTable</code> get their own numbering (but they share references with figures), Enhancement <a href="https://github.com/Abhi-1U/texor/issues/51" class="external-link">#51</a>.</li>
+<li>added support for <code>\command{..}</code> macro.</li>
+<li>Included dummy <code>slug</code> and <code>citation_url</code>, Issue <a href="https://github.com/Abhi-1U/texor/issues/50" class="external-link">#50</a>.</li>
+<li>Included a constructor for sample article, Enhancement <a href="https://github.com/Abhi-1U/texor/issues/52" class="external-link">#52</a>.</li>
+<li>Added support for <code>\file{}</code>,<code>\var{}</code>,<code>\env{}</code>,<code>\option{}</code>,<code>\dfn{}</code>, <code>\cpkg{}</code> and <code>\samp{}</code> macro.</li>
+<li>Asking user for Inputs in <code>interactive_mode</code>, Enhancement <a href="https://github.com/Abhi-1U/texor/issues/53" class="external-link">#53</a>.</li>
+</ol></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-2-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-0"></a></h3>
+<ol style="list-style-type: decimal"><li>Modified the workflow to avoid missing Images.</li>
+<li>Modified Lua filters to suppress numbering widetables in captions.</li>
+<li>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/49" class="external-link">#49</a> where some text of algorithms were left behind.</li>
+<li>Updated pdf conversion functions with poppler version check and note in man pages.</li>
+<li>Fixed copying markdown files back in temp_mode.</li>
+<li>Set <code><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink()</a></code> as <code><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit()</a></code> function in temp_mode</li>
+<li>Removed table Numbering for images gridded in a table environment within a Figure environment.</li>
+</ol></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="version-110">Version 1.1.0<a class="anchor" aria-label="anchor" href="#version-110"></a></h2>
 <div class="section level3">
