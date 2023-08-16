@@ -99,6 +99,18 @@ function Figure(el)
         end
     	label = "WideTable " .. tostring(wdtables) .. ":"
     end
+    --using table for grid content as in subfigures
+    if is_wdtable == 1 and is_code == 0 and is_fig == 1 and is_alg == 0 then
+        for i = 1,#el.content,1  do
+            print(el.content[i].tag)
+            if el.content[i].tag == 'Table' then
+                print(el.content[i].caption.long)
+                el.content[i].caption.long = "widetable"
+                print(el.content[i].caption.long)
+            end
+        end
+    	label = "Figure " .. tostring(figures) .. ":"
+    end
     -- Figure has some math in it
     for i = 1,#el.content,1 do
         if el.content[i].tag == 'Para' or el.content[i].tag == 'Plain' then

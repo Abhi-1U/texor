@@ -23,6 +23,7 @@ function Table(el)
       -- skip numbering widetables
       if pandoc.utils.stringify(caption[1].content) == "widetable" then
           print("widetable")
+          tables = tables - 1
         caption[1].content = pandoc.Space()
       else
          -- Prepend label to paragraph
