@@ -55,11 +55,11 @@ patch_table_env <- function(article_dir) {
                                "\\s*\\\\multicolumn\\{", "multicolumn", "multicolumnx")
         warning("changed \\multicolumn to \\multicolumnx")
         raw_lines <- stream_editor(raw_lines,
-                                   "\\s*\\\\begin\\{widetable\\}", "widetable", "figure")
-        warning("Changed \\begin{widetable} to \\begin{figure}")
+                                   "\\s*\\\\begin\\{widetable\\}", "widetable", "table")
+        warning("Changed \\begin{widetable} to \\begin{table}")
         raw_lines <- stream_editor(raw_lines,
-                                   "\\s*\\\\end\\{widetable\\}", "widetable", "figure")
-        warning("Changed \\end{widetable} to \\end{figure}")
+                                   "\\s*\\\\end\\{widetable\\}", "widetable", "table")
+        warning("Changed \\end{widetable} to \\end{table}")
         # backup old file
         if (file.exists(file_path)) {
         src_file_data <- readLines(file_path)

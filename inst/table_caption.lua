@@ -1,5 +1,5 @@
 --[[
-CodeBlock filter – Convert a Div block into a CodeBlock
+Table filter – Adds Table Numbering
 License:   MIT – see LICENSE file for details
 adapted from: Albert Krewinkel implementation
 original License: CC0
@@ -7,6 +7,8 @@ original License: CC0
 
 -- Table counter variable
 tables = 0
+
+
 --[[
 Applies the filter to table elements
 --]]
@@ -32,8 +34,9 @@ function Table(el)
       end
     else
       -- Add label as plain block element
-
     end
     el.caption.long = caption
     return el
 end
+
+

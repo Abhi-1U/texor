@@ -122,6 +122,8 @@ convert_to_markdown <- function(article_dir) {
         "bookdown_ref.lua", package = "texor")
     error_checker_filter <- system.file(
         "issue_checker.lua", package = "texor")
+    wdtable_filter <- system.file(
+        "widetable_patcher.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
                     "--lua-filter", error_checker_filter,
@@ -130,6 +132,7 @@ convert_to_markdown <- function(article_dir) {
                     "--lua-filter", equation_filter,
                     "--lua-filter", image_filter,
                     "--lua-filter", figure_filter,
+                    "--lua-filter", wdtable_filter,
                     "--lua-filter", code_block_filter,
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
@@ -433,6 +436,8 @@ convert_to_native <- function(article_dir) {
         "equation_filter.lua", package = "texor")
     bookdown_ref_filter <- system.file(
         "bookdown_ref.lua", package = "texor")
+    wdtable_filter <- system.file(
+        "widetable_patcher.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
                     "--lua-filter", abs_filter,
@@ -440,6 +445,7 @@ convert_to_native <- function(article_dir) {
                     "--lua-filter", image_filter,
                     "--lua-filter", code_block_filter,
                     "--lua-filter", figure_filter,
+                    "--lua-filter", wdtable_filter,
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
                     "--lua-filter", equation_filter,

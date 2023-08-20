@@ -23,7 +23,7 @@ function Math(el)
     if el.text:match('\\bm') then
         el.text= el.text:gsub('\\bm','\\mathbf')
     end
-    print(el.text)
+    --print(el.text)
     if el.mathtype == "DisplayMath" then
         if el.text:match('label') then
             local text = pandoc.utils.stringify(el.text)
