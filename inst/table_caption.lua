@@ -17,10 +17,17 @@ function Table(el)
     -- Table Numbering to be appended
     local label = pandoc.Inlines("Table " .. tostring(tables))
     -- original caption
+    print(pandoc.utils.stringify(el.caption,long))
+
     local caption = el.caption.long
     if not caption[1] then
       -- Table has no caption, just add the label
       caption = pandoc.Blocks{label}
+      if (pandoc.utils.stringify(el.caption.long) == "") then
+          print("widetable")
+          tables = tables - 1
+          caption[1].content = pandoc.Space()
+      end
     elseif caption[1].tag == 'Plain' or caption[1].tag == 'Para' then
       -- skip numbering widetables
       if pandoc.utils.stringify(caption[1].content) == "widetable" then
@@ -38,5 +45,4 @@ function Table(el)
     el.caption.long = caption
     return el
 end
-
 

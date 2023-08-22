@@ -5,7 +5,9 @@ adapted from: Albert Krewinkel implementation
 original License: CC0
 Pandoc : > 3.0
 --]]
-old_session = false
+old_session_al = false
+old_session_fg = false
+old_session_wd = false
 -- Image counter variable
 figures = 0
 -- Algorithm counter variable
@@ -68,25 +70,11 @@ function Figure(el)
     local label = ""
     pandoc.walk_block(el,filter)
     if is_alg == 1 then
-        if old_session then
-            local file,err = io.open("algorithms.txt",'a')
-            if file then
-                --print(el.identifier)
-                file:write(pandoc.utils.stringify(el.identifier) .. "\n")
-                file:close()
-            else
-                print("error:", err)
-            end
+        if old_session_al then
+            write_to_file("algorithms.txt",'a',pandoc.utils.stringify(el.identifier))
         else
-            local file,err = io.open("algorithms.txt",'w')
-            if file then
-                --print(el.identifier)
-                file:write(pandoc.utils.stringify(el.identifier) .. "\n")
-                file:close()
-            else
-                print("error:", err)
-            end
-            old_session = true
+            write_to_file("algorithms.txt",'w',pandoc.utils.stringify(el.identifier))
+            old_session_al = true
         end
         algorithms = algorithms + 1
     	label = "Algorithm " .. tostring(algorithms) .. ":"
@@ -102,93 +90,33 @@ function Figure(el)
     if is_fig == 1 and is_alg == 0 then
     	figures = figures + 1
     	label = "Figure " .. tostring(figures) .. ":"
-    	if old_session then
-            local file,err = io.open("figs.txt",'a')
-            if file then
-                --print(el.identifier)
-                file:write(pandoc.utils.stringify(el.identifier) .. "\n")
-                file:close()
-            else
-                print("error:", err)
-            end
+    	if old_session_fg then
+    	    write_to_file("figs.txt",'a',pandoc.utils.stringify(el.identifier))
         else
-            local file,err = io.open("figs.txt",'w')
-            if file then
-                --print(el.identifier)
-                file:write(pandoc.utils.stringify(el.identifier) .. "\n")
-                file:close()
-            else
-                print("error:", err)
-            end
-            old_session = true
+            write_to_file("figs.txt",'w',pandoc.utils.stringify(el.identifier))
+            old_session_fg = true
         end
     end
     if is_code == 1 and is_fig == 0 and is_alg == 0 then
         figures = figures + 1
     	label = "Figure " .. tostring(figures) .. ":"
-    	if old_session then
-            local file,err = io.open("figs.txt",'a')
-            if file then
-                --print(el.identifier)
-                file:write(pandoc.utils.stringify(el.identifier) .. "\n")
-                file:close()
-            else
-                print("error:", err)
-            end
+    	if old_session_fg then
+    	    write_to_file("figs.txt",'a',pandoc.utils.stringify(el.identifier))
         else
-            local file,err = io.open("figs.txt",'w')
-            if file then
-                --print(el.identifier)
-                file:write(pandoc.utils.stringify(el.identifier) .. "\n")
-                file:close()
-            else
-                print("error:", err)
-            end
-            old_session = true
+            write_to_file("figs.txt",'w',pandoc.utils.stringify(el.identifier))
+            old_session_fg = true
         end
-    end
-    if is_wdtable == 1 and is_code == 0 and is_fig == 0 and is_alg == 0 then
-        wdtables = wdtables + 1
-        table_pos = {}
-        for i = 1,#el.content,1  do
-            if el.content[i].tag == 'Table' then
-                table.insert(table_pos, i)
-            end
-        end
-        for i = 1,#table_pos,1 do
-            if (i ~= #table_pos) then
-                el.content[i].caption.long = "widetable"
-            else
-                el.content[i].caption.long[1] = el.caption.long[1].content
-            end
-        end
-        el.caption.long[1].content = {pandoc.Space()}
-    	is_wdtable = 0
-        return el
     end
     --using table for grid content as in subfigures
     if is_wdtable == 1 and is_code == 0 and is_fig == 1 and is_alg == 0 then
         for i = 1,#el.content,1  do
-            --print(el.content[i].tag)
             if el.content[i].tag == 'Table' then
-                --print(el.content[i].caption.long)
-                el.content[i].caption.long = "widetable"
-                --print(el.content[i].caption.long)
+                el.content[i].caption.long = pandoc.Str("widetable")
             end
         end
+
     	label = "Figure " .. tostring(figures) .. ":"
     end
-    -- Figure has some math in it
-    for i = 1,#el.content,1 do
-        if el.content[i].tag == 'Para' or el.content[i].tag == 'Plain' then
-    	    for j = 1,#el.content[i].content,1 do
-    	        if el.content[i].content[j].tag == 'Math' then
-
-    	            el.content[i].content[j].text = [[$]] .. el.content[i].content[j].text .. [[$]]
-    	       end
-    	    end
-        end
-   end
     local caption = el.caption
     if not caption then
       -- Figure has no caption, just add the label
@@ -210,7 +138,6 @@ function Figure(el)
     is_fig = 0
     is_alg = 0
     is_code = 0
-    tikz_style = 0
     is_wdtable = 0
     return el
 end
@@ -237,4 +164,14 @@ function Image(el)
         end
     end
     return el
+end
+
+function write_to_file(filename,open_mode,content)
+    local file,err = io.open(filename,open_mode)
+    if file then
+        file:write(content .. "\n")
+        file:close()
+    else
+        print("error:", err)
+    end
 end

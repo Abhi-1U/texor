@@ -5,8 +5,9 @@ adapted from: Albert Krewinkel implementation
 original License: CC0
 --]]
 old_session = false
-
+ignore_tables = {}
 is_table =0
+is_image =0
 is_wd_table =0
 table_identifiers = {}
 --[[
@@ -20,37 +21,17 @@ end
 function Div(el)
     pandoc.walk_block(el,filtert)
     if is_table then
-        if not table_identifiers then
+        if not table_identifiers and (pandoc.utils.stringify(el.content[i].caption.long) ~= "") then
             table.insert(table_identifiers,pandoc.utils.stringify(el.identifier))
-            local file,err = io.open("tabs.txt",'w')
-            if file then
-                --print(el.identifier)
-                file:write(pandoc.utils.stringify(el.identifier) .. "\n")
-                file:close()
-            else
-                print("error:", err)
-            end
+            write_to_file("tabs.txt",'w',pandoc.utils.stringify(el.identifier))
+            old_session = true
         elseif (is_unique(pandoc.utils.stringify(el.identifier))) then
             table.insert(table_identifiers,pandoc.utils.stringify(el.identifier))
             if old_session then
-                local file,err = io.open("tabs.txt",'a')
-                if file then
-                    --print(el.identifier)
-                    file:write(pandoc.utils.stringify(el.identifier) .. "\n")
-                    file:close()
-                else
-                    print("error:", err)
-                end
+                write_to_file("tabs.txt",'a',pandoc.utils.stringify(el.identifier))
             else
-                local file,err = io.open("tabs.txt",'w')
-                if file then
-                    --print(el.identifier)
-                    file:write(pandoc.utils.stringify(el.identifier) .. "\n")
-                    file:close()
-                else
-                    print("error:", err)
-                end
-            old_session = true
+                write_to_file("tabs.txt",'w',pandoc.utils.stringify(el.identifier))
+                old_session = true
             end
         else
             for i = 1,#el.content,1 do
@@ -73,3 +54,19 @@ function is_unique(el)
     end
     return true
 end
+
+function write_to_file(filename,open_mode,content)
+    local file,err = io.open(filename,open_mode)
+    if file then
+        file:write(content .. "\n")
+        file:close()
+    else
+        print("error:", err)
+    end
+end
+
+function file_exists(name)
+   local f=io.open(name,"r")
+   if f~=nil then io.close(f) return true else return false end
+end
+
