@@ -43,8 +43,8 @@ function Math(el)
         else
             --pass
         end
-        --return {pandoc.LineBreak(), pandoc.RawInline('markdown',[[$$]] .. el.text .. [[$$]]),pandoc.LineBreak()}
-        return el
+        return {pandoc.Str("\n"),el,pandoc.Str("\n")}
+        --return el
     else
         return el
     end

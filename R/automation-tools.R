@@ -57,7 +57,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
                           warning(c)
                       })
         all_files <- list.files(your_article_path)
-        exculde_files <- c("*.bk","*.tex","*.yaml","*.sty","*.log","*.txt")
+        exculde_files <- c("*[.]bk$","*[.]tex$","*[.]yaml$","*[.]sty$","*[.]log$","*[.]txt$")
         for (exp in exculde_files) {
             all_files <- all_files[!grepl(exp,all_files)]
         }
