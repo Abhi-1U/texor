@@ -1,47 +1,47 @@
 --[[
-Bookdown Math Equation  Filter – Add Bookdown style equation numbering and labels from LaTeX
-format \label{eq:xyz} to bookdown format (\#eq:xyz)
-pandoc generated sample : $\mbox{$\mathbf B$}$
-filter generated equivalent : [\(\mbox{$\mathbf B$}\)]
-Conversion type : LaTeX --> Markdown
-Copyright: © 2023 Abhishek Ulayil
-License:   MIT – see LICENSE file for details
---]]
-
-
---[[
-Applies the filter to Math elements
---]]
---[[
 Equation filter – tries to correct and fix the equations and references.
 Note: In pandoc use --from as latex
 Copyright: © 2023 Abhishek Ulayil
 License:   MIT – see LICENSE file for details
 --]]
-
+old_session = false
+old_session_2 = false
 function Math(el)
     if el.text:match('\\bm') then
         el.text= el.text:gsub('\\bm','\\mathbf')
     end
-    --print(el.text)
+
     if el.mathtype == "DisplayMath" then
-        if el.text:match('label') then
+        if el.text:match('\\label') then
             local text = pandoc.utils.stringify(el.text)
             s, e, l = string.find(text,"\\label{(.-)}")
             -- Bookdown does not support . _ in equations hence substituting them as hyphen
+            if old_session then
+                write_to_file('oldeqlabels.txt','a',l)
+
+            else
+               write_to_file('oldeqlabels.txt','w',l)
+               old_session = true
+            end
             l = string.gsub(l, "%.", "-")
             l = string.gsub(l, "_", "-")
             l = string.gsub(l, " ", "-")
             if (not l:match("^eq:")) then
                 l = "eq:" .. l
             end
-            el.text = text .. [[  (\#]] .. l .. [[)  ]]
+            if old_session_2 then
+                write_to_file('neweqlabels.txt','a',l)
+
+            else
+               write_to_file('neweqlabels.txt','w',l)
+               old_session_2 = true
+            end
+            el.text = text .. [[   (\#]] .. l .. [[)]]
         else
             --pass
         end
-        local left = el.mathtype == 'InlineMath' and '\\(' or '$$'
-        local right = el.mathtype == 'InlineMath' and '\\)' or '$$'
-        return pandoc.RawInline('markdown',[[$$]] .. el.text .. [[$$]])
+        --return {pandoc.LineBreak(), pandoc.RawInline('markdown',[[$$]] .. el.text .. [[$$]]),pandoc.LineBreak()}
+        return el
     else
         return el
     end
@@ -54,16 +54,17 @@ function Link(el)
         resource = [[http://]] .. resource
         el.target = resource
     end
-    if (el.target:match("^#eq:")) then
-        l = el.target
-        l = string.gsub(l, "%.", "-")
-        l = string.gsub(l, "_", "-")
-        l = string.gsub(l, " ", "-")
-        el.content = l:gsub("#","")
-        bkdown = [[\@ref(]] .. l:gsub("#","") .. [[)]]
-        return pandoc.RawInline('markdown', bkdown)
-    end
     return el
+end
+
+function write_to_file(filename, open_mode, content)
+    local file,err = io.open(filename, open_mode)
+    if file then
+        file:write(content .. "\n")
+        file:close()
+    else
+        print("error:", err)
+    end
 end
 
 

@@ -4,7 +4,18 @@ Note: In pandoc use --from as latex
 Copyright: © 2023 Abhishek Ulayil
 License:   MIT – see LICENSE file for details
 --]]
+
+new_eq_labels = {}
+not_cached = true
+
 function Link(el)
+    -- cache new equation labels in a table
+    if file_exists('neweqlabels.txt') and not_cached then
+        for line in io.lines("neweqlabels.txt") do
+            table.insert(new_eq_labels, line)
+        end
+        not_cached = false
+    end
     -- change the numbering of algorithm images
     if (file_exists("algorithms.txt") and pandoc.utils.stringify(el.target):match("alg:")) then
         mini_iter = 1
@@ -43,8 +54,32 @@ function Link(el)
             mini_iter_3 = mini_iter_3 + 1
         end
     end
+    -- change numbering of equations if they exist
+    if (file_exists('oldeqlabels.txt') and file_exists('neweqlabels.txt')) then
+        mini_iter_4 = 1
+        for line in io.lines("oldeqlabels.txt") do
+            if (("#"..line)) == (pandoc.utils.stringify(el.target)) then
+                print(el.target)
+                print("new target")
+                print(new_eq_labels[mini_iter_4])
+                el.target = [[#]]..new_eq_labels[mini_iter_4]
+                break
+            end
+            mini_iter_4  = mini_iter_4 + 1
+        end
+    end
+    if (el.target:match("^#eq:")) then
+        l = el.target
+        l = string.gsub(l, "%.", "-")
+        l = string.gsub(l, "_", "-")
+        l = string.gsub(l, " ", "-")
+        el.content = l:gsub("#","")
+        bkdown = [[\@ref(]] .. l:gsub("#","") .. [[)]]
+        return pandoc.RawInline('markdown', bkdown)
+    end
     if el.attributes[1] ~= nil then
         if el.attributes[1][2] == "ref" then
+
             return pandoc.RawInline('markdown', [[[]].. pandoc.utils.stringify(el.content) .. [[](]] .. el.target .. [[)]])
         end
     else

@@ -1,8 +1,6 @@
 --[[
 WideTable Patcher – Adapts WideTable to the table framework
 License:   MIT – see LICENSE file for details
-adapted from: Albert Krewinkel implementation
-original License: CC0
 --]]
 old_session = false
 ignore_tables = {}
@@ -11,17 +9,23 @@ is_image =0
 is_wd_table =0
 table_identifiers = {}
 --[[
-Applies the filter to Table elements
+Applies the filter to Table elements to check for existence of tables
 --]]
 filtert = {
 Table = function(el)
     is_table = 1
 end
 }
+--[[
+--  Div ?
+--  Tables are stored in Div blocks in pandoc
+--]]
 function Div(el)
     pandoc.walk_block(el,filtert)
+    -- Creating a list of unique tables and also storing their identifiers in a text file.
     if is_table then
-        if not table_identifiers and (pandoc.utils.stringify(el.content[i].caption.long) ~= "") then
+        -- First table, checking for empty captions, if no caption, it wont be added to
+        if not table_identifiers then
             table.insert(table_identifiers,pandoc.utils.stringify(el.identifier))
             write_to_file("tabs.txt",'w',pandoc.utils.stringify(el.identifier))
             old_session = true
