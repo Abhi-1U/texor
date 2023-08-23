@@ -1,5 +1,5 @@
 --[[
-Table filter – Adds Table Numbering
+Table filter – Adds Table Numbering (ignores widetables)
 License:   MIT – see LICENSE file for details
 adapted from: Albert Krewinkel implementation
 original License: CC0
@@ -17,8 +17,6 @@ function Table(el)
     -- Table Numbering to be appended
     local label = pandoc.Inlines("Table " .. tostring(tables))
     -- original caption
-    print(pandoc.utils.stringify(el.caption,long))
-
     local caption = el.caption.long
     if not caption[1] then
       -- Table has no caption, just add the label
@@ -31,7 +29,7 @@ function Table(el)
     elseif caption[1].tag == 'Plain' or caption[1].tag == 'Para' then
       -- skip numbering widetables
       if pandoc.utils.stringify(caption[1].content) == "widetable" then
-          print("widetable")
+          --print("widetable")
           tables = tables - 1
         caption[1].content = pandoc.Space()
       else

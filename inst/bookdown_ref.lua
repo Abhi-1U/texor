@@ -17,7 +17,7 @@ function Link(el)
         not_cached = false
     end
     -- change the numbering of algorithm images
-    if (file_exists("algorithms.txt") and pandoc.utils.stringify(el.target):match("alg:")) then
+    if file_exists("algorithms.txt") then
         mini_iter = 1
         for line in io.lines("algorithms.txt") do
             if (("#"..line) == pandoc.utils.stringify(el.target)) then

@@ -26,6 +26,9 @@ function Math(el)
             l = string.gsub(l, "%.", "-")
             l = string.gsub(l, "_", "-")
             l = string.gsub(l, " ", "-")
+            l = string.gsub(l, ":","")
+            l = string.gsub(l, "/","")
+            l = string.gsub(l, ",","")
             if (not l:match("^eq:")) then
                 l = "eq:" .. l
             end
