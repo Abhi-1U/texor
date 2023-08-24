@@ -22,20 +22,31 @@ function Link(el)
         for line in io.lines("algorithms.txt") do
             if (("#"..line) == pandoc.utils.stringify(el.target)) then
                 --print("#"..line)
+                print("#"..line .. tostring(mini_iter))
                 el.content = pandoc.Str(tostring(mini_iter))
                 break
             end
             mini_iter = mini_iter + 1
         end
-        return(el)
     end
-    -- change the numbering of normal figures only in case of algorithms,
+    -- change the numbering for lstlistings environment
+    if file_exists("listings.txt") then
+        mini_iter_x = 1
+        for line in io.lines("listings.txt") do
+            if (("#"..line) == pandoc.utils.stringify(el.target)) then
+                el.content = pandoc.Str(tostring(mini_iter_x))
+                break
+            end
+            mini_iter_x = mini_iter_x + 1
+        end
+    end
+    -- change the numbering of normal figures only in case of algorithms, listings
     -- where there is a need for renumbering
     if (file_exists("algorithms.txt") and file_exists("figs.txt")) then
         mini_iter_2 = 1
         for line in io.lines("figs.txt") do
             if (("#"..line) == pandoc.utils.stringify(el.target)) then
-                --print("#"..line)
+                print("#"..line .. tostring(mini_iter_2))
                 el.content = pandoc.Str(tostring(mini_iter_2))
                 break
             end
@@ -48,6 +59,7 @@ function Link(el)
         for line in io.lines("tabs.txt") do
             if (("#"..line) == pandoc.utils.stringify(el.target)) then
                 --print("#"..line)
+                print("#"..line .. tostring(mini_iter_3))
                 el.content = pandoc.Str(tostring(mini_iter_3))
                 break
             end
@@ -58,10 +70,8 @@ function Link(el)
     if (file_exists('oldeqlabels.txt') and file_exists('neweqlabels.txt')) then
         mini_iter_4 = 1
         for line in io.lines("oldeqlabels.txt") do
-            if (("#"..line)) == (pandoc.utils.stringify(el.target)) then
-                print(el.target)
-                print("new target")
-                print(new_eq_labels[mini_iter_4])
+            if ("#"..line) == (pandoc.utils.stringify(el.target)) then
+                print("#"..line .. tostring(mini_iter_4))
                 el.target = [[#]]..new_eq_labels[mini_iter_4]
                 break
             end

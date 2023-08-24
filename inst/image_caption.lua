@@ -8,6 +8,7 @@ Pandoc : > 3.0
 old_session_al = false
 old_session_fg = false
 old_session_wd = false
+old_session_ls = false
 -- Image counter variable
 figures = 0
 -- Algorithm counter variable
@@ -15,12 +16,13 @@ algorithms = 0
 algs = 0
 -- codeblock counter variable
 codes = 0
+listings = 0
 -- widetables counter variable
 wdtables = 0
 is_alg = 0
 -- temp variable to check for figure image
 is_fig = 0
-
+is_listing = 0
 -- temp variable to check for widetable
 is_wdtable = 0
 
@@ -46,6 +48,9 @@ filter = {
  Image = function(el)
  	if el.src:match('alg/') then
         is_alg = 1
+        is_fig = 0
+ 	elseif el.src:match('lst/') then
+        is_listing = 1
         is_fig = 0
     else
         is_fig = 1
@@ -87,6 +92,18 @@ function Figure(el)
     	    end
     	 end
     end
+
+    if is_code == 1 and is_listing==1 and is_alg == 0 then
+        if old_session_ls then
+            write_to_file("listings.txt",'a',pandoc.utils.stringify(el.identifier))
+        else
+            write_to_file("listings.txt",'w',pandoc.utils.stringify(el.identifier))
+            old_session_ls = true
+        end
+        listings = listings + 1
+    	label = "Listing " .. tostring(listings) .. ":"
+    end
+
     if is_fig == 1 and is_alg == 0 then
     	figures = figures + 1
     	label = "Figure " .. tostring(figures) .. ":"
