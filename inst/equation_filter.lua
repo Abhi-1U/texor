@@ -23,6 +23,9 @@ function Math(el)
                write_to_file('oldeqlabels.txt','w',l)
                old_session = true
             end
+            if l:match("^eq:") then
+                l = string.gsub(l,"^eq:","")
+            end
             l = string.gsub(l, "%.", "-")
             l = string.gsub(l, "_", "-")
             l = string.gsub(l, " ", "-")
