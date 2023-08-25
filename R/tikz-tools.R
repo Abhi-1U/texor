@@ -50,7 +50,7 @@ convert_tikz <- function(fig_block, article_dir) {
     tryCatch(tinytex::latexmk(tikz_path, engine = "pdflatex"),
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
-                 warning(c$message)
+                 message(c$message)
                  fig_block$compiled <- FALSE
              }
     )
@@ -62,7 +62,7 @@ convert_tikz <- function(fig_block, article_dir) {
     tryCatch(texor::convert_to_png(xfun::with_ext(tikz_path,"pdf")),
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
-                 warning(c$message)
+                 message(c$message)
                  fig_block$converted <- FALSE
              }
     )
@@ -70,13 +70,13 @@ convert_tikz <- function(fig_block, article_dir) {
     web_tikz_folder <- paste(article_dir,"web/tikz",sep = "/")
     web_tikz_png_path <- paste0(web_tikz_folder,"/",tikz_png_file)
     if (!dir.exists(web_tikz_folder)) {
-        dir.create(web_tikz_folder)
+        suppressWarnings(dir.create(web_tikz_folder))
     }
     fig_block$copied <- TRUE
     tryCatch(file.copy(tikz_png_path,web_tikz_png_path),
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
-                 warning(c$message)
+                 message(c$message)
                  fig_block$copied <- FALSE
              }
     )
@@ -84,7 +84,7 @@ convert_tikz <- function(fig_block, article_dir) {
     tryCatch(insert_tikz_png(fig_block, article_dir),
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
-                 warning(c$message)
+                 message(c$message)
                  fig_block$included_as_png <- FALSE
              }
     )
@@ -138,7 +138,7 @@ extract_tikz_lib <- function(article_dir) {
         wrapper_lines <- readLines(wrapper_path)
     }
     else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     rjournal_line <- which(grepl("\\usepackage\\{RJournal\\}",wrapper_lines))
@@ -185,7 +185,7 @@ tikz_count <- function(article_dir, file_name) {
         raw_lines <- readLines(file_path)
     }
     else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     tikz_start_patt <- "\\\\begin\\{tikzpicture\\}"
@@ -261,7 +261,7 @@ article_has_tikz <- function(article_dir) {
         src_file_data <- readLines(file.path(article_dir, file_name))
     }
     else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     # all possible values of tikz start points
@@ -288,7 +288,7 @@ insert_tikz_png <- function(fig_block,article_dir) {
         raw_lines <- readLines(file.path(article_dir, file_name))
     }
     else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     file_path <- paste0(article_dir,"/",file_name)
@@ -301,7 +301,7 @@ insert_tikz_png <- function(fig_block,article_dir) {
     before_including_image <- raw_lines[1:figure_starts[fig_block$image_number]]
     remaining_line <- raw_lines[((figure_starts[fig_block$image_number]) + 1):length(raw_lines)]
     if (!identical(which(grepl("\\\\includegraphics\\{tikz/",remaining_line)),integer(0))) {
-        warning("Image already included")
+        message("Image already included")
         return(TRUE)
     }
     include_png_line <- paste0("\\includegraphics{tikz/",gsub(":","",fig_block$label),".png}")

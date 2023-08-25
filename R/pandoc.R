@@ -12,7 +12,7 @@
 pandoc_version_check <- function(){
     pandoc_installation_check <- rmarkdown::pandoc_available()
     if (!pandoc_installation_check) {
-        warning("Pandoc not installed !, please install pandoc >= v3.1 ")
+        message("Pandoc not installed !, please install pandoc >= v3.1 ")
         return(FALSE)
     }
     else {
@@ -24,7 +24,7 @@ pandoc_version_check <- function(){
     }
     ## Pandoc Not Installed
     else {
-        warning("Pandoc not installed !, please install pandoc >= v3.1 ")
+        message("Pandoc not installed !, please install pandoc >= v3.1 ")
         return(FALSE)
     }
     # Pandoc Installed with version 3.1 exactly or above
@@ -75,7 +75,11 @@ check_markdown_file <- function(article_dir) {
     }
     failed_conversion_doc_2 <- c("::: article",
                                  ":::")
+    failed_conversion_doc_1 <- c("")
     if (identical(failed_conversion_doc_2,raw_lines)) {
+        return(FALSE)
+    }
+    if (file.size(file_path) == 0L) {
         return(FALSE)
     }
     else {

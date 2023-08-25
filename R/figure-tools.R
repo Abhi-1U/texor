@@ -16,7 +16,7 @@ figure_reader <- function(article_dir, file_name) {
         raw_lines <- readLines(file_path)
     }
     else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     alg_start_patt <- "\\s*\\\\begin\\{algorithm\\}"
@@ -181,47 +181,47 @@ patch_figure_env <- function(article_dir, with_alg = TRUE) {
             raw_lines <- readLines(file_path)
         }
         else {
-            warning("LaTeX file not found !")
+            message("LaTeX file not found !")
             return(FALSE)
         }
         raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\begin\\{figure\\*\\}", "figure\\*", "figure")
-        warning("Changed \\begin{figure\\*} to \\begin{figure}")
+        message("Changed \\begin{figure\\*} to \\begin{figure}")
         raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\end\\{figure\\*\\}", "figure\\*", "figure")
-        warning("Changed \\end{figure\\*} to \\end{figure}")
+        message("Changed \\end{figure\\*} to \\end{figure}")
         raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\begin\\{widefigure\\}", "widefigure", "figure")
-        warning("Changed \\begin{widefigure} to \\begin{figure}")
+        message("Changed \\begin{widefigure} to \\begin{figure}")
         raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\end\\{widefigure\\}", "widefigure", "figure")
-        warning("Changed \\end{widefigure} to \\end{figure}")
+        message("Changed \\end{widefigure} to \\end{figure}")
         raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\begin\\{widefigure\\*\\}", "widefigure\\*", "figure")
-        warning("Changed \\begin{widefigure\\*} to \\begin{figure}")
+        message("Changed \\begin{widefigure\\*} to \\begin{figure}")
         raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\end\\{widefigure\\*\\}", "widefigure\\*", "figure")
-        warning("Changed \\end{widefigure\\*} to \\end{figure}")
+        message("Changed \\end{widefigure\\*} to \\end{figure}")
         raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\begin\\{algorithmic}", "algorithmic", "algorithm")
-        warning("Changed \\begin{algorithmic} to \\begin{algorithm}")
+        message("Changed \\begin{algorithmic} to \\begin{algorithm}")
         raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\end\\{algorithmic}", "algorithmic", "algorithm")
-        warning("Changed \\end{algorithmic} to \\end{algorithm}")
+        message("Changed \\end{algorithmic} to \\end{algorithm}")
         if (with_alg) {
             raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\begin\\{algorithm}", "algorithm", "figure")
-            warning("Changed \\begin{algorithm} to \\begin{figure}")
+            message("Changed \\begin{algorithm} to \\begin{figure}")
             raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\end\\{algorithm}", "algorithm", "figure")
-            warning("Changed \\end{algorithm} to \\end{figure}")
+            message("Changed \\end{algorithm} to \\end{figure}")
         }
         # backup old file
         if (file.exists(file_path)){
             src_file_data <- readLines(file_path)
         }
         else {
-            warning("LaTeX file not found !")
+            message("LaTeX file not found !")
             return(FALSE)
         }
         backup_file <- paste(file_path, ".bk", sep = "")
@@ -283,7 +283,7 @@ seperate_multiple_figures <- function(article_dir) {
         raw_lines <- readLines(file_path)
     }
     else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     inc_gr_patt <- "\\s*\\\\includegraphics"
@@ -301,7 +301,7 @@ seperate_multiple_figures <- function(article_dir) {
         src_file_data <- readLines(file_path)
     }
     else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     backup_file <- paste(file_path, ".bk", sep = "")

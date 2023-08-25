@@ -35,7 +35,7 @@ patch_equations <- function(article_dir) {
             raw_lines <- readLines(file_path)
         }
         else {
-            warning("LaTeX file not found !")
+            message("LaTeX file not found !")
             return(FALSE)
         }
         eqn_arr_begin_bps <- which(grepl("\\s*\\\\begin\\{eqnarray\\}",raw_lines))
@@ -51,13 +51,13 @@ patch_equations <- function(article_dir) {
             }
         }
         else {
-            warning("The equations do not align")
+            message("The equations do not align")
         }
         if (file.exists(file_path)) {
             src_file_data <- readLines(file_path)
         }
         else {
-            warning("LaTeX file not found !")
+            message("LaTeX file not found !")
             return(FALSE)
         }
         backup_file <- paste(file_path, ".bk", sep = "")

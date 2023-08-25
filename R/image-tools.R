@@ -118,7 +118,7 @@ find_image_extension <- function(article_dir, image_path, is_tikz = FALSE) {
             if (ext != "") {
                 return(ext)
             } else {
-                warning("File does not exist in the directory or wrong directory path")
+                message("File does not exist in the directory or wrong directory path")
             }
         }
     }
@@ -211,7 +211,7 @@ image_count <- function(article_dir, file_name) {
         raw_lines <- readLines(file_path)
     }
     else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     graphics_patt <- "\\s*\\\\includegraphics"

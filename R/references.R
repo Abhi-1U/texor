@@ -17,7 +17,7 @@ multi_label_check <- function(article_dir){
         matches_x <- matches[start_point:end_point]
         referenced_matches <- list()
         if (length(matches) > 2) {
-            warning("Multiple labels found in a figure environment !")
+            message("Multiple labels found in a figure environment !")
             for (match in matches_x) {
                 for (ref in unique(used_references$references)) {
                     if (ref == paste0("{",match,"}")) {
@@ -25,8 +25,8 @@ multi_label_check <- function(article_dir){
                     }
                 }
             }
-            warning("used matches :", paste0(referenced_matches,sep = ","))
-            warning("unused matches :", paste0(setdiff(matches_x,referenced_matches),sep = ","))
+            message("used matches :", paste0(referenced_matches,sep = ","))
+            message("unused matches :", paste0(setdiff(matches_x,referenced_matches),sep = ","))
             unused_references = append(unused_references, setdiff(matches_x,referenced_matches))
         }
     }
@@ -44,7 +44,7 @@ ref_reader <- function(file_path) {
         raw_lines <- readLines(file_path)
     }
     else {
-        warning("File Does not exist !")
+        message("File Does not exist !")
         return(FALSE)
     }
     raw_words <- str_split(raw_lines," ")

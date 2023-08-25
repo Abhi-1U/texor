@@ -35,6 +35,11 @@ convert_algorithm <- function(alg_object, article_dir) {
     if (! identical(M,integer(0))) {
         alg_object$alglib[M] <- ""
     }
+    A <- which(grepl("\\{algorithm2e\\}", alg_object$alglib))
+    print(alg_object$alglib[A])
+    if (identical(A,integer(0))) {
+        alg_object$alglib[length(alg_object$alglib)] <- "\\usepackage{algorithm2e}"
+    }
     algorithm_template <- c(
         "\\documentclass{standalone}",
         "\\usepackage{xcolor}",
@@ -46,7 +51,6 @@ convert_algorithm <- function(alg_object, article_dir) {
         "\\newcommand{\\pkg}[1]{#1}",
         "\\newcommand{\\CRANpkg}[1]{\\pkg{#1}}%",
         "\\newcommand{\\BIOpkg}[1]{\\pkg{#1}}",
-        "\\usepackage{algorithm2e}",
         alg_object$alglib,
         "\\begin{document}",
         "\\nopagecolor",
@@ -63,9 +67,12 @@ convert_algorithm <- function(alg_object, article_dir) {
     close(fileconn)
     alg_object$compiled <- TRUE
     tryCatch(tinytex::latexmk(alg_path, engine = "pdflatex"),
+             warning = function(c){
+                 message(c$message)
+             },
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
-                 warning(c$message)
+                 message(c$message)
                  alg_object$compiled <- FALSE
              }
     )
@@ -74,9 +81,12 @@ convert_algorithm <- function(alg_object, article_dir) {
     alg_object$path <- paste0("alg/",alg_png_file)
     alg_object$converted <- TRUE
     tryCatch(texor::convert_to_png(xfun::with_ext(alg_path,"pdf")),
+             warning = function(c){
+                 message(c$message)
+             },
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
-                 warning(c$message)
+                 message(c$message)
                  alg_object$converted <- FALSE
              }
     )
@@ -89,7 +99,7 @@ convert_algorithm <- function(alg_object, article_dir) {
     tryCatch(file.copy(alg_png_path, web_alg_png_path),
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
-                 warning(c$message)
+                 message(c$message)
                  alg_object$copied <- FALSE
              }
     )
@@ -97,7 +107,7 @@ convert_algorithm <- function(alg_object, article_dir) {
     tryCatch(insert_algorithm_png(alg_object, article_dir),
              error = function(c) {
                  c$message <- paste0(c$message, " (in ", article_dir , ")")
-                 warning(c$message)
+                 message(c$message)
                  alg_object$included_as_png <- FALSE
              }
     )
@@ -118,7 +128,7 @@ extract_extra_lib <- function(article_dir) {
         wrapper_lines <- readLines(wrapper_path)
     }
     else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     rjournal_line <- which(grepl("\\usepackage\\{RJournal\\}",wrapper_lines))
@@ -141,7 +151,7 @@ insert_algorithm_png <- function(fig_block,article_dir) {
     if (file.exists(file.path(article_dir,file_name))) {
         raw_lines <- readLines(file.path(article_dir, file_name))
     } else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     file_path <- paste0(article_dir,"/",file_name)

@@ -198,7 +198,7 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
         return(FALSE)
     }
     if (!check_markdown_file(article_dir)) {
-        warning(paste0("There seems to be a problem with converted markdown file, Please check again !"))
+        warning(paste0("Pandoc Failed to convert the LaTeX article, please check for missing brackets/closing environments and spelling mistakes !"))
         return(FALSE)
     }
     else {
@@ -543,9 +543,9 @@ produce_html <- function(article_dir,example = FALSE, web_dir = TRUE, interactiv
         input_file_path <- paste(article_dir, "web",
                                  xfun::with_ext(wrapper,"Rmd"),sep = "/")
     }
-    rmarkdown::render(
+    suppressWarnings(rmarkdown::render(
         input = input_file_path,
-        output_format = "rjtools::rjournal_web_article")
+        output_format = "rjtools::rjournal_web_article",))
 }
 
 #' Create an R Journal article with a modified template for texor.

@@ -42,30 +42,30 @@ patch_table_env <- function(article_dir) {
             raw_lines <- readLines(file_path)
         }
         else {
-            warning("LaTeX file not found !")
+            message("LaTeX file not found !")
             return(FALSE)
         }
         raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\begin\\{table\\*\\}", "table\\*", "table")
-        warning("Changed \\begin{table\\*} to \\begin{table}")
+        message("Changed \\begin{table\\*} to \\begin{table}")
         raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\end\\{table\\*\\}", "table\\*", "table")
-        warning("Changed \\end{table*} to \\end{table}")
+        message("Changed \\end{table*} to \\end{table}")
         raw_lines <- stream_editor(raw_lines,
                                "\\s*\\\\multicolumn\\{", "multicolumn", "multicolumnx")
-        warning("changed \\multicolumn to \\multicolumnx")
+        message("changed \\multicolumn to \\multicolumnx")
         raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\begin\\{widetable\\}", "widetable", "table")
-        warning("Changed \\begin{widetable} to \\begin{table}")
+        message("Changed \\begin{widetable} to \\begin{table}")
         raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\end\\{widetable\\}", "widetable", "table")
-        warning("Changed \\end{widetable} to \\end{table}")
+        message("Changed \\end{widetable} to \\end{table}")
         # backup old file
         if (file.exists(file_path)) {
         src_file_data <- readLines(file_path)
         }
         else {
-            warning("LaTeX file not found !")
+            message("LaTeX file not found !")
             return(FALSE)
         }
         backup_file <- paste(file_path, ".bk", sep = "")

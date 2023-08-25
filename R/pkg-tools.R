@@ -13,7 +13,7 @@ find_pkg_references <- function(input_file){
         input <- readLines(input_file)
     }
     else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     pkgs <- gregexpr("\\\\(CRAN|BIO)pkg\\{.+?\\}", input)

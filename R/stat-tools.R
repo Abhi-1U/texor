@@ -59,7 +59,7 @@ count_env <- function(article_dir, env_name) {
         raw_lines <- readLines(file_path)
     }
     else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     begin_patt <- paste("\\s*\\\\begin\\{", env_name, "\\}", sep = "")
@@ -109,7 +109,7 @@ count_inline <- function(article_dir, inline) {
         raw_lines <- readLines(file_path)
     }
     else {
-        warning("LaTeX file not found !")
+        message("LaTeX file not found !")
         return(FALSE)
     }
     raw_words <- str_split(raw_lines," ")
