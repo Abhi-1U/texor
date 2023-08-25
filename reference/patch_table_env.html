@@ -94,15 +94,15 @@ These are due to the pandoc's limitations and ease in conversion."><!-- mathjax 
 <span class="r-in"><span><span class="va">your_article_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">your_article_folder</span>,<span class="st">"article"</span>,sep<span class="op">=</span><span class="st">"/"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">texor</span><span class="fu">::</span><span class="fu">patch_table_env</span><span class="op">(</span><span class="va">your_article_path</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found  1 Matches for target : table\*</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Changed \begin{table\*} to \begin{table}</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Changed \begin{table\*} to \begin{table}</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found  1 Matches for target : table\*</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Changed \end{table*} to \end{table}</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Changed \end{table*} to \end{table}</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found  2 Matches for target : multicolumn</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>changed \multicolumn to \multicolumnx</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> changed \multicolumn to \multicolumnx</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found 0 Matches for target :  widetable</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Changed \begin{widetable} to \begin{table}</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Changed \begin{widetable} to \begin{table}</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found 0 Matches for target :  widetable</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Changed \end{widetable} to \end{table}</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Changed \end{widetable} to \end{table}</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">your_article_folder</span>,recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
