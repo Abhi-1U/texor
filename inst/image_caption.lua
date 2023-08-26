@@ -52,6 +52,10 @@ filter = {
  	elseif el.src:match('lst/') then
         is_listing = 1
         is_fig = 0
+ 	elseif el.src:match('tikz/') then
+        tikz_style=1
+        is_fig = 1
+        is_alg = 0
     else
         is_fig = 1
         is_alg = 0
@@ -112,6 +116,17 @@ function Figure(el)
         else
             write_to_file("figs.txt",'w',pandoc.utils.stringify(el.identifier))
             old_session_fg = true
+    	end
+        if tikz_style == 1 then
+            for i = 1,#el.content,1 do
+    	        if el.content[i].tag == 'Para' or el.content[i].tag == 'Plain' then
+    	            if el.content[i].content[1].tag ~= "Image" then
+    	                -- remove any leftover string from tikz Images
+    	                el.content[i] = pandoc.Space()
+    	            end
+    	        end
+            end
+            tikz_style = 0
         end
     end
     if is_code == 1 and is_fig == 0 and is_alg == 0 then
@@ -141,16 +156,7 @@ function Figure(el)
     else
       caption = {pandoc.Str(label),pandoc.Space()}
     end
-    if tikz_style == 1 then
-        for i = 1,#el.content,1 do
-    	    if el.content[i].tag == 'Para' or el.content[i].tag == 'Plain' then
-                if pandoc.utils.stringify(el.content[i]):match('^(= %[)') then
-                    el.content[2] = pandoc.Plain( pandoc.Space())
-                end
-    	    end
-          end
-        tikz_style = 0
-    end
+
     el.caption.long[1].content = caption .. el.caption.long[1].content
     is_fig = 0
     is_alg = 0
