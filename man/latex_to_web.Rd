@@ -11,7 +11,8 @@ latex_to_web(
   auto_wrapper = TRUE,
   temp_mode = TRUE,
   web_dir = FALSE,
-  interactive_mode = FALSE
+  interactive_mode = FALSE,
+  compile_rmd_in_temp = !temp_mode
 )
 }
 \arguments{
@@ -29,6 +30,9 @@ article untouched. default value = TRUE}
 \item{web_dir}{option to create a new web directory, default FALSE}
 
 \item{interactive_mode}{interactive mode for converting articles with options. default FALSE}
+
+\item{compile_rmd_in_temp}{This works only with a forked version of rjtools.
+Not recommended to use with CRAN or github version of the rjtools package. (default FALSE)}
 }
 \value{
 RJweb article document in /web folder
