@@ -74,7 +74,7 @@ patch_code_env <- function(article_dir) {
             raw_lines <- readLines(file_path)
         }
         else {
-            warning("LaTeX file not found !")
+            message("LaTeX file not found !")
             return(FALSE)
         }
         replacement <- "verbatim"
@@ -87,7 +87,7 @@ patch_code_env <- function(article_dir) {
             src_file_data <- readLines(file_path)
         }
         else {
-            warning("LaTeX file not found !")
+            message("LaTeX file not found !")
             return(FALSE)
         }
         backup_file <- paste(file_path, ".bk", sep = "")

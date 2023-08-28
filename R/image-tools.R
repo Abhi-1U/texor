@@ -118,7 +118,12 @@ find_image_extension <- function(article_dir, image_path, is_tikz = FALSE) {
             if (ext != "") {
                 return(ext)
             } else {
-                message("File does not exist in the directory or wrong directory path")
+                if (image_path == ""){
+                    return("")
+                }
+                else{
+                    message("File does not exist in the directory or wrong directory path")
+                }
             }
         }
     }

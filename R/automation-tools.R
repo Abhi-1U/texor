@@ -8,6 +8,8 @@
 #' article untouched. default value = TRUE
 #' @param web_dir option to create a new web directory, default FALSE
 #' @param interactive_mode interactive mode for converting articles with options. default FALSE
+#' @param compile_rmd_in_temp This works only with a forked version of rjtools.
+#' Not recommended to use with CRAN or github version of the rjtools package. (default FALSE)
 #' @note Use pandoc version greater than or equal to 2.17
 #' @note Do not use example = TRUE param when working with conversions.
 #'
@@ -24,7 +26,9 @@
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
 #' texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE, temp_mode =FALSE)
 #' unlink(your_article_folder, recursive = TRUE)
-latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = TRUE, temp_mode = TRUE, web_dir = FALSE, interactive_mode = FALSE) {
+latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = TRUE,
+                         temp_mode = TRUE, web_dir = FALSE, interactive_mode = FALSE,
+                         compile_rmd_in_temp = !temp_mode) {
     message(dir)
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17"))
@@ -39,7 +43,6 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
                                 auto_wrapper = auto_wrapper,
                                 interactive_mode = interactive_mode) #wrapper file name
     file_name <- get_texfile_name(dir)
-
     # temp mode
     if (temp_mode) {
         dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
@@ -52,7 +55,8 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
                                           auto_wrapper = auto_wrapper,
                                           temp_mode = FALSE,
                                           web_dir = web_dir,
-                                          interactive_mode = interactive_mode),
+                                          interactive_mode = interactive_mode,
+                                          compile_rmd_in_temp = compile_rmd_in_temp),
                       error = function(c) {
                           warning(c)
                       })
@@ -65,6 +69,10 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
                        to = xfun::normalize_path(dir),
                        recursive = TRUE,
                        )
+        if (!compile_rmd_in_temp) {
+            message(paste0("Knitting Rmd to html"))
+            texor::produce_html(dir, web_dir = web_dir, interactive_mode = interactive_mode)
+        }
         return(TRUE)
     }
     if (log_steps) {
@@ -128,10 +136,11 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
         texor::generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode)
         texor_log(paste0("Stage-09 | ","Created R-markdown File to /web"), "info", 2)
         # Step - 10 : produce html (using rj_web_article) format
-        texor_log(paste0("Stage-10 | ","Knitting Rmd to html"), "info", 2)
-        texor::produce_html(dir, web_dir = web_dir, interactive_mode = interactive_mode)
-        texor_log(paste0("Stage-10 | ","Knitted Rmd to html"), "info", 2)
-
+        if (compile_rmd_in_temp) {
+            texor_log(paste0("Stage-10 | ","Knitting Rmd to html"), "info", 2)
+            texor::produce_html(dir, web_dir = web_dir, interactive_mode = interactive_mode)
+            texor_log(paste0("Stage-10 | ","Knitted Rmd to html"), "info", 2)
+        }
         post_data <- yaml::read_yaml(paste0(dir,"/post-conversion-meta.yaml"))
         if (post_data$text$words == 0) {
             texor_log(paste0("Pandoc produced an empty file"), "error", 2)
@@ -162,8 +171,10 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
             }
             convert_to_markdown(dir) # Step 7
             texor::generate_rmd(dir,web_dir = web_dir) # Step 9
+            if (compile_rmd_in_temp) {
             texor::produce_html(dir,example = TRUE, web_dir = web_dir,
                                 interactive_mode = interactive_mode) # Step 10
+            }
         }
         else {
             if (web_dir) {
@@ -172,8 +183,10 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
             convert_to_markdown(dir) # Step 7
             texor::generate_rmd(dir,web_dir = web_dir,
                                 interactive_mode = interactive_mode) # Step 9
-            texor::produce_html(dir,web_dir = web_dir,
+            if (compile_rmd_in_temp) {
+                texor::produce_html(dir,web_dir = web_dir,
                                 interactive_mode = interactive_mode) # Step 10
+            }
         }
 
         return(TRUE)
