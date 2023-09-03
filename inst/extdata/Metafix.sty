@@ -3,7 +3,7 @@
 \newcommand{\R}{R}
 \newcommand{\command}[1]{\texttt{#1}}
 % Package name commands
-\renewcommand{\pkg}[1]{\emph{#1}}
+\renewcommand{\pkg}[1]{\textbf{\emph{#1}}}
 \newcommand{\cpkg}[1]{\pkg{#1}}
 \newcommand{\CRANpkg}[1]{\href{https://CRAN.R-project.org/package=#1}{\pkg{#1}}}%
 \newcommand{\BIOpkg}[1]{\href{https://www.bioconductor.org/packages/release/bioc/html/#1.html}{\pkg{#1}}}
@@ -36,3 +36,6 @@
 \newcommand{\fbox}[2][]{#2}
 %\renewcommand{\multicolumn}[3]{ #3}
 \renewcommand{\multicolumnx}[3]{\multicolumn{#1}{c}{#3}}
+% references
+\newcommand{\nameref}[1]{\ref{#1}}
+\newcommand{\autoref}[1]{\ref{#1}}

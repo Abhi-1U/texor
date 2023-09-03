@@ -49,12 +49,12 @@ convert_to_png <- function(file_path){
         message("This PDF contains multiple pages. Please change the file_paths according to the page numbers manually.")
         suppressWarnings(pdftools::pdf_convert(file_path,
                               format = "png",
-                              dpi = 600))
+                              dpi = 300))
     }
     else {
         suppressWarnings(pdftools::pdf_convert(file_path,
                               format = "png",
-                              dpi = 600,
+                              dpi = 300,
                               filenames = png_file))
     }
 }
@@ -219,15 +219,15 @@ make_png_files <- function(input_file_paths) {
             on.exit(setwd(oldwd))
             suppressWarnings(pdftools::pdf_convert(input_file_paths[[file_iter]][1],
                                   format = "png",
-                                  dpi = 600))
+                                  dpi = 300))
         }
         else {
             suppressWarnings(pdftools::pdf_convert(input_file_paths[[file_iter]][1],
                               format = "png",
-                              dpi = 600,
+                              dpi = 300,
                               pages = 1,
                               filenames = png_file))
         }
     }
-    message("made PNG graphics @ 600 dpi density")
+    message("made PNG graphics @ 300 dpi density")
 }
