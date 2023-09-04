@@ -34,8 +34,21 @@
 \renewcommand{\textwidth}{\smallskip}
 \newcommand{\raisebox}[2][]{#2}
 \newcommand{\fbox}[2][]{#2}
-%\renewcommand{\multicolumn}[3]{ #3}
-\renewcommand{\multicolumnx}[3]{\multicolumn{#1}{c}{#3}}
+\newcommand{\parbox}[3][]{#3}
+\newcommand{\resizebox}[3]{#3}
+
 % references
 \newcommand{\nameref}[1]{\ref{#1}}
 \newcommand{\autoref}[1]{\ref{#1}}
+% tables
+\renewcommand{\multicolumnx}[3]{\multicolumn{#1}{c}{#3}}
+\newcommand{\tabularnewline}{\\}
+\newcommand{\cmidrule}[1]{\\}
+% math
+\renewcommand{\ensuremath}[1]{#1}
+\renewcommand{\protect}[1]{#1}
+\renewcommand{\mbox}[1]{#1}
+\newcommand{\boldmath}[1]{{\mathbf{#1}}}
+\renewcommand{\vspace}[1]{}
+\renewcommand{\hspace}[1]{}
+\renewcommand{\footnotesize}{}

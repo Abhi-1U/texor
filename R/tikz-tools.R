@@ -12,12 +12,25 @@ convert_tikz <- function(fig_block, article_dir) {
     if (!identical(caption_point, integer(0))) {
         fig_block$data[caption_point] <- ""
     }
+    caption_point <- which(grepl("\\\\caption\\{",fig_block$data))
+    if (!identical(caption_point, integer(0))) {
+        fig_block$data[caption_point] <- ""
+    }
+    M <- which(grepl("\\\\usepackage\\{Metafix\\}", fig_block$tikzlib))
+    if (! identical(M,integer(0))) {
+        fig_block$tikzlib[M] <- ""
+    }
+    A <- which(grepl("\\{tikz\\}", fig_block$tikzlib))
+    print(fig_block$tikzlib[A])
+    if (identical(A,integer(0))) {
+        fig_block$tikzlib[length(fig_block$tikzlib)] <- "\\usepackage{tikz}"
+    }
     tikz_picture_end_point <- which(grepl("\\\\end\\{tikzpicture\\}",fig_block$data))
     tikz_template <- c(
         "\\documentclass{standalone}",
         "\\usepackage{xcolor}",
         "\\usepackage{verbatim}",
-        "\\usepackage{tikz}",
+        #"\\usepackage{tikz}",
         "\\usepackage[T1]{fontenc}",
         "\\usepackage{graphics}",
         "\\usepackage{hyperref}",
@@ -29,8 +42,8 @@ convert_tikz <- function(fig_block, article_dir) {
         fig_block$tikzlib,
         "\\begin{document}",
         "\\nopagecolor",
-        fig_block$tikzstyle,
-        fig_block$data[2:tikz_picture_end_point],
+        #fig_block$tikzstyle,
+        fig_block$data[2:tikz_picture_end_point[length(tikz_picture_end_point)]],
         #fig_block$data,
         "\\end{document}"
     )

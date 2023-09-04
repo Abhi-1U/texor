@@ -99,7 +99,7 @@ fig_block_reader <- function(article_dir,fig_data, raw_data, iterator, start_pos
     if (find_tikz(fig_data)) {
         tikz_count_var <- tikz_count_var + 1
         # extract tikz libraries from RJwrapper
-        tikz_lib <- extract_tikz_lib(article_dir)
+        tikz_lib <- extract_extra_lib(article_dir)
         f_block$tikzlib <- tikz_lib
         # caption
         f_block$image_count <- 1
