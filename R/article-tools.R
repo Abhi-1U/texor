@@ -370,8 +370,12 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
         dir.create(dirname(output_file_name), showWarnings = FALSE)
     }
 
+    # Screen reader note
+    screen_reader_note = '<div style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">This article is converted from a Legacy LaTeX article using the texor package. The pdf version is the official version. To report a problem with the html, refer to CONTRIBUTE on the R Journal homepage.
+    This article includes tables which may not be properly formatted. This article includes figures which have not been given correct alternative text.</div>'
+
     xfun::write_utf8(
-            c("---", yaml::as.yaml(front_matter), "---", article_body),
+            c("---", yaml::as.yaml(front_matter), "---", screen_reader_note, article_body),
             output_file_name)
 }
 
