@@ -170,7 +170,7 @@ function Image(el)
     if old_attr == nil then
         -- Figure has no attributes
         el.attributes[1] = {"width", "100%"}
-
+        el.attributes[2] = {"alt","graphic without alt text"}
     else
         -- Add label as plain block element
         attribute_1 = el.attributes
@@ -178,9 +178,11 @@ function Image(el)
             local width = tonumber(attribute_1[1][2]:match('%d+.%d+'))
             if(attribute_1[1][2]:match('%d+.%d+') == nil) then
                 el.attributes[1] = {"width", "100%"}
+                el.attributes[2] = {"alt","graphic without alt text"}
             else
                 width_as_percent = tostring(width*100)
                 el.attributes[1] = {"width", width_as_percent .. [[%]]}
+                el.attributes[2] = {"alt","graphic without alt text"}
             end
         else
             --pass
