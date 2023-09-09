@@ -11,6 +11,7 @@ old_session_wd = false
 old_session_ls = false
 -- Image counter variable
 figures = 0
+local_fig_count = 0
 -- Algorithm counter variable
 algorithms = 0
 algs = 0
@@ -47,16 +48,20 @@ Applies the filter to Image elements
 filter = {
  Image = function(el)
  	if el.src:match('alg/') then
+ 	    local_fig_count = local_fig_count+1
         is_alg = 1
         is_fig = 0
  	elseif el.src:match('lst/') then
+ 	    local_fig_count = local_fig_count+1
         is_listing = 1
         is_fig = 0
  	elseif el.src:match('tikz/') then
+ 	    local_fig_count = local_fig_count+1
         tikz_style=1
         is_fig = 1
         is_alg = 0
     else
+        local_fig_count = local_fig_count+1
         is_fig = 1
         is_alg = 0
     end
@@ -88,6 +93,11 @@ function Figure(el)
         algorithms = algorithms + 1
     	label = "Algorithm " .. tostring(algorithms) .. ":"
     	for i = 1,#el.content,1 do
+    	    if el.content[i].tag == 'Image' and local_fig_count == 1 then
+    	        print(label)
+    	        -- leave it empty pandoc will handle it appropriately.
+    	        el.content[i].attributes[2] = {}
+    	    end
     	    if el.content[i].tag == 'Para' or el.content[i].tag == 'Plain' then
     	        if el.content[i].content[1].tag ~= "Image" then
     	            -- remove any leftover string from algorithm Images
@@ -126,6 +136,13 @@ function Figure(el)
     	            end
     	        end
             end
+            for i = 1,#el.content,1 do
+                if el.content[i].tag == 'Image' and local_fig_count == 1 then
+    	            -- leave alt text empty pandoc will handle it appropriately.
+    	            print(label)
+    	            el.content[i].attributes[2] = {}
+                end
+	        end
             tikz_style = 0
         end
     end
@@ -162,34 +179,11 @@ function Figure(el)
     is_alg = 0
     is_code = 0
     is_wdtable = 0
+    local_fig_count = 0
     return el
 end
 
-function Image(el)
-    local old_attr = el.attributes[1]
-    if old_attr == nil then
-        -- Figure has no attributes
-        el.attributes[1] = {"width", "100%"}
-        el.attributes[2] = {"alt","graphic without alt text"}
-    else
-        -- Add label as plain block element
-        attribute_1 = el.attributes
-        if el.attributes[1][2]:match('%\\') then
-            local width = tonumber(attribute_1[1][2]:match('%d+.%d+'))
-            if(attribute_1[1][2]:match('%d+.%d+') == nil) then
-                el.attributes[1] = {"width", "100%"}
-                el.attributes[2] = {"alt","graphic without alt text"}
-            else
-                width_as_percent = tostring(width*100)
-                el.attributes[1] = {"width", width_as_percent .. [[%]]}
-                el.attributes[2] = {"alt","graphic without alt text"}
-            end
-        else
-            --pass
-        end
-    end
-    return el
-end
+
 
 function write_to_file(filename,open_mode,content)
     local file,err = io.open(filename,open_mode)

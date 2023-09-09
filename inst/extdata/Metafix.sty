@@ -4,7 +4,7 @@
 \newcommand{\command}[1]{\texttt{#1}}
 \newcommand{\sloppy}{\\}
 % Package name commands
-\renewcommand{\pkg}[1]{\textbf{{#1}}}
+\renewcommand{\pkg}[1]{\emph{#1}}
 
 \newcommand{\CRANpkg}[1]{\href{https://CRAN.R-project.org/package=#1}{\pkg{#1}}}%
 \newcommand{\cpkg}[1]{\CRANpkg{#1}}
@@ -38,7 +38,7 @@
 \newcommand{\fbox}[2][]{#2}
 \newcommand{\parbox}[3][]{#3}
 \newcommand{\resizebox}[3]{#3}
-
+\newcommand{\centerline}[1]{#1}
 % references
 \newcommand{\nameref}[1]{\ref{#1}}
 \newcommand{\autoref}[1]{\ref{#1}}
@@ -46,6 +46,7 @@
 \renewcommand{\multicolumnx}[3]{\multicolumn{#1}{c}{#3}}
 \newcommand{\tabularnewline}{\\}
 \newcommand{\cmidrule}[1]{\\}
+\newcommand{\addlinespace}[1]{\hline}
 % math
 \renewcommand{\ensuremath}[1]{#1}
 \renewcommand{\protect}[1]{#1}
@@ -54,3 +55,5 @@
 \renewcommand{\vspace}[1]{}
 \renewcommand{\hspace}[1]{}
 \renewcommand{\footnotesize}[1]{#1}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\footnotetext}[1]{#1}
