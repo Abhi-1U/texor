@@ -23,7 +23,7 @@ end
 function Div(el)
     pandoc.walk_block(el,filtert)
     -- Creating a list of unique tables and also storing their identifiers in a text file.
-    if is_table then
+    if is_table == 1 then
         -- First table, checking for empty captions, if no caption, it wont be added to
         if not table_identifiers then
             table.insert(table_identifiers,pandoc.utils.stringify(el.identifier))
