@@ -10,8 +10,18 @@ function Math(el)
     if el.text:match('\\bm') then
         el.text= el.text:gsub('\\bm','\\mathbf')
     end
+    if el.text:match('\\begin{tabular}') then
+        el.text= el.text:gsub('\\begin{tabular}','\\begin{array}')
 
+    end
+    if el.text:match('\\end{tabular}') then
+        el.text= el.text:gsub('\\end{tabular}','\\end{array}')
+    end
     if el.mathtype == "DisplayMath" then
+        if el.text:match('%$') then
+            print(el.text)
+            el.text= el.text:gsub('%$', '')
+        end
         if el.text:match('\\label') then
             local text = pandoc.utils.stringify(el.text)
             s, e, l = string.find(text,"\\label{(.-)}")

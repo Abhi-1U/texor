@@ -173,8 +173,9 @@ function Figure(el)
     else
       caption = {pandoc.Str(label),pandoc.Space()}
     end
-
-    el.caption.long[1].content = caption .. el.caption.long[1].content
+    if el.caption then
+        el.caption.long[1].content = caption .. el.caption.long[1].content
+    end
     is_fig = 0
     is_alg = 0
     is_code = 0
