@@ -1,5 +1,5 @@
 --[[
-WideTable Patcher – Adapts WideTable to the table framework
+WideTable Patcher – Adapts Tables, WideTables to the table numbering framework
 License:   MIT – see LICENSE file for details
 --]]
 old_session = false

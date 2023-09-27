@@ -1,3 +1,29 @@
+# Version 1.3.0
+
+## Feature Updates
+
+1. Equations are better handled and equation references are edited to match bookdown format.
+2. Knitting of Rmarkdown is now done outside the `temp` folder to avoid PDF compilation errors.
+3. Added workaround macros for `\nameref{}` and `\autoref{}`.
+4. Added workaround macros for `\scalebox{}`, `\fbox{}`, `\adjustbox{}`, `\framebox{}`.
+5. Option to set DPI when invoking `convert_to_png` function.
+
+## Bug Fixes
+
+1. `CodeBlocks` and `WideTables` are now back to the original form.
+2. `Algorithm` get separate numbering in references.
+3. Removed unnecessary warnings.
+4. Better mechanism to remove leftover text after processing tikz.
+5. Package names using `\pkg{}` are now bold.
+6. Reduced DPI of raster images to reduce file sizes.
+7. `Algorithmic` not treated as figures.
+8. Fixes in lua filters for equation which now adds basic support for tabular and removes nested inline math.
+9. Fixing logic in table reference numbering.
+
+## Accessibility Feature Updates
+
+1. All images processed are set with a default alt-text : 'graphic without alt text' 
+
 # Version 1.2.0
 
 ## Feature Updates

@@ -1,5 +1,8 @@
 --[[
 Image numbering filter V3 - Numbering Images in caption
+Warning: for numbering of Figure, presence of a label\identifier is necessary.
+Any image inside 'alg/' folder is numbered as Algorithm
+Alert: This filter may fail if there is no caption for the figure.
 License:   MIT - see LICENSE file for details
 adapted from: Albert Krewinkel implementation
 original License: CC0
