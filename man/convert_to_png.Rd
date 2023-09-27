@@ -4,10 +4,12 @@
 \alias{convert_to_png}
 \title{convert one single pdf file to png}
 \usage{
-convert_to_png(file_path)
+convert_to_png(file_path, dpi = 180)
 }
 \arguments{
 \item{file_path}{path to the pdf file}
+
+\item{dpi}{Set DPI for converting PDF files. default: 180}
 }
 \value{
 png file of the same

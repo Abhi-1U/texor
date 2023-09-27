@@ -14,7 +14,7 @@
 #'  If you find inconsistencies in the raster image generated from PDF using this
 #'  function. Please update poppler utils to newer versions (possibly latest one).
 #' @param file_path path to the pdf file
-#'
+#' @param dpi Set DPI for converting PDF files. default: 180
 #' @return png file of the same
 #' @export
 #'
@@ -27,7 +27,7 @@
 #' rmarkdown::pandoc_version()
 #' texor::convert_to_png(paste0(your_article_path,"/normal.pdf"))
 #' unlink(your_article_folder,recursive = TRUE)
-convert_to_png <- function(file_path){
+convert_to_png <- function(file_path, dpi = 180){
     file_path <- xfun::normalize_path(file_path)
     if (!grepl(".pdf$",file_path)) {
         file_path <- paste0(file_path,".pdf")
@@ -49,12 +49,12 @@ convert_to_png <- function(file_path){
         message("This PDF contains multiple pages. Please change the file_paths according to the page numbers manually.")
         suppressWarnings(pdftools::pdf_convert(file_path,
                               format = "png",
-                              dpi = 180))
+                              dpi = dpi))
     }
     else {
         suppressWarnings(pdftools::pdf_convert(file_path,
                               format = "png",
-                              dpi = 180,
+                              dpi = dpi,
                               filenames = png_file))
     }
 }
@@ -67,7 +67,7 @@ convert_to_png <- function(file_path){
 #'
 #' @return modified fig_block
 #' @noRd
-convert_all_pdf <- function(article_dir, fig_block) {
+convert_all_pdf <- function(article_dir, fig_block, dpi) {
     article_dir <- xfun::normalize_path(article_dir)
     for (iterator in seq_along(fig_block)) {
         if (fig_block[[iterator]]$image_count == 1) {
