@@ -1,5 +1,6 @@
 ## Resubmission 
-1. Fixed a test case where it was attempting to write in user-library
+1. Feature updates to the package
+2. Bug fixes
 
 ## Test environments
 * local ubuntu 22.04 install, R 4.1.2, 4.3.0
@@ -15,11 +16,11 @@ There are no references to works/articles in my package that discuss the methods
 This is because this package is built to convert legacy 'LaTeX` article to 
 'Rmarkdown' based 'RJ-web-article' format.
 
-Also there is a general requirement of pandoc >= v2.17. In case its lower than v2.17
+Also there is a general requirement of pandoc >= v3.1. In case its lower than v3.1
 the package will not execute the function, informing the user to upgrade pandoc.
 
 ## R CMD check results
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release.
+

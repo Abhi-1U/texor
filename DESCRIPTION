@@ -1,7 +1,7 @@
 Package: texor
 Type: Package
 Title: Converting 'LaTeX' 'R Journal' Articles into 'RJ-web-articles'
-Version: 1.2.0
+Version: 1.3.0
 Authors@R: 
     c(person(given = "Abhishek",
              family = "Ulayil",
@@ -59,4 +59,4 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Language: en-US
-SystemRequirements: pandoc (>= 3.1) - https://pandoc.org, poppler-utils (>= 22.02.0) - https://poppler.freedesktop.org/
+SystemRequirements: pandoc (>= 3.1) - https://pandoc.org
