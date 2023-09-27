@@ -202,12 +202,6 @@ patch_figure_env <- function(article_dir, with_alg = TRUE) {
         raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\end\\{widefigure\\*\\}", "widefigure\\*", "figure")
         message("Changed \\end{widefigure\\*} to \\end{figure}")
-        raw_lines <- stream_editor(raw_lines,
-                               "\\s*\\\\begin\\{algorithmic}", "algorithmic", "algorithm")
-        message("Changed \\begin{algorithmic} to \\begin{algorithm}")
-        raw_lines <- stream_editor(raw_lines,
-                               "\\s*\\\\end\\{algorithmic}", "algorithmic", "algorithm")
-        message("Changed \\end{algorithmic} to \\end{algorithm}")
         if (with_alg) {
             raw_lines <- stream_editor(raw_lines,
                                    "\\s*\\\\begin\\{algorithm}", "algorithm", "figure")
