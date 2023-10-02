@@ -124,6 +124,8 @@ convert_to_markdown <- function(article_dir) {
         "issue_checker.lua", package = "texor")
     wdtable_filter <- system.file(
         "widetable_patcher.lua", package = "texor")
+    auto_num_eq <- system.file(
+        "auto_number_equations.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
                     "--lua-filter", error_checker_filter,
@@ -439,6 +441,8 @@ convert_to_native <- function(article_dir) {
         "bookdown_ref.lua", package = "texor")
     wdtable_filter <- system.file(
         "widetable_patcher.lua", package = "texor")
+    auto_num_eq <- system.file(
+        "auto_number_equations.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
                     "--lua-filter", abs_filter,
