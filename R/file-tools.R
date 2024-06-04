@@ -66,8 +66,8 @@ get_texfile_name <- function(article_dir) {
     pre_marker <- wrapper_file[seq_len(article_start)]
     post_marker <- wrapper_file[seq_len(article_start) + 1]
     source_line <- setdiff(post_marker, pre_marker)
-    tex_file <- gsub("[[:space:]]", "",
-                     gsub("\\\\input\\{|\\}", "", source_line))
+    tex_file <- gsub("\\\\input\\{|\\}", "",
+                     gsub("^\\s+|\\s+$", "", source_line))
     if (!grepl(".tex$", tex_file)) {
         tex_file <- paste0(tex_file, ".tex")
     }
