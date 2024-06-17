@@ -12,7 +12,7 @@
 #' # texor works with pandoc version >= 2.17
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
-rnw_to_rmd <- function(input_file) {
+rnw_to_rmd <- function(input_file, front_matter_type = "vignettes") {
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17"))
         return(FALSE)
@@ -78,10 +78,15 @@ rnw_to_rmd <- function(input_file) {
 
     # Stage 03: Post process after convert to markdown
 
-    # Step 01: patch for inline code
+    # Step 01: patch for R code
     md_file_path <- paste0(dir, "/RJwrapper.md")
     rnw_patch_inline_code(md_file_path)
     rnw_patch_code_chunk(md_file_path, md_code_file_path)
+
+    # Step 02: patch for vignette entry
+    if(front_matter_type == "vignettes") {
+        rnw_patch_vignette_entry(md_file_path, input_file)
+    }
 
 
     # Stage 04
@@ -93,7 +98,7 @@ rnw_to_rmd <- function(input_file) {
     # YYYY is the year, ZZ is the Journal issue number and MMM is the DOI
     # referral(unique article number).
 
-    generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode)
+    rnw_generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode, front_matter_type = front_matter_type)
     # post_data <- yaml::read_yaml(paste0(dir,"/post-conversion-meta.yaml"))
 
     return(TRUE)
@@ -290,5 +295,57 @@ rnw_patch_code_chunk <- function(input_file_path, code_file_path) {
 
     modified_content <- unlist(modified_content, use.names = FALSE)
     xfun::write_utf8(modified_content, input_file_path)
+    return(TRUE)
+}
+
+#' @title patch for vignette entry name
+#' @description 1
+#' @param dir directory path
+#' @note Use pandoc version greater than or equal to 2.17
+#' @note 1
+#'
+#' @return RMarkdown file in the same folder
+#'
+#' @export
+#' @examples
+#' # Checking for pandoc version
+#' # texor works with pandoc version >= 2.17
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+rnw_patch_vignette_entry <- function(md_file_path, rnw_file_path) {
+    if(!file.exists(md_file_path) || !file.exists(rnw_file_path)) {
+        stop("File does not exist")
+    }
+    md_content <- readLines(md_file_path)
+    rnw_content <- readLines(rnw_file_path)
+
+    # Extract the entry name from the Rnw file
+    entry_name <- NULL
+    for (line in rnw_content) {
+        if (grepl("^%%\\\\VignetteIndexEntry", line)) {
+            entry_name <- gsub("^%%\\\\VignetteIndexEntry\\{(.*)\\}$", "\\1", line)
+            break
+        }
+    }
+
+    if (is.null(entry_name)) {
+        stop("Vignette entry name not found")
+    }
+
+    # Add the entry name to the front yaml in md file
+    entry_added <- FALSE
+    modified_content <- vector("list", length(md_content))
+    for (i in seq_along(md_content)) {
+        line <- md_content[[i]]
+        if (!entry_added && grepl("^---$", line)) {
+            modified_content[[i]] <- c(line, paste0("VignetteIndexEntry: ", entry_name))
+            entry_added <- TRUE
+        } else {
+            modified_content[[i]] <- line
+        }
+    }
+
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, md_file_path)
     return(TRUE)
 }

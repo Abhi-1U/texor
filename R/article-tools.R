@@ -590,3 +590,173 @@ create_article <- function(name="test", edit = TRUE){
 
     message("Success: your paper is ready to edit!")
 }
+
+#' @title Modify Markdown from LaTex to R-markdown
+#'
+#' @description
+#' generate rmarkdown file in output folder
+#'
+#' @param article_dir path to the directory which contains tex article
+#' @param web_dir option to create a new web directory, default TRUE
+#' @param interactive_mode interactive mode for converting articles with options. default FALSE
+#' @note Use pandoc version greater than or equal to 2.17
+#' @return R-markdown file in the web folder
+#' @export
+#' @examples
+#' # Note This is a minimal example to execute this function
+#' ...
+rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE, front_matter_type = "vignettes") {
+    article_dir <- xfun::normalize_path(article_dir)
+    if (!pandoc_version_check()) {
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
+        return(FALSE)
+    }
+    if (!check_markdown_file(article_dir)) {
+        warning(paste0("Pandoc Failed to convert the LaTeX article, please check for missing brackets/closing environments and spelling mistakes !"))
+        return(FALSE)
+    }
+    else {
+        #pass
+    }
+    volume <- 1 # placeholder value
+    issue <- 1 # placeholder value
+    journal_details <- get_journal_details(article_dir)
+    volume <- journal_details$volume
+    issue <- journal_details$issue
+    markdown_file <- paste(article_dir,xfun::with_ext(get_wrapper_type(article_dir),"md"),sep = "/")
+    metadata <- rmarkdown::yaml_front_matter(markdown_file)
+    # reads the abstract from the second author field
+    # reason : abstract is patched as author in metafix.sty
+    abstract <- metadata$author[2]
+    metadata$abstract <- abstract
+    # if metadata$address is NULL
+    if (is.null(metadata$address)) {
+        metadata$author <- metadata$author[1]
+    } else {
+        metadata$author <- lapply(
+            strsplit(metadata$address, "\\\n", fixed = TRUE),
+            function(person) {
+                author <- list(
+                    name = person[1],
+                    affiliation = person[2]
+                )
+                if (any(orcid <- grepl("^ORCiD:", person))) {
+                    author$orcid <- sub("^ORCiD: ", "", person[orcid])
+                }
+                if (any(email <- grepl("^email:", person))) {
+                    author$email <- sub("^email:", "", person[email])
+                }
+                fields <- logical(length(person))
+                fields[1:2] <- TRUE
+                if (any(address <- !(fields | orcid | email))) {
+                    author$address <- person[address]
+                }
+                author
+            }
+        )
+    }
+    metadata$address <- NULL
+    # article metadata from DESCRIPTION
+    article_metadata <- if (file.exists(file.path(
+        dirname(markdown_file), "DESCRIPTION"))) {
+        if (!journal_details$sample) {
+            art <- load_article(file.path(dirname(markdown_file), "DESCRIPTION"))
+            online_date <- Filter(function(x) x$status == "online", art$status)
+            acknowledged_date <- Filter(function(x) x$status == "acknowledged", art$status)[[1]]$date
+        } else {
+            online_date <- list()
+            acknowledged_date <- Sys.Date()
+        }
+        online_date <- if (length(online_date) == 0) {
+            Sys.Date()
+        } else {
+            online_date[[1]]$date
+        }
+        list(
+            slug = if (journal_details$sample) {'~'} else {journal_details$slug},
+            acknowledged = acknowledged_date,
+            online = online_date
+        )
+    } else {
+        # Produce minimal article metadata for news
+        issue_year <- volume + 2008
+        issue_month <- if (issue_year < 2022) issue * 6 else issue * 3
+        list(
+            slug = journal_details$slug,
+            online = as.Date(paste(volume + 2008,
+                                   issue_month, "01"), format = "%Y %m %d")
+        )
+    }
+    # if article has no abstract
+    if (toString(metadata$abstract) == "NA") {
+        issue_year <- volume + 2008
+        issue_month <- if (issue_year < 2022) issue * 6 else issue * 3
+        metadata$abstract <- paste0("The '", metadata$title,
+                                    "' article from the ", issue_year,
+                                    "-", issue, " issue.")
+    }
+    pkg_yaml_path <- paste(dirname(markdown_file), "pkg_meta.yaml", sep = "/" )
+    if (interactive_mode) {
+        cli::cli_alert_warning(paste0("Currently the slug is : ",
+                                      article_metadata$slug,
+                                      "\nfor the article titled : ",
+                                      metadata$title,
+                                      "\nDo you want to update the slug"))
+        if (utils::menu(c("Yes", "No")) == 1) {
+            article_metadata$slug = toString(readline("Enter the new Slug : "))
+        }
+        cli::cli_alert_warning(paste0("Do you want to set the firstpage,lastpage ?",
+                                      "\nfor the article titled : ",
+                                      metadata$title))
+        if (utils::menu(c("Yes", "No")) == 1) {
+            article_metadata$pages[1] = toString(readline("Enter the firstpage : "))
+            article_metadata$pages[2] = toString(readline("Enter the lastpage : "))
+        }
+    }
+    front_matter_list <- list(
+        "vignettes" = list(
+            title = metadata$title,
+            abstract = metadata$abstract, #%||% ,
+            author = metadata$author,
+            date = format_non_null(article_metadata$online),
+            packages = yaml::read_yaml(pkg_yaml_path),
+            vignette = paste("%\\VignetteEngine{knitr::knitr}\n%\\VignetteEncoding{UTF-8}\n%\\VignetteIndexEntry{",
+                             metadata$VignetteIndexEntry, "}", sep = ""),
+            output = "rmarkdown::html_vignette"
+        )
+    )
+    front_matter <- front_matter_list[[front_matter_type]]
+    if (file.exists(markdown_file)){
+        pandoc_md_contents <- readLines(markdown_file)
+    }
+    else{
+        warning("Markdown file not found/Unreadable !")
+        return(FALSE)
+    }
+    delimiters <- grep("^(---|\\.\\.\\.)\\s*$", pandoc_md_contents)
+    article_body <- c()
+    if (delimiters[1] > 1)
+        article_body <- c(article_body, pandoc_md_contents[1:delimiters[1] - 1])
+    if (delimiters[2] < length(pandoc_md_contents))
+        article_body <- c(article_body, pandoc_md_contents[-(1:delimiters[2])])
+
+    input_file <- basename(markdown_file)
+    if (!web_dir) {
+        output_file_name <- paste(dirname(markdown_file),"/",
+                                  toString(tools::file_path_sans_ext(input_file)),
+                                  ".Rmd", sep = "")
+    }
+    if (web_dir) {
+        output_file_name <- paste(dirname(markdown_file),
+                                  "/web/",
+                                  toString(tools::file_path_sans_ext(input_file)),
+                                  ".Rmd", sep = "")
+        dir.create(dirname(output_file_name), showWarnings = FALSE)
+    }
+
+    yaml_front_matter <- yaml::as.yaml(front_matter)
+
+    xfun::write_utf8(
+        c("---", yaml::as.yaml(front_matter), "---", article_body),
+        output_file_name)
+}
