@@ -32,6 +32,7 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes") {
     if(!file.exists(input_file)) {
         stop("knitr file not created")
     }
+    # patch_rnw_abstract()
     knitr::knit(input = input_file, output = output_file) # it will print as warning/highlight
     if(!file.exists(output_file)) {
         stop("tex file not created")

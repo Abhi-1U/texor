@@ -213,10 +213,14 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
     issue <- journal_details$issue
     markdown_file <- paste(article_dir,xfun::with_ext(get_wrapper_type(article_dir),"md"),sep = "/")
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
+
     # reads the abstract from the second author field
     # reason : abstract is patched as author in metafix.sty
-    abstract <- metadata$author[2]
-    metadata$abstract <- abstract
+
+    # PHINNEY: I don't see any reason to do this.  The abstract is already in the metadata.
+    # abstract <- metadata$author[2]
+    # metadata$abstract <- abstract
+
     # if metadata$address is NULL
     if (is.null(metadata$address)) {
         metadata$author <- metadata$author[1]
@@ -627,8 +631,8 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
     metadata <- rmarkdown::yaml_front_matter(markdown_file)
     # reads the abstract from the second author field
     # reason : abstract is patched as author in metafix.sty
-    abstract <- metadata$author[2]
-    metadata$abstract <- abstract
+    # abstract <- metadata$author[2]
+    # metadata$abstract <- abstract
     # if metadata$address is NULL
     if (is.null(metadata$address)) {
         metadata$author <- metadata$author[1]
