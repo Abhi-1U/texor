@@ -439,6 +439,16 @@ wrapper_auto_sty <- function(rnw_file_path, wrapper_name = "RJwrapper.tex") {
     }
     wrapper_content <- readLines(wrapper_path)
     modified_content <- list()
+    # avoid duplicate sty files
+    for (i in seq_along(wrapper_content)) {
+        line <- wrapper_content[[i]]
+        if (grepl("\\\\usepackage\\{", line)) {
+            sty_file <- gsub(".*\\{(.*)\\}", "\\1", line)
+            if (sty_file %in% include_sty_files) {
+                include_sty_files <- include_sty_files[include_sty_files != sty_file]
+            }
+        }
+    }
     # add sty file after \usepackage{Metafix}
     for (i in seq_along(wrapper_content)) {
         line <- wrapper_content[[i]]
