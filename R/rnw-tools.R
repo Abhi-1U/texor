@@ -63,6 +63,10 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes") {
     include_style_file(dir)
     wrapper <- get_wrapper_type(dir, auto_wrapper = auto_wrapper)
 
+    # PHINNEY: patch for self-defined macros
+    wrapper_auto_sty(input_file)
+
+
     # rebib::aggregate_bibliography(dir)
 
     patch_code_env(dir)
@@ -393,5 +397,59 @@ patch_rnw_abstract <- function(rnw_file_path) {
 
     modified_content <- unlist(modified_content, use.names = FALSE)
     xfun::write_utf8(modified_content, rnw_file_path)
+    return(TRUE)
+}
+
+#' @title patch for self-defined macros of LaTeX
+#' @description 1
+#' @param dir directory path
+#' @note Use pandoc version greater than or equal to 2.17
+#' @note 1
+#'
+#' @return RMarkdown file in the same folder
+#'
+#' @export
+#' @examples
+#' # Checking for pandoc version
+#' # texor works with pandoc version >= 2.17
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+wrapper_auto_sty <- function(rnw_file_path, wrapper_name = "RJwrapper.tex") {
+    if (!file.exists(rnw_file_path)) {
+        stop("File does not exist")
+    }
+    article_dir <- xfun::normalize_path(dirname(rnw_file_path))
+    article_files <- list.files(article_dir, recursive = FALSE)
+    sty_files <- article_files[grep(pattern = "[.]sty$", article_files)]
+    sty_files <- sty_files[!grepl(pattern = "Metafix[.]sty$", sty_files)]
+    rnw_content <- readLines(rnw_file_path)
+    include_sty_files <- list()
+    for (i in seq_along(rnw_content)) {
+        line <- rnw_content[[i]]
+        if (grepl("\\\\usepackage\\{", line)) {
+            sty_file <- gsub(".*\\{(.*)\\}", "\\1", line)
+            if (paste0(sty_file, ".sty") %in% sty_files) {
+                include_sty_files <- c(include_sty_files, sty_file)
+            }
+        }
+    }
+    wrapper_path <- file.path(article_dir, wrapper_name)
+    if (!file.exists(wrapper_path)) {
+        stop("Wrapper file does not exist")
+    }
+    wrapper_content <- readLines(wrapper_path)
+    modified_content <- list()
+    # add sty file after \usepackage{Metafix}
+    for (i in seq_along(wrapper_content)) {
+        line <- wrapper_content[[i]]
+        modified_content <- c(modified_content, line)
+        if (grepl("\\\\usepackage\\{Metafix\\}", line)) {
+            for (sty_file in include_sty_files) {
+                modified_content <- c(modified_content, paste0("\\usepackage{", sty_file, "}"))
+            }
+        }
+    }
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, wrapper_path)
     return(TRUE)
 }
