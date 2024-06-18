@@ -32,7 +32,7 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes") {
     if(!file.exists(input_file)) {
         stop("knitr file not created")
     }
-    # patch_rnw_abstract()
+    patch_rnw_abstract(input_file)
     knitr::knit(input = input_file, output = output_file) # it will print as warning/highlight
     if(!file.exists(output_file)) {
         stop("tex file not created")
@@ -348,5 +348,50 @@ rnw_patch_vignette_entry <- function(md_file_path, rnw_file_path) {
 
     modified_content <- unlist(modified_content, use.names = FALSE)
     xfun::write_utf8(modified_content, md_file_path)
+    return(TRUE)
+}
+
+#' @title patch for abstract syntax of Sweave
+#' @description 1
+#' @param dir directory path
+#' @note Use pandoc version greater than or equal to 2.17
+#' @note 1
+#'
+#' @return RMarkdown file in the same folder
+#'
+#' @export
+#' @examples
+#' # Checking for pandoc version
+#' # texor works with pandoc version >= 2.17
+#' article_dir <- system.file("examples/article",
+#'                  package = "texor")
+patch_rnw_abstract <- function(rnw_file_path) {
+    if(!file.exists(rnw_file_path)) {
+        stop("File does not exist")
+    }
+    rnw_content <- readLines(rnw_file_path)
+    in_abstract <- FALSE
+    abstract_start <- NULL
+    abstract_end <- NULL
+    modified_content <- list()
+
+    for (i in seq_along(rnw_content)) {
+        line <- rnw_content[i]
+        # check in_abstract above to prevent modify the same line
+        if (in_abstract && grepl("\\}$", line)) {
+            in_abstract <- FALSE
+            abstract_end <- i
+            line <- sub("\\}$", "\\\\end{abstract}", line)
+        }
+        if (grepl("\\\\abstract\\{", line)) {
+            in_abstract <- TRUE
+            abstract_start <- i
+            line <- sub("\\\\abstract\\{", "\\\\begin{abstract}", line)
+        }
+        modified_content[i] <- line
+    }
+
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, rnw_file_path)
     return(TRUE)
 }
