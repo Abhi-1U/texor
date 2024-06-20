@@ -726,7 +726,12 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
             packages = yaml::read_yaml(pkg_yaml_path),
             vignette = paste("%\\VignetteEngine{knitr::knitr}\n%\\VignetteEncoding{UTF-8}\n%\\VignetteIndexEntry{",
                              metadata$VignetteIndexEntry, "}", sep = ""),
-            output = "rmarkdown::html_vignette"
+            output = list(
+                "bookdown::html_document2" = list(
+                    base_format = "rmarkdown::html_vignette",
+                    number_sections = TRUE
+                )
+            )
         )
     )
     front_matter <- front_matter_list[[front_matter_type]]
