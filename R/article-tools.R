@@ -731,7 +731,8 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
                     base_format = "rmarkdown::html_vignette",
                     number_sections = TRUE
                 )
-            )
+            ),
+            bibliography = metadata$bibliography
         )
     )
     front_matter <- front_matter_list[[front_matter_type]]

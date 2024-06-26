@@ -67,7 +67,7 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes") {
     wrapper_auto_sty(input_file)
 
 
-    # rebib::aggregate_bibliography(dir)
+    rebib::aggregate_bibliography(dir)
 
     patch_code_env(dir)
     patch_table_env(dir)
@@ -334,7 +334,8 @@ rnw_patch_vignette_entry <- function(md_file_path, rnw_file_path) {
     }
 
     if (is.null(entry_name)) {
-        stop("Vignette entry name not found")
+        entry_name <- basename(rnw_file_path)
+        # stop("Vignette entry name not found")
     }
 
     # Add the entry name to the front yaml in md file
