@@ -33,10 +33,12 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes") {
         stop("knitr file not created")
     }
     patch_rnw_abstract(input_file)
-    knitr::knit(input = input_file, output = output_file) # it will print as warning/highlight
-    if(!file.exists(output_file)) {
-        stop("tex file not created")
-    }
+
+    # PHINNEY: donnot compile the knitr file to save time
+    # knitr::knit(input = input_file, output = output_file) # it will print as warning/highlight
+    # if(!file.exists(output_file)) {
+    #     stop("tex file not created")
+    # }
     # Step 02: Separate knitr file to code chunks and tex
     part_file_path <- rnw_remove_code_chunk(input_file)
     md_code_file_path <- part_file_path$md_file_path
@@ -46,7 +48,8 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes") {
     rnw_read_body(rnw_file_path)
 
     # Step 04: renme original .tex file to .tex.bak
-    file.rename(output_file, paste0(output_file, ".bak"))
+    # PHINNEY: donnot compile the knitr file to save time
+    # file.rename(output_file, paste0(output_file, ".bak"))
 
     # Stage 02: Convert tex to Markdown (part of texor::latex_to_web())
     # TODO: We just use texor::latex_to_web(dir, log_steps = TRUE, temp_mode = FALSE,
@@ -192,6 +195,16 @@ rnw_read_body <- function(input_file) {
     if(!file.exists(input_file)) {
         stop("File does not exist")
     }
+
+    file_content <- readLines(input_file)
+    # delete \begin{document}, \end{document}, \usepackage{...}, \documentclass{...}
+    file_content <- file_content[!grepl("\\\\usepackage(\\[.*\\])?\\{.*\\}", file_content)]
+    file_content <- file_content[!grepl("\\\\documentclass(\\[.*\\])?\\{.*\\}", file_content)]
+    file_content <- file_content[!grepl("\\\\begin\\{document\\}", file_content)]
+    file_content <- file_content[!grepl("\\\\end\\{document\\}", file_content)]
+    xfun::write_utf8(file_content, input_file)
+    return(TRUE)
+
     latex_body_reader <- system.file(
         "latex_body_reader.lua", package = "texor")
 
@@ -326,9 +339,16 @@ rnw_patch_vignette_entry <- function(md_file_path, rnw_file_path) {
 
     # Extract the entry name from the Rnw file
     entry_name <- NULL
+    depend_name <- NULL
     for (line in rnw_content) {
-        if (grepl("^%%\\\\VignetteIndexEntry", line)) {
-            entry_name <- gsub("^%%\\\\VignetteIndexEntry\\{(.*)\\}$", "\\1", line)
+        if (grepl("^%\\\\VignetteIndexEntry", line)) {
+            entry_name <- gsub("^%\\\\VignetteIndexEntry\\{(.*)\\}$", "\\1", line)
+            break
+        }
+    }
+    for (line in rnw_content) {
+        if (grepl("^%\\\\VignetteDepends", line)) {
+            depend_name <- gsub("^%\\\\VignetteDepends\\{(.*)\\}$", "\\1", line)
             break
         }
     }
@@ -345,6 +365,11 @@ rnw_patch_vignette_entry <- function(md_file_path, rnw_file_path) {
         line <- md_content[[i]]
         if (!entry_added && grepl("^---$", line)) {
             modified_content[[i]] <- c(line, paste0("VignetteIndexEntry: ", entry_name))
+            if (!is.null(depend_name)) {
+                modified_content[[i]] <- c(modified_content[[i]], paste0("VignetteDepends: ", depend_name))
+            } else{
+                modified_content[[i]] <- c(modified_content[[i]], paste0("VignetteDepends: ", ""))
+            }
             entry_added <- TRUE
         } else {
             modified_content[[i]] <- line

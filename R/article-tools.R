@@ -679,22 +679,17 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
         list(
             slug = if (journal_details$sample) {'~'} else {journal_details$slug},
             acknowledged = acknowledged_date,
-            online = online_date
+            online = Sys.Date()
         )
     } else {
         # Produce minimal article metadata for news
-        issue_year <- volume + 2008
-        issue_month <- if (issue_year < 2022) issue * 6 else issue * 3
         list(
             slug = journal_details$slug,
-            online = as.Date(paste(volume + 2008,
-                                   issue_month, "01"), format = "%Y %m %d")
+            online = Sys.Date()
         )
     }
     # if article has no abstract
     if (toString(metadata$abstract) == "NA") {
-        issue_year <- volume + 2008
-        issue_month <- if (issue_year < 2022) issue * 6 else issue * 3
         metadata$abstract <- paste0("The '", metadata$title,
                                     "' article from the ", issue_year,
                                     "-", issue, " issue.")
@@ -723,9 +718,9 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
             abstract = metadata$abstract, #%||% ,
             author = metadata$author,
             date = format_non_null(article_metadata$online),
-            packages = yaml::read_yaml(pkg_yaml_path),
             vignette = paste("%\\VignetteEngine{knitr::knitr}\n%\\VignetteEncoding{UTF-8}\n%\\VignetteIndexEntry{",
-                             metadata$VignetteIndexEntry, "}", sep = ""),
+                             metadata$VignetteIndexEntry, "}\n%\\VignetteDepends{",
+                             metadata$VignetteDepends, "}", sep = ""),
             output = list(
                 "bookdown::html_document2" = list(
                     base_format = "rmarkdown::html_vignette",
