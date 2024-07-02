@@ -1,18 +1,24 @@
 #' @title Sweave to RMarkdown
-#' @description 1
-#' @param dir directory path
+#' @description automated function for converting a single Sweave file to R Markdown file
+#' @param input_file input Sweave file path
+#' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes"
+#' @param clean_up whether to clean up the intermediate files, default is TRUE
 #' @note Use pandoc version greater than or equal to 2.17
-#' @note 1
 #'
-#' @return RMarkdown file in the same folder
+#' @return True if R Markdown file successfully generated in the same folder
 #'
 #' @export
 #' @examples
 #' # Checking for pandoc version
 #' # texor works with pandoc version >= 2.17
-#' article_dir <- system.file("examples/article",
-#'                  package = "texor")
-rnw_to_rmd <- function(input_file, front_matter_type = "vignettes") {
+#' article_dir <- system.file("examples/sweave_article", package = "texor")
+#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE)
+#' your_article_path <- paste(your_article_folder,"sweave_article", "example.Rnw",sep="/")
+#' your_article_path <- xfun::normalize_path(your_article_path)
+#' rnw_to_rmd(your_article_path, front_matter_type = "vignettes", clean_up = TRUE)
+#' unlink(your_article_folder, recursive = TRUE)
+rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = TRUE) {
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17"))
         return(FALSE)
@@ -109,24 +115,14 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes") {
     rnw_generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode, front_matter_type = front_matter_type)
     # post_data <- yaml::read_yaml(paste0(dir,"/post-conversion-meta.yaml"))
 
+    # Step - 10 : clean up the intermediate files
+    if(clean_up) {
+        clean_up_files(dir)
+    }
+
     return(TRUE)
 }
 
-
-#' @title Remove code chunks from Rnw file
-#' @description 1
-#' @param dir directory path
-#' @note Use pandoc version greater than or equal to 2.17
-#' @note 1
-#'
-#' @return RMarkdown file in the same folder
-#'
-#' @export
-#' @examples
-#' # Checking for pandoc version
-#' # texor works with pandoc version >= 2.17
-#' article_dir <- system.file("examples/article",
-#'                  package = "texor")
 rnw_remove_code_chunk <- function(input_file) {
     dir <- dirname(input_file)
     if(!dir.exists(dir)) {
@@ -176,21 +172,6 @@ rnw_remove_code_chunk <- function(input_file) {
     return(list(md_file_path = md_file_path, rnw_file_path = rnw_file_path))
 }
 
-
-#' @title Only keep body in tex file
-#' @description 1
-#' @param dir directory path
-#' @note Use pandoc version greater than or equal to 2.17
-#' @note 1
-#'
-#' @return RMarkdown file in the same folder
-#'
-#' @export
-#' @examples
-#' # Checking for pandoc version
-#' # texor works with pandoc version >= 2.17
-#' article_dir <- system.file("examples/article",
-#'                  package = "texor")
 rnw_read_body <- function(input_file) {
     if(!file.exists(input_file)) {
         stop("File does not exist")
@@ -220,21 +201,6 @@ rnw_read_body <- function(input_file) {
     return(TRUE)
 }
 
-
-#' @title Only keep body in tex file
-#' @description 1
-#' @param dir directory path
-#' @note Use pandoc version greater than or equal to 2.17
-#' @note 1
-#'
-#' @return RMarkdown file in the same folder
-#'
-#' @export
-#' @examples
-#' # Checking for pandoc version
-#' # texor works with pandoc version >= 2.17
-#' article_dir <- system.file("examples/article",
-#'                  package = "texor")
 rnw_patch_inline_code <- function(input_file_path) {
     if(!file.exists(input_file_path)) {
         stop("File does not exist")
@@ -246,22 +212,6 @@ rnw_patch_inline_code <- function(input_file_path) {
     return(TRUE)
 }
 
-
-
-#' @title Only keep body in tex file
-#' @description 1
-#' @param dir directory path
-#' @note Use pandoc version greater than or equal to 2.17
-#' @note 1
-#'
-#' @return RMarkdown file in the same folder
-#'
-#' @export
-#' @examples
-#' # Checking for pandoc version
-#' # texor works with pandoc version >= 2.17
-#' article_dir <- system.file("examples/article",
-#'                  package = "texor")
 rnw_patch_code_chunk <- function(input_file_path, code_file_path) {
     if(!file.exists(input_file_path) || !file.exists(code_file_path)) {
         stop("File does not exist")
@@ -316,20 +266,6 @@ rnw_patch_code_chunk <- function(input_file_path, code_file_path) {
     return(TRUE)
 }
 
-#' @title patch for vignette entry name
-#' @description 1
-#' @param dir directory path
-#' @note Use pandoc version greater than or equal to 2.17
-#' @note 1
-#'
-#' @return RMarkdown file in the same folder
-#'
-#' @export
-#' @examples
-#' # Checking for pandoc version
-#' # texor works with pandoc version >= 2.17
-#' article_dir <- system.file("examples/article",
-#'                  package = "texor")
 rnw_patch_vignette_entry <- function(md_file_path, rnw_file_path) {
     if(!file.exists(md_file_path) || !file.exists(rnw_file_path)) {
         stop("File does not exist")
@@ -341,14 +277,14 @@ rnw_patch_vignette_entry <- function(md_file_path, rnw_file_path) {
     entry_name <- NULL
     depend_name <- NULL
     for (line in rnw_content) {
-        if (grepl("^%\\\\VignetteIndexEntry", line)) {
-            entry_name <- gsub("^%\\\\VignetteIndexEntry\\{(.*)\\}$", "\\1", line)
+        if (grepl("%+\\\\VignetteIndexEntry", line)) {
+            entry_name <- gsub("%+\\\\VignetteIndexEntry\\{(.*)\\}", "\\1", line)
             break
         }
     }
     for (line in rnw_content) {
-        if (grepl("^%\\\\VignetteDepends", line)) {
-            depend_name <- gsub("^%\\\\VignetteDepends\\{(.*)\\}$", "\\1", line)
+        if (grepl("%+\\\\VignetteDepends", line)) {
+            depend_name <- gsub("%+\\\\VignetteDepends\\{(.*)\\}", "\\1", line)
             break
         }
     }
@@ -381,20 +317,6 @@ rnw_patch_vignette_entry <- function(md_file_path, rnw_file_path) {
     return(TRUE)
 }
 
-#' @title patch for abstract syntax of Sweave
-#' @description 1
-#' @param dir directory path
-#' @note Use pandoc version greater than or equal to 2.17
-#' @note 1
-#'
-#' @return RMarkdown file in the same folder
-#'
-#' @export
-#' @examples
-#' # Checking for pandoc version
-#' # texor works with pandoc version >= 2.17
-#' article_dir <- system.file("examples/article",
-#'                  package = "texor")
 patch_rnw_abstract <- function(rnw_file_path) {
     if(!file.exists(rnw_file_path)) {
         stop("File does not exist")
@@ -426,20 +348,6 @@ patch_rnw_abstract <- function(rnw_file_path) {
     return(TRUE)
 }
 
-#' @title patch for self-defined macros of LaTeX
-#' @description 1
-#' @param dir directory path
-#' @note Use pandoc version greater than or equal to 2.17
-#' @note 1
-#'
-#' @return RMarkdown file in the same folder
-#'
-#' @export
-#' @examples
-#' # Checking for pandoc version
-#' # texor works with pandoc version >= 2.17
-#' article_dir <- system.file("examples/article",
-#'                  package = "texor")
 wrapper_auto_sty <- function(rnw_file_path, wrapper_name = "RJwrapper.tex") {
     if (!file.exists(rnw_file_path)) {
         stop("File does not exist")
@@ -487,5 +395,30 @@ wrapper_auto_sty <- function(rnw_file_path, wrapper_name = "RJwrapper.tex") {
     }
     modified_content <- unlist(modified_content, use.names = FALSE)
     xfun::write_utf8(modified_content, wrapper_path)
+    return(TRUE)
+}
+
+clean_up_files <- function(work_dir, intermediate_file_list = NULL) {
+    if (is.null(intermediate_file_list)) {
+        # get all file name in work_dir
+        all_files <- list.files(work_dir, recursive = FALSE, full.names = TRUE)
+        # remove all intermediate files in work_dir (.bk, .bak, .yaml, .txt, .md, .tex, -knitr.Rnw)
+        intermediate_file_list <- c("\\.bk$", "\\.bak$", "\\.yaml$", "\\.txt$", "\\.md$", "\\.tex$",
+                                    "-knitr\\.Rnw$", "Metafix\\.sty$")
+        for (file in all_files) {
+            # match end of file name
+            pattern <- paste("(", intermediate_file_list, ")", collapse = "|", sep = "")
+            if (grepl(paste0(".*", pattern, sep = ""), file)) {
+                file.remove(file)
+            }
+        }
+        return(TRUE)
+    }
+    all_files <- list.files(work_dir, recursive = FALSE, full.names = TRUE)
+    for (file in all_files) {
+        if (file %in% intermediate_file_list) {
+            file.remove(file)
+        }
+    }
     return(TRUE)
 }
