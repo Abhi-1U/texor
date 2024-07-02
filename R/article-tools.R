@@ -691,8 +691,7 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
     # if article has no abstract
     if (toString(metadata$abstract) == "NA") {
         metadata$abstract <- paste0("The '", metadata$title,
-                                    "' article from the ", issue_year,
-                                    "-", issue, " issue.")
+                                    "' article from the ", issue, " issue.")
     }
     pkg_yaml_path <- paste(dirname(markdown_file), "pkg_meta.yaml", sep = "/" )
     if (interactive_mode) {
