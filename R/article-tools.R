@@ -595,7 +595,7 @@ create_article <- function(name="test", edit = TRUE){
     message("Success: your paper is ready to edit!")
 }
 
-#' @title Modify Markdown from LaTex to R-markdown
+#' @title Modify Markdown from Sweave to R-markdown
 #'
 #' @description
 #' generate rmarkdown file in output folder
@@ -608,7 +608,7 @@ create_article <- function(name="test", edit = TRUE){
 #' @export
 #' @examples
 #' # Note This is a minimal example to execute this function
-#' ...
+#' # Please refer to texor::rnw_to_rmd for a detailed example
 rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE, front_matter_type = "vignettes") {
     article_dir <- xfun::normalize_path(article_dir)
     if (!pandoc_version_check()) {
