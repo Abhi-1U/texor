@@ -603,6 +603,7 @@ create_article <- function(name="test", edit = TRUE){
 #' @param article_dir path to the directory which contains tex article
 #' @param web_dir option to create a new web directory, default TRUE
 #' @param interactive_mode interactive mode for converting articles with options. default FALSE
+#' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes"
 #' @note Use pandoc version greater than or equal to 2.17
 #' @return R-markdown file in the web folder
 #' @export

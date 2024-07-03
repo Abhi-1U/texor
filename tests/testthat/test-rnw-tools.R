@@ -4,10 +4,10 @@ test_that("Convert Rnw to Rmd", {
     x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE)
     your_article_path <- paste(your_article_folder, "sweave_article", "example.Rnw",sep="/")
     your_article_path <- xfun::normalize_path(your_article_path)
-    rnw_to_rmd(your_article_path, front_matter_type = "vignettes", clean_up = TRUE)
-    expect_equal(file.exists(
-                    xfun::normalize_path(
-                        paste(your_article_folder, "sweave_article", "example.Rmd", sep="/"))),
-                 TRUE)
+    expect_equal(texor::rnw_to_rmd(your_article_path, front_matter_type = "vignettes", clean_up = TRUE), TRUE)
+    # expect_equal(file.exists(
+    #                 xfun::normalize_path(
+    #                     paste(your_article_folder, "sweave_article", "example.Rmd", sep="/"))),
+    #              TRUE)
     unlink(your_article_folder, recursive = TRUE)
 })

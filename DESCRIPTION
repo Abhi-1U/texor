@@ -1,7 +1,7 @@
 Package: texor
 Type: Package
 Title: Converting 'LaTeX' 'R Journal' Articles into 'RJ-web-articles'
-Version: 1.3.0
+Version: 1.4.0
 Authors@R: 
     c(person(given = "Abhishek",
              family = "Ulayil",
@@ -27,7 +27,12 @@ Authors@R:
              family = "Cook",
              email = "dicook@monash.edu",
              role = "ctb",
-             comment = c(ORCID = "0000-0002-3813-7155")))
+             comment = c(ORCID = "0000-0002-3813-7155")),
+      person(given = "Yinxiang",
+             family = "Huang",
+             email = "21375146@buaa.edu.cn",
+             role = "ctb",
+             comment = c(ORCID = "0009-0007-2031-7901")))
 Description: Articles in the 'R Journal' were first authored in 'LaTeX', which performs 
     admirably for 'PDF' files but is less than ideal for modern online interfaces.
     The 'texor' package does all the transitional chores and conversions necessary
