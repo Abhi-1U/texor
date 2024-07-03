@@ -119,7 +119,7 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = T
     # Step - 10 : rename the file to the original file name
     file.rename(paste0(dir,"/RJwrapper.Rmd"), paste0(dir,"/",gsub(".Rnw", ".Rmd", input_file_name)))
 
-    # Step - 10 : clean up the intermediate files
+    # Step - 11 : clean up the intermediate files
     if(clean_up) {
         clean_up_files(dir)
     }
