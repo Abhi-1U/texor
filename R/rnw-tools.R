@@ -330,15 +330,15 @@ patch_rnw_abstract <- function(rnw_file_path) {
     for (i in seq_along(rnw_content)) {
         line <- rnw_content[i]
         # check in_abstract above to prevent modify the same line
-        if (in_abstract && grepl("\\}$", line)) {
-            in_abstract <- FALSE
-            abstract_end <- i
-            line <- sub("\\}$", "\\\\end{abstract}", line)
-        }
         if (grepl("\\\\abstract\\{", line)) {
             in_abstract <- TRUE
             abstract_start <- i
             line <- sub("\\\\abstract\\{", "\\\\begin{abstract}", line)
+        }
+        if (in_abstract && grepl("(?<!\\\\begin\\{abstract)\\}$", line, perl = TRUE)) {
+            in_abstract <- FALSE
+            abstract_end <- i
+            line <- sub("\\}$", "\\\\end{abstract}", line)
         }
         modified_content[i] <- line
     }
