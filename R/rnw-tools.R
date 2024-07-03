@@ -24,6 +24,7 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = T
         return(FALSE)
     }
     dir <- dirname(input_file)
+    input_file_name <- basename(input_file)
     if(!dir.exists(dir)) {
         stop("Directory does not exist")
     }
@@ -114,6 +115,9 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = T
 
     rnw_generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode, front_matter_type = front_matter_type)
     # post_data <- yaml::read_yaml(paste0(dir,"/post-conversion-meta.yaml"))
+
+    # Step - 10 : rename the file to the original file name
+    file.rename(paste0(dir,"/RJwrapper.Rmd"), paste0(dir,"/",gsub(".Rnw", ".Rmd", input_file_name)))
 
     # Step - 10 : clean up the intermediate files
     if(clean_up) {
