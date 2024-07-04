@@ -112,6 +112,12 @@
     <loc>/reference/produce_html.html</loc>
   </url>
   <url>
+    <loc>/reference/rnw_generate_rmd.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rnw_to_rmd.html</loc>
+  </url>
+  <url>
     <loc>/reference/stream_editor.html</loc>
   </url>
   <url>
