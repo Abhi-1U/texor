@@ -1,5 +1,5 @@
 % Metadata handlers
-\renewcommand{\abstract}[1]{\author{#1}}
+% \renewcommand{\abstract}[1]{\author{#1}}
 \newcommand{\R}{R}
 \newcommand{\command}[1]{\texttt{#1}}
 \newcommand{\sloppy}{\\}
@@ -12,6 +12,9 @@
 \newcommand{\ctv}[1]{\href{https://CRAN.R-project.org/view=#1}{\emph{#1}}}
 % acronym
 \newcommand{\acronym}[1]{#1}
+% R code
+\newcommand{\Sexpr}[1]{\verb|r #1|}
+\newcommand{\Rcodeplaceholder}[1]{\verb|<!--R_CODE_CHUNK_PLACEHOLDER-->|}
 % code
 \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
 \DefineVerbatimEnvironment{Soutput}{Verbatim}{}
@@ -65,3 +68,4 @@
 \newcommand{\rrbracket}{\right]\!\right]}
 \newcommand{\llbracket}{\left[\!\left[}
 \newcommand{\mathds}{\mathbb}
+\newcommand{\bm}[1]{\boldsymbol{\mathbf{#1}}}

@@ -43,6 +43,8 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
                                 auto_wrapper = auto_wrapper,
                                 interactive_mode = interactive_mode) #wrapper file name
     file_name <- get_texfile_name(dir)
+    # PHINNEY: patch abstract here
+    patch_rnw_abstract(paste0(dir, "/", file_name))
     # temp mode
     if (temp_mode) {
         dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))

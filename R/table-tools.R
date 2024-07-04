@@ -9,7 +9,7 @@
 #' 1. table* environment to table environment
 #' 2. \\multicolumn to \\multicolumnx
 #' \\multicolumnx is redefined in Metafix.sty as
-#' \\renewcommand{\\multicolumnx}[3]{\\multicolumn{#1}{c}{#3}}
+#' \\renewcommand\{\\multicolumnx\}[3]\{\\multicolumn\{#1\}\{c\}\{#3\}\}
 #' @param article_dir path to the directory which contains tex article
 #'
 #' @return patches table environments in LaTeX file and also backs up the old file before modification

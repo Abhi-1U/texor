@@ -31,6 +31,8 @@ reference:
     - generate_rmd
     - produce_html
     - latex_to_web
+    - rnw_generate_rmd
+    - rnw_to_rmd
 
 - title: Graphics
   desc: >

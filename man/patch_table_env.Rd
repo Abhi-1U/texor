@@ -22,7 +22,7 @@ changes are made to :
 1. table* environment to table environment
 2. \\multicolumn to \\multicolumnx
 \\multicolumnx is redefined in Metafix.sty as
-\\renewcommand{\\multicolumnx}[3]{\\multicolumn{#1}{c}{#3}}
+\\renewcommand\{\\multicolumnx\}[3]\{\\multicolumn\{#1\}\{c\}\{#3\}\}
 }
 \examples{
 article_dir <- system.file("examples/article",
