@@ -4,10 +4,12 @@
 \alias{convert_to_native}
 \title{convert LaTeX wrapper to native pandoc AST}
 \usage{
-convert_to_native(article_dir)
+convert_to_native(article_dir, autonumber_eq = FALSE)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
+
+\item{autonumber_eq}{whether to autonumber the equations, default is FALSE}
 }
 \value{
 creates a converted native AST file, as well as a pkg_meta.yaml file

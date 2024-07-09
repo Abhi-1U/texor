@@ -4,10 +4,12 @@
 \alias{convert_to_markdown}
 \title{convert LaTeX wrapper to markdown}
 \usage{
-convert_to_markdown(article_dir)
+convert_to_markdown(article_dir, autonumber_eq = FALSE)
 }
 \arguments{
 \item{article_dir}{path to the directory which contains tex article}
+
+\item{autonumber_eq}{whether to autonumber the equations, default is FALSE}
 }
 \value{
 creates a converted markdown file, as well as a pkg_meta.yaml file

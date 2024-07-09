@@ -4,7 +4,12 @@
 \alias{rnw_to_rmd}
 \title{Sweave to RMarkdown}
 \usage{
-rnw_to_rmd(input_file, front_matter_type = "vignettes", clean_up = TRUE)
+rnw_to_rmd(
+  input_file,
+  front_matter_type = "vignettes",
+  clean_up = TRUE,
+  autonumber_eq = FALSE
+)
 }
 \arguments{
 \item{input_file}{input Sweave file path}
@@ -12,6 +17,8 @@ rnw_to_rmd(input_file, front_matter_type = "vignettes", clean_up = TRUE)
 \item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes"}
 
 \item{clean_up}{whether to clean up the intermediate files, default is TRUE}
+
+\item{autonumber_eq}{whether to autonumber the equations, default is FALSE}
 }
 \value{
 True if R Markdown file successfully generated in the same folder

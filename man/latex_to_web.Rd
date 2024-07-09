@@ -12,6 +12,7 @@ latex_to_web(
   temp_mode = TRUE,
   web_dir = FALSE,
   interactive_mode = FALSE,
+  autonumber_eq = FALSE,
   compile_rmd_in_temp = !temp_mode
 )
 }
@@ -30,6 +31,8 @@ article untouched. default value = TRUE}
 \item{web_dir}{option to create a new web directory, default FALSE}
 
 \item{interactive_mode}{interactive mode for converting articles with options. default FALSE}
+
+\item{autonumber_eq}{whether to autonumber the equations, default is FALSE}
 
 \item{compile_rmd_in_temp}{This works only with a forked version of rjtools.
 Not recommended to use with CRAN or github version of the rjtools package. (default FALSE)}

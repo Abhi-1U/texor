@@ -61,6 +61,7 @@ include_style_file <- function(article_dir) {
 #' convert latex(wrapper) file to markdown
 #'
 #' @param article_dir path to the directory which contains tex article
+#' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @description
 #' Uses pandoc along with several lua filters
 #' found at inst/extdata/filters in texor package
@@ -390,6 +391,7 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
 #' convert latex(wrapper) file to pandoc AST
 #'
 #' @param article_dir path to the directory which contains tex article
+#' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @description
 #' Uses pandoc along with several lua filters
 #' found at inst/extdata/filters in texor package
