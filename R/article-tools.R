@@ -85,7 +85,7 @@ include_style_file <- function(article_dir) {
 #' rebib::aggregate_bibliography(your_article_path)
 #' texor::convert_to_markdown(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-convert_to_markdown <- function(article_dir) {
+convert_to_markdown <- function(article_dir, autonumber_eq = FALSE) {
     # wrapper file name
     article_dir <- xfun::normalize_path(article_dir)
     input_file <- get_wrapper_type(article_dir)
@@ -139,6 +139,9 @@ convert_to_markdown <- function(article_dir) {
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
                     "--lua-filter", bookdown_ref_filter)
+    if (autonumber_eq) {
+        pandoc_opt <- c(pandoc_opt, "--lua-filter", auto_num_eq)
+    }
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     if (!pandoc_version_check()) {
@@ -408,7 +411,7 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
 #' rebib::aggregate_bibliography(your_article_path)
 #' texor::convert_to_native(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-convert_to_native <- function(article_dir) {
+convert_to_native <- function(article_dir, autonumber_eq = FALSE) {
     article_dir <- xfun::normalize_path(article_dir)
     # wrapper file name
     input_file <- get_wrapper_type(article_dir)
@@ -459,6 +462,9 @@ convert_to_native <- function(article_dir) {
                     "--lua-filter", stat_filter,
                     "--lua-filter", equation_filter,
                     "--lua-filter", bookdown_ref_filter)
+    if (autonumber_eq) {
+        pandoc_opt <- c(pandoc_opt, "--lua-filter", auto_num_eq)
+    }
     output_format <- "native"
     # This will generate a markdown file with YAML headers.
     if (! pandoc_version_check()){

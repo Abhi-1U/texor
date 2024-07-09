@@ -3,6 +3,7 @@
 #' @param input_file input Sweave file path
 #' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes"
 #' @param clean_up whether to clean up the intermediate files, default is TRUE
+#' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @note Use pandoc version greater than or equal to 2.17
 #'
 #' @return True if R Markdown file successfully generated in the same folder
@@ -18,7 +19,7 @@
 #' your_article_path <- xfun::normalize_path(your_article_path)
 #' rnw_to_rmd(your_article_path, front_matter_type = "vignettes", clean_up = TRUE)
 #' unlink(your_article_folder, recursive = TRUE)
-rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = TRUE) {
+rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = TRUE, autonumber_eq = FALSE) {
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17"))
         return(FALSE)
@@ -88,7 +89,7 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = T
     # Step - 7 : Convert to markdown + find package
     #            references
     meta <- pre_conversion_statistics(dir)
-    convert_to_markdown(dir)
+    convert_to_markdown(dir, autonumber_eq = autonumber_eq)
 
 
     # Stage 03: Post process after convert to markdown

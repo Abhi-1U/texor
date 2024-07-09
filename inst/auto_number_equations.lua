@@ -1,6 +1,6 @@
 --[[
 AutoNumber Equation filter – tries to autonumber equations.
-Copyright: © 2023 Abhishek Ulayil
+Copyright: © 2023 Abhishek Ulayil & Yinxiang Huang
 License:   MIT – see LICENSE file for details
 --]]
 equation_counter =1
@@ -11,15 +11,15 @@ function Math(el)
             -- but also add them to the tally of equation
             equation_counter = equation_counter + 1
             return {pandoc.Str("\n"),el,pandoc.Str("\n")}
-        elseif el.text:match('\\nonumber') then
+        elseif el.text:match('\\nonumber') or el.text:match('\\tag') then
               -- skip numbering equations with \nonumber
               return {pandoc.Str("\n"),el,pandoc.Str("\n")}
         else
             local text = pandoc.utils.stringify(el.text)
             -- insert a label to invoke numbering.
-            html_label = "eq:".. tostring(equation_counter)
+            html_label = "eq:autonumber".. tostring(equation_counter)
             --el.text = [[\label{eq:}]] .. tostring(equation_counter) .. [[}]] .. text
-            el.text = text .. [[   (\#]] .. html_label .. [[)]]
+            el.text = text .. "\n" .. [[(\#]] .. html_label .. [[) ]]
             equation_counter = equation_counter + 1
         end
         return {pandoc.Str("\n"),el,pandoc.Str("\n")}
