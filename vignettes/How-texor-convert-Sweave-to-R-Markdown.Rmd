@@ -1,0 +1,94 @@
+---
+title: "How texor convert Sweave to R Markdown"
+abstract: |
+  Many of the early R packages used Sweave to write vigneettes,
+  which will be shown to users as pdf format on CRAN. However, as
+  time goes on, R Markdown, a lightweight markup language, has
+  begun to gradually replace Sweave and better present content
+  on CRAN in the form of HTML.
+
+  In order to help many R package developers who haven't used R
+  Markdown or don't have time to do the format conversion manually
+  to migrate from Sweave to R Markdown, **texor** helps people
+  automate this conversion process.
+author: |
+  Yinxiang Huang
+vignette: >
+  %\VignetteIndexEntry{Sweave-to-R-Markdown}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{texor, rebib}
+date: '2024-07-12'
+bibliography: texor.bib
+csl: https://www.zotero.org/styles/ieee
+output:
+  bookdown::html_document2:
+    base_format: rmarkdown::html_vignette
+    number_sections: yes
+---
+
+::: article
+
+# Introduction {#sec:intro}
+
+As we know, Sweave is a tool that allows to embed R code into LaTeX, while R Markdown is a lightweight markup language that allows to embed R code into Markdown. The main difference between them is that R Markdown is easier to use and more flexible than Sweave. For example, R Markdown can be converted to many formats, such as HTML, PDF, and Word, while Sweave can only be converted to PDF.
+
+In order to help R users, especially many R package developers who haven't used R Markdown or don't have time to do the format conversion manually to migrate from Sweave to R Markdown, `texor` helps people automate this conversion process.
+
+The most challenging part of the conversion is non-existent syntax may require consideration of elegant alternatives. For example, `\SweaveOpts{concordance=TRUE}` in Sweave is not supported in R Markdown. In this case, we need to find a way to replace it with a suitable alternative in R Markdown. First, we convert this command to a code chunk in R Markdown, and then we add the `knitr::opts_chunk$set(concordance=TRUE)` command to the code chunk to achieve the same effect.
+
+# How does `texor::rnw_to_rmd` work? {#sec:work}
+
+The `texor::rnw_to_rmd` function is used to convert a Sweave file to an R Markdown file. The function takes a file path as input and returns a logic value indicating whether the conversion is successful.
+
+The conversion process is as follows:
+
+1. Read the Sweave file and convert it to knitr format. knitr is almost the same as Sweave, but it is more powerful and flexible. The conversion is done by function `knitr::Sweave2knitr`[@sweave2knitr].
+
+2. Read the knitr file and separate the R code and LaTeX content. The R code is stored in code chunks, and the LaTeX content is converted to markdown text. The code chunks' position information is handled by a placeholder in LaTeX content.
+
+3. Write the R Markdown file. Combine the R code and markdown text and write them to the R Markdown file.
+
+4. Add yaml front matter to the R Markdown file. The yaml front matter contains metadata such as the title, author, and date of the R Markdown file.
+
+5. Add a reference section to the R Markdown file. The reference section contains the references used in the R Markdown file. All references are stored in a separate file (.bib) using R package `rebib`.
+
+# Example {#sec:example}
+
+Here is an example of how to use `texor::rnw_to_rmd` to convert a Sweave file to an R Markdown file.
+
+```r
+    library(texor)
+    article_dir <- system.file("examples/sweave_article", package = "texor")
+    dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+    x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE)
+    your_article_path <- paste(your_article_folder, "sweave_article", "example.Rnw",sep="/")
+    your_article_path <- xfun::normalize_path(your_article_path)
+    texor::rnw_to_rmd(your_article_path, 
+                      front_matter_type = "vignettes", 
+                      clean_up = TRUE, 
+                      autonumber_eq = FALSE)
+    unlink(your_article_folder, recursive = TRUE)
+```
+
+Notice that you can manually check the R Markdown file in the tempdir before executing unlink function. And try to knit it into HTML format to see if it works. Furthermore, you can compile the original Sweave file into PDF format to compare the results.
+
+# Discussion {#sec:discuss}
+
+Although `texor::rnw_to_rmd` can convert most Sweave files to R Markdown files, there are still some limitations.
+
+First, The conversion of complex LaTeX commands may not be perfect especially when using rare macros. In this case, we need to manually modify the R Markdown file to achieve the desired effect.
+
+It should be noted that the syntax of R Markdown is far simpler than LaTeX's, so it is normal for complex renderings in LaTeX not to show up in R Markdown. `texor` will first try to convert it to a simpler syntax to be as similar as possible to the original article.
+
+Another problem is that the R code chunk may influence the rendering of the LaTeX content, or give some LaTeX style output. In this case, it's impossible to reproduce the same effect in R Markdown.
+
+Some R code chunks may output image, so how to numbering the image is a problem. To solve this problem, `texor` compile the Sweave file to LaTeX and extract the image number, then add the image number to the R Markdown file. However, this method may cause long waiting time on compiling, so we decided to make it optional.
+
+In conclusion, `texor` is a useful tool for converting Sweave files to R Markdown files, but it may not be perfect. Users should understand the issues that could arise in converting a complex system to a simpler one and choose appropriate documents for the conversion.
+
+# References {#sec:ref .unnumbered}
+
+<div id="refs"></div>
+
+:::
