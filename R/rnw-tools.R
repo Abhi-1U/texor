@@ -86,9 +86,15 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = T
     patch_equations(dir)
     # Step - 6 : patch figure environments to figure
     patch_figure_env(dir)
-    # Step - 7 : Convert to markdown + find package
-    #            references
+    # Step - 7 : find package references
     meta <- pre_conversion_statistics(dir)
+
+    # Step - 8 : Add reference caption
+    if (rebib::citation_reader(rnw_file_path)$count > 0) {
+        add_reference_caption(rnw_file_path)
+    }
+
+    # Step - 9 : Convert to markdown
     convert_to_markdown(dir, autonumber_eq = autonumber_eq)
 
 
@@ -282,14 +288,14 @@ rnw_patch_vignette_entry <- function(md_file_path, rnw_file_path) {
     entry_name <- NULL
     depend_name <- NULL
     for (line in rnw_content) {
-        if (grepl("%+\\\\VignetteIndexEntry", line)) {
-            entry_name <- gsub("%+\\\\VignetteIndexEntry\\{(.*)\\}", "\\1", line)
+        if (grepl("%+\\s*\\\\VignetteIndexEntry", line)) {
+            entry_name <- gsub("%+\\s*\\\\VignetteIndexEntry\\{(.*)\\}", "\\1", line)
             break
         }
     }
     for (line in rnw_content) {
-        if (grepl("%+\\\\VignetteDepends", line)) {
-            depend_name <- gsub("%+\\\\VignetteDepends\\{(.*)\\}", "\\1", line)
+        if (grepl("%+\\s*\\\\VignetteDepends", line)) {
+            depend_name <- gsub("%+\\s*\\\\VignetteDepends\\{(.*)\\}", "\\1", line)
             break
         }
     }
@@ -425,5 +431,24 @@ clean_up_files <- function(work_dir, intermediate_file_list = NULL) {
             file.remove(file)
         }
     }
+    return(TRUE)
+}
+
+add_reference_caption <- function(rnw_file_path) {
+    if (!file.exists(rnw_file_path)) {
+        stop("File does not exist")
+    }
+    rnw_content <- readLines(rnw_file_path)
+    # replace \bibliography{...} with \section*{References}
+    modified_content <- list()
+    for (i in seq_along(rnw_content)) {
+        line <- rnw_content[[i]]
+        if (grepl("\\\\bibliography\\{", line, ignore.case = TRUE)) {
+            modified_content <- c(modified_content, "\\section*{References}")
+        }
+        modified_content <- c(modified_content, line)
+    }
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, rnw_file_path)
     return(TRUE)
 }
