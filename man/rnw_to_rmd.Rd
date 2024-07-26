@@ -20,11 +20,9 @@ True if R Markdown file successfully generated in the same folder
 automated function for converting a single Sweave file to R Markdown file
 }
 \note{
-Use pandoc version greater than or equal to 2.17
+Use pandoc version greater than or equal to 3.1
 }
 \examples{
-# Checking for pandoc version
-# texor works with pandoc version >= 2.17
 article_dir <- system.file("examples/sweave_article", package = "texor")
 dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE)

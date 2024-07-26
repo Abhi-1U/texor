@@ -41,13 +41,13 @@ RJweb article document in /web folder
 automated function for converting a single RJarticle to web
 }
 \note{
-Use pandoc version greater than or equal to 2.17
+Use pandoc version greater than or equal to 3.1
 
-Do not use example = TRUE param when working with conversions.
+Do not set example = TRUE param when working with conversions.
+
+example param is set TRUE in example, to conform with CRAN check restrictions.
 }
 \examples{
-# Checking for pandoc version
-# texor works with pandoc version >= 2.17
 article_dir <- system.file("examples/article",
                  package = "texor")
 dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))

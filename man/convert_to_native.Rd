@@ -24,7 +24,7 @@ pandoc (along with lua interpreter) is already installed with
  R-studio, hence if not using R-studio you will need to install pandoc.
  https://pandoc.org/installing.html
 
-Use pandoc version greater than or equal to 2.17
+Use pandoc version greater than or equal to 3.1
 }
 \examples{
 # Note This is a minimal example to execute this function

@@ -95,6 +95,8 @@ x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 your_article_path <- paste(your_article_folder,"article",sep="/")
 # view your original article at
 your_article_path
+#' #Note : Do not use example = TRUE param when working with conversions.
+#' # It is set TRUE here, to conform with CRAN/Build check restrictions.
 texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE)
 # view  your converted and original article at
 paste0(your_article_path,"/web")
