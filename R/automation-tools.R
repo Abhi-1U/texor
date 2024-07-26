@@ -29,7 +29,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
                          compile_rmd_in_temp = !temp_mode) {
     message(dir)
     if (!pandoc_version_check()) {
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     else {

@@ -140,7 +140,7 @@ convert_to_markdown <- function(article_dir) {
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     if (!pandoc_version_check()) {
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     else {
@@ -194,7 +194,7 @@ convert_to_markdown <- function(article_dir) {
 generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
     article_dir <- xfun::normalize_path(article_dir)
     if (!pandoc_version_check()) {
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     if (!check_markdown_file(article_dir)) {
@@ -460,7 +460,7 @@ convert_to_native <- function(article_dir) {
     output_format <- "native"
     # This will generate a markdown file with YAML headers.
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     else {
@@ -512,7 +512,7 @@ produce_html <- function(article_dir,example = FALSE, web_dir = TRUE, interactiv
         return(TRUE)
     }
     if (!pandoc_version_check()) {
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     else {
@@ -612,7 +612,7 @@ create_article <- function(name="test", edit = TRUE){
 rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE, front_matter_type = "vignettes") {
     article_dir <- xfun::normalize_path(article_dir)
     if (!pandoc_version_check()) {
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     if (!check_markdown_file(article_dir)) {

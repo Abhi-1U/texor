@@ -18,7 +18,7 @@
 #' unlink(your_article_folder, recursive = TRUE)
 rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = TRUE) {
     if (!pandoc_version_check()) {
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     dir <- dirname(input_file)
