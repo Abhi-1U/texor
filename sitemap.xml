@@ -1,126 +1,44 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/articles/environment-handling.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/introduction-to-texor.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/readme.html</loc>
-  </url>
-  <url>
-    <loc>/reference/article_has_tikz.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check_markdown_file.html</loc>
-  </url>
-  <url>
-    <loc>/reference/convert_to_markdown.html</loc>
-  </url>
-  <url>
-    <loc>/reference/convert_to_native.html</loc>
-  </url>
-  <url>
-    <loc>/reference/convert_to_png.html</loc>
-  </url>
-  <url>
-    <loc>/reference/copy_other_files.html</loc>
-  </url>
-  <url>
-    <loc>/reference/count_env.html</loc>
-  </url>
-  <url>
-    <loc>/reference/count_inline.html</loc>
-  </url>
-  <url>
-    <loc>/reference/create_article.html</loc>
-  </url>
-  <url>
-    <loc>/reference/find_wrapper.html</loc>
-  </url>
-  <url>
-    <loc>/reference/generate_rmd.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_journal_details.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_md_file_name.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_texfile_name.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_wrapper_type.html</loc>
-  </url>
-  <url>
-    <loc>/reference/handle_figures.html</loc>
-  </url>
-  <url>
-    <loc>/reference/include_style_file.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latex_to_web.html</loc>
-  </url>
-  <url>
-    <loc>/reference/log_setup.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pandoc_version_check.html</loc>
-  </url>
-  <url>
-    <loc>/reference/patch_code_env.html</loc>
-  </url>
-  <url>
-    <loc>/reference/patch_equations.html</loc>
-  </url>
-  <url>
-    <loc>/reference/patch_figure_env.html</loc>
-  </url>
-  <url>
-    <loc>/reference/patch_table_env.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pre_conversion_statistics.html</loc>
-  </url>
-  <url>
-    <loc>/reference/produce_html.html</loc>
-  </url>
-  <url>
-    <loc>/reference/rnw_generate_rmd.html</loc>
-  </url>
-  <url>
-    <loc>/reference/rnw_to_rmd.html</loc>
-  </url>
-  <url>
-    <loc>/reference/stream_editor.html</loc>
-  </url>
-  <url>
-    <loc>/reference/texor_log.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/environment-handling.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/introduction-to-texor.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/readme.html</loc></url>
+<url><loc>/reference/article_has_tikz.html</loc></url>
+<url><loc>/reference/check_markdown_file.html</loc></url>
+<url><loc>/reference/convert_to_markdown.html</loc></url>
+<url><loc>/reference/convert_to_native.html</loc></url>
+<url><loc>/reference/convert_to_png.html</loc></url>
+<url><loc>/reference/copy_other_files.html</loc></url>
+<url><loc>/reference/count_env.html</loc></url>
+<url><loc>/reference/count_inline.html</loc></url>
+<url><loc>/reference/create_article.html</loc></url>
+<url><loc>/reference/find_wrapper.html</loc></url>
+<url><loc>/reference/generate_rmd.html</loc></url>
+<url><loc>/reference/get_journal_details.html</loc></url>
+<url><loc>/reference/get_md_file_name.html</loc></url>
+<url><loc>/reference/get_texfile_name.html</loc></url>
+<url><loc>/reference/get_wrapper_type.html</loc></url>
+<url><loc>/reference/handle_figures.html</loc></url>
+<url><loc>/reference/include_style_file.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/latex_to_web.html</loc></url>
+<url><loc>/reference/log_setup.html</loc></url>
+<url><loc>/reference/pandoc_version_check.html</loc></url>
+<url><loc>/reference/patch_code_env.html</loc></url>
+<url><loc>/reference/patch_equations.html</loc></url>
+<url><loc>/reference/patch_figure_env.html</loc></url>
+<url><loc>/reference/patch_table_env.html</loc></url>
+<url><loc>/reference/pre_conversion_statistics.html</loc></url>
+<url><loc>/reference/produce_html.html</loc></url>
+<url><loc>/reference/rnw_generate_rmd.html</loc></url>
+<url><loc>/reference/rnw_to_rmd.html</loc></url>
+<url><loc>/reference/stream_editor.html</loc></url>
+<url><loc>/reference/texor_log.html</loc></url>
 </urlset>
+
