@@ -54,44 +54,22 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="texor--tools-for-converting-latex-source-files-into-rj-web-articles">texor : Tools for converting LaTeX source files into RJ-web-articles<a class="anchor" aria-label="anchor" href="#texor--tools-for-converting-latex-source-files-into-rj-web-articles"></a>
+<div class="page-header"><h1 id="texor-">texor <a href="https://abhi-1u.github.io/texor/" class="external-link"><img src="reference/figures/texor-hex-sticker.png" align="right" height="138.5"></a>
+<a class="anchor" aria-label="anchor" href="#texor-"></a>
 </h1></div>
 <!-- badges: start -->
 
-<p>texor is a package that deals with multiple challenges that occour in conversion of LaTeX source files (which typically generate a PDF) to a web friendly RJ-web-article format.</p>
-<div class="section level3">
-<h3 id="currently-texor-can-handle-r-journal-structured-latex-files-with-support-for">Currently texor can handle R-Journal structured LaTeX files with support for:<a class="anchor" aria-label="anchor" href="#currently-texor-can-handle-r-journal-structured-latex-files-with-support-for"></a>
-</h3>
-<ol style="list-style-type: decimal">
-<li>RJournal based LaTeX files with macros such as <code>\pkg{}</code>,<code>\CRANpkg{}</code>,<code>\BIOpkg{}</code>, <code>\code{}</code>, <code>\acronym{}</code>
-</li>
-<li>Reading Metadata from LaTeX file as well as DESCRIPTION.</li>
-<li>Reading bibliography from bibtex files and ignoring <code>\thebibliography</code>
-</li>
-<li>Supports code environments like <code>Sinput</code>,<code>Soutput</code>, <code>example</code> ,<code>example*</code>,<code>verbatim</code>, <code>smallverbatim</code> with code highlight.</li>
-<li>Supports graphics included as PDF, PNG, JPG, tikz, algorithm2e graphics supported (some figures might not work).</li>
-<li>Functions to convert PDF graphics to PNG.</li>
-<li>Almost all tables are supported with a few exceptions.</li>
-<li>Other things like citations,links,footnotes,math,CTV,package references are also supported.</li>
-<li>Bibliography management and aggregation.(moved to <a href="https://github.com/Abhi-1U/rebib" class="external-link">rebib</a>)</li>
-<li>Figure/Table/Equation numbering</li>
-<li>Stream Editor to rename alien commands/environments to accepted defaults.</li>
-<li>Pre and Post conversion statistics of environments for verification.</li>
-<li>Support for included files (1 degree related to main article only).</li>
-<li>Logging of events.</li>
-</ol>
-</div>
+<p>The R package texor will ease your LaTeX R Journal / Sweave article migration to web format by providing tools and utilities.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Install Pandoc v3.1 or greater, ideally latest version. If you are using Rstudio, it should be pre-installed.</p>
+<p>Install pandoc v3.1 or greater, ideally latest version. If you are using Rstudio, it should be pre-installed.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># To check the version of pandoc</span></span>
 <span><span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/pandoc_available.html" class="external-link">pandoc_version</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># or to simply check if you are good to go in terms of pandoc</span></span>
 <span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="reference/pandoc_version_check.html">pandoc_version_check</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co"># TRUE if pandoc is good to go</span></span>
-<span><span class="co"># FALSE if pandoc is too old for texor</span></span></code></pre></div>
+<span><span class="co"># TRUE if pandoc is good to go, else FALSE</span></span></code></pre></div>
 <p>For included PDF conversions also install poppler-utils (used with pdftools package) Ideally install the latest version of poppler-utils.</p>
 <p>Install the mainline version from CRAN with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -119,7 +97,7 @@
 <span><span class="co"># view your original article at</span></span>
 <span><span class="va">your_article_path</span></span>
 <span><span class="co">#' #Note : Do not use example = TRUE param when working with conversions.</span></span>
-<span><span class="co">#' # It is set TRUE here, to conform with CRAN/Build check restrictions.</span></span>
+<span><span class="co">#' #  It is set TRUE here, to conform with CRAN/Build check restrictions.</span></span>
 <span><span class="fu">texor</span><span class="fu">::</span><span class="fu"><a href="reference/latex_to_web.html">latex_to_web</a></span><span class="op">(</span><span class="va">your_article_path</span>,log_steps <span class="op">=</span> <span class="cn">FALSE</span>, example <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co"># view  your converted and original article at</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">your_article_path</span>,<span class="st">"/web"</span><span class="op">)</span></span></code></pre></div>
