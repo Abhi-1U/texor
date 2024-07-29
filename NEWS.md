@@ -1,3 +1,18 @@
+# Version 1.4.0
+
+## Feature Updates
+
+1. Initial Support for Sweave (.Rnw) article conversion.
+2. A new Hex-sticker for the package.
+3. Simplification of Readme file.
+
+## Bug Fixes
+
+1. Fixed Rd files with LaTeX like syntax to conform with recent R changes.
+2. Removed redundant comments regarding pandoc version checks from examples.
+3. Updates warning messages and notes in Rd section.
+
+
 # Version 1.3.0
 
 ## Feature Updates
