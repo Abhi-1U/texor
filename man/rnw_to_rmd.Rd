@@ -17,6 +17,8 @@ rnw_to_rmd(
 \item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes"}
 
 \item{clean_up}{whether to clean up the intermediate files, default is TRUE}
+
+\item{autonumber_eq}{whether to autonumber the equations, default is FALSE}
 }
 \value{
 True if R Markdown file successfully generated in the same folder
@@ -39,10 +41,10 @@ rnw_to_rmd(file.path(article_dir, "example.Rnw"),
            clean_up = TRUE,
            autonumber_eq = TRUE)
 
-# convert Rmd to HTML
-rmarkdown::render(file.path(article_dir, "example.Rmd"))
-browseURL(file.path(article_dir, "example.html"))
+# convert Rmd to HTML (comment this step to avoid failure on R CMD Check)
+# rmarkdown::render(file.path(article_dir, "example.Rmd"))
+# browseURL(file.path(article_dir, "example.html"))
 
 # remove temporary files
-unlink(your_article_folder, recursive = TRUE)
+unlink(article_dir, recursive = TRUE)
 }

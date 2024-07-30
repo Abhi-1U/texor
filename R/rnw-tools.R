@@ -3,6 +3,7 @@
 #' @param input_file input Sweave file path
 #' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes"
 #' @param clean_up whether to clean up the intermediate files, default is TRUE
+#' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @note Use pandoc version greater than or equal to 3.1
 #'
 #' @return True if R Markdown file successfully generated in the same folder
@@ -20,12 +21,12 @@
 #'            clean_up = TRUE,
 #'            autonumber_eq = TRUE)
 #'
-#' # convert Rmd to HTML
-#' rmarkdown::render(file.path(article_dir, "example.Rmd"))
-#' browseURL(file.path(article_dir, "example.html"))
+#' # convert Rmd to HTML (comment this step to avoid failure on R CMD Check)
+#' # rmarkdown::render(file.path(article_dir, "example.Rmd"))
+#' # browseURL(file.path(article_dir, "example.html"))
 #'
 #' # remove temporary files
-#' unlink(your_article_folder, recursive = TRUE)
+#' unlink(article_dir, recursive = TRUE)
 rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = TRUE, autonumber_eq = FALSE) {
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
