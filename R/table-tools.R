@@ -110,19 +110,19 @@ patch_table_label <- function(article_dir) {
         table_env <- FALSE
         table_count <- 0
         for (line in raw_lines) {
-            if (grepl("^\\\\begin\\{table\\}", line)) {
+            if (grepl("^\\\\begin\\{(table|longtable|widetable)\\}", line)) {
                 table_env <- TRUE
                 label_found <- FALSE
                 table_count <- table_count + 1
             }
 
             if (table_env) {
-                if (grepl("\\\\label\\{", line)) {
+                if (!is_comment_line(line) && grepl("\\\\label\\{", line)) {
                     label_found <- TRUE
                 }
             }
 
-            if (grepl("^\\\\end\\{table\\}", line)) {
+            if (grepl("^\\\\end\\{(table|longtable|widetable)\\}", line)) {
                 if (!label_found) {
                     modified_content <- c(modified_content, paste0("\\label{table:auto", as.character(table_count), "}"))
                 }
@@ -134,5 +134,14 @@ patch_table_label <- function(article_dir) {
         message("Auto add label for table env")
         modified_content <- unlist(modified_content, use.names = FALSE)
         xfun::write_utf8(modified_content, file_path)
+    }
+}
+
+is_comment_line <- function(line) {
+    if (grepl("^\\s*%", line)) {
+        return(TRUE)
+    }
+    else {
+        return(FALSE)
     }
 }
