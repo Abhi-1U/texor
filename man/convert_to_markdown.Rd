@@ -25,12 +25,10 @@ convert latex(wrapper) file to markdown
 pandoc (along with lua interpreter) is already installed with
  R-studio, hence if not using R-studio you will need to install pandoc.
  https://pandoc.org/installing.html
- @note Use pandoc version greater than or equal to 2.17
+ @note Use pandoc version greater than or equal to 3.1
 }
 \examples{
 # Note This is a minimal example to execute this function
-# Checking for pandoc version
-# texor works with pandoc version >= 2.17
 article_dir <- system.file("examples/article",
                  package = "texor")
 dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))

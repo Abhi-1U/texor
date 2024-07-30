@@ -20,7 +20,7 @@ R-markdown file in the web folder
 generate rmarkdown file in output folder
 }
 \note{
-Use pandoc version greater than or equal to 2.17
+Use pandoc version greater than or equal to 3.1
 }
 \examples{
 # Note This is a minimal example to execute this function

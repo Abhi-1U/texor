@@ -11,15 +11,13 @@
 #' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @param compile_rmd_in_temp This works only with a forked version of rjtools.
 #' Not recommended to use with CRAN or github version of the rjtools package. (default FALSE)
-#' @note Use pandoc version greater than or equal to 2.17
-#' @note Do not use example = TRUE param when working with conversions.
-#'
+#' @note Use pandoc version greater than or equal to 3.1
+#' @note Do not set example = TRUE param when working with conversions.
+#' @note example param is set TRUE in example, to conform with CRAN check restrictions.
 #' @return RJweb article document in /web folder
 #'
 #' @export
 #' @examples
-#' # Checking for pandoc version
-#' # texor works with pandoc version >= 2.17
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
 #' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
@@ -32,7 +30,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
                          autonumber_eq = FALSE, compile_rmd_in_temp = !temp_mode) {
     message(dir)
     if (!pandoc_version_check()) {
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     else {

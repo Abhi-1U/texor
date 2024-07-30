@@ -68,14 +68,12 @@ include_style_file <- function(article_dir) {
 #' @note  pandoc (along with lua interpreter) is already installed with
 #'  R-studio, hence if not using R-studio you will need to install pandoc.
 #'  https://pandoc.org/installing.html
-#'  @note Use pandoc version greater than or equal to 2.17
+#'  @note Use pandoc version greater than or equal to 3.1
 #'
 #' @return creates a converted markdown file, as well as a pkg_meta.yaml file
 #' @export
 #' @examples
 #' # Note This is a minimal example to execute this function
-#' # Checking for pandoc version
-#' # texor works with pandoc version >= 2.17
 #' article_dir <- system.file("examples/article",
 #'                  package = "texor")
 #' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
@@ -146,7 +144,7 @@ convert_to_markdown <- function(article_dir, autonumber_eq = FALSE) {
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     if (!pandoc_version_check()) {
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     else {
@@ -175,7 +173,7 @@ convert_to_markdown <- function(article_dir, autonumber_eq = FALSE) {
 #' @param article_dir path to the directory which contains tex article
 #' @param web_dir option to create a new web directory, default TRUE
 #' @param interactive_mode interactive mode for converting articles with options. default FALSE
-#' @note Use pandoc version greater than or equal to 2.17
+#' @note Use pandoc version greater than or equal to 3.1
 #' @return R-markdown file in the web folder
 #' @export
 #' @examples
@@ -200,7 +198,7 @@ convert_to_markdown <- function(article_dir, autonumber_eq = FALSE) {
 generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
     article_dir <- xfun::normalize_path(article_dir)
     if (!pandoc_version_check()) {
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     if (!check_markdown_file(article_dir)) {
@@ -398,7 +396,7 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
 #' @note  pandoc (along with lua interpreter) is already installed with
 #'  R-studio, hence if not using R-studio you will need to install pandoc.
 #'  https://pandoc.org/installing.html
-#' @note Use pandoc version greater than or equal to 2.17
+#' @note Use pandoc version greater than or equal to 3.1
 #' @return creates a converted native AST file, as well as a pkg_meta.yaml file
 #' @export
 #' @examples
@@ -470,7 +468,7 @@ convert_to_native <- function(article_dir, autonumber_eq = FALSE) {
     output_format <- "native"
     # This will generate a markdown file with YAML headers.
     if (! pandoc_version_check()){
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     else {
@@ -497,8 +495,9 @@ convert_to_native <- function(article_dir, autonumber_eq = FALSE) {
 #'  to enable export of this function.
 #' @param web_dir option to create a new web directory, default TRUE
 #' @param interactive_mode interactive mode for converting articles with options. default FALSE
-#' @note Use pandoc version greater than or equal to 2.17
-#' @note Do not use example = TRUE param when working with conversions.
+#' @note Use pandoc version greater than or equal to 3.1
+#' @note Do not set example = TRUE param when working with conversions.
+#' @note example param is set TRUE in example, to conform with CRAN check restrictions.
 #' @return Renders a RJwrapper.html file in the /web folder, in example it will
 #' return TRUE
 #' @export
@@ -521,7 +520,7 @@ produce_html <- function(article_dir,example = FALSE, web_dir = TRUE, interactiv
         return(TRUE)
     }
     if (!pandoc_version_check()) {
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     else {
@@ -612,7 +611,7 @@ create_article <- function(name="test", edit = TRUE){
 #' @param web_dir option to create a new web directory, default TRUE
 #' @param interactive_mode interactive mode for converting articles with options. default FALSE
 #' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes"
-#' @note Use pandoc version greater than or equal to 2.17
+#' @note Use pandoc version greater than or equal to 3.1
 #' @return R-markdown file in the web folder
 #' @export
 #' @examples
@@ -621,7 +620,7 @@ create_article <- function(name="test", edit = TRUE){
 rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE, front_matter_type = "vignettes") {
     article_dir <- xfun::normalize_path(article_dir)
     if (!pandoc_version_check()) {
-        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=2.17\n","Please Install a newer version of pandoc to run texor"))
+        warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
     if (!check_markdown_file(article_dir)) {

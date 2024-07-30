@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# texor : Tools for converting LaTeX source files into RJ-web-articles
+# texor <a href='https://abhi-1u.github.io/texor/'><img src='man/figures/texor-hex-sticker.png' align="right" alt="texor package hex sticker with icons showing transistion from PDF documents to web pages." width="120" /></a>
 
 <!-- badges: start -->
 [![CRAN/METACRAN](https://img.shields.io/cran/v/texor?color=blue&style=for-the-badge)](https://cran.r-project.org/package=texor)
@@ -26,28 +26,11 @@ knitr::opts_chunk$set(
 ![Github Issues](https://img.shields.io/github/issues/Abhi-1U/texor?color=orange&logo=github&logoColor=&style=for-the-badge)
 <!-- badges: end -->
 
-texor is a package that deals with multiple challenges that occour in conversion of LaTeX source files (which typically generate a PDF) to a web friendly RJ-web-article format. 
-
-### Currently texor can handle R-Journal structured LaTeX files with support for:
-
-1. RJournal based LaTeX files with macros such as `\pkg{}`,`\CRANpkg{}`,`\BIOpkg{}`, `\code{}`, `\acronym{}`
-2. Reading Metadata from LaTeX file as well as DESCRIPTION.
-3. Reading bibliography from bibtex files and ignoring `\thebibliography`
-4. Supports code environments like `Sinput`,`Soutput`, `example` ,`example*`,`verbatim`, `smallverbatim`  with code highlight.
-5. Supports graphics included as PDF, PNG, JPG, tikz, algorithm2e graphics supported (some figures might not work).
-6. Functions to convert PDF graphics to PNG.
-7. Almost all tables are supported with a few exceptions.
-8. Other things like citations,links,footnotes,math,CTV,package references are also supported.
-9.  Bibliography management and aggregation.(moved to [rebib](https://github.com/Abhi-1U/rebib))
-10. Figure/Table/Equation numbering
-11. Stream Editor to rename alien commands/environments to accepted defaults.
-12. Pre and Post conversion statistics of environments for verification.
-13. Support for included files (1 degree related to main article only).
-14. Logging of events.
+The R package texor will ease your LaTeX R Journal / Sweave article migration to web format by providing tools and utilities.
 
 ## Installation
 
-Install Pandoc v3.1 or greater, ideally latest version. 
+Install pandoc v3.1 or greater, ideally latest version. 
 If you are using Rstudio, it should be pre-installed.
 
 
@@ -56,8 +39,7 @@ If you are using Rstudio, it should be pre-installed.
 rmarkdown::pandoc_version()
 # or to simply check if you are good to go in terms of pandoc
 texor::pandoc_version_check()
-# TRUE if pandoc is good to go
-# FALSE if pandoc is too old for texor
+# TRUE if pandoc is good to go, else FALSE
 ```
 
 For included PDF conversions also install poppler-utils (used with pdftools package) 
@@ -94,6 +76,8 @@ x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 your_article_path <- paste(your_article_folder,"article",sep="/")
 # view your original article at
 your_article_path
+#Note : Do not use example = TRUE param when working with conversions.
+#  It is set TRUE here, to conform with CRAN/Build check restrictions.
 texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE)
 # view  your converted and original article at
 paste0(your_article_path,"/web")

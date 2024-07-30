@@ -17,8 +17,6 @@ rnw_to_rmd(
 \item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes"}
 
 \item{clean_up}{whether to clean up the intermediate files, default is TRUE}
-
-\item{autonumber_eq}{whether to autonumber the equations, default is FALSE}
 }
 \value{
 True if R Markdown file successfully generated in the same folder
@@ -27,12 +25,9 @@ True if R Markdown file successfully generated in the same folder
 automated function for converting a single Sweave file to R Markdown file
 }
 \note{
-Use pandoc version greater than or equal to 2.17
+Use pandoc version greater than or equal to 3.1
 }
 \examples{
-# Checking for pandoc version
-# texor works with pandoc version >= 2.17
-
 # move example Sweave article and associated files to a temporary directory
 example_dir <- system.file("examples", "sweave_article", package = "texor")
 file.copy(from = example_dir, to = tempdir(), recursive = TRUE)
