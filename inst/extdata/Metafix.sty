@@ -5,8 +5,10 @@
 \newcommand{\sloppy}{\\}
 % Some unsupported commands in pandoc
 % \renewcommand{\vspace*}[1]{\vspace{#1}} %this commands break r code chunk
-% Package name commands
-\renewcommand{\pkg}[1]{\emph{#1}}
+% Package name commands (jss style)
+% \renewcommand{\pkg}[1]{\emph{#1}}
+\renewcommand{\pkg}[1]{\textbf{#1}}
+\renewcommand{\proglang}[1]{\textsf{#1}}
 \newcommand{\And}{\\}
 
 \newcommand{\CRANpkg}[1]{\href{https://CRAN.R-project.org/package=#1}{\pkg{#1}}}%
