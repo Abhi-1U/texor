@@ -79,7 +79,12 @@ Insert a reference to the first image: \ref{fig:test}. And for bibtex\cite{Yinxi
 Let's test another image from R code chunk:
 
 <<image,fig=TRUE, fig.cap="matrix package's image">>=
-library(Matrix)
+if (system.file(package = "Matrix") == "") {
+  install.packages("Matrix")
+  library(Matrix)
+} else {
+  library(Matrix)
+}
 data(CAex, package = "Matrix")
 print(image(CAex, main = "image(CAex)")) # print(.) needed for Sweave
 @
