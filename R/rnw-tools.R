@@ -153,7 +153,7 @@ rnw_remove_code_chunk <- function(input_file) {
                      "-part1.md", sep = "")
     input_file_path <- paste(dir, basename(input_file), sep = "/")
     md_file_path <- xfun::normalize_path(md_file_path)
-    rnw_file_path <- gsub(".Rnw", "-part2.tex", input_file)
+    rnw_file_path <- gsub("-knitr.Rnw", "-generated.tex", input_file)
 
     sweave_code_reader <- system.file(
         "sweave_code_reader.lua", package = "texor")
