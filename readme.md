@@ -14,6 +14,7 @@ Status](https://img.shields.io/github/actions/workflow/status/Abhi-1U/texor/cmdc
 monorepo)](https://img.shields.io/github/r-package/v/Abhi-1U/texor?filename=DESCRIPTION&label=texor&logo=github&color=navy&style=for-the-badge)](https://github.com/Abhi-1U/texor/blob/master/DESCRIPTION)
 ![Github
 Issues](https://img.shields.io/github/issues/Abhi-1U/texor?color=orange&logo=github&logoColor=&style=for-the-badge)
+[![codecov](https://img.shields.io/codecov/c/gh/Abhi-1U/texor?style=for-the-badge&logo=codecov)](https://codecov.io/gh/Abhi-1U/texor)
 <!-- badges: end -->
 
 The R package texor will ease your LaTeX R Journal / Sweave article
