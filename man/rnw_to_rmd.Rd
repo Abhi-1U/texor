@@ -32,11 +32,22 @@ Use pandoc version greater than or equal to 2.17
 \examples{
 # Checking for pandoc version
 # texor works with pandoc version >= 2.17
-article_dir <- system.file("examples/sweave_article", package = "texor")
-dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
-x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE)
-your_article_path <- paste(your_article_folder,"sweave_article", "example.Rnw",sep="/")
-your_article_path <- xfun::normalize_path(your_article_path)
-rnw_to_rmd(your_article_path, front_matter_type = "vignettes", clean_up = TRUE)
+
+# move example Sweave article and associated files to a temporary directory
+example_dir <- system.file("examples", "sweave_article", package = "texor")
+file.copy(from = example_dir, to = tempdir(), recursive = TRUE)
+article_dir <- file.path(tempdir(), "sweave_article")
+
+# convert example Sweave article to Rmd
+rnw_to_rmd(file.path(article_dir, "example.Rnw"),
+           front_matter_type = "vignettes",
+           clean_up = TRUE,
+           autonumber_eq = TRUE)
+
+# convert Rmd to HTML
+rmarkdown::render(file.path(article_dir, "example.Rmd"))
+browseURL(file.path(article_dir, "example.html"))
+
+# remove temporary files
 unlink(your_article_folder, recursive = TRUE)
 }
