@@ -735,6 +735,7 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
                     number_sections = TRUE
                 )
             ),
+            "link-citations" = TRUE,
             bibliography = metadata$bibliography
         )
     )
