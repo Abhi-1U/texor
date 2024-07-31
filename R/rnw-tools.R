@@ -102,6 +102,8 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = T
         add_reference_caption(rnw_file_path)
     }
 
+    remove_unsupport_commands(rnw_file_path)
+
     # Step - 9 : Convert to markdown
     convert_to_markdown(dir, autonumber_eq = autonumber_eq)
 
@@ -453,6 +455,28 @@ add_reference_caption <- function(rnw_file_path) {
         line <- rnw_content[[i]]
         if (grepl("\\\\bibliography\\{", line, ignore.case = TRUE)) {
             modified_content <- c(modified_content, "\\section*{References}")
+        }
+        modified_content <- c(modified_content, line)
+    }
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, rnw_file_path)
+    return(TRUE)
+}
+
+remove_unsupport_commands <- function(rnw_file_path) {
+    if (!file.exists(rnw_file_path)) {
+        stop("File does not exist")
+    }
+    rnw_content <- readLines(rnw_file_path)
+    modified_content <- list()
+    for (i in seq_along(rnw_content)) {
+        line <- rnw_content[[i]]
+        # remove \vspace{...}, \hspace{...}, \vspace*{...}, \hspace*{...}
+        if (grepl("^\\\\vspace\\{.*\\}$", line) ||
+            grepl("^\\\\hspace\\{.*\\}$", line) ||
+            grepl("^\\\\vspace\\*\\{.*\\}$", line) ||
+            grepl("^\\\\hspace\\*\\{.*\\}$", line)) {
+            next
         }
         modified_content <- c(modified_content, line)
     }
