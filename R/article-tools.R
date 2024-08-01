@@ -124,6 +124,15 @@ convert_to_markdown <- function(article_dir) {
         "widetable_patcher.lua", package = "texor")
     auto_num_eq <- system.file(
         "auto_number_equations.lua", package = "texor")
+    ## @phinney > To do : include an option in this function to choose between
+    ## "image_caption.lua" and "fig_code_chunk.lua" file, similar to autonumber.
+    ## I have updated the reference handling system, which should be able to
+    ## handle references for both the filters.
+    ## Also the bookdown_ref_filter should always be the last lua filter which
+    ## runs.
+    ## Remove the comments after these changes. < Thanks, from Abhishek.
+    fig_code_chunk <- system.file(
+        "fig_code_chunk.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
                     "--lua-filter", error_checker_filter,
@@ -132,6 +141,7 @@ convert_to_markdown <- function(article_dir) {
                     "--lua-filter", equation_filter,
                     "--lua-filter", image_filter,
                     "--lua-filter", figure_filter,
+                    "--lua-filter", fig_code_chunk,
                     "--lua-filter", wdtable_filter,
                     "--lua-filter", code_block_filter,
                     "--lua-filter", table_filter,
