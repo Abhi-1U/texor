@@ -617,7 +617,9 @@ create_article <- function(name="test", edit = TRUE){
 #' @examples
 #' # Note This is a minimal example to execute this function
 #' # Please refer to texor::rnw_to_rmd for a detailed example
-rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE, front_matter_type = "vignettes") {
+rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE,
+                             front_matter_type = "vignettes",
+                             autonumber_sec = TRUE) {
     article_dir <- xfun::normalize_path(article_dir)
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
@@ -731,13 +733,20 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
             output = list(
                 "bookdown::html_document2" = list(
                     base_format = "rmarkdown::html_vignette",
-                    number_sections = TRUE
+                    number_sections = FALSE
                 )
             ),
             "link-citations" = TRUE,
             bibliography = metadata$bibliography
         )
     )
+
+    if (autonumber_sec == TRUE) {
+        front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes <- list(
+            in_header = "auto-number-sec-js.html"
+        )
+    }
+
     front_matter <- front_matter_list[[front_matter_type]]
     if (file.exists(markdown_file)){
         pandoc_md_contents <- readLines(markdown_file)

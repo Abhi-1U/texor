@@ -4,6 +4,7 @@
 #' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes"
 #' @param clean_up whether to clean up the intermediate files, default is TRUE
 #' @param autonumber_eq whether to autonumber the equations, default is FALSE
+#' @param autonumber_sec whether to autonumber the sections, default is TRUE
 #' @note Use pandoc version greater than or equal to 3.1
 #'
 #' @return True if R Markdown file successfully generated in the same folder
@@ -27,7 +28,11 @@
 #'
 #' # remove temporary files
 #' unlink(article_dir, recursive = TRUE)
-rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = TRUE, autonumber_eq = FALSE) {
+rnw_to_rmd <- function(input_file,
+                       front_matter_type = "vignettes",
+                       clean_up = TRUE,
+                       autonumber_eq = FALSE,
+                       autonumber_sec = TRUE) {
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
@@ -130,7 +135,15 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = T
     # YYYY is the year, ZZ is the Journal issue number and MMM is the DOI
     # referral(unique article number).
 
-    rnw_generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode, front_matter_type = front_matter_type)
+    rnw_generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode,
+                     front_matter_type = front_matter_type,
+                     autonumber_sec = autonumber_sec)
+    if (autonumber_sec == TRUE) {
+        # copy html file include the js
+        file.copy(system.file("extdata", "auto-number-sec-js.html", package = "texor"),
+                  paste0(dir, "/auto-number-sec-js.html"))
+        replace_all_sec_ref(paste0(dir, "/RJwrapper.Rmd"))
+    }
     # post_data <- yaml::read_yaml(paste0(dir,"/post-conversion-meta.yaml"))
 
     # Step - 10 : rename the file to the original file name
@@ -482,5 +495,29 @@ remove_unsupport_commands <- function(rnw_file_path) {
     }
     modified_content <- unlist(modified_content, use.names = FALSE)
     xfun::write_utf8(modified_content, rnw_file_path)
+    return(TRUE)
+}
+
+replace_all_sec_ref <- function(rmd_file_path) {
+    if (!file.exists(rmd_file_path)) {
+        stop("File does not exist")
+    }
+    rmd_content <- readLines(rmd_file_path)
+    # detect  \@ref(sec:...)
+    # replace with [<span class="ref" data-target="sec:..."></span>](#sec:...)
+    modified_content <- lapply(rmd_content, function(line) {
+        if (grepl("\\\\@ref\\(sec:", line)) {
+            # 替换所有匹配项
+            line <- gsub("\\\\@ref\\((sec:[^)]*)\\)",
+                         "[<span class=\"ref\" data-target=\"\\1\"></span>](#\\1)", line, perl = TRUE)
+        }
+        if (grepl("\\[\\d+\\]\\(#sec:", line)) {
+            line <- gsub("\\[(\\d+)\\]\\(#(sec:[^)]*)\\)",
+                         "[<span class=\"ref\" data-target=\"\\2\"></span>](#\\2)", line, perl = TRUE)
+        }
+        return(line)
+    })
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, rmd_file_path)
     return(TRUE)
 }
