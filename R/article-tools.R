@@ -61,14 +61,17 @@ include_style_file <- function(article_dir) {
 #' convert latex(wrapper) file to markdown
 #'
 #' @param article_dir path to the directory which contains tex article
+#' @param kable_tab converts to kable table instead of markdown tables
 #' @description
 #' Uses pandoc along with several lua filters
 #' found at inst/extdata/filters in texor package
 #' @note  pandoc (along with lua interpreter) is already installed with
 #'  R-studio, hence if not using R-studio you will need to install pandoc.
 #'  https://pandoc.org/installing.html
-#'  @note Use pandoc version greater than or equal to 3.1
-#'
+#' @note Use pandoc version greater than or equal to 3.1
+#' @note Kable tables will work for simple static data, any math / code /
+#'  image within any table will send the package into fallback mode (normal
+#'  markdown tables) for the rest of tables in the article.
 #' @return creates a converted markdown file, as well as a pkg_meta.yaml file
 #' @export
 #' @examples
@@ -83,7 +86,7 @@ include_style_file <- function(article_dir) {
 #' rebib::aggregate_bibliography(your_article_path)
 #' texor::convert_to_markdown(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-convert_to_markdown <- function(article_dir) {
+convert_to_markdown <- function(article_dir, kable_tab = TRUE) {
     # wrapper file name
     article_dir <- xfun::normalize_path(article_dir)
     input_file <- get_wrapper_type(article_dir)
@@ -133,6 +136,8 @@ convert_to_markdown <- function(article_dir) {
     ## Remove the comments after these changes. < Thanks, from Abhishek.
     fig_code_chunk <- system.file(
         "fig_code_chunk.lua", package = "texor")
+    table_code_chunk <- system.file(
+        "table_code_chunk.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
                     "--lua-filter", error_checker_filter,
@@ -141,12 +146,16 @@ convert_to_markdown <- function(article_dir) {
                     "--lua-filter", equation_filter,
                     "--lua-filter", image_filter,
                     "--lua-filter", figure_filter,
-                    "--lua-filter", fig_code_chunk,
+                    #"--lua-filter", fig_code_chunk,
                     "--lua-filter", wdtable_filter,
                     "--lua-filter", code_block_filter,
-                    "--lua-filter", table_filter,
+                    "--lua-filter", table_filter)
+    if (kable_tab) {
+        pandoc_opt <- c(pandoc_opt,
+                    "--lua-filter", table_code_chunk,
                     "--lua-filter", stat_filter,
                     "--lua-filter", bookdown_ref_filter)
+    }
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     if (!pandoc_version_check()) {
