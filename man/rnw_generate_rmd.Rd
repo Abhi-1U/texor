@@ -8,7 +8,8 @@ rnw_generate_rmd(
   article_dir,
   web_dir = TRUE,
   interactive_mode = FALSE,
-  front_matter_type = "vignettes"
+  front_matter_type = "vignettes",
+  autonumber_sec = TRUE
 )
 }
 \arguments{

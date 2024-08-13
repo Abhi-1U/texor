@@ -8,17 +8,20 @@ rnw_to_rmd(
   input_file,
   front_matter_type = "vignettes",
   clean_up = TRUE,
-  autonumber_eq = FALSE
+  autonumber_eq = FALSE,
+  autonumber_sec = TRUE
 )
 }
 \arguments{
 \item{input_file}{input Sweave file path}
 
-\item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes"}
+\item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes", optional for "biocstyle", "litedown"}
 
 \item{clean_up}{whether to clean up the intermediate files, default is TRUE}
 
 \item{autonumber_eq}{whether to autonumber the equations, default is FALSE}
+
+\item{autonumber_sec}{whether to autonumber the sections, default is TRUE}
 }
 \value{
 True if R Markdown file successfully generated in the same folder
