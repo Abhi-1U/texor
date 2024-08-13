@@ -20,7 +20,8 @@
 #' rnw_to_rmd(file.path(article_dir, "example.Rnw"),
 #'            front_matter_type = "vignettes",
 #'            clean_up = TRUE,
-#'            autonumber_eq = TRUE)
+#'            autonumber_eq = TRUE,
+#'            autonumber_sec = FALSE)
 #'
 #' # convert Rmd to HTML (comment this step to avoid failure on R CMD Check)
 #' # rmarkdown::render(file.path(article_dir, "example.Rmd"))
