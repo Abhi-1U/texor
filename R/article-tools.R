@@ -330,7 +330,6 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
                 self_contained = TRUE,
                 toc = FALSE,
                 legacy_pdf = TRUE,
-                web_only = TRUE,
                 mathjax = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js",
                 md_extension = "-tex_math_single_backslash"
             )
