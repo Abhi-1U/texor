@@ -1,7 +1,7 @@
 #' @title Sweave to RMarkdown
 #' @description automated function for converting a single Sweave file to R Markdown file
 #' @param input_file input Sweave file path
-#' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes"
+#' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes", optional for "biocstyle", "litedown"
 #' @param clean_up whether to clean up the intermediate files, default is TRUE
 #' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @param autonumber_sec whether to autonumber the sections, default is TRUE
@@ -121,7 +121,7 @@ rnw_to_rmd <- function(input_file,
     rnw_patch_code_chunk(md_file_path, md_code_file_path)
 
     # Step 02: patch for vignette entry
-    if(front_matter_type == "vignettes") {
+    if(front_matter_type %in% c("vignettes", "biocstyle", "litedown")) {
         rnw_patch_vignette_entry(md_file_path, input_file)
     }
 

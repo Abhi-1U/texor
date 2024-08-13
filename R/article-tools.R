@@ -737,6 +737,32 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
             ),
             "link-citations" = TRUE,
             bibliography = metadata$bibliography
+        ),
+        "biocstyle" = list(
+            title = metadata$title,
+            abstract = metadata$abstract, #%||% ,
+            author = metadata$author,
+            output = list(
+                "BiocStyle::html_document" = list(
+                    toc_float = TRUE
+                ),
+                "BiocStyle::pdf_document" = "default"
+            ),
+            vignette = paste("%\\VignetteEngine{knitr::rmarkdown}\n%\\VignetteEncoding{UTF-8}\n%\\VignetteIndexEntry{",
+                             metadata$VignetteIndexEntry, "}\n", sep = ""),
+            bibliography = metadata$bibliography
+        ),
+        "litedown" = list(
+            title = metadata$title,
+            output = list(
+                "litedown::html_format" = list(
+                    meta = list(
+                        css = c("@default")
+                    )
+                )
+            ),
+            vignette = paste("%\\VignetteEngine{litedown::vignette}\n%\\VignetteEncoding{UTF-8}\n%\\VignetteIndexEntry{",
+                             metadata$VignetteIndexEntry, "}\n", sep = "")
         )
     )
 
