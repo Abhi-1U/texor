@@ -19,7 +19,9 @@ rnw_generate_rmd(
 
 \item{interactive_mode}{interactive mode for converting articles with options. default FALSE}
 
-\item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes"}
+\item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes", optional for "biocstyle", "litedown"}
+
+\item{autonumber_sec}{whether to autonumber the sections, default is TRUE}
 }
 \value{
 R-markdown file in the web folder
