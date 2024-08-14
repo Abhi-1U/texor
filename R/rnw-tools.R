@@ -5,6 +5,7 @@
 #' @param clean_up whether to clean up the intermediate files, default is TRUE
 #' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @param autonumber_sec whether to autonumber the sections, default is TRUE
+#' @param suppress_package_startup_message whether to suppress the package startup message, default is FALSE
 #' @note Use pandoc version greater than or equal to 3.1
 #'
 #' @return True if R Markdown file successfully generated in the same folder
@@ -33,7 +34,8 @@ rnw_to_rmd <- function(input_file,
                        front_matter_type = "vignettes",
                        clean_up = TRUE,
                        autonumber_eq = FALSE,
-                       autonumber_sec = TRUE) {
+                       autonumber_sec = TRUE,
+                       suppress_package_startup_message = FALSE) {
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
@@ -65,6 +67,9 @@ rnw_to_rmd <- function(input_file,
     part_file_path <- rnw_remove_code_chunk(input_file)
     md_code_file_path <- part_file_path$md_file_path
     rnw_file_path <- part_file_path$rnw_file_path
+    if (suppress_package_startup_message == TRUE) {
+        patch_startup_message(md_code_file_path)
+    }
 
     # Step 03: only keep the body of tex file (\document)
     rnw_read_body(rnw_file_path)
@@ -520,5 +525,26 @@ replace_all_sec_ref <- function(rmd_file_path) {
     })
     modified_content <- unlist(modified_content, use.names = FALSE)
     xfun::write_utf8(modified_content, rmd_file_path)
+    return(TRUE)
+}
+
+patch_startup_message <- function(code_file_path) {
+    if(!file.exists(code_file_path)) {
+        stop("File does not exist")
+    }
+    code_content <- readLines(code_file_path)
+    # insert "library <- function(...) suppressPackageStartupMessages(base::library(...))" after first ``` line
+    modified_content <- list()
+    add_command <- FALSE
+    for (i in seq_along(code_content)) {
+        line <- code_content[[i]]
+        modified_content <- c(modified_content, line)
+        if (grepl("^```", line) && add_command == FALSE) {
+            modified_content <- c(modified_content, "library <- function(...) suppressPackageStartupMessages(base::library(...))")
+            add_command <- TRUE
+        }
+    }
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, code_file_path)
     return(TRUE)
 }

@@ -9,7 +9,8 @@ rnw_to_rmd(
   front_matter_type = "vignettes",
   clean_up = TRUE,
   autonumber_eq = FALSE,
-  autonumber_sec = TRUE
+  autonumber_sec = TRUE,
+  suppress_package_startup_message = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ rnw_to_rmd(
 \item{autonumber_eq}{whether to autonumber the equations, default is FALSE}
 
 \item{autonumber_sec}{whether to autonumber the sections, default is TRUE}
+
+\item{suppress_package_startup_message}{whether to suppress the package startup message, default is FALSE}
 }
 \value{
 True if R Markdown file successfully generated in the same folder
