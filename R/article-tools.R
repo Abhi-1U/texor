@@ -138,9 +138,13 @@ convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = F
                     "--lua-filter", figure_filter,
                     "--lua-filter", wdtable_filter,
                     "--lua-filter", code_block_filter,
-                    "--lua-filter", table_filter,
-                    "--lua-filter", stat_filter,
-                    "--lua-filter", bookdown_ref_filter)
+                    "--lua-filter", table_filter)
+    if (kable_tab) {
+        pandoc_opt <- c(pandoc_opt,
+                        "--lua-filter", table_code_chunk,
+                        "--lua-filter", stat_filter,
+                        "--lua-filter", bookdown_ref_filter)
+    }
     if (autonumber_eq) {
         pandoc_opt <- c(pandoc_opt, "--lua-filter", auto_num_eq)
     }
