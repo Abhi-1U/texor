@@ -13,7 +13,9 @@ latex_to_web(
   web_dir = FALSE,
   interactive_mode = FALSE,
   autonumber_eq = FALSE,
-  compile_rmd_in_temp = !temp_mode
+  compile_rmd_in_temp = !temp_mode,
+  kable_tab = TRUE,
+  fig_in_r = TRUE
 )
 }
 \arguments{
@@ -34,7 +36,11 @@ article untouched. default value = TRUE}
 
 \item{autonumber_eq}{whether to autonumber the equations, default is FALSE}
 
-\item{compile_rmd_in_temp}{This works only with a forked version of rjtools.
+\item{compile_rmd_in_temp}{This works only with a forked version of rjtools.}
+
+\item{kable_tab}{converts to kable table instead of markdown tables}
+
+\item{fig_in_r}{whether to include figures in R code chunks, default is TRUE
 Not recommended to use with CRAN or github version of the rjtools package. (default FALSE)}
 }
 \value{

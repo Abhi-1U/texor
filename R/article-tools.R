@@ -63,6 +63,7 @@ include_style_file <- function(article_dir) {
 #' @param article_dir path to the directory which contains tex article
 #' @param kable_tab converts to kable table instead of markdown tables
 #' @param autonumber_eq whether to autonumber the equations, default is FALSE
+#' @param fig_in_r whether to include figures in R code chunks, default is TRUE
 #' @description
 #' Uses pandoc along with several lua filters
 #' found at inst/extdata/filters in texor package
@@ -87,7 +88,7 @@ include_style_file <- function(article_dir) {
 #' rebib::aggregate_bibliography(your_article_path)
 #' texor::convert_to_markdown(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = FALSE) {
+convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = FALSE, fig_in_r = TRUE) {
     # wrapper file name
     article_dir <- xfun::normalize_path(article_dir)
     input_file <- get_wrapper_type(article_dir)
@@ -145,21 +146,28 @@ convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = F
                     "--lua-filter", abs_filter,
                     "--lua-filter", bib_filter,
                     "--lua-filter", equation_filter,
-                    "--lua-filter", image_filter,
-                    "--lua-filter", figure_filter,
-                    #"--lua-filter", fig_code_chunk,
+                    "--lua-filter", image_filter)
+    if (fig_in_r) {
+        pandoc_opt <- c(pandoc_opt, "--lua-filter", fig_code_chunk)
+    } else {
+        pandoc_opt <- c(pandoc_opt, "--lua-filter", figure_filter)
+    }
+
+    pandoc_opt <- c(pandoc_opt,
                     "--lua-filter", wdtable_filter,
                     "--lua-filter", code_block_filter,
                     "--lua-filter", table_filter)
+
+    if (autonumber_eq) {
+        pandoc_opt <- c(pandoc_opt, "--lua-filter", auto_num_eq)
+    }
     if (kable_tab) {
         pandoc_opt <- c(pandoc_opt,
                         "--lua-filter", table_code_chunk,
                         "--lua-filter", stat_filter,
                         "--lua-filter", bookdown_ref_filter)
     }
-    if (autonumber_eq) {
-        pandoc_opt <- c(pandoc_opt, "--lua-filter", auto_num_eq)
-    }
+
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     if (!pandoc_version_check()) {

@@ -10,7 +10,9 @@ rnw_to_rmd(
   clean_up = TRUE,
   autonumber_eq = FALSE,
   autonumber_sec = TRUE,
-  suppress_package_startup_message = FALSE
+  suppress_package_startup_message = FALSE,
+  kable_tab = TRUE,
+  fig_in_r = TRUE
 )
 }
 \arguments{
@@ -25,6 +27,10 @@ rnw_to_rmd(
 \item{autonumber_sec}{whether to autonumber the sections, default is TRUE}
 
 \item{suppress_package_startup_message}{whether to suppress the package startup message, default is FALSE}
+
+\item{kable_tab}{converts to kable table instead of markdown tables}
+
+\item{fig_in_r}{whether to include figures in R code chunks, default is TRUE}
 }
 \value{
 True if R Markdown file successfully generated in the same folder

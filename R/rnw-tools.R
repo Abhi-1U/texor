@@ -6,6 +6,8 @@
 #' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @param autonumber_sec whether to autonumber the sections, default is TRUE
 #' @param suppress_package_startup_message whether to suppress the package startup message, default is FALSE
+#' @param kable_tab converts to kable table instead of markdown tables
+#' @param fig_in_r whether to include figures in R code chunks, default is TRUE
 #' @note Use pandoc version greater than or equal to 3.1
 #'
 #' @return True if R Markdown file successfully generated in the same folder
@@ -35,7 +37,9 @@ rnw_to_rmd <- function(input_file,
                        clean_up = TRUE,
                        autonumber_eq = FALSE,
                        autonumber_sec = TRUE,
-                       suppress_package_startup_message = FALSE) {
+                       suppress_package_startup_message = FALSE,
+                       kable_tab = TRUE,
+                       fig_in_r = TRUE) {
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
@@ -116,7 +120,7 @@ rnw_to_rmd <- function(input_file,
     remove_unsupport_commands(rnw_file_path)
 
     # Step - 9 : Convert to markdown
-    convert_to_markdown(dir, autonumber_eq = autonumber_eq)
+    convert_to_markdown(dir, autonumber_eq = autonumber_eq, kable_tab = kable_tab, fig_in_r = fig_in_r)
 
 
     # Stage 03: Post process after convert to markdown
