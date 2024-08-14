@@ -61,6 +61,7 @@ include_style_file <- function(article_dir) {
 #' convert latex(wrapper) file to markdown
 #'
 #' @param article_dir path to the directory which contains tex article
+#' @param kable_tab converts to kable table instead of markdown tables
 #' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @description
 #' Uses pandoc along with several lua filters
@@ -68,8 +69,10 @@ include_style_file <- function(article_dir) {
 #' @note  pandoc (along with lua interpreter) is already installed with
 #'  R-studio, hence if not using R-studio you will need to install pandoc.
 #'  https://pandoc.org/installing.html
-#'  @note Use pandoc version greater than or equal to 3.1
-#'
+#' @note Use pandoc version greater than or equal to 3.1
+#'	#' @note Kable tables will work for simple static data, any math / code /
+#'  image within any table will send the package into fallback mode (normal
+#'  markdown tables) for the rest of tables in the article.
 #' @return creates a converted markdown file, as well as a pkg_meta.yaml file
 #' @export
 #' @examples
@@ -84,7 +87,7 @@ include_style_file <- function(article_dir) {
 #' rebib::aggregate_bibliography(your_article_path)
 #' texor::convert_to_markdown(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-convert_to_markdown <- function(article_dir, autonumber_eq = FALSE) {
+convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = FALSE) {
     # wrapper file name
     article_dir <- xfun::normalize_path(article_dir)
     input_file <- get_wrapper_type(article_dir)
