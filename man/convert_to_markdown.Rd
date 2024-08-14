@@ -29,7 +29,8 @@ pandoc (along with lua interpreter) is already installed with
  https://pandoc.org/installing.html
 
 Use pandoc version greater than or equal to 3.1
-#' @note Kable tables will work for simple static data, any math / code /
+
+Kable tables will work for simple static data, any math / code /
  image within any table will send the package into fallback mode (normal
  markdown tables) for the rest of tables in the article.
 }

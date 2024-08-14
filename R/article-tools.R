@@ -70,7 +70,7 @@ include_style_file <- function(article_dir) {
 #'  R-studio, hence if not using R-studio you will need to install pandoc.
 #'  https://pandoc.org/installing.html
 #' @note Use pandoc version greater than or equal to 3.1
-#'	#' @note Kable tables will work for simple static data, any math / code /
+#' @note Kable tables will work for simple static data, any math / code /
 #'  image within any table will send the package into fallback mode (normal
 #'  markdown tables) for the rest of tables in the article.
 #' @return creates a converted markdown file, as well as a pkg_meta.yaml file
@@ -128,6 +128,17 @@ convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = F
         "widetable_patcher.lua", package = "texor")
     auto_num_eq <- system.file(
         "auto_number_equations.lua", package = "texor")
+    ## @phinney > To do : include an option in this function to choose between
+    ## "image_caption.lua" and "fig_code_chunk.lua" file, similar to autonumber.
+    ## I have updated the reference handling system, which should be able to
+    ## handle references for both the filters.
+    ## Also the bookdown_ref_filter should always be the last lua filter which
+    ## runs.
+    ## Remove the comments after these changes. < Thanks, from Abhishek.
+    fig_code_chunk <- system.file(
+        "fig_code_chunk.lua", package = "texor")
+    table_code_chunk <- system.file(
+        "table_code_chunk.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
                     "--lua-filter", error_checker_filter,
@@ -136,6 +147,7 @@ convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = F
                     "--lua-filter", equation_filter,
                     "--lua-filter", image_filter,
                     "--lua-filter", figure_filter,
+                    #"--lua-filter", fig_code_chunk,
                     "--lua-filter", wdtable_filter,
                     "--lua-filter", code_block_filter,
                     "--lua-filter", table_filter)
