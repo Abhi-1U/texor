@@ -58,7 +58,10 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Environment Handling</h1>
+                        <h4 data-toc-skip class="author">Abhishek
+Ulayil</h4>
             
+            <h4 data-toc-skip class="date">2024-08-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Abhi-1U/texor/blob/main/vignettes/environment-handling.Rmd" class="external-link"><code>vignettes/environment-handling.Rmd</code></a></small>
       <div class="d-none name"><code>environment-handling.Rmd</code></div>
@@ -66,6 +69,17 @@
 
     
     
+<p>Transition from LaTeX to R markdown syntax often has multiple ways of
+describing article components. For example figure environments in R
+markdown, has multiple ways to include a figure like, firstly there is
+simple markdown structure, then one can use
+<code><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">knitr::include_graphics()</a></code> within a code chunk to include
+images or if you are targetting HTML web formats then you can also
+choose to include images using <code>&lt;img .. /&gt;</code> tag as
+well. Similar variations exist in LaTeX as well and that is why
+understanding how the <code>texor</code> package will transform these
+environments and which options are available for you to choose is
+important.</p>
 <div class="section level2">
 <h2 id="working-with-figure-environments">Working with Figure Environments<a class="anchor" aria-label="anchor" href="#working-with-figure-environments"></a>
 </h2>
@@ -159,12 +173,52 @@ markup (normal text), as it is not reflected in HTML properly.</li>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="fu">\caption</span>{This is a sample caption}</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="fu">\labeL</span>{fig:image-1}</span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="kw">\end</span>{<span class="ex">figure</span>}</span></code></pre></div>
+<p>will be converted to</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="st">```</span><span class="at">{r , echo=FALSE , fig.cap="This is a sample caption", fig.alt="graphic without alt text",</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="at"> fig.show='hold', fig.align="center", out.width="100%"}</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="at">knitr::include_graphics(c("image/sample.png"))</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="st">```</span></span></code></pre></div>
+<p>if the option <code>fig_in_r</code> is set FALSE, a simple markdown
+figure would be generated</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="al">![Figure 1: This is a sample caption](image/sample.png)</span>{width="100%"</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>alt="graphic without alt text"}</span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
+</h4>
+<ol style="list-style-type: decimal">
+<li>Default handling of the <code>texor</code> package is to generate R
+markdown style code chunks to include images using
+<code>knitr::include_graphics(c(file_path))</code>. This mechanism was
+added using a unique Lua filter <a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Included in texor v1.5.0 and above&lt;/p&gt;"><sup>1</sup></a> which can also handle multiple images in a
+single figure environment as well. The Lua filter is open source and
+available under MIT License <a href="https://github.com/Abhi-1U/fig-code-chunk" class="external-link">here</a>.</li>
+<li>If you set the option <code>fig_in_r = FALSE</code> in
+<code><a href="../reference/rnw_to_rmd.html">rnw_to_rmd()</a></code> or <code><a href="../reference/latex_to_web.html">latex_to_web()</a></code> functions, you
+can revert back to simple markdown figures which has the following
+syntax <code>![caption](file_path){#identifier ..}</code>.</li>
+<li>Some authors used to add verbatim environments inside figure
+environments to be able to add captions. To maintain parity, the
+<code>texor</code> package transforms the block into a raw HTML block so
+as to enable such out of the box use of figure environment in
+markdown.</li>
+<li>In case you set <code>fig_in_r = FALSE</code>, the captions added to
+the figures will be appended with figure numbering which would also be
+reflected in the references to the figures throughout the document as
+well. If you want to add or change the position of the position of the
+figures exercise caution.</li>
+<li>To add to accessibility, we have added a default alt-text to every
+figure which is meant to motivate the author to replace it with a better
+alt-text rather than repeating the caption as alt-text. However in case
+of bulk conversions the alt-text is a reasonable placeholder compared to
+no alt-text at all.</li>
+</ol>
 </div>
 </div>
 <div class="section level2">
 <h2 id="working-with-table-environments">Working with Table Environments<a class="anchor" aria-label="anchor" href="#working-with-table-environments"></a>
 </h2>
-<p>Tables are commonly used in RJ articles to display data in a tabular
+<p>Tables are commonly used in articles to display data in a tabular
 format. However, there are differences in the way tables are handled by
 LaTeX and HTML.</p>
 <p>LaTeX tables have more customization and are usually optimized for
@@ -174,80 +228,105 @@ sizes of media.</p>
 do well with table customization packages and complex tables.</p>
 <p>Some pandoc extensions are used in order to tackle them, they are :
 <code>simple_tables</code>, <code>pipe_tables</code></p>
-<p>Limited Multicolumn support is included.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="kw">\begin</span>{<span class="ex">table*</span>}[t!]</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="kw">\begin</span>{<span class="ex">center</span>}</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="kw">\begin</span>{<span class="ex">tabular</span>}{l | llll }</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a> <span class="fu">\hline</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a> <span class="fu">\multicolumn</span>{1}{c |}{EXAMPLE} <span class="op">&amp;</span> <span class="fu">\multicolumn</span>{2}{c}{<span class="ss">$X$</span>} <span class="op">&amp;</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">\multicolumn</span>{2}{c}{<span class="ss">$Y$</span>} <span class="fu">\\</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a> <span class="fu">\hline</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="op">&amp;</span> 1 <span class="op">&amp;</span> 2 <span class="op">&amp;</span> 1 <span class="op">&amp;</span> 2 <span class="fu">\\</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a> EX1  <span class="op">&amp;</span> X11 <span class="op">&amp;</span> X12 <span class="op">&amp;</span>  Y11  <span class="op">&amp;</span> Y12 <span class="fu">\\</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a> EX2  <span class="op">&amp;</span> X21 <span class="op">&amp;</span> X22 <span class="op">&amp;</span>  Y21  <span class="op">&amp;</span> Y22 <span class="fu">\\</span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a> EX3  <span class="op">&amp;</span> X31 <span class="op">&amp;</span> X32 <span class="op">&amp;</span>  Y31  <span class="op">&amp;</span> Y32 <span class="fu">\\</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a> EX4  <span class="op">&amp;</span> X41 <span class="op">&amp;</span> X42 <span class="op">&amp;</span>  Y41  <span class="op">&amp;</span> Y42<span class="fu">\\</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a> EX5  <span class="op">&amp;</span> X51 <span class="op">&amp;</span> X52 <span class="op">&amp;</span>  Y51  <span class="op">&amp;</span> Y52 <span class="fu">\\</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="fu">\hline</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="kw">\end</span>{<span class="ex">tabular</span>}</span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="kw">\label</span>{<span class="ex">table1</span>} <span class="fu">\caption</span>{An Example Table with Multicolumn}</span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="kw">\end</span>{<span class="ex">center</span>}</span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="kw">\end</span>{<span class="ex">table*</span>}</span></code></pre></div>
-<p>The above example illustrates a complicated table, which the texor
-package can handle through subroutines and pre-processing step to
-transform the LaTeX code.</p>
+<p>Limited Multicolumn support is included<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Multicolumn support is not available for
+&lt;code&gt;kable()&lt;/code&gt; tables&lt;/p&gt;"><sup>2</sup></a>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="kw">\begin</span>{<span class="ex">table</span>}[t!]</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="kw">\begin</span>{<span class="ex">tabular</span>}{l | llll }</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a> <span class="fu">\hline</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>EXAMPLE <span class="op">&amp;</span> <span class="ss">$X$</span>  <span class="op">&amp;</span> <span class="op">&amp;</span> <span class="ss">$Y$</span> <span class="op">&amp;</span> <span class="fu">\\</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a> <span class="fu">\hline</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="op">&amp;</span> 1 <span class="op">&amp;</span> 2 <span class="op">&amp;</span> 1 <span class="op">&amp;</span> 2 <span class="fu">\\</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a> EX1  <span class="op">&amp;</span> X11 <span class="op">&amp;</span> X12 <span class="op">&amp;</span>  Y11  <span class="op">&amp;</span> Y12 <span class="fu">\\</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a> EX2  <span class="op">&amp;</span> X21 <span class="op">&amp;</span> X22 <span class="op">&amp;</span>  Y21  <span class="op">&amp;</span> Y22 <span class="fu">\\</span>autonumber_eq = TRUE</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a> EX3  <span class="op">&amp;</span> X31 <span class="op">&amp;</span> X32 <span class="op">&amp;</span>  Y31  <span class="op">&amp;</span> Y32 <span class="fu">\\</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a> EX4  <span class="op">&amp;</span> X41 <span class="op">&amp;</span> X42 <span class="op">&amp;</span>  Y41  <span class="op">&amp;</span> Y42<span class="fu">\\</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a> EX5  <span class="op">&amp;</span> X51 <span class="op">&amp;</span> X52 <span class="op">&amp;</span>  Y51  <span class="op">&amp;</span> Y52 <span class="fu">\\</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="fu">\hline</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="kw">\end</span>{<span class="ex">tabular</span>}</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="kw">\label</span>{<span class="ex">table1</span>} <span class="fu">\caption</span>{An Example Table}</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="kw">\end</span>{<span class="ex">table</span>}</span></code></pre></div>
+<p>In newer versions<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Version 1.5.0 and above&lt;/p&gt;"><sup>3</sup></a> of the <code>texor</code> package, the
+default tables generated are included using <code>kable()</code>
+function. The data is stored within a csv file and has support for
+multiple data/object types. However there are some limitations with
+handling a wide variety of tables available in LaTeX. Hence, in case the
+<code>texor</code> package recognizes some complex table, in order to
+retain the table structure and preserve the data in the article, the
+package will fallback to simpler markdown tables for the rest of the
+document.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="sc">:::</span> {<span class="co">#table1}</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="st">```</span><span class="at">{r table-1, echo = FALSE, results = 'asis'}</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="at">table_1_data &lt;- read.csv("table_data_1.csv")</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="at">knitr::kable(table_1_data, caption="An Example Table")</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="sc">:::</span></span></code></pre></div>
+<p>with the data tucked away in a csv file.</p>
+<pre class="csv"><code>EXAMPLE ,$X$ ,  ,$Y$ , 
+  ,1 ,2 ,1 ,2
+EX1 ,X11 ,X12 ,Y11 ,Y12
+EX2 ,X21 ,X22 ,Y21 ,Y22
+EX3 ,X31 ,X32 ,Y31 ,Y32
+EX4 ,X41 ,X42 ,Y41 ,Y42
+EX5 ,X51 ,X52 ,Y51 ,Y52</code></pre>
+<p>However, if you choose to use the option
+<code>kable_tab = FALSE</code> the resulting markdown generated would
+look like</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>::: {#table1}</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  -------------------------------------</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  EXAMPLE   <span class="sc">\(</span>X<span class="sc">\)</span>         <span class="sc">\(</span>Y<span class="sc">\)</span>   </span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  --------- ------- ----- ------- -----</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="in">            1       2     1       2</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  EX1       X11     X12   Y11     Y12</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  EX2       X21     X22   Y21     Y22</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  EX3       X31     X32   Y31     Y32</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>  EX4       X41     X42   Y41     Y42</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>  EX5       X51     X52   Y51     Y52</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>  -------------------------------------</span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  : Table 1: An Example Table</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>:::</span></code></pre></div>
+<div class="section level4">
+<h4 id="notes-1">Notes<a class="anchor" aria-label="anchor" href="#notes-1"></a>
+</h4>
 <ol style="list-style-type: decimal">
-<li>The Stream Editor modifies the <code>\multicolumn{..}</code> to
-<code>\multicolumnx{..}</code>
-</li>
-<li>Then a LaTeX macro redefines the <code>\multicolumnx{..}</code> to
-<code>\multicolumn{---}</code>, which is accepted by pandoc.</li>
-<li>Finally pandoc reads the table and transforms it to markdown.</li>
+<li>The table data is parsed and converted into a csv file using <a href="https://github.com/Abhi-1U/table-code-chunk" class="external-link">this</a> Lua filter
+which is open source and available under MIT License.</li>
+<li>The tables will be converted to <code>kable()</code> tables by
+default, unless some complex LaTeX table is identified, beyond which the
+package will fallback to simpler markdown tables.</li>
+<li>Provision for wide tables is provided which can span across multiple
+tables within the document.</li>
+<li>Although some support for including <code>CodeBlocks</code> inside
+of tables exists, it is not the best and can have unintended side
+effects.</li>
+<li>Markdown tables have their captions appended with table numbering,
+reflected in the references as well. This is static for the document,
+which will require modifications if you want to add/ re-position the
+tables in the converted article.</li>
 </ol>
-<p>Also note that the stream editor is used to rename
-<code>table*</code> environment to <code>table</code> environment
-because the markdown/HTML will not support the specific changes
-<code>table*</code> environment will bring.</p>
-<p>The Resulting Markdown Generated would look like :</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>::: center</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>::: {#table1}</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  -------------------------------------</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  EXAMPLE   <span class="sc">\(</span>X<span class="sc">\)</span>         <span class="sc">\(</span>Y<span class="sc">\)</span>   </span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  --------- ------- ----- ------- -----</span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="in">            1       2     1       2</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  EX1       X11     X12   Y11     Y12</span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  EX2       X21     X22   Y21     Y22</span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  EX3       X31     X32   Y31     Y32</span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  EX4       X41     X42   Y41     Y42</span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>  EX5       X51     X52   Y51     Y52</span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>  -------------------------------------</span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a></span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>  : Table 1: An Example Table with Multicolumn</span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>:::</span>
-<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a></span>
-<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>[]{#table1 label="table1"}</span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>:::</span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="working-with-code-environments">Working with Code Environments<a class="anchor" aria-label="anchor" href="#working-with-code-environments"></a>
 </h2>
 <p>Pandoc naturally converts verbatim environment easily, however the
-redefination of other commands such as <code>example</code>,
+redefinition of other commands such as <code>example</code>,
 <code>example*</code>, <code>Sinput</code> etc to verbatim does not work
 well in pandoc.</p>
-<p>Hence Texor package uses the stream editor to search find and replace
-matching code environments to verbatim before pandoc touches it.</p>
+<p>Hence <code>texor</code> package uses the stream editor to search
+find and replace matching code environments to verbatim before pandoc
+touches it.</p>
 <p>This way the the code is not lost in conversion, also a pandoc
 extension is used to add attributes to the markdown code using
-’fenced_code_attributes`</p>
-<div class="section level3">
-<h3 id="supported-rj-article-latex-code-environment">Supported RJ-article (LaTeX) code environment:<a class="anchor" aria-label="anchor" href="#supported-rj-article-latex-code-environment"></a>
-</h3>
+<code>fenced_code_attributes</code></p>
+<div class="section level4">
+<h4 id="supported-rj-article-latex-code-environment">Supported RJ-article (LaTeX) code environment:<a class="anchor" aria-label="anchor" href="#supported-rj-article-latex-code-environment"></a>
+</h4>
 <table class="table">
 <caption>Code Environment support in texor</caption>
 <colgroup>
@@ -266,11 +345,40 @@ extension is used to add attributes to the markdown code using
 <td align="left">smallverbatim, boxedverbatim</td>
 </tr></tbody>
 </table>
-<p>Note that any special markup (like font-size, font-style) bought by
-any of these code environments will be lost, However the retained text
-will have syntax highlighting (for R by default, if you want to change
-the syntax highlighting, change the language in the markdown source code
-formed)</p>
+</div>
+<div class="section level4">
+<h4 id="sweave-code-chunks">Sweave code chunks<a class="anchor" aria-label="anchor" href="#sweave-code-chunks"></a>
+</h4>
+<p>With updates to the <code>texor</code> package we were able to add
+support for Sweave articles which included retaining the code chunks
+with parameters. This functionality is not found natively in LaTeX,
+hence unsupported in pandoc as well. To add this feature, we designed a
+custom pandoc reader in Lua, which uses LPEG expressions to separate out
+the code chunks from the Sweave document, while retaining the parameters
+and code.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="sc">&lt;</span><span class="er">&lt;</span>test<span class="sc">&gt;</span><span class="er">&gt;=</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="dv">1</span><span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">30</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="sc">@</span></span></code></pre></div>
+<p>The above Sweave code block would be converted to</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="st">```</span><span class="at">{r test}</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="at">1+1</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="at">rnorm(30)</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="st">```</span></span></code></pre></div>
+<p>Similarly inline code express in Sweave defined by
+<code>\Sexpr{'0.6'}</code> will be transformed to
+<code>` r '0.6'`</code></p>
+</div>
+<div class="section level4">
+<h4 id="notes-2">Notes<a class="anchor" aria-label="anchor" href="#notes-2"></a>
+</h4>
+<ol style="list-style-type: decimal">
+<li>Any special markup (like font-size, font-style) bought by any of
+these code environments will be lost.</li>
+<li>The retained text will have syntax highlighting (for R by default,
+if you want to change the syntax highlighting, change the language in
+the markdown source code formed).</li>
+</ol>
 </div>
 </div>
 <div class="section level2">
@@ -282,9 +390,27 @@ as we proceed to our humble web interfaces, math is hard to describe
 traditionally. There have been advancements in JavaScript libraries to
 better Typeset and present math in web pages but not all LaTeX
 commands/math functions are available.</p>
-<p>The texor package uses Mathjax version 3<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;more info &lt;a href="https://www.mathjax.org/" class="external-link"&gt;here&lt;/a&gt;&lt;/p&gt;'><sup>1</sup></a> to enhance the visual
-look of the math content in HTML. There is support for equations, inline
+<p>The texor package uses Mathjax version 3 to enhance the visual look
+of the math content in HTML. There is support for equations, inline
 math, and equation numbering.</p>
+<div class="section level4">
+<h4 id="equation-numbering">Equation Numbering<a class="anchor" aria-label="anchor" href="#equation-numbering"></a>
+</h4>
+<p>In bookdown, you do not get automatic numbering of un-labelled
+equations. This can be tricky to deal with if we want to have the
+equation numbering matching with the one in LaTeX. To circumvent this
+issue we first transform the equation labels both in the equations and
+references, to maintain support with the specifications prescribed in
+bookdown. Then we transform the labels from LaTeX label in equations
+from <code>\label{..}</code> to <code>(\#eq:..)</code> and references
+from <code>\ref{..}</code> to <code>\@ref(eq:..)</code> which ensures
+compatibility. Next for equations without labels and no
+<code>\nonumber</code> commands, we automatically assign and add a
+equation label like <code>(\#eq:autonumber..)</code> where the equation
+number is the last character.</p>
+<p>To enable this you need to set the option <code>autonumber_eq</code>
+as <code>TRUE</code> while converting the documents.</p>
+</div>
 </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
