@@ -81,7 +81,7 @@ understanding how the <code>texor</code> package will transform these
 environments and which options are available for you to choose is
 important.</p>
 <div class="section level2">
-<h2 id="working-with-figure-environments">Working with Figure Environments<a class="anchor" aria-label="anchor" href="#working-with-figure-environments"></a>
+<h2 id="figure-environments">Figure Environments<a class="anchor" aria-label="anchor" href="#figure-environments"></a>
 </h2>
 <p>Images are an essential component in any article, However due to the
 differences in the support for various graphic formats between LaTeX and
@@ -216,7 +216,7 @@ no alt-text at all.</li>
 </div>
 </div>
 <div class="section level2">
-<h2 id="working-with-table-environments">Working with Table Environments<a class="anchor" aria-label="anchor" href="#working-with-table-environments"></a>
+<h2 id="table-environments">Table Environments<a class="anchor" aria-label="anchor" href="#table-environments"></a>
 </h2>
 <p>Tables are commonly used in articles to display data in a tabular
 format. However, there are differences in the way tables are handled by
@@ -312,7 +312,7 @@ tables in the converted article.</li>
 </div>
 </div>
 <div class="section level2">
-<h2 id="working-with-code-environments">Working with Code Environments<a class="anchor" aria-label="anchor" href="#working-with-code-environments"></a>
+<h2 id="code-environments">Code Environments<a class="anchor" aria-label="anchor" href="#code-environments"></a>
 </h2>
 <p>Pandoc naturally converts verbatim environment easily, however the
 redefinition of other commands such as <code>example</code>,
@@ -382,7 +382,7 @@ the markdown source code formed).</li>
 </div>
 </div>
 <div class="section level2">
-<h2 id="working-with-math-environments">Working with Math Environments<a class="anchor" aria-label="anchor" href="#working-with-math-environments"></a>
+<h2 id="math-environments">Math Environments<a class="anchor" aria-label="anchor" href="#math-environments"></a>
 </h2>
 <p>Math typesetting has always been LaTeX’s highlight feature, making it
 a de facto choice among academicians and researchers globally. However,
@@ -410,6 +410,44 @@ equation label like <code>(\#eq:autonumber..)</code> where the equation
 number is the last character.</p>
 <p>To enable this you need to set the option <code>autonumber_eq</code>
 as <code>TRUE</code> while converting the documents.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="output-formats">Output Formats<a class="anchor" aria-label="anchor" href="#output-formats"></a>
+</h2>
+<p>The aim of the <code>texor</code> package was to convert the LaTeX
+source code to a R markdown file which could be then knitted into
+different web formats.</p>
+<p>For R journal articles, we prefer to use the template from
+<code>rjtools</code> package
+<code><a href="https://rdrr.io/pkg/rjtools/man/rjournal_article.html" class="external-link">rjtools::rjournal_web_article</a></code>.</p>
+<p>For Sweave articles however, we have opened up options for vignette
+styles.</p>
+<ol style="list-style-type: decimal">
+<li>
+<code>bookdown</code> : By default, the option
+<code>front_matter_type</code> is set to <code>vignettes</code> option,
+this will use <code><a href="https://pkgs.rstudio.com/bookdown/reference/html_document2.html" class="external-link">bookdown::html_document2</a></code> for the
+vignette.</li>
+<li>
+<code>litedown</code> : For a lightweight html vignette, set the
+option <code>front_matter_type</code> to <code>litedown</code>, which
+will use <code>litedown::html_format</code> for the vignette.</li>
+<li>
+<code>biocstyle</code> : Commonly used among bioconductor vignettes,
+set the option <code>front_matter_type</code> to <code>biocstyle</code>
+which will use <code>BiocStyle::html_document</code> for the
+vignette.</li>
+</ol>
+<div class="section level4">
+<h4 id="notes-3">Notes<a class="anchor" aria-label="anchor" href="#notes-3"></a>
+</h4>
+<ol style="list-style-type: decimal">
+<li>Some functionality like bibliography/footnotes might be lost in
+<code>litedown</code> as of now as it is an experimental package.</li>
+<li>Ultimately you can modify the generated R markdown however you want
+for the desired format.</li>
+</ol>
 </div>
 </div>
 
