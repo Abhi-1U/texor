@@ -71,6 +71,10 @@ rnw_to_rmd <- function(input_file,
     part_file_path <- rnw_remove_code_chunk(input_file)
     md_code_file_path <- part_file_path$md_file_path
     rnw_file_path <- part_file_path$rnw_file_path
+    part_file_path2 <- rnw_remove_algorithm(rnw_file_path)
+    md_algorithm_file_path <- part_file_path2$md_file_path
+    rnw_file_path <- part_file_path2$rnw_file_path
+
     if (suppress_package_startup_message == TRUE) {
         patch_startup_message(md_code_file_path)
     }
@@ -129,6 +133,7 @@ rnw_to_rmd <- function(input_file,
     md_file_path <- paste0(dir, "/RJwrapper.md")
     rnw_patch_inline_code(md_file_path)
     rnw_patch_code_chunk(md_file_path, md_code_file_path)
+    rnw_patch_algorithm(md_file_path, md_algorithm_file_path)
 
     # Step 02: patch for vignette entry
     if(front_matter_type %in% c("vignettes", "biocstyle", "litedown")) {
@@ -197,6 +202,50 @@ rnw_remove_code_chunk <- function(input_file) {
                               from = "latex",
                               to = markdown_output_format,
                               options = pandoc_opt_code_chunk,
+                              output = md_file_path,
+                              verbose = TRUE)
+    rmarkdown::pandoc_convert(input_file_path,
+                              from = "latex",
+                              to = "latex",
+                              options = pandoc_opt_other,
+                              output = rnw_file_path,
+                              verbose = TRUE)
+
+    if (!file.exists(md_file_path)) {
+        stop("Markdown part file not created")
+    }
+    if (!file.exists(rnw_file_path)) {
+        stop("Rnw part file not created")
+    }
+
+    return(list(md_file_path = md_file_path, rnw_file_path = rnw_file_path))
+}
+
+rnw_remove_algorithm <- function(input_file) {
+    dir <- dirname(input_file)
+    if(!dir.exists(dir)) {
+        stop("Directory does not exist")
+    }
+    dir <- xfun::normalize_path(dir)
+    md_file_path <- gsub("-generated", "-knitr-part2.md", toString(tools::file_path_sans_ext(input_file)))
+    input_file_path <- paste(dir, basename(input_file), sep = "/")
+    md_file_path <- xfun::normalize_path(md_file_path)
+    rnw_file_path <- input_file
+
+    algorithm_reader <- system.file(
+        "algorithm_reader.lua", package = "texor")
+    algorithm_remove <- system.file(
+        "algorithm_remove.lua", package = "texor")
+    pandoc_opt_algorithm <- c("--resource-path", dir,
+                               "-f", algorithm_reader)
+    pandoc_opt_other <- c("--resource-path", dir,
+                          "-f", algorithm_remove)
+    markdown_output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
+
+    rmarkdown::pandoc_convert(input_file_path,
+                              from = "latex",
+                              to = markdown_output_format,
+                              options = pandoc_opt_algorithm,
                               output = md_file_path,
                               verbose = TRUE)
     rmarkdown::pandoc_convert(input_file_path,
@@ -293,6 +342,60 @@ rnw_patch_code_chunk <- function(input_file_path, code_file_path) {
     file_content <- readLines(input_file_path)
     modified_content <- lapply(file_content, function(line) {
         if (grepl("<!--R_CODE_CHUNK_PLACEHOLDER-->", line)) {
+            if (chunk_index <= length(chunks)) {
+                replacement <- paste(chunks[[chunk_index]], collapse = "\n")
+                chunk_index <<- chunk_index + 1
+                return(replacement)
+            } else {
+                return(line)
+            }
+        } else {
+            return(line)
+        }
+    })
+
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, input_file_path)
+    return(TRUE)
+}
+
+rnw_patch_algorithm <- function(input_file_path, algorithm_file_path) {
+    if(!file.exists(input_file_path) || !file.exists(algorithm_file_path)) {
+        stop("File does not exist")
+    }
+    algorithm_content <- readLines(algorithm_file_path)
+    chunks <- list()
+    current_chunk <- NULL
+    in_chunk <- FALSE
+    for (line in algorithm_content) {
+        if (grepl("^::::\\s*\\{", line)) {
+            # Start of a new chunk
+            if (!is.null(current_chunk)) {
+                # Save the previous chunk
+                chunks <- c(chunks, list(current_chunk))
+            }
+            current_chunk <- line
+            in_chunk <- TRUE
+        } else if (grepl("^::::$", line) && in_chunk) {
+            # End of the current chunk
+            current_chunk <- c(current_chunk, line)
+            chunks <- c(chunks, list(current_chunk))
+            current_chunk <- NULL
+            in_chunk <- FALSE
+        } else if (in_chunk) {
+            # Inside a chunk
+            current_chunk <- c(current_chunk, line)
+        }
+    }
+    if (!is.null(current_chunk)) {
+        # Save the last chunk
+        chunks <- c(chunks, list(current_chunk))
+    }
+
+    chunk_index <- 1
+    file_content <- readLines(input_file_path)
+    modified_content <- lapply(file_content, function(line) {
+        if (grepl("<!--ALGORITHM_PLACEHOLDER-->", line)) {
             if (chunk_index <= length(chunks)) {
                 replacement <- paste(chunks[[chunk_index]], collapse = "\n")
                 chunk_index <<- chunk_index + 1
