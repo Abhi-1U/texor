@@ -12,7 +12,8 @@ rnw_to_rmd(
   autonumber_sec = TRUE,
   suppress_package_startup_message = FALSE,
   kable_tab = TRUE,
-  fig_in_r = TRUE
+  fig_in_r = TRUE,
+  algorithm_render = "offline"
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ rnw_to_rmd(
 \item{kable_tab}{converts to kable table instead of markdown tables}
 
 \item{fig_in_r}{whether to include figures in R code chunks, default is TRUE}
+
+\item{algorithm_render}{how to render algorithm environment with pseudocode.js, default is "offline" optional for "latest", "offline". Exclude it by using any other value}
 }
 \value{
 True if R Markdown file successfully generated in the same folder

@@ -62,25 +62,3 @@ div.article h1 {
   font-size: 30px;
 }
 </style>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [['$','$'], ['\\(','\\)']],
-            displayMath: [['$$','$$'], ['\\[','\\]']],
-            processEscapes: true,
-            processEnvironments: true,
-        }
-    });
-</script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.css">
-<script src="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.js"></script>
-
-<script>
-window.addEventListener('load', (event) => {
-  elem = document.querySelectorAll(".algorithm")
-  elem.forEach(e => {
-    pseudocode.renderElement(e, {lineNumber: true, lineNumberPunc: ':'});
-  })
-});
-</script>

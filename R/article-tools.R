@@ -631,6 +631,7 @@ create_article <- function(name="test", edit = TRUE){
 #' @param interactive_mode interactive mode for converting articles with options. default FALSE
 #' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes", optional for "biocstyle", "litedown"
 #' @param autonumber_sec whether to autonumber the sections, default is TRUE
+#' @param algorithm_render how to render algorithm environment with pseudocode.js, default is "offline" optional for "latest", "offline". Exclude it by using any other value
 #' @note Use pandoc version greater than or equal to 3.1
 #' @return R-markdown file in the web folder
 #' @export
@@ -639,7 +640,8 @@ create_article <- function(name="test", edit = TRUE){
 #' # Please refer to texor::rnw_to_rmd for a detailed example
 rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE,
                              front_matter_type = "vignettes",
-                             autonumber_sec = TRUE) {
+                             autonumber_sec = TRUE,
+                             algorithm_render = "offline") {
     article_dir <- xfun::normalize_path(article_dir)
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
@@ -789,8 +791,18 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
 
     if (autonumber_sec == TRUE) {
         front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes <- list(
-            in_header = "auto-number-sec-js.html"
+            in_header = list("auto-number-sec-js.html")
         )
+    }
+    if (algorithm_render == "offline" || algorithm_render == "latest") {
+        if (is.null(front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes$in_header)) {
+            front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes$in_header <-
+                  paste("pseudocodejs-", algorithm_render, ".html", sep = "")
+        } else {
+            front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes$in_header <-
+                c(front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes$in_header,
+                  paste("pseudocodejs-", algorithm_render, ".html", sep = ""))
+        }
     }
 
     front_matter <- front_matter_list[[front_matter_type]]

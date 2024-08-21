@@ -1,0 +1,21 @@
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [['$','$'], ['\\(','\\)']],
+            displayMath: [['$$','$$'], ['\\[','\\]']],
+            processEscapes: true,
+            processEnvironments: true,
+        }
+    });
+</script>
+<link rel="stylesheet" href="pseudocode_v2.4.1.min.css">
+<script src="pseudocode_v2.4.1.min.js"></script>
+
+<script>
+window.addEventListener('load', (event) => {
+  elem = document.querySelectorAll(".algorithm")
+  elem.forEach(e => {
+    pseudocode.renderElement(e, {lineNumber: true, lineNumberPunc: ':'});
+  })
+});
+</script>

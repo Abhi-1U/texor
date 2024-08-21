@@ -8,6 +8,7 @@
 #' @param suppress_package_startup_message whether to suppress the package startup message, default is FALSE
 #' @param kable_tab converts to kable table instead of markdown tables
 #' @param fig_in_r whether to include figures in R code chunks, default is TRUE
+#' @param algorithm_render how to render algorithm environment with pseudocode.js, default is "offline" optional for "latest", "offline". Exclude it by using any other value
 #' @note Use pandoc version greater than or equal to 3.1
 #'
 #' @return True if R Markdown file successfully generated in the same folder
@@ -39,7 +40,8 @@ rnw_to_rmd <- function(input_file,
                        autonumber_sec = TRUE,
                        suppress_package_startup_message = FALSE,
                        kable_tab = TRUE,
-                       fig_in_r = TRUE) {
+                       fig_in_r = TRUE,
+                       algorithm_render = "offline") {
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
@@ -152,12 +154,27 @@ rnw_to_rmd <- function(input_file,
 
     rnw_generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode,
                      front_matter_type = front_matter_type,
-                     autonumber_sec = autonumber_sec)
+                     autonumber_sec = autonumber_sec,
+                     algorithm_render = algorithm_render)
     if (autonumber_sec == TRUE) {
         # copy html file include the js
         file.copy(system.file("extdata", "auto-number-sec-js.html", package = "texor"),
                   paste0(dir, "/auto-number-sec-js.html"))
         replace_all_sec_ref(paste0(dir, "/RJwrapper.Rmd"))
+    }
+    if (algorithm_render == "offline") {
+        file.copy(system.file("extdata", "pseudocodejs-offline.html", package = "texor"),
+                  paste0(dir, "/pseudocodejs-offline.html"))
+        file.copy(system.file("extdata", "pseudocode_v2.4.1.min.js", package = "texor"),
+                  paste0(dir, "/pseudocode_v2.4.1.min.js"))
+        file.copy(system.file("extdata", "pseudocode_v2.4.1.min.css", package = "texor"),
+                  paste0(dir, "/pseudocode_v2.4.1.min.css"))
+        dir.create(paste0(dir, "/katex_v0.16.11"))
+        file.copy(system.file("extdata", "katex_v0.16.11", package = "texor"),
+                  dir, recursive = TRUE)
+    } else if (algorithm_render == "latest") {
+        file.copy(system.file("extdata", "pseudocodejs-latest.html", package = "texor"),
+                  paste0(dir, "/pseudocodejs-latest.html"))
     }
     # post_data <- yaml::read_yaml(paste0(dir,"/post-conversion-meta.yaml"))
 
