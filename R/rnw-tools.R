@@ -1,22 +1,47 @@
 #' @title Sweave to RMarkdown
 #' @description automated function for converting a single Sweave file to R Markdown file
 #' @param input_file input Sweave file path
-#' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes"
+#' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes", optional for "biocstyle", "litedown"
 #' @param clean_up whether to clean up the intermediate files, default is TRUE
+#' @param autonumber_eq whether to autonumber the equations, default is FALSE
+#' @param autonumber_sec whether to autonumber the sections, default is TRUE
+#' @param suppress_package_startup_message whether to suppress the package startup message, default is FALSE
+#' @param kable_tab converts to kable table instead of markdown tables
+#' @param fig_in_r whether to include figures in R code chunks, default is TRUE
+#' @param algorithm_render how to render algorithm environment with pseudocode.js, default is "offline" optional for "latest", "offline". Exclude it by using any other value
 #' @note Use pandoc version greater than or equal to 3.1
 #'
 #' @return True if R Markdown file successfully generated in the same folder
 #'
 #' @export
 #' @examples
-#' article_dir <- system.file("examples/sweave_article", package = "texor")
-#' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
-#' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE)
-#' your_article_path <- paste(your_article_folder,"sweave_article", "example.Rnw",sep="/")
-#' your_article_path <- xfun::normalize_path(your_article_path)
-#' rnw_to_rmd(your_article_path, front_matter_type = "vignettes", clean_up = TRUE)
-#' unlink(your_article_folder, recursive = TRUE)
-rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = TRUE) {
+#' # move example Sweave article and associated files to a temporary directory
+#' example_dir <- system.file("examples", "sweave_article", package = "texor")
+#' file.copy(from = example_dir, to = tempdir(), recursive = TRUE)
+#' article_dir <- file.path(tempdir(), "sweave_article")
+#'
+#' # convert example Sweave article to Rmd
+#' rnw_to_rmd(file.path(article_dir, "example.Rnw"),
+#'            front_matter_type = "vignettes",
+#'            clean_up = TRUE,
+#'            autonumber_eq = TRUE,
+#'            autonumber_sec = FALSE)
+#'
+#' # convert Rmd to HTML (comment this step to avoid failure on R CMD Check)
+#' # rmarkdown::render(file.path(article_dir, "example.Rmd"))
+#' # browseURL(file.path(article_dir, "example.html"))
+#'
+#' # remove temporary files
+#' unlink(article_dir, recursive = TRUE)
+rnw_to_rmd <- function(input_file,
+                       front_matter_type = "vignettes",
+                       clean_up = TRUE,
+                       autonumber_eq = FALSE,
+                       autonumber_sec = TRUE,
+                       suppress_package_startup_message = FALSE,
+                       kable_tab = TRUE,
+                       fig_in_r = TRUE,
+                       algorithm_render = "offline") {
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
@@ -48,6 +73,13 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = T
     part_file_path <- rnw_remove_code_chunk(input_file)
     md_code_file_path <- part_file_path$md_file_path
     rnw_file_path <- part_file_path$rnw_file_path
+    part_file_path2 <- rnw_remove_algorithm(rnw_file_path)
+    md_algorithm_file_path <- part_file_path2$md_file_path
+    rnw_file_path <- part_file_path2$rnw_file_path
+
+    if (suppress_package_startup_message == TRUE) {
+        patch_startup_message(md_code_file_path)
+    }
 
     # Step 03: only keep the body of tex file (\document)
     rnw_read_body(rnw_file_path)
@@ -83,10 +115,18 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = T
     patch_equations(dir)
     # Step - 6 : patch figure environments to figure
     patch_figure_env(dir)
-    # Step - 7 : Convert to markdown + find package
-    #            references
+    # Step - 7 : find package references
     meta <- pre_conversion_statistics(dir)
-    convert_to_markdown(dir)
+
+    # Step - 8 : Add reference caption
+    if (rebib::citation_reader(rnw_file_path)$count > 0) {
+        add_reference_caption(rnw_file_path)
+    }
+
+    remove_unsupport_commands(rnw_file_path)
+
+    # Step - 9 : Convert to markdown
+    convert_to_markdown(dir, autonumber_eq = autonumber_eq, kable_tab = kable_tab, fig_in_r = fig_in_r)
 
 
     # Stage 03: Post process after convert to markdown
@@ -95,9 +135,10 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = T
     md_file_path <- paste0(dir, "/RJwrapper.md")
     rnw_patch_inline_code(md_file_path)
     rnw_patch_code_chunk(md_file_path, md_code_file_path)
+    rnw_patch_algorithm(md_file_path, md_algorithm_file_path)
 
     # Step 02: patch for vignette entry
-    if(front_matter_type == "vignettes") {
+    if(front_matter_type %in% c("vignettes", "biocstyle", "litedown")) {
         rnw_patch_vignette_entry(md_file_path, input_file)
     }
 
@@ -111,7 +152,30 @@ rnw_to_rmd <- function(input_file, front_matter_type = "vignettes", clean_up = T
     # YYYY is the year, ZZ is the Journal issue number and MMM is the DOI
     # referral(unique article number).
 
-    rnw_generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode, front_matter_type = front_matter_type)
+    rnw_generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode,
+                     front_matter_type = front_matter_type,
+                     autonumber_sec = autonumber_sec,
+                     algorithm_render = algorithm_render)
+    if (autonumber_sec == TRUE) {
+        # copy html file include the js
+        file.copy(system.file("extdata", "auto-number-sec-js.html", package = "texor"),
+                  paste0(dir, "/auto-number-sec-js.html"))
+        replace_all_sec_ref(paste0(dir, "/RJwrapper.Rmd"))
+    }
+    if (algorithm_render == "offline") {
+        file.copy(system.file("extdata", "pseudocodejs-offline.html", package = "texor"),
+                  paste0(dir, "/pseudocodejs-offline.html"))
+        file.copy(system.file("extdata", "pseudocode_v2.4.1.min.js", package = "texor"),
+                  paste0(dir, "/pseudocode_v2.4.1.min.js"))
+        file.copy(system.file("extdata", "pseudocode_v2.4.1.min.css", package = "texor"),
+                  paste0(dir, "/pseudocode_v2.4.1.min.css"))
+        dir.create(paste0(dir, "/katex_v0.16.11"))
+        file.copy(system.file("extdata", "katex_v0.16.11", package = "texor"),
+                  dir, recursive = TRUE)
+    } else if (algorithm_render == "latest") {
+        file.copy(system.file("extdata", "pseudocodejs-latest.html", package = "texor"),
+                  paste0(dir, "/pseudocodejs-latest.html"))
+    }
     # post_data <- yaml::read_yaml(paste0(dir,"/post-conversion-meta.yaml"))
 
     # Step - 10 : rename the file to the original file name
@@ -136,7 +200,7 @@ rnw_remove_code_chunk <- function(input_file) {
                      "-part1.md", sep = "")
     input_file_path <- paste(dir, basename(input_file), sep = "/")
     md_file_path <- xfun::normalize_path(md_file_path)
-    rnw_file_path <- gsub(".Rnw", "-part2.tex", input_file)
+    rnw_file_path <- gsub("-knitr.Rnw", "-generated.tex", input_file)
 
     sweave_code_reader <- system.file(
         "sweave_code_reader.lua", package = "texor")
@@ -155,6 +219,50 @@ rnw_remove_code_chunk <- function(input_file) {
                               from = "latex",
                               to = markdown_output_format,
                               options = pandoc_opt_code_chunk,
+                              output = md_file_path,
+                              verbose = TRUE)
+    rmarkdown::pandoc_convert(input_file_path,
+                              from = "latex",
+                              to = "latex",
+                              options = pandoc_opt_other,
+                              output = rnw_file_path,
+                              verbose = TRUE)
+
+    if (!file.exists(md_file_path)) {
+        stop("Markdown part file not created")
+    }
+    if (!file.exists(rnw_file_path)) {
+        stop("Rnw part file not created")
+    }
+
+    return(list(md_file_path = md_file_path, rnw_file_path = rnw_file_path))
+}
+
+rnw_remove_algorithm <- function(input_file) {
+    dir <- dirname(input_file)
+    if(!dir.exists(dir)) {
+        stop("Directory does not exist")
+    }
+    dir <- xfun::normalize_path(dir)
+    md_file_path <- gsub("-generated", "-knitr-part2.md", toString(tools::file_path_sans_ext(input_file)))
+    input_file_path <- paste(dir, basename(input_file), sep = "/")
+    md_file_path <- xfun::normalize_path(md_file_path)
+    rnw_file_path <- input_file
+
+    algorithm_reader <- system.file(
+        "algorithm_reader.lua", package = "texor")
+    algorithm_remove <- system.file(
+        "algorithm_remove.lua", package = "texor")
+    pandoc_opt_algorithm <- c("--resource-path", dir,
+                               "-f", algorithm_reader)
+    pandoc_opt_other <- c("--resource-path", dir,
+                          "-f", algorithm_remove)
+    markdown_output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
+
+    rmarkdown::pandoc_convert(input_file_path,
+                              from = "latex",
+                              to = markdown_output_format,
+                              options = pandoc_opt_algorithm,
                               output = md_file_path,
                               verbose = TRUE)
     rmarkdown::pandoc_convert(input_file_path,
@@ -268,6 +376,60 @@ rnw_patch_code_chunk <- function(input_file_path, code_file_path) {
     return(TRUE)
 }
 
+rnw_patch_algorithm <- function(input_file_path, algorithm_file_path) {
+    if(!file.exists(input_file_path) || !file.exists(algorithm_file_path)) {
+        stop("File does not exist")
+    }
+    algorithm_content <- readLines(algorithm_file_path)
+    chunks <- list()
+    current_chunk <- NULL
+    in_chunk <- FALSE
+    for (line in algorithm_content) {
+        if (grepl("^::::\\s*\\{", line)) {
+            # Start of a new chunk
+            if (!is.null(current_chunk)) {
+                # Save the previous chunk
+                chunks <- c(chunks, list(current_chunk))
+            }
+            current_chunk <- line
+            in_chunk <- TRUE
+        } else if (grepl("^::::$", line) && in_chunk) {
+            # End of the current chunk
+            current_chunk <- c(current_chunk, line)
+            chunks <- c(chunks, list(current_chunk))
+            current_chunk <- NULL
+            in_chunk <- FALSE
+        } else if (in_chunk) {
+            # Inside a chunk
+            current_chunk <- c(current_chunk, line)
+        }
+    }
+    if (!is.null(current_chunk)) {
+        # Save the last chunk
+        chunks <- c(chunks, list(current_chunk))
+    }
+
+    chunk_index <- 1
+    file_content <- readLines(input_file_path)
+    modified_content <- lapply(file_content, function(line) {
+        if (grepl("<!--ALGORITHM_PLACEHOLDER-->", line)) {
+            if (chunk_index <= length(chunks)) {
+                replacement <- paste(chunks[[chunk_index]], collapse = "\n")
+                chunk_index <<- chunk_index + 1
+                return(replacement)
+            } else {
+                return(line)
+            }
+        } else {
+            return(line)
+        }
+    })
+
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, input_file_path)
+    return(TRUE)
+}
+
 rnw_patch_vignette_entry <- function(md_file_path, rnw_file_path) {
     if(!file.exists(md_file_path) || !file.exists(rnw_file_path)) {
         stop("File does not exist")
@@ -279,14 +441,14 @@ rnw_patch_vignette_entry <- function(md_file_path, rnw_file_path) {
     entry_name <- NULL
     depend_name <- NULL
     for (line in rnw_content) {
-        if (grepl("%+\\\\VignetteIndexEntry", line)) {
-            entry_name <- gsub("%+\\\\VignetteIndexEntry\\{(.*)\\}", "\\1", line)
+        if (grepl("%+\\s*\\\\VignetteIndexEntry", line)) {
+            entry_name <- gsub("%+\\s*\\\\VignetteIndexEntry\\{(.*)\\}", "\\1", line)
             break
         }
     }
     for (line in rnw_content) {
-        if (grepl("%+\\\\VignetteDepends", line)) {
-            depend_name <- gsub("%+\\\\VignetteDepends\\{(.*)\\}", "\\1", line)
+        if (grepl("%+\\s*\\\\VignetteDepends", line)) {
+            depend_name <- gsub("%+\\s*\\\\VignetteDepends\\{(.*)\\}", "\\1", line)
             break
         }
     }
@@ -332,10 +494,10 @@ patch_rnw_abstract <- function(rnw_file_path) {
     for (i in seq_along(rnw_content)) {
         line <- rnw_content[i]
         # check in_abstract above to prevent modify the same line
-        if (grepl("\\\\abstract\\{", line)) {
+        if (grepl("\\\\abstract\\{", line, ignore.case = TRUE)) {
             in_abstract <- TRUE
             abstract_start <- i
-            line <- sub("\\\\abstract\\{", "\\\\begin{abstract}", line)
+            line <- sub("(?i)\\\\abstract\\{", "\\\\begin{abstract}", line, perl = TRUE)
         }
         if (in_abstract && grepl("(?<!\\\\begin\\{abstract)\\}$", line, perl = TRUE)) {
             in_abstract <- FALSE
@@ -422,5 +584,91 @@ clean_up_files <- function(work_dir, intermediate_file_list = NULL) {
             file.remove(file)
         }
     }
+    return(TRUE)
+}
+
+add_reference_caption <- function(rnw_file_path) {
+    if (!file.exists(rnw_file_path)) {
+        stop("File does not exist")
+    }
+    rnw_content <- readLines(rnw_file_path)
+    # replace \bibliography{...} with \section*{References}
+    modified_content <- list()
+    for (i in seq_along(rnw_content)) {
+        line <- rnw_content[[i]]
+        if (grepl("\\\\bibliography\\{", line, ignore.case = TRUE)) {
+            modified_content <- c(modified_content, "\\section*{References}")
+        }
+        modified_content <- c(modified_content, line)
+    }
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, rnw_file_path)
+    return(TRUE)
+}
+
+remove_unsupport_commands <- function(rnw_file_path) {
+    if (!file.exists(rnw_file_path)) {
+        stop("File does not exist")
+    }
+    rnw_content <- readLines(rnw_file_path)
+    modified_content <- list()
+    for (i in seq_along(rnw_content)) {
+        line <- rnw_content[[i]]
+        # remove \vspace{...}, \hspace{...}, \vspace*{...}, \hspace*{...}
+        if (grepl("^\\\\vspace\\{.*\\}$", line) ||
+            grepl("^\\\\hspace\\{.*\\}$", line) ||
+            grepl("^\\\\vspace\\*\\{.*\\}$", line) ||
+            grepl("^\\\\hspace\\*\\{.*\\}$", line)) {
+            next
+        }
+        modified_content <- c(modified_content, line)
+    }
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, rnw_file_path)
+    return(TRUE)
+}
+
+replace_all_sec_ref <- function(rmd_file_path) {
+    if (!file.exists(rmd_file_path)) {
+        stop("File does not exist")
+    }
+    rmd_content <- readLines(rmd_file_path)
+    # detect  \@ref(sec:...)
+    # replace with [<span class="ref" data-target="sec:..."></span>](#sec:...)
+    modified_content <- lapply(rmd_content, function(line) {
+        if (grepl("\\\\@ref\\(sec:", line)) {
+            # 替换所有匹配项
+            line <- gsub("\\\\@ref\\((sec:[^)]*)\\)",
+                         "[<span class=\"ref\" data-target=\"\\1\"></span>](#\\1)", line, perl = TRUE)
+        }
+        if (grepl("\\[\\d+\\]\\(#sec:", line)) {
+            line <- gsub("\\[(\\d+)\\]\\(#(sec:[^)]*)\\)",
+                         "[<span class=\"ref\" data-target=\"\\2\"></span>](#\\2)", line, perl = TRUE)
+        }
+        return(line)
+    })
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, rmd_file_path)
+    return(TRUE)
+}
+
+patch_startup_message <- function(code_file_path) {
+    if(!file.exists(code_file_path)) {
+        stop("File does not exist")
+    }
+    code_content <- readLines(code_file_path)
+    # insert "library <- function(...) suppressPackageStartupMessages(base::library(...))" after first ``` line
+    modified_content <- list()
+    add_command <- FALSE
+    for (i in seq_along(code_content)) {
+        line <- code_content[[i]]
+        modified_content <- c(modified_content, line)
+        if (grepl("^```", line) && add_command == FALSE) {
+            modified_content <- c(modified_content, "library <- function(...) suppressPackageStartupMessages(base::library(...))")
+            add_command <- TRUE
+        }
+    }
+    modified_content <- unlist(modified_content, use.names = FALSE)
+    xfun::write_utf8(modified_content, code_file_path)
     return(TRUE)
 }

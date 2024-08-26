@@ -3,8 +3,13 @@
 \newcommand{\R}{R}
 \newcommand{\command}[1]{\texttt{#1}}
 \newcommand{\sloppy}{\\}
-% Package name commands
-\renewcommand{\pkg}[1]{\emph{#1}}
+% Some unsupported commands in pandoc
+% \renewcommand{\vspace*}[1]{\vspace{#1}} %this commands break r code chunk
+% Package name commands (jss style)
+% \renewcommand{\pkg}[1]{\emph{#1}}
+\renewcommand{\pkg}[1]{\textbf{#1}}
+\renewcommand{\proglang}[1]{\textsf{#1}}
+\newcommand{\And}{\\}
 
 \newcommand{\CRANpkg}[1]{\href{https://CRAN.R-project.org/package=#1}{\pkg{#1}}}%
 \newcommand{\cpkg}[1]{\CRANpkg{#1}}
@@ -15,6 +20,8 @@
 % R code
 \newcommand{\Sexpr}[1]{\verb|r #1|}
 \newcommand{\Rcodeplaceholder}[1]{\verb|<!--R_CODE_CHUNK_PLACEHOLDER-->|}
+% Algorithm
+\newcommand{\Algorithmplaceholder}[1]{\verb|<!--ALGORITHM_PLACEHOLDER-->|}
 % code
 \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
 \DefineVerbatimEnvironment{Soutput}{Verbatim}{}

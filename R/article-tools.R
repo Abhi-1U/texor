@@ -62,6 +62,8 @@ include_style_file <- function(article_dir) {
 #'
 #' @param article_dir path to the directory which contains tex article
 #' @param kable_tab converts to kable table instead of markdown tables
+#' @param autonumber_eq whether to autonumber the equations, default is FALSE
+#' @param fig_in_r whether to include figures in R code chunks, default is TRUE
 #' @description
 #' Uses pandoc along with several lua filters
 #' found at inst/extdata/filters in texor package
@@ -86,7 +88,7 @@ include_style_file <- function(article_dir) {
 #' rebib::aggregate_bibliography(your_article_path)
 #' texor::convert_to_markdown(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-convert_to_markdown <- function(article_dir, kable_tab = TRUE) {
+convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = FALSE, fig_in_r = TRUE) {
     # wrapper file name
     article_dir <- xfun::normalize_path(article_dir)
     input_file <- get_wrapper_type(article_dir)
@@ -127,13 +129,6 @@ convert_to_markdown <- function(article_dir, kable_tab = TRUE) {
         "widetable_patcher.lua", package = "texor")
     auto_num_eq <- system.file(
         "auto_number_equations.lua", package = "texor")
-    ## @phinney > To do : include an option in this function to choose between
-    ## "image_caption.lua" and "fig_code_chunk.lua" file, similar to autonumber.
-    ## I have updated the reference handling system, which should be able to
-    ## handle references for both the filters.
-    ## Also the bookdown_ref_filter should always be the last lua filter which
-    ## runs.
-    ## Remove the comments after these changes. < Thanks, from Abhishek.
     fig_code_chunk <- system.file(
         "fig_code_chunk.lua", package = "texor")
     table_code_chunk <- system.file(
@@ -144,18 +139,28 @@ convert_to_markdown <- function(article_dir, kable_tab = TRUE) {
                     "--lua-filter", abs_filter,
                     "--lua-filter", bib_filter,
                     "--lua-filter", equation_filter,
-                    "--lua-filter", image_filter,
-                    "--lua-filter", figure_filter,
-                    #"--lua-filter", fig_code_chunk,
+                    "--lua-filter", image_filter)
+    if (fig_in_r) {
+        pandoc_opt <- c(pandoc_opt, "--lua-filter", fig_code_chunk)
+    } else {
+        pandoc_opt <- c(pandoc_opt, "--lua-filter", figure_filter)
+    }
+
+    pandoc_opt <- c(pandoc_opt,
                     "--lua-filter", wdtable_filter,
                     "--lua-filter", code_block_filter,
                     "--lua-filter", table_filter)
+
+    if (autonumber_eq) {
+        pandoc_opt <- c(pandoc_opt, "--lua-filter", auto_num_eq)
+    }
     if (kable_tab) {
         pandoc_opt <- c(pandoc_opt,
-                    "--lua-filter", table_code_chunk,
-                    "--lua-filter", stat_filter,
-                    "--lua-filter", bookdown_ref_filter)
+                        "--lua-filter", table_code_chunk,
+                        "--lua-filter", stat_filter,
+                        "--lua-filter", bookdown_ref_filter)
     }
+
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     if (!pandoc_version_check()) {
@@ -345,7 +350,6 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
                 self_contained = TRUE,
                 toc = FALSE,
                 legacy_pdf = TRUE,
-                web_only = TRUE,
                 mathjax = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js",
                 md_extension = "-tex_math_single_backslash"
             )
@@ -404,6 +408,7 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
 #' convert latex(wrapper) file to pandoc AST
 #'
 #' @param article_dir path to the directory which contains tex article
+#' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @description
 #' Uses pandoc along with several lua filters
 #' found at inst/extdata/filters in texor package
@@ -425,7 +430,7 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
 #' rebib::aggregate_bibliography(your_article_path)
 #' texor::convert_to_native(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-convert_to_native <- function(article_dir) {
+convert_to_native <- function(article_dir, autonumber_eq = FALSE) {
     article_dir <- xfun::normalize_path(article_dir)
     # wrapper file name
     input_file <- get_wrapper_type(article_dir)
@@ -476,6 +481,9 @@ convert_to_native <- function(article_dir) {
                     "--lua-filter", stat_filter,
                     "--lua-filter", equation_filter,
                     "--lua-filter", bookdown_ref_filter)
+    if (autonumber_eq) {
+        pandoc_opt <- c(pandoc_opt, "--lua-filter", auto_num_eq)
+    }
     output_format <- "native"
     # This will generate a markdown file with YAML headers.
     if (! pandoc_version_check()){
@@ -621,14 +629,19 @@ create_article <- function(name="test", edit = TRUE){
 #' @param article_dir path to the directory which contains tex article
 #' @param web_dir option to create a new web directory, default TRUE
 #' @param interactive_mode interactive mode for converting articles with options. default FALSE
-#' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes"
+#' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes", optional for "biocstyle", "litedown"
+#' @param autonumber_sec whether to autonumber the sections, default is TRUE
+#' @param algorithm_render how to render algorithm environment with pseudocode.js, default is "offline" optional for "latest", "offline". Exclude it by using any other value
 #' @note Use pandoc version greater than or equal to 3.1
 #' @return R-markdown file in the web folder
 #' @export
 #' @examples
 #' # Note This is a minimal example to execute this function
 #' # Please refer to texor::rnw_to_rmd for a detailed example
-rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE, front_matter_type = "vignettes") {
+rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE,
+                             front_matter_type = "vignettes",
+                             autonumber_sec = TRUE,
+                             algorithm_render = "offline") {
     article_dir <- xfun::normalize_path(article_dir)
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
@@ -742,12 +755,56 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
             output = list(
                 "bookdown::html_document2" = list(
                     base_format = "rmarkdown::html_vignette",
-                    number_sections = TRUE
+                    number_sections = FALSE
                 )
             ),
+            "link-citations" = TRUE,
             bibliography = metadata$bibliography
+        ),
+        "biocstyle" = list(
+            title = metadata$title,
+            abstract = metadata$abstract, #%||% ,
+            author = metadata$author,
+            output = list(
+                "BiocStyle::html_document" = list(
+                    toc_float = TRUE
+                ),
+                "BiocStyle::pdf_document" = "default"
+            ),
+            vignette = paste("%\\VignetteEngine{knitr::rmarkdown}\n%\\VignetteEncoding{UTF-8}\n%\\VignetteIndexEntry{",
+                             metadata$VignetteIndexEntry, "}\n", sep = ""),
+            bibliography = metadata$bibliography
+        ),
+        "litedown" = list(
+            title = metadata$title,
+            output = list(
+                "litedown::html_format" = list(
+                    meta = list(
+                        css = c("@default")
+                    )
+                )
+            ),
+            vignette = paste("%\\VignetteEngine{litedown::vignette}\n%\\VignetteEncoding{UTF-8}\n%\\VignetteIndexEntry{",
+                             metadata$VignetteIndexEntry, "}\n", sep = "")
         )
     )
+
+    if (autonumber_sec == TRUE) {
+        front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes <- list(
+            in_header = list("auto-number-sec-js.html")
+        )
+    }
+    if (algorithm_render == "offline" || algorithm_render == "latest") {
+        if (is.null(front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes$in_header)) {
+            front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes$in_header <-
+                  paste("pseudocodejs-", algorithm_render, ".html", sep = "")
+        } else {
+            front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes$in_header <-
+                c(front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes$in_header,
+                  paste("pseudocodejs-", algorithm_render, ".html", sep = ""))
+        }
+    }
+
     front_matter <- front_matter_list[[front_matter_type]]
     if (file.exists(markdown_file)){
         pandoc_md_contents <- readLines(markdown_file)

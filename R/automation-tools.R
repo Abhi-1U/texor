@@ -8,7 +8,10 @@
 #' article untouched. default value = TRUE
 #' @param web_dir option to create a new web directory, default FALSE
 #' @param interactive_mode interactive mode for converting articles with options. default FALSE
+#' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @param compile_rmd_in_temp This works only with a forked version of rjtools.
+#' @param kable_tab converts to kable table instead of markdown tables
+#' @param fig_in_r whether to include figures in R code chunks, default is TRUE
 #' Not recommended to use with CRAN or github version of the rjtools package. (default FALSE)
 #' @note Use pandoc version greater than or equal to 3.1
 #' @note Do not set example = TRUE param when working with conversions.
@@ -26,7 +29,8 @@
 #' unlink(your_article_folder, recursive = TRUE)
 latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = TRUE,
                          temp_mode = TRUE, web_dir = FALSE, interactive_mode = FALSE,
-                         compile_rmd_in_temp = !temp_mode) {
+                         autonumber_eq = FALSE, compile_rmd_in_temp = !temp_mode,
+                         kable_tab = TRUE, fig_in_r = TRUE) {
     message(dir)
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
@@ -116,7 +120,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
         #            references
         texor_log(paste0("Stage-07 | ","Converting LaTeX to Markdown"), "info", 2)
         meta <- pre_conversion_statistics(dir)
-        convert_to_markdown(dir)
+        convert_to_markdown(dir, autonumber_eq = autonumber_eq, kable_tab = kable_tab, fig_in_r = fig_in_r)
         texor_log(paste0("Stage-07 | ","Converted LaTeX to Markdown"), "info", 2)
         # Step - 8 : Create a new directory and copy
         #            dependent files/folders
@@ -169,7 +173,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
             if (web_dir) {
                 copy_other_files(dir) # Step 8
             }
-            convert_to_markdown(dir) # Step 7
+            convert_to_markdown(dir, autonumber_eq = autonumber_eq, kable_tab = kable_tab, fig_in_r = fig_in_r) # Step 7
             texor::generate_rmd(dir,web_dir = web_dir) # Step 9
             if (compile_rmd_in_temp) {
             texor::produce_html(dir,example = TRUE, web_dir = web_dir,
@@ -180,7 +184,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
             if (web_dir) {
                 copy_other_files(dir) # Step 8
             }
-            convert_to_markdown(dir) # Step 7
+            convert_to_markdown(dir, autonumber_eq = autonumber_eq, kable_tab = kable_tab, fig_in_r = fig_in_r) # Step 7
             texor::generate_rmd(dir,web_dir = web_dir,
                                 interactive_mode = interactive_mode) # Step 9
             if (compile_rmd_in_temp) {

@@ -8,7 +8,9 @@ rnw_generate_rmd(
   article_dir,
   web_dir = TRUE,
   interactive_mode = FALSE,
-  front_matter_type = "vignettes"
+  front_matter_type = "vignettes",
+  autonumber_sec = TRUE,
+  algorithm_render = "offline"
 )
 }
 \arguments{
@@ -18,7 +20,11 @@ rnw_generate_rmd(
 
 \item{interactive_mode}{interactive mode for converting articles with options. default FALSE}
 
-\item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes"}
+\item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes", optional for "biocstyle", "litedown"}
+
+\item{autonumber_sec}{whether to autonumber the sections, default is TRUE}
+
+\item{algorithm_render}{how to render algorithm environment with pseudocode.js, default is "offline" optional for "latest", "offline". Exclude it by using any other value}
 }
 \value{
 R-markdown file in the web folder

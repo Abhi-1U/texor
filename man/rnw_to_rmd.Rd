@@ -4,14 +4,36 @@
 \alias{rnw_to_rmd}
 \title{Sweave to RMarkdown}
 \usage{
-rnw_to_rmd(input_file, front_matter_type = "vignettes", clean_up = TRUE)
+rnw_to_rmd(
+  input_file,
+  front_matter_type = "vignettes",
+  clean_up = TRUE,
+  autonumber_eq = FALSE,
+  autonumber_sec = TRUE,
+  suppress_package_startup_message = FALSE,
+  kable_tab = TRUE,
+  fig_in_r = TRUE,
+  algorithm_render = "offline"
+)
 }
 \arguments{
 \item{input_file}{input Sweave file path}
 
-\item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes"}
+\item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes", optional for "biocstyle", "litedown"}
 
 \item{clean_up}{whether to clean up the intermediate files, default is TRUE}
+
+\item{autonumber_eq}{whether to autonumber the equations, default is FALSE}
+
+\item{autonumber_sec}{whether to autonumber the sections, default is TRUE}
+
+\item{suppress_package_startup_message}{whether to suppress the package startup message, default is FALSE}
+
+\item{kable_tab}{converts to kable table instead of markdown tables}
+
+\item{fig_in_r}{whether to include figures in R code chunks, default is TRUE}
+
+\item{algorithm_render}{how to render algorithm environment with pseudocode.js, default is "offline" optional for "latest", "offline". Exclude it by using any other value}
 }
 \value{
 True if R Markdown file successfully generated in the same folder
@@ -23,11 +45,22 @@ automated function for converting a single Sweave file to R Markdown file
 Use pandoc version greater than or equal to 3.1
 }
 \examples{
-article_dir <- system.file("examples/sweave_article", package = "texor")
-dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
-x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE)
-your_article_path <- paste(your_article_folder,"sweave_article", "example.Rnw",sep="/")
-your_article_path <- xfun::normalize_path(your_article_path)
-rnw_to_rmd(your_article_path, front_matter_type = "vignettes", clean_up = TRUE)
-unlink(your_article_folder, recursive = TRUE)
+# move example Sweave article and associated files to a temporary directory
+example_dir <- system.file("examples", "sweave_article", package = "texor")
+file.copy(from = example_dir, to = tempdir(), recursive = TRUE)
+article_dir <- file.path(tempdir(), "sweave_article")
+
+# convert example Sweave article to Rmd
+rnw_to_rmd(file.path(article_dir, "example.Rnw"),
+           front_matter_type = "vignettes",
+           clean_up = TRUE,
+           autonumber_eq = TRUE,
+           autonumber_sec = FALSE)
+
+# convert Rmd to HTML (comment this step to avoid failure on R CMD Check)
+# rmarkdown::render(file.path(article_dir, "example.Rmd"))
+# browseURL(file.path(article_dir, "example.html"))
+
+# remove temporary files
+unlink(article_dir, recursive = TRUE)
 }

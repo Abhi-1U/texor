@@ -75,4 +75,73 @@ patch_table_env <- function(article_dir) {
         # write same tex file with new data
         write_external_file(file_path, "w", raw_lines)
     }
+
+    patch_table_label(article_dir)
+}
+
+patch_table_label <- function(article_dir) {
+    # To better handle from latex_to_web and rnw_to_rmd, it offer two type of inputs
+    file_paths <- c()
+    article_dir <- xfun::normalize_path(article_dir)
+    file_name <- get_texfile_name(article_dir)
+    if (check_sub_sec_files(article_dir)) {
+        ## include sub files
+        file_paths <- get_sub_sec_files(article_dir)
+        ## include original file
+        append(file_paths, texor::get_texfile_name(article_dir))
+    }
+    else {
+        ## include only original file
+        file_paths <- file_name
+    }
+
+    for (file_path in file_paths) {
+        file_path <- paste(article_dir, file_path, sep = "/")
+        if (file.exists(file_path)) {
+            raw_lines <- readLines(file_path)
+        }
+        else {
+            message("LaTeX file not found !")
+            return(FALSE)
+        }
+
+        modified_content <- list()
+        label_found <- FALSE
+        table_env <- FALSE
+        table_count <- 0
+        for (line in raw_lines) {
+            if (grepl("^\\\\begin\\{(table|longtable|widetable)\\}", line)) {
+                table_env <- TRUE
+                label_found <- FALSE
+                table_count <- table_count + 1
+            }
+
+            if (table_env) {
+                if (!is_comment_line(line) && grepl("\\\\label\\{", line)) {
+                    label_found <- TRUE
+                }
+            }
+
+            if (grepl("^\\\\end\\{(table|longtable|widetable)\\}", line)) {
+                if (!label_found) {
+                    modified_content <- c(modified_content, paste0("\\label{table:auto", as.character(table_count), "}"))
+                }
+                table_env <- FALSE
+                label_found <- FALSE
+            }
+            modified_content <- c(modified_content, line)
+        }
+        message("Auto add label for table env")
+        modified_content <- unlist(modified_content, use.names = FALSE)
+        xfun::write_utf8(modified_content, file_path)
+    }
+}
+
+is_comment_line <- function(line) {
+    if (grepl("^\\s*%", line)) {
+        return(TRUE)
+    }
+    else {
+        return(FALSE)
+    }
 }

@@ -1,0 +1,64 @@
+<script>
+window.onload = function() {
+  const headings = document.querySelectorAll('.section.level1');
+  const headingCounters = { h1: 0, h2: 0, h3: 0 };
+
+  headings.forEach(section => {
+    const h1 = section.querySelector('h1');
+    const h2s = section.querySelectorAll('h2');
+
+    if (section.classList.contains('unnumbered')) {
+      if (h1) {
+        h1.setAttribute('data-counter', '');
+        h1.setAttribute('data-title', h1.textContent.trim());
+      }
+      h2s.forEach(h2 => {
+        h2.setAttribute('data-counter', '');
+        h2.setAttribute('data-title', h2.textContent.trim());
+      });
+    } else {
+      headingCounters.h1++;
+      headingCounters.h2 = 0;
+
+      if (h1) {
+        h1.setAttribute('data-counter', headingCounters.h1);
+        h1.insertAdjacentText('afterbegin', headingCounters.h1 + " ");
+      }
+
+      h2s.forEach(h2 => {
+        headingCounters.h2++;
+        headingCounters.h3 = 0;
+        h2.setAttribute('data-counter', headingCounters.h1 + "." + headingCounters.h2);
+        h2.insertAdjacentText('afterbegin', headingCounters.h1 + "." + headingCounters.h2 + " ");
+
+        const h3s = h2.querySelectorAll('h3');
+        h3s.forEach(h3 => {
+          headingCounters.h3++;
+          h3.setAttribute('data-counter', headingCounters.h1 + "." + headingCounters.h2 + "." + headingCounters.h3);
+          h3.insertAdjacentText('afterbegin', headingCounters.h1 + "." + headingCounters.h2 + "." + headingCounters.h3 + " ");
+        });
+      });
+    }
+  });
+
+  const refElements = document.querySelectorAll('span.ref');
+  refElements.forEach(ref => {
+    const targetId = ref.getAttribute('data-target');
+    const targetElement = document.querySelector(`#${CSS.escape(targetId)}`);
+
+    if (targetElement) {
+      const counterValue = targetElement.querySelector('[data-counter]').getAttribute('data-counter');
+      const titleValue = targetElement.querySelector('[data-counter]').getAttribute('data-title');
+      ref.textContent = counterValue ? counterValue : titleValue;
+    } else {
+      ref.textContent = '??';
+    }
+  });
+};
+</script>
+
+<style type="text/css">
+div.article h1 {
+  font-size: 30px;
+}
+</style>
