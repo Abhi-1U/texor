@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">texor</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,31 @@
       <small>Source: <a href="https://github.com/Abhi-1U/texor/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.0" id="version-150">Version 1.5.0<a class="anchor" aria-label="anchor" href="#version-150"></a></h2>
+<div class="section level3">
+<h3 id="feature-updates-1-5-0">Feature Updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-5-0"></a></h3>
+<ol style="list-style-type: decimal"><li>Included CodeCov code coverage workflow closing issue <a href="https://github.com/Abhi-1U/texor/issues/70" class="external-link">#70</a>.</li>
+<li>Included custom JavaScript for auto-numbering equations independent of <code>number_sections:</code> option, fixing issue <a href="https://github.com/Abhi-1U/texor/issues/83" class="external-link">#83</a> and issue <a href="https://github.com/Abhi-1U/texor/issues/86" class="external-link">#86</a>.</li>
+<li>Optional automatic equation numbering with a custom pandoc Lua filter, fixing issue <a href="https://github.com/Abhi-1U/texor/issues/68" class="external-link">#68</a>.</li>
+<li>New option to convert figures into R markdown code chunks instead of regular markdown syntax, somewhat fixing issue <a href="https://github.com/Abhi-1U/texor/issues/80" class="external-link">#80</a>.</li>
+<li>New option to convert most table structures into a csv data file, which is included into the article using <code>kable()</code> in a code block.</li>
+<li>New option to suppress package startup messages in the generated document, fixing issue <a href="https://github.com/Abhi-1U/texor/issues/81" class="external-link">#81</a>.</li>
+<li>New options for vignette output styles including <code>vignettes</code>(for <code>knitr</code>),<code>litedown</code> and <code>biocstyle</code>, closing issue <a href="https://github.com/Abhi-1U/texor/issues/76" class="external-link">#76</a>.</li>
+<li>Use of pseudocodejs for rendering Algorithm environment in the R markdown files, closing issue <a href="https://github.com/Abhi-1U/texor/issues/69" class="external-link">#69</a>.</li>
+</ol></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-5-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-0"></a></h3>
+<ol style="list-style-type: decimal"><li>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/78" class="external-link">#78</a> where references are not hyperlinked.</li>
+<li>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/67" class="external-link">#67</a> where unlabelled tables were not numbered.</li>
+<li>Updated example Sweave file.</li>
+<li>Added support for some jss style LaTeX macros under issue <a href="https://github.com/Abhi-1U/texor/issues/77" class="external-link">#77</a>.</li>
+<li>Partially fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/84" class="external-link">#84</a> renaming bibliography file more appropriately.</li>
+<li>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/79" class="external-link">#79</a> where <code>\vspace*{}</code>,<code>\hspace*{}</code> are ignored.</li>
+<li>Removed <code>web_only</code> parameter from yaml front matter, adapting to changes in <code>rjtools</code> package.</li>
+<li>Using updated <a href="https://github.com/Abhi-1U/table-code-chunk" class="external-link"><code>table_cod_chunk</code></a> pandoc Lua filter, which preserves the table data more effectively, see <a href="https://github.com/Abhi-1U/table-code-chunk/issues/1" class="external-link">supported types</a> for more information.</li>
+</ol></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.0" id="version-140">Version 1.4.0<a class="anchor" aria-label="anchor" href="#version-140"></a></h2>
 <div class="section level3">
