@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# texor <a href='https://abhi-1u.github.io/texor/'><img src='man/figures/texor-hex-sticker.png' align="right" alt="texor package hex sticker with icons showing transistion from PDF documents to web pages." width="120" /></a>
+# texor <a href='https://abhi-1u.github.io/texor/'><img src='https://abhi-1u.github.io/template_samples/img/texor-hex-sticker.png' align="right" alt="texor package hex sticker with icons showing transistion from PDF documents to web pages." width="120" /></a>
 
 <!-- badges: start -->
 
@@ -53,6 +53,8 @@ pak::pak("Abhi-1U/texor")
 
 ## General Usage
 
+#### R Journal articles
+
 here is a quick example to use texor package with a sample RJournal
 article (included with the package
 [inst/article](https://github.com/Abhi-1U/texor/tree/master/inst/examples/article))
@@ -75,6 +77,16 @@ your_article_path
 texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE)
 # view  your converted and original article at
 paste0(your_article_path,"/web")
+```
+
+#### Sweave articles
+
+Similar to the conversion of R journal articles, pass the file
+path(instead of the folder path) to the function.
+
+``` r
+texor::rnw_to_rmd(file_path,..) 
+# Additionally you can set the options to modify the end result as per your needs.
 ```
 
 ## Using texor over multiple files

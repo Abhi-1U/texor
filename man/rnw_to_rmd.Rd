@@ -13,7 +13,7 @@ rnw_to_rmd(
   suppress_package_startup_message = FALSE,
   kable_tab = TRUE,
   fig_in_r = TRUE,
-  algorithm_render = "offline"
+  algorithm_render = FALSE
 )
 }
 \arguments{
@@ -33,7 +33,7 @@ rnw_to_rmd(
 
 \item{fig_in_r}{whether to include figures in R code chunks, default is TRUE}
 
-\item{algorithm_render}{how to render algorithm environment with pseudocode.js, default is "offline" optional for "latest", "offline". Exclude it by using any other value}
+\item{algorithm_render}{Enable to include algorithms with pseudocode.js, default is FALSE optional is TRUE}
 }
 \value{
 True if R Markdown file successfully generated in the same folder

@@ -10,7 +10,7 @@ rnw_generate_rmd(
   interactive_mode = FALSE,
   front_matter_type = "vignettes",
   autonumber_sec = TRUE,
-  algorithm_render = "offline"
+  algorithm_render = FALSE
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ rnw_generate_rmd(
 
 \item{autonumber_sec}{whether to autonumber the sections, default is TRUE}
 
-\item{algorithm_render}{how to render algorithm environment with pseudocode.js, default is "offline" optional for "latest", "offline". Exclude it by using any other value}
+\item{algorithm_render}{Enable to include algorithms with pseudocode.js, default is FALSE optional is TRUE}
 }
 \value{
 R-markdown file in the web folder
