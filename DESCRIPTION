@@ -56,7 +56,8 @@ Imports:
     rebib,
     cli,
     whisker
-Suggests: 
+Suggests:
+    bookdown,
     knitr,
     spelling,
     rstudioapi,

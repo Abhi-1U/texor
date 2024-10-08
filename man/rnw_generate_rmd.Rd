@@ -8,7 +8,8 @@ rnw_generate_rmd(
   article_dir,
   web_dir = TRUE,
   interactive_mode = FALSE,
-  front_matter_type = "vignettes",
+  output_format,
+  autonumber_eq = FALSE,
   autonumber_sec = TRUE,
   algorithm_render = FALSE
 )
@@ -20,7 +21,9 @@ rnw_generate_rmd(
 
 \item{interactive_mode}{interactive mode for converting articles with options. default FALSE}
 
-\item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes", optional for "biocstyle", "litedown"}
+\item{output_format}{knit output type for the RMarkdown file, options for "bookdown", "biocstyle", "litedown"}
+
+\item{autonumber_eq}{whether to autonumber the equations, default is FALSE}
 
 \item{autonumber_sec}{whether to autonumber the sections, default is TRUE}
 

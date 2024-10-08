@@ -6,7 +6,7 @@
 \usage{
 rnw_to_rmd(
   input_file,
-  front_matter_type = "vignettes",
+  output_format,
   clean_up = TRUE,
   autonumber_eq = FALSE,
   autonumber_sec = TRUE,
@@ -19,7 +19,7 @@ rnw_to_rmd(
 \arguments{
 \item{input_file}{input Sweave file path}
 
-\item{front_matter_type}{knit output type for the RMarkdown file, default is "vignettes", optional for "biocstyle", "litedown"}
+\item{output_format}{knit output type for the RMarkdown file options for "bookdown", "biocstyle", "litedown"}
 
 \item{clean_up}{whether to clean up the intermediate files, default is TRUE}
 
@@ -52,7 +52,7 @@ article_dir <- file.path(tempdir(), "sweave_article")
 
 # convert example Sweave article to Rmd
 rnw_to_rmd(file.path(article_dir, "example.Rnw"),
-           front_matter_type = "vignettes",
+           output_format = "bookdown",
            clean_up = TRUE,
            autonumber_eq = TRUE,
            autonumber_sec = FALSE)

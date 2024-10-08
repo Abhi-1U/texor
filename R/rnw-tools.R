@@ -1,7 +1,7 @@
 #' @title Sweave to RMarkdown
 #' @description automated function for converting a single Sweave file to R Markdown file
 #' @param input_file input Sweave file path
-#' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes", optional for "biocstyle", "litedown"
+#' @param output_format knit output type for the RMarkdown file options for "bookdown", "biocstyle", "litedown"
 #' @param clean_up whether to clean up the intermediate files, default is TRUE
 #' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @param autonumber_sec whether to autonumber the sections, default is TRUE
@@ -22,7 +22,7 @@
 #'
 #' # convert example Sweave article to Rmd
 #' rnw_to_rmd(file.path(article_dir, "example.Rnw"),
-#'            front_matter_type = "vignettes",
+#'            output_format = "bookdown",
 #'            clean_up = TRUE,
 #'            autonumber_eq = TRUE,
 #'            autonumber_sec = FALSE)
@@ -34,7 +34,7 @@
 #' # remove temporary files
 #' unlink(article_dir, recursive = TRUE)
 rnw_to_rmd <- function(input_file,
-                       front_matter_type = "vignettes",
+                       output_format,
                        clean_up = TRUE,
                        autonumber_eq = FALSE,
                        autonumber_sec = TRUE,
@@ -46,6 +46,7 @@ rnw_to_rmd <- function(input_file,
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
     }
+    input_file <- xfun::normalize_path(input_file)
     dir <- dirname(input_file)
     input_file_name <- basename(input_file)
     if(!dir.exists(dir)) {
@@ -54,7 +55,7 @@ rnw_to_rmd <- function(input_file,
     dir <- xfun::normalize_path(dir)
     date <- Sys.Date()
 
-    # Stage 01: pre process beofre using part of texor::latex_to_web()
+    # Stage 01: pre process before using part of texor::latex_to_web()
     # Step 01: Convert Rnw to knitr and tex
     knitr::Sweave2knitr(input_file)
     input_file <- gsub("[.]([^.]+)$", "-knitr.\\1", input_file)
@@ -138,7 +139,7 @@ rnw_to_rmd <- function(input_file,
     rnw_patch_algorithm(md_file_path, md_algorithm_file_path)
 
     # Step 02: patch for vignette entry
-    if(front_matter_type %in% c("vignettes", "biocstyle", "litedown")) {
+    if(output_format %in% c("bookdown", "biocstyle", "litedown")) {
         rnw_patch_vignette_entry(md_file_path, input_file)
     }
 
@@ -153,7 +154,8 @@ rnw_to_rmd <- function(input_file,
     # referral(unique article number).
 
     rnw_generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode,
-                     front_matter_type = front_matter_type,
+                     output_format = output_format,
+                     autonumber_eq = autonumber_eq,
                      autonumber_sec = autonumber_sec,
                      algorithm_render = algorithm_render)
     if (autonumber_sec == TRUE) {
@@ -180,12 +182,12 @@ rnw_to_rmd <- function(input_file,
 }
 
 rnw_remove_code_chunk <- function(input_file) {
+    input_file <- xfun::normalize_path(input_file)
     dir <- dirname(input_file)
     if(!dir.exists(dir)) {
         stop("Directory does not exist")
     }
     dir <- xfun::normalize_path(dir)
-
     md_file_path <- paste(toString(tools::file_path_sans_ext(input_file)),
                      "-part1.md", sep = "")
     input_file_path <- paste(dir, basename(input_file), sep = "/")
@@ -627,7 +629,7 @@ replace_all_sec_ref <- function(rmd_file_path) {
     # replace with [<span class="ref" data-target="sec:..."></span>](#sec:...)
     modified_content <- lapply(rmd_content, function(line) {
         if (grepl("\\\\@ref\\(sec:", line)) {
-            # 替换所有匹配项
+            # Replace all matches
             line <- gsub("\\\\@ref\\((sec:[^)]*)\\)",
                          "[<span class=\"ref\" data-target=\"\\1\"></span>](#\\1)", line, perl = TRUE)
         }

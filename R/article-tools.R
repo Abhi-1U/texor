@@ -629,7 +629,8 @@ create_article <- function(name="test", edit = TRUE){
 #' @param article_dir path to the directory which contains tex article
 #' @param web_dir option to create a new web directory, default TRUE
 #' @param interactive_mode interactive mode for converting articles with options. default FALSE
-#' @param front_matter_type knit output type for the RMarkdown file, default is "vignettes", optional for "biocstyle", "litedown"
+#' @param output_format knit output type for the RMarkdown file, options for "bookdown", "biocstyle", "litedown"
+#' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @param autonumber_sec whether to autonumber the sections, default is TRUE
 #' @param algorithm_render Enable to include algorithms with pseudocode.js, default is FALSE optional is TRUE
 #' @note Use pandoc version greater than or equal to 3.1
@@ -639,7 +640,8 @@ create_article <- function(name="test", edit = TRUE){
 #' # Note This is a minimal example to execute this function
 #' # Please refer to texor::rnw_to_rmd for a detailed example
 rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE,
-                             front_matter_type = "vignettes",
+                             output_format,
+                             autonumber_eq = FALSE,
                              autonumber_sec = TRUE,
                              algorithm_render = FALSE) {
     article_dir <- xfun::normalize_path(article_dir)
@@ -744,18 +746,19 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
         }
     }
     front_matter_list <- list(
-        "vignettes" = list(
+        "bookdown" = list(
             title = metadata$title,
             abstract = metadata$abstract, #%||% ,
             author = metadata$author,
             date = format_non_null(article_metadata$online),
-            vignette = paste("%\\VignetteEngine{knitr::knitr}\n%\\VignetteEncoding{UTF-8}\n%\\VignetteIndexEntry{",
+            vignette = paste("%\\VignetteEngine{knitr::rmarkdown}\n%\\VignetteEncoding{UTF-8}\n%\\VignetteIndexEntry{",
                              metadata$VignetteIndexEntry, "}\n%\\VignetteDepends{",
                              metadata$VignetteDepends, "}", sep = ""),
             output = list(
                 "bookdown::html_document2" = list(
                     base_format = "rmarkdown::html_vignette",
-                    number_sections = FALSE
+                    number_sections = FALSE,
+                    math_method = "katex"
                 )
             ),
             "link-citations" = TRUE,
@@ -790,20 +793,24 @@ rnw_generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALS
     )
 
     if (autonumber_sec == TRUE) {
-        front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes <- list(
+        front_matter_list$"bookdown"$output[["bookdown::html_document2"]]$includes <- list(
             in_header = list("auto-number-sec-js.html")
         )
     }
+    if (autonumber_eq == TRUE) {
+        # Set math method to mathjax if autonumber
+        front_matter_list$"bookdown"$output[["bookdown::html_document2"]]$math_method = "mathjax"
+    }
     if (algorithm_render) {
-        if (is.null(front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes$in_header)) {
-            front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes$in_header <- "pseudocodejs-latest.html"
+        if (is.null(front_matter_list$"bookdown"$output[["bookdown::html_document2"]]$includes$in_header)) {
+            front_matter_list$"bookdown"$output[["bookdown::html_document2"]]$includes$in_header <- "pseudocodejs-latest.html"
         } else {
-            front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes$in_header <-
-                c(front_matter_list$"vignettes"$output[["bookdown::html_document2"]]$includes$in_header, "pseudocodejs-latest.html")
+            front_matter_list$"bookdown"$output[["bookdown::html_document2"]]$includes$in_header <-
+                c(front_matter_list$"bookdown"$output[["bookdown::html_document2"]]$includes$in_header, "pseudocodejs-latest.html")
         }
     }
 
-    front_matter <- front_matter_list[[front_matter_type]]
+    front_matter <- front_matter_list[[output_format]]
     if (file.exists(markdown_file)){
         pandoc_md_contents <- readLines(markdown_file)
     }
