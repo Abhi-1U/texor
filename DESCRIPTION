@@ -55,7 +55,8 @@ Imports:
     rjtools,
     rebib,
     cli,
-    whisker
+    whisker,
+    desc
 Suggests:
     bookdown,
     knitr,

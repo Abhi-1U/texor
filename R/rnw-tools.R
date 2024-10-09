@@ -177,7 +177,10 @@ rnw_to_rmd <- function(input_file,
     if(clean_up) {
         clean_up_files(dir)
     }
-
+    package_map = list("bookdown" = "bookdown",
+                        "litedown" = "litedown",
+                        "biocstyle" = "BiocStyle")
+    update_package_desc(path = dir, package_name = package_map[[output_format]])
     return(TRUE)
 }
 
@@ -663,4 +666,50 @@ patch_startup_message <- function(code_file_path) {
     modified_content <- unlist(modified_content, use.names = FALSE)
     xfun::write_utf8(modified_content, code_file_path)
     return(TRUE)
+}
+
+update_package_desc <- function(path = ".", package_name = "bookdown") {
+    if (file.exists(file.path(path, "DESCRIPTION"))) {
+        modified_desc = FALSE
+        packages = ""
+        import_list = desc::desc_get_deps(file.path(path, "DESCRIPTION"))
+        if (!(package_name %in% import_list$package)) {
+            desc::desc_set_dep(package = package_name,
+                               type = "Suggests",
+                               version = "*",
+                               file = file.path(path,"DESCRIPTION"))
+            modified_desc = TRUE
+            packages = paste0(packages, " ", package_name)
+        }
+        if (!("knitr" %in% import_list$package)) {
+            desc::desc_set_dep(package = "knitr",
+                               type = "Suggests",
+                               version = "*",
+                               file = file.path(path,"DESCRIPTION"))
+            modified_desc = TRUE
+            if (packages == "") {
+                packages = paste0(packages, " knitr")
+            }
+            else {
+                packages = paste0(packages, " and ",  "knitr")
+            }
+        }
+        # if the VignetteBuilder is missing
+        if (is.na(desc::desc_get(file=file.path(path,"DESCRIPTION"),keys = "VignetteBuilder"))[[1]]) {
+            desc::desc_set("VignetteBuilder","knitr",file = file.path(path,"DESCRIPTION"),normalize = T)
+            cli::cli_alert_info(
+                "DESCRIPTION file of the package updated with VignetteBuilder set as `knitr`"
+            )
+        }
+        if (modified_desc){
+            cli::cli_alert_info(
+            "DESCRIPTION file of the package updated with dependency Suggests for{.package {packages}}"
+            )
+        }
+    }
+    else {
+        cli::cli_alert_warning(
+            "{.arg package.dir} ({.path {path}}) does not contain a DESCRIPTION, hence not updated"
+        )
+    }
 }

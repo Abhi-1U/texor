@@ -10,7 +10,7 @@
 6. New option to suppress package startup messages in the generated document, fixing issue #81.
 7. New options for vignette output styles including `vignettes`(for `knitr`),`litedown` and `biocstyle`, closing issue #76.
 8. Use of pseudocodejs for rendering Algorithm environment in the R markdown files, closing issue #69.
-
+9. `texor::rnw_to_rmd()` now also modifies the DESCRIPTION file (if available) with Dependency Suggests and VignetteBuilder if missing (#94)
 ## Bug Fixes
 
 1. Fixed Issue #78 where references are not hyperlinked.
@@ -21,6 +21,11 @@
 6. Fixed Issue #79 where `\vspace*{}`,`\hspace*{}` are ignored.
 7. Removed `web_only` parameter from yaml front matter, adapting to changes in `rjtools` package.
 8. Using updated [`table_cod_chunk`](https://github.com/Abhi-1U/table-code-chunk) pandoc Lua filter, which preserves the table data more effectively, see [supported types](https://github.com/Abhi-1U/table-code-chunk/issues/1) for more information. 
+9. `texor::rnw_to_rmd()`: `front_matter_type` parameter is now called `output_format` with no defaults (#91).
+10. `texor::rnw_to_rmd()`: in `output_format` parameter, "vignettes" option is now simply "bookdown" (#91).
+11. To support offline math in bookdown format, `math_method` option is now set to `katex` (better for accessibility) by default, in case of equation numbering it is set to `mathjax` (#92,#90).
+12. Fixed Relative Paths Issue in `texor::rnw_to_rmd()` (#93).
+13. VignetteEngine in bookdown format is now `knitr::rmarkdown` (#94).
 
 # Version 1.4.0
 
