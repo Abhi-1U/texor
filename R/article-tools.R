@@ -133,13 +133,15 @@ convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = F
         "fig_code_chunk.lua", package = "texor")
     table_code_chunk <- system.file(
         "table_code_chunk.lua", package = "texor")
+    sec_depth <- system.file("sec_depth.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
                     "--lua-filter", error_checker_filter,
                     "--lua-filter", abs_filter,
                     "--lua-filter", bib_filter,
                     "--lua-filter", equation_filter,
-                    "--lua-filter", image_filter)
+                    "--lua-filter", image_filter,
+                    "--lua-filter", sec_depth)
     if (fig_in_r) {
         pandoc_opt <- c(pandoc_opt, "--lua-filter", fig_code_chunk)
     } else {
@@ -469,6 +471,7 @@ convert_to_native <- function(article_dir, autonumber_eq = FALSE) {
         "widetable_patcher.lua", package = "texor")
     auto_num_eq <- system.file(
         "auto_number_equations.lua", package = "texor")
+    sec_depth <- system.file("sec_depth.lua", package = "texor")
     pandoc_opt <- c("-s",
                     "--resource-path", abs_file_path,
                     "--lua-filter", abs_filter,
@@ -480,7 +483,8 @@ convert_to_native <- function(article_dir, autonumber_eq = FALSE) {
                     "--lua-filter", table_filter,
                     "--lua-filter", stat_filter,
                     "--lua-filter", equation_filter,
-                    "--lua-filter", bookdown_ref_filter)
+                    "--lua-filter", bookdown_ref_filter,
+                    "--lua-filter", sec_depth)
     if (autonumber_eq) {
         pandoc_opt <- c(pandoc_opt, "--lua-filter", auto_num_eq)
     }
