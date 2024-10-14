@@ -42,28 +42,34 @@
 <h2 class="pkg-version" data-toc-text="1.5.0" id="version-150">Version 1.5.0<a class="anchor" aria-label="anchor" href="#version-150"></a></h2>
 <div class="section level3">
 <h3 id="feature-updates-1-5-0">Feature Updates<a class="anchor" aria-label="anchor" href="#feature-updates-1-5-0"></a></h3>
-<ol style="list-style-type: decimal"><li><p>Included CodeCov code coverage workflow closing issue <a href="https://github.com/Abhi-1U/texor/issues/70" class="external-link">#70</a>.</p></li>
-<li><p>Included custom JavaScript for auto-numbering equations independent of <code>number_sections:</code> option, fixing issue <a href="https://github.com/Abhi-1U/texor/issues/83" class="external-link">#83</a> and issue <a href="https://github.com/Abhi-1U/texor/issues/86" class="external-link">#86</a>.</p></li>
-<li><p>Optional automatic equation numbering with a custom pandoc Lua filter, fixing issue <a href="https://github.com/Abhi-1U/texor/issues/68" class="external-link">#68</a>.</p></li>
-<li><p>New option to convert figures into R markdown code chunks instead of regular markdown syntax, somewhat fixing issue <a href="https://github.com/Abhi-1U/texor/issues/80" class="external-link">#80</a>.</p></li>
-<li><p>New option to convert most table structures into a csv data file, which is included into the article using <code>kable()</code> in a code block.</p></li>
-<li><p>New option to suppress package startup messages in the generated document, fixing issue <a href="https://github.com/Abhi-1U/texor/issues/81" class="external-link">#81</a>.</p></li>
-<li><p>New options for vignette output styles including <code>vignettes</code>(for <code>knitr</code>),<code>litedown</code> and <code>biocstyle</code>, closing issue <a href="https://github.com/Abhi-1U/texor/issues/76" class="external-link">#76</a>.</p></li>
-<li><p>Use of pseudocodejs for rendering Algorithm environment in the R markdown files, closing issue <a href="https://github.com/Abhi-1U/texor/issues/69" class="external-link">#69</a>.</p></li>
-<li><p><code><a href="../reference/rnw_to_rmd.html">texor::rnw_to_rmd()</a></code> now also modifies the DESCRIPTION file (if available) with Dependency Suggests and VignetteBuilder if missing (<a href="https://github.com/Abhi-1U/texor/issues/94" class="external-link">#94</a>) ## Bug Fixes</p></li>
-<li><p>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/78" class="external-link">#78</a> where references are not hyperlinked.</p></li>
-<li><p>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/67" class="external-link">#67</a> where unlabelled tables were not numbered.</p></li>
-<li><p>Updated example Sweave file.</p></li>
-<li><p>Added support for some jss style LaTeX macros under issue <a href="https://github.com/Abhi-1U/texor/issues/77" class="external-link">#77</a>.</p></li>
-<li><p>Partially fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/84" class="external-link">#84</a> renaming bibliography file more appropriately.</p></li>
-<li><p>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/79" class="external-link">#79</a> where <code>\vspace*{}</code>,<code>\hspace*{}</code> are ignored.</p></li>
-<li><p>Removed <code>web_only</code> parameter from yaml front matter, adapting to changes in <code>rjtools</code> package.</p></li>
-<li><p>Using updated <a href="https://github.com/Abhi-1U/table-code-chunk" class="external-link"><code>table_cod_chunk</code></a> pandoc Lua filter, which preserves the table data more effectively, see <a href="https://github.com/Abhi-1U/table-code-chunk/issues/1" class="external-link">supported types</a> for more information.</p></li>
-<li><p><code><a href="../reference/rnw_to_rmd.html">texor::rnw_to_rmd()</a></code>: <code>front_matter_type</code> parameter is now called <code>output_format</code> with no defaults (<a href="https://github.com/Abhi-1U/texor/issues/91" class="external-link">#91</a>).</p></li>
-<li><p><code><a href="../reference/rnw_to_rmd.html">texor::rnw_to_rmd()</a></code>: in <code>output_format</code> parameter, “vignettes” option is now simply “bookdown” (<a href="https://github.com/Abhi-1U/texor/issues/91" class="external-link">#91</a>).</p></li>
-<li><p>To support offline math in bookdown format, <code>math_method</code> option is now set to <code>katex</code> (better for accessibility) by default, in case of equation numbering it is set to <code>mathjax</code> (<a href="https://github.com/Abhi-1U/texor/issues/92" class="external-link">#92</a>,#90).</p></li>
-<li><p>Fixed Relative Paths Issue in <code><a href="../reference/rnw_to_rmd.html">texor::rnw_to_rmd()</a></code> (<a href="https://github.com/Abhi-1U/texor/issues/93" class="external-link">#93</a>).</p></li>
-<li><p>VignetteEngine in bookdown format is now <code>knitr::rmarkdown</code> (<a href="https://github.com/Abhi-1U/texor/issues/94" class="external-link">#94</a>).</p></li>
+<ol style="list-style-type: decimal"><li>Included CodeCov code coverage workflow closing issue <a href="https://github.com/Abhi-1U/texor/issues/70" class="external-link">#70</a>.</li>
+<li>Included custom JavaScript for auto-numbering equations independent of <code>number_sections:</code> option, fixing issue <a href="https://github.com/Abhi-1U/texor/issues/83" class="external-link">#83</a> and issue <a href="https://github.com/Abhi-1U/texor/issues/86" class="external-link">#86</a>.</li>
+<li>Optional automatic equation numbering with a custom pandoc Lua filter, fixing issue <a href="https://github.com/Abhi-1U/texor/issues/68" class="external-link">#68</a>.</li>
+<li>New option to convert figures into R markdown code chunks instead of regular markdown syntax, somewhat fixing issue <a href="https://github.com/Abhi-1U/texor/issues/80" class="external-link">#80</a>.</li>
+<li>New option to convert most table structures into a csv data file, which is included into the article using <code>kable()</code> in a code block.</li>
+<li>New option to suppress package startup messages in the generated document, fixing issue <a href="https://github.com/Abhi-1U/texor/issues/81" class="external-link">#81</a>.</li>
+<li>New options for vignette output styles including <code>bookdown</code>,<code>litedown</code> and <code>biocstyle</code>, closing issue <a href="https://github.com/Abhi-1U/texor/issues/76" class="external-link">#76</a>.</li>
+<li>Use of pseudocodejs for rendering Algorithm environment in the R markdown files, closing issue <a href="https://github.com/Abhi-1U/texor/issues/69" class="external-link">#69</a>.</li>
+<li>
+<code><a href="../reference/rnw_to_rmd.html">texor::rnw_to_rmd()</a></code> now also modifies the DESCRIPTION file (if available) with Dependency Suggests and VignetteBuilder if missing (<a href="https://github.com/Abhi-1U/texor/issues/94" class="external-link">#94</a>)</li>
+</ol></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-5-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-0"></a></h3>
+<ol style="list-style-type: decimal"><li>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/78" class="external-link">#78</a> where references are not hyperlinked.</li>
+<li>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/67" class="external-link">#67</a> where unlabelled tables were not numbered.</li>
+<li>Updated example Sweave file.</li>
+<li>Added support for some jss style LaTeX macros under issue <a href="https://github.com/Abhi-1U/texor/issues/77" class="external-link">#77</a>.</li>
+<li>Partially fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/84" class="external-link">#84</a> renaming bibliography file more appropriately.</li>
+<li>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/79" class="external-link">#79</a> where <code>\vspace*{}</code>,<code>\hspace*{}</code> are ignored.</li>
+<li>Removed <code>web_only</code> parameter from yaml front matter, adapting to changes in <code>rjtools</code> package.</li>
+<li>Using updated <a href="https://github.com/Abhi-1U/table-code-chunk" class="external-link"><code>table_cod_chunk</code></a> pandoc Lua filter, which preserves the table data more effectively, see <a href="https://github.com/Abhi-1U/table-code-chunk/issues/1" class="external-link">supported types</a> for more information.</li>
+<li>
+<code><a href="../reference/rnw_to_rmd.html">texor::rnw_to_rmd()</a></code>: <code>front_matter_type</code> parameter is now called <code>output_format</code> with no defaults (<a href="https://github.com/Abhi-1U/texor/issues/91" class="external-link">#91</a>).</li>
+<li>To support offline math in bookdown format, <code>math_method</code> option is now set to <code>katex</code> (better for accessibility) by default, in case of equation numbering it is set to <code>mathjax</code> (<a href="https://github.com/Abhi-1U/texor/issues/92" class="external-link">#92</a>,#90).</li>
+<li>Fixed Relative Paths Issue in <code><a href="../reference/rnw_to_rmd.html">texor::rnw_to_rmd()</a></code> (<a href="https://github.com/Abhi-1U/texor/issues/93" class="external-link">#93</a>).</li>
+<li>VignetteEngine in bookdown format is now <code>knitr::rmarkdown</code> (<a href="https://github.com/Abhi-1U/texor/issues/94" class="external-link">#94</a>).</li>
+<li>Removed excess <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> statements from Lua Filters.</li>
+<li>If the figure/table referenced to a sweave code chunk is labelled with the prefix (<code>fig:</code>,<code>tab:</code>,<code>table:</code>) then the references will be transformed to bookdown style label.</li>
 </ol></div>
 </div>
     <div class="section level2">
