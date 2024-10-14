@@ -1,12 +1,14 @@
 ---
 title: "Environment Handling"
 author: "Abhishek Ulayil"
-date: "2024-08-17"
-output: rmarkdown::html_vignette
+date: "2024-10-14"
 vignette: >
   %\VignetteIndexEntry{environment-handling}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+output:
+    bookdown::html_document2:
+        base_format: rmarkdown::html_vignette
 ---
 
 ```{r, include = FALSE}
@@ -52,6 +54,8 @@ then to a PNG using pdftools package.
 1. Avoid using framebox or any other latex command to wrap the `\includegraphics{}` .
 This might interfere with the packages ability to properly read the path and copy the relevant image properly.
 2. Try to keep the actual content of the caption without any LaTeX markup (normal text), as it is not reflected in HTML properly.
+
+In newer versions of `texor` package, a new option is available to convert figures into Rmarkdown style code chunks to include figures there. If the option `fig_in_r` is set TRUE, a custom Lua Filter will transform the image structure.
 
 For example :
 ```latex
@@ -256,11 +260,13 @@ For R journal articles, we prefer to use the template from `rjtools` package `rj
 
 For Sweave articles however, we have opened up options for vignette styles.
 
-1. `bookdown` : By default, the option  `front_matter_type` is set to `vignettes` option, this will use `bookdown::html_document2`  for the vignette.
-2. `litedown` : For a lightweight html vignette, set the option `front_matter_type` to `litedown`, which will use `litedown::html_format` for the vignette.
-3. `biocstyle` : Commonly used among bioconductor vignettes, set the option `front_matter_type` to `biocstyle` which will use `BiocStyle::html_document` for the vignette.
+1. `bookdown` : The most common choice for `output_format` is  `bookdown` option, this will use `bookdown::html_document2`  for the vignette.
+2. `litedown` : For a lightweight html vignette, set the option `output_format` to `litedown`, which will use `litedown::html_format` for the vignette.
+3. `biocstyle` : Commonly used among bioconductor vignettes, set the option `output_format` to `biocstyle` which will use `BiocStyle::html_document` for the vignette.
 
 #### Notes
 
 1. Some functionality like bibliography/footnotes might be lost in `litedown` as of now as it is an experimental package.
-2. Ultimately you can modify the generated R markdown however you want for the desired format.
+2. `bookdown` option includes an header file with custom JavaScript to incorporate section numbering and normal equation numbering (i.e. eq 1,2,3,.. instead of 1.1,1.2,2.1,3.1,..), this will be included when `autonumber_sec`  is set to `TRUE`.
+3. `bookdown` option will set the math_mode to `katex` by default unless `autonumber_eq` option is set to `TRUE`, where the math_mode is `mathjax`.
+4. Ultimately you can modify the generated R markdown however you want for the desired format.

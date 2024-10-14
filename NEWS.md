@@ -7,15 +7,15 @@
 3. Optional automatic equation numbering with a custom pandoc Lua filter, fixing issue #68. 
 4. New option to convert figures into R markdown code chunks instead of regular markdown syntax, somewhat fixing issue #80.
 5. New option to convert most table structures into a csv data file, which is included into the article using `kable()` in a code block.
-6. New option to suppress package startup messages in the generated document, fixing issue #81.
+6. New option to suppress package start up messages in the generated document, fixing issue #81.
 7. New options for vignette output styles including `bookdown`,`litedown` and `biocstyle`, closing issue #76.
-8. Use of pseudocodejs for rendering Algorithm environment in the R markdown files, closing issue #69.
-9. `texor::rnw_to_rmd()` now also modifies the DESCRIPTION file (if available) with Dependency Suggests and VignetteBuilder if missing (#94)
+8. Use of `pseudocodejs` for rendering Algorithm environment in the R markdown files, closing issue #69.
+9. `texor::rnw_to_rmd()` now also modifies the DESCRIPTION file (if available) with Dependency `Suggests` and `VignetteBuilder` if missing (#94)
 
 ## Bug Fixes
 
 1. Fixed Issue #78 where references are not hyperlinked.
-2. Fixed Issue #67 where unlabelled tables were not numbered.
+2. Fixed Issue #67 where unlabeled tables were not numbered.
 3. Updated example Sweave file.
 4. Added support for some jss style LaTeX macros under issue #77.
 5. Partially fixed Issue #84 renaming bibliography file more appropriately.
