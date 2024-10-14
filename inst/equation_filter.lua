@@ -19,7 +19,6 @@ function Math(el)
     end
     if el.mathtype == "DisplayMath" then
         if el.text:match('%$') then
-            print(el.text)
             el.text= el.text:gsub('%$', '')
         end
         if el.text:match('\\label') then

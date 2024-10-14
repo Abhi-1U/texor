@@ -1,6 +1,10 @@
 -- Borrowed from rjtools
 
 function Header (h)
-    h.level = h.level+1
+    if h.level < 6 then
+        h.level = h.level+1
+    else
+        -- pass
+    end
     return h
 end

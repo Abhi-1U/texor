@@ -1,6 +1,5 @@
 <script>
 window.onload = function() {
-    var headings = [];
     var counters = [0,0,0]
     var tag_names = {
         h1:1,
@@ -10,16 +9,24 @@ window.onload = function() {
         h5:1,
         h6:1
     };
+    var skip_numbering = 0;
     function walk(root) {
         if (root.nodeType === 1 && root.nodeName !== 'script') {
             // match headers only
             if ( tag_names.hasOwnProperty(root.nodeName.toLowerCase())) {
                 if (root.nodeName.toLowerCase() == "h2") {
-                    counters[1] = counters[1] +1;
-                    counters[2] = 0; // reset the counter for subsections in case a new tag is detected
-                    root.innerHTML = counters[1].toString() +" " + root.innerHTML;
+                    if (root.parentElement.classList.contains("unnumbered")){
+                        counters[2] = 0; // reset the counter for subsections in case a new tag is detected
+                        skip_numbering = 1;
+                    }
+                    else {
+                        counters[1] = counters[1] +1;
+                        counters[2] = 0; // reset the counter for subsections in case a new tag is detected
+                        root.innerHTML = counters[1].toString() +" " + root.innerHTML;
+                        skip_numbering = 0;
+                    }
                 }
-                if (root.nodeName.toLowerCase() == "h3") {
+                if (root.nodeName.toLowerCase() == "h3" && !skip_numbering) {
                     counters[2] = counters[2] +1;
                     root.innerHTML = counters[1].toString() + "." + counters[2].toString() + " " + root.innerHTML;
                 }
