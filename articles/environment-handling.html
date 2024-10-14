@@ -62,7 +62,7 @@
                         <h4 data-toc-skip class="author">Abhishek
 Ulayil</h4>
             
-            <h4 data-toc-skip class="date">2024-08-17</h4>
+            <h4 data-toc-skip class="date">2024-10-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Abhi-1U/texor/blob/main/vignettes/environment-handling.Rmd" class="external-link"><code>vignettes/environment-handling.Rmd</code></a></small>
       <div class="d-none name"><code>environment-handling.Rmd</code></div>
@@ -426,17 +426,16 @@ different web formats.</p>
 styles.</p>
 <ol style="list-style-type: decimal">
 <li>
-<code>bookdown</code> : By default, the option
-<code>front_matter_type</code> is set to <code>vignettes</code> option,
-this will use <code><a href="https://pkgs.rstudio.com/bookdown/reference/html_document2.html" class="external-link">bookdown::html_document2</a></code> for the
-vignette.</li>
+<code>bookdown</code> : The most common choice for
+<code>output_format</code> is <code>bookdown</code> option, this will
+use <code><a href="https://pkgs.rstudio.com/bookdown/reference/html_document2.html" class="external-link">bookdown::html_document2</a></code> for the vignette.</li>
 <li>
 <code>litedown</code> : For a lightweight html vignette, set the
-option <code>front_matter_type</code> to <code>litedown</code>, which
-will use <code>litedown::html_format</code> for the vignette.</li>
+option <code>output_format</code> to <code>litedown</code>, which will
+use <code>litedown::html_format</code> for the vignette.</li>
 <li>
 <code>biocstyle</code> : Commonly used among bioconductor vignettes,
-set the option <code>front_matter_type</code> to <code>biocstyle</code>
+set the option <code>output_format</code> to <code>biocstyle</code>
 which will use <code>BiocStyle::html_document</code> for the
 vignette.</li>
 </ol>
@@ -446,6 +445,17 @@ vignette.</li>
 <ol style="list-style-type: decimal">
 <li>Some functionality like bibliography/footnotes might be lost in
 <code>litedown</code> as of now as it is an experimental package.</li>
+<li>
+<code>bookdown</code> option includes an header file with custom
+JavaScript to incorporate section numbering and normal equation
+numbering (i.e. eq 1,2,3,.. instead of 1.1,1.2,2.1,3.1,..), this will be
+included when <code>autonumber_sec</code> is set to
+<code>TRUE</code>.</li>
+<li>
+<code>bookdown</code> option will set the math_mode to
+<code>katex</code> by default unless <code>autonumber_eq</code> option
+is set to <code>TRUE</code>, where the math_mode is
+<code>mathjax</code>.</li>
 <li>Ultimately you can modify the generated R markdown however you want
 for the desired format.</li>
 </ol>
