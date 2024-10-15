@@ -47,16 +47,16 @@
 <li>Optional automatic equation numbering with a custom pandoc Lua filter, fixing issue <a href="https://github.com/Abhi-1U/texor/issues/68" class="external-link">#68</a>.</li>
 <li>New option to convert figures into R markdown code chunks instead of regular markdown syntax, somewhat fixing issue <a href="https://github.com/Abhi-1U/texor/issues/80" class="external-link">#80</a>.</li>
 <li>New option to convert most table structures into a csv data file, which is included into the article using <code>kable()</code> in a code block.</li>
-<li>New option to suppress package startup messages in the generated document, fixing issue <a href="https://github.com/Abhi-1U/texor/issues/81" class="external-link">#81</a>.</li>
+<li>New option to suppress package start up messages in the generated document, fixing issue <a href="https://github.com/Abhi-1U/texor/issues/81" class="external-link">#81</a>.</li>
 <li>New options for vignette output styles including <code>bookdown</code>,<code>litedown</code> and <code>biocstyle</code>, closing issue <a href="https://github.com/Abhi-1U/texor/issues/76" class="external-link">#76</a>.</li>
-<li>Use of pseudocodejs for rendering Algorithm environment in the R markdown files, closing issue <a href="https://github.com/Abhi-1U/texor/issues/69" class="external-link">#69</a>.</li>
+<li>Use of <code>pseudocodejs</code> for rendering Algorithm environment in the R markdown files, closing issue <a href="https://github.com/Abhi-1U/texor/issues/69" class="external-link">#69</a>.</li>
 <li>
-<code><a href="../reference/rnw_to_rmd.html">texor::rnw_to_rmd()</a></code> now also modifies the DESCRIPTION file (if available) with Dependency Suggests and VignetteBuilder if missing (<a href="https://github.com/Abhi-1U/texor/issues/94" class="external-link">#94</a>)</li>
+<code><a href="../reference/rnw_to_rmd.html">texor::rnw_to_rmd()</a></code> now also modifies the DESCRIPTION file (if available) with Dependency <code>Suggests</code> and <code>VignetteBuilder</code> if missing (<a href="https://github.com/Abhi-1U/texor/issues/94" class="external-link">#94</a>)</li>
 </ol></div>
 <div class="section level3">
 <h3 id="bug-fixes-1-5-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-0"></a></h3>
 <ol style="list-style-type: decimal"><li>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/78" class="external-link">#78</a> where references are not hyperlinked.</li>
-<li>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/67" class="external-link">#67</a> where unlabelled tables were not numbered.</li>
+<li>Fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/67" class="external-link">#67</a> where unlabeled tables were not numbered.</li>
 <li>Updated example Sweave file.</li>
 <li>Added support for some jss style LaTeX macros under issue <a href="https://github.com/Abhi-1U/texor/issues/77" class="external-link">#77</a>.</li>
 <li>Partially fixed Issue <a href="https://github.com/Abhi-1U/texor/issues/84" class="external-link">#84</a> renaming bibliography file more appropriately.</li>
