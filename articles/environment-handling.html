@@ -168,6 +168,10 @@ properly.</li>
 <li>Try to keep the actual content of the caption without any LaTeX
 markup (normal text), as it is not reflected in HTML properly.</li>
 </ol>
+<p>In newer versions of <code>texor</code> package, a new option is
+available to convert figures into Rmarkdown style code chunks to include
+figures there. If the option <code>fig_in_r</code> is set TRUE, a custom
+Lua Filter will transform the image structure.</p>
 <p>For example :</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="kw">\begin</span>{<span class="ex">figure</span>}</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="bu">\includegraphics</span>{<span class="ex">image/sample.png</span>}</span>
