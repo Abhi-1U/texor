@@ -46,3 +46,12 @@ test_that("comment filter", {
 
     expect_equal(comment_filter(raw_text), expected_text)
 })
+
+test_that("find_wrapper",{
+    article_dir <- system.file("examples/article", package = "texor")
+    dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
+    x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
+    your_article_path <- paste(your_article_folder,"article",sep="/")
+    expect_equal(texor::find_wrapper(your_article_path),"RJwrapper.tex")
+    unlink(your_article_folder,recursive = TRUE)
+})
