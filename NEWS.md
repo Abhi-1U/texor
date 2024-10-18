@@ -1,3 +1,10 @@
+# Version 1.5.X (Running GitHub Build)
+
+## Bug Fixes
+
+1. Fixed the path to search for DESCRIPTION file in a package directory.
+2. Moved clean up function to `on.exit()` instead of sequential execution.
+
 # Version 1.5.0
 
 ## Feature Updates

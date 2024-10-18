@@ -42,6 +42,11 @@ rnw_to_rmd <- function(input_file,
                        kable_tab = TRUE,
                        fig_in_r = TRUE,
                        algorithm_render = FALSE) {
+    on.exit(
+        if (clean_up && pandoc_version_check()) {
+            clean_up_files(dir)
+        }
+    )
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
         return(FALSE)
@@ -669,6 +674,12 @@ patch_startup_message <- function(code_file_path) {
 }
 
 update_package_desc <- function(path = ".", package_name = "bookdown") {
+    if (dirname(path) != getwd()) {
+        cli::cli_alert_warning(
+        "{.arg package.dir} ({.path {path}}) does not contain a DESCRIPTION, hence not updated")
+        return(FALSE)
+    }
+    path = dirname(path)
     if (file.exists(file.path(path, "DESCRIPTION"))) {
         modified_desc = FALSE
         packages = ""
