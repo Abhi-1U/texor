@@ -113,7 +113,7 @@ function Figure(fig)
     end
     local identifier = sanitize_identifier(fig.identifier)
     -- caption % need to stringify
-    local caption = pandoc.utils.stringify(fig.caption)
+    local caption = pandoc.utils.stringify(fig.caption.long)
     -- alt % default alt text for images
     local alt = "graphic without alt text"
     -- alignment % default center
