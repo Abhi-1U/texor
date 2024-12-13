@@ -1,9 +1,10 @@
-# Version 1.5.X (Running GitHub Build)
+# Version 1.5.3
 
 ## Bug Fixes
 
 1. Fixed the path to search for DESCRIPTION file in a package directory.
-2. Moved clean up function to `on.exit()` instead of sequential execution.
+2. Moved clean up function to `on.exit()`, instead of sequential execution.
+3. Fixed issue #99 where a Lua filter would not work with newer pandoc version.
 
 # Version 1.5.0
 
