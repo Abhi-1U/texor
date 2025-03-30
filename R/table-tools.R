@@ -124,7 +124,7 @@ patch_table_label <- function(article_dir) {
 
             if (grepl("^\\\\end\\{(table|longtable|widetable)\\}", line)) {
                 if (!label_found) {
-                    modified_content <- c(modified_content, paste0("\\label{table:auto", as.character(table_count), "}"))
+                    modified_content <- c(modified_content, paste0("\\label{tab:T", as.character(table_count), "}"))
                 }
                 table_env <- FALSE
                 label_found <- FALSE
@@ -144,4 +144,39 @@ is_comment_line <- function(line) {
     else {
         return(FALSE)
     }
+}
+
+patch_table_numbering <- function(article_dir) {
+    # To better handle from latex_to_web and rnw_to_rmd, it offer two type of inputs
+    article_dir <- xfun::normalize_path(article_dir)
+    file_name <- get_md_file_name(article_dir)
+    file_path <- paste(article_dir, file_name, sep = "/")
+    print(file_path)
+    if (file.exists(file_path)) {
+        raw_lines <- readLines(file_path)
+    }
+    else {
+        message("markdown file not found !")
+        return(FALSE)
+    }
+
+    modified_content <- list()
+    for (line in raw_lines) {
+        if (grepl("\\(\\\\\\\\#tab:", line)) {
+            line <- gsub("\\(\\\\\\\\#tab:","\\(\\\\#tab:",line)
+            print(line)
+            modified_content <- c(modified_content, line)
+        }
+        if (grepl("\\(\\\\\\\\\\\\\\\\#tab:", line)) {
+            line <- gsub("\\(\\\\\\\\\\\\\\\\#tab:","\\(\\#tab:",line)
+            print(line)
+            modified_content <- c(modified_content, line)
+        }
+        else{
+        modified_content <- c(modified_content, line)
+        }
+    }
+        message("Fixed table label")
+        modified_content <- unlist(modified_content, use.names = FALSE)
+        xfun::write_utf8(modified_content, file_path)
 }

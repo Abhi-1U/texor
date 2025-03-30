@@ -143,6 +143,7 @@ convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = F
                     "--lua-filter", image_filter,
                     "--lua-filter", sec_depth)
     if (fig_in_r) {
+        pandoc_opt <- c(pandoc_opt, "--lua-filter", figure_filter)
         pandoc_opt <- c(pandoc_opt, "--lua-filter", fig_code_chunk)
     } else {
         pandoc_opt <- c(pandoc_opt, "--lua-filter", figure_filter)
@@ -185,6 +186,7 @@ convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = F
                            sep = "/")
     find_pkg_references(tex_file_path)
     check_for_errors(article_dir)
+    patch_table_numbering(article_dir)
 }
 
 #' @title Modify Markdown to R-markdown

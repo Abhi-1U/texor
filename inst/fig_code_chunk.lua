@@ -6,8 +6,21 @@
 -- Makes sure users know if their pandoc version is too old for this
 -- filter.
 PANDOC_VERSION:must_be_at_least '3.1'
+-- Image counter variable
+fig_count = 0
+local_fig_count = 0
+-- Algorithm counter variable
+algorithms = 0
+algs = 0
 
+-- Fuse for falling back to "simple markdown figures"
+fig_fuse = 0
+
+-- codeblock counter variable
+codes = 0
+listings = 0
 old_session = false
+old_session2 = false
 function write_to_file(filename,open_mode,content)
     local file,err = io.open(filename,open_mode)
     if file then
@@ -86,6 +99,11 @@ filter_check = {
 
 
 function Figure(fig)
+    -- if figure fuse is blown, fallback to normal tables for the rest of the doc
+    if fig_fuse == 1 then
+        write_to_file("fig_fuse.txt",'w',"Blown")
+        return fig
+    end
     -- temp variable to check for algorithm image
     is_alg = 0
     -- temp variable to check for figure image
@@ -97,9 +115,20 @@ function Figure(fig)
     tikz_syle = 0
     local_fig_count = 0
     pandoc.walk_block(fig,filter_check)
-    -- Checks for code blocks or tables within the Figure environment
+    -- Checks for code blocks
     -- falls back to default handling.
-    if (is_code == 1) or (is_wdtable == 1) then
+    if (is_code == 1)  then
+        fig_fuse = 1
+        fig_count = fig_count+1
+        return fig
+    end
+    -- checks for Algorithm or tables within the Figure environment
+    -- falls back to default handling.
+    if (is_wdtable == 1)  then
+        fig_fuse = 1
+        return fig
+    end
+    if (is_alg == 1) then
         return fig
     end
     figure_src = {}
@@ -111,9 +140,15 @@ function Figure(fig)
         write_to_file("fig_refs.txt",'w',pandoc.utils.stringify(fig.identifier))
         old_session = true
     end
+    fig_count = fig_count+1
     local identifier = sanitize_identifier(fig.identifier)
     -- caption % need to stringify
     local caption = pandoc.utils.stringify(fig.caption.long)
+    local patt = [[^Figure ]]..fig_count .. [[:]]
+    if caption:match(patt) then
+        caption = caption:gsub(patt,"")
+        caption = caption:gsub('^%s+',"")
+    end
     -- alt % default alt text for images
     local alt = "graphic without alt text"
     -- alignment % default center

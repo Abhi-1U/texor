@@ -6,13 +6,28 @@ License:   MIT – see LICENSE file for details
 --]]
 
 new_eq_labels = {}
+new_tab_labels = {}
 not_cached = true
-
+fig_fuse = 0
 function Link(el)
+    -- check for fig fuse
+    if (file_exists("fig_fuse.txt")) then
+        for line in io.lines("fig_fuse.txt") do
+            if line == "Blown" then
+                fig_fuse =1
+            end
+        end
+    end
     -- cache new equation labels in a table
     if file_exists('neweqlabels.txt') and not_cached then
         for line in io.lines("neweqlabels.txt") do
             table.insert(new_eq_labels, line)
+        end
+        not_cached = false
+    end
+    if file_exists('newtablabels.txt') and not_cached then
+        for line in io.lines("newtablabels.txt") do
+            table.insert(new_tab_labels, line)
         end
         not_cached = false
     end
@@ -67,11 +82,11 @@ function Link(el)
     if (file_exists("tabs.txt")) then
         mini_iter_3 = 1
         for line in io.lines("tabs.txt") do
-            if (("#"..line) == pandoc.utils.stringify(el.target)) then
-                el.content = pandoc.Str(tostring(mini_iter_3))
+            if ("#"..line) == (pandoc.utils.stringify(el.target)) then
+                el.target = [[#]]..new_tab_labels[mini_iter_3]
                 break
             end
-            mini_iter_3 = mini_iter_3 + 1
+            mini_iter_3  = mini_iter_3 + 1
         end
     end
     -- change numbering of equations if they exist
@@ -96,8 +111,11 @@ function Link(el)
     end
     if el.attributes[1] ~= nil then
         if el.attributes[1][2] == "ref" then
-            if (el.target:match("^#fig:")) or (el.target:match("^#tab:")) or (el.target:match("^#table:")) then
+            if ((el.target:match("^#fig:")) and (fig_fuse == 0 )) or (el.target:match("^#tab:")) or (el.target:match("^#table:")) then
                 l = el.target
+                if el.target:match("^#table:") then
+                    l:gsub("#table:","#tab:")
+                end
                 el.content = l:gsub("#","")
                 bkdown = [[\@ref(]] .. l:gsub("#","") .. [[)]]
                 return pandoc.RawInline('markdown', bkdown)

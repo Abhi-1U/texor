@@ -119,12 +119,14 @@ function Table(el)
     end
   end
   local table_code_block = {}
-  local patt = "^Table "..table_count .. ":"
-  local caption =  pandoc.utils.stringify(el.caption)
+  local patt = [[%(\\#tab:T]]..table_count .. [[%)]]
+  local caption =  pandoc.utils.stringify(el.caption.long)
+
   if caption:match(patt) then
     caption = caption:gsub(patt,"")
+    caption = caption:gsub('^%s+',"")
   end
-  table.insert(table_code_block, [[```{r ]] .. [[table-]]..table_count..[[, echo = FALSE, results = 'asis'}]] .. string.char(10))
+  table.insert(table_code_block, [[```{r ]] .. [[T]]..table_count..[[, echo = FALSE, results = 'asis'}]] .. string.char(10))
   table.insert(table_code_block, [[table_]]..table_count..[[_data <- read.csv("]] .. data_file_name .. [[")]] .. string.char(10))
   if wide_table_check(el) then
     table.insert(table_code_block, [[knitr::kable(table_]]..table_count..[[_data)]] .. string.char(10))
