@@ -7,9 +7,9 @@
 
 [![CRAN/METACRAN](https://img.shields.io/cran/v/texor?color=blue&style=for-the-badge)](https://cran.r-project.org/package=texor)
 [![GitHub Workflow Status
-(branch)](https://img.shields.io/github/actions/workflow/status/Abhi-1U/texor/pkg_down.yaml?branch=master&label=pkgdown&style=for-the-badge)](https://github.com/Abhi-1U/texor/actions/workflows/pkg_down.yaml)
+(branch)](https://img.shields.io/github/actions/workflow/status/Abhi-1U/texor/pkg_down.yaml?branch=main&label=pkgdown&style=for-the-badge)](https://github.com/Abhi-1U/texor/actions/workflows/pkg_down.yaml)
 [![GitHub Workflow
-Status](https://img.shields.io/github/actions/workflow/status/Abhi-1U/texor/cmdcheck.yaml?branch=master&label=R-CMD-CHECK&style=for-the-badge)](https://github.com/Abhi-1U/texor/actions/workflows/cmdcheck.yaml)
+Status](https://img.shields.io/github/actions/workflow/status/Abhi-1U/texor/cmdcheck.yaml?branch=main&label=R-CMD-CHECK&style=for-the-badge)](https://github.com/Abhi-1U/texor/actions/workflows/cmdcheck.yaml)
 [![GitHub R package version (subdirectory of
 monorepo)](https://img.shields.io/github/r-package/v/Abhi-1U/texor?filename=DESCRIPTION&label=texor&logo=github&color=navy&style=for-the-badge)](https://github.com/Abhi-1U/texor/blob/master/DESCRIPTION)
 ![Github
@@ -72,9 +72,7 @@ x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 your_article_path <- paste(your_article_folder,"article",sep="/")
 # view your original article at
 your_article_path
-#Note : Do not use example = TRUE param when working with conversions.
-#  It is set TRUE here, to conform with CRAN/Build check restrictions.
-texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE)
+texor::latex_to_web(your_article_path,..)
 # view  your converted and original article at
 paste0(your_article_path,"/web")
 ```
