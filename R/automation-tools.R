@@ -10,8 +10,8 @@
 #' @param interactive_mode interactive mode for converting articles with options. default FALSE
 #' @param autonumber_eq whether to autonumber the equations, default is FALSE
 #' @param compile_rmd_in_temp This works only with a forked version of rjtools.
-#' @param kable_tab converts to kable table instead of markdown tables
-#' @param fig_in_r whether to include figures in R code chunks, default is TRUE
+#' @param kable_tab converts to kable table instead of markdown tables, default is FALSE
+#' @param fig_in_r whether to include figures in R code chunks, default is FALSE
 #' Not recommended to use with CRAN or github version of the rjtools package. (default FALSE)
 #' @note Use pandoc version greater than or equal to 3.1
 #' @note Do not set example = TRUE param when working with conversions.
@@ -30,7 +30,7 @@
 latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = TRUE,
                          temp_mode = TRUE, web_dir = FALSE, interactive_mode = FALSE,
                          autonumber_eq = FALSE, compile_rmd_in_temp = !temp_mode,
-                         kable_tab = TRUE, fig_in_r = TRUE) {
+                         kable_tab = FALSE, fig_in_r = FALSE) {
     message(dir)
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
@@ -60,7 +60,9 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
                                           temp_mode = FALSE,
                                           web_dir = web_dir,
                                           interactive_mode = interactive_mode,
-                                          compile_rmd_in_temp = compile_rmd_in_temp),
+                                          compile_rmd_in_temp = compile_rmd_in_temp,
+                                          kable_tab = kable_tab,
+                                          fig_in_r = fig_in_r),
                       error = function(c) {
                           warning(c)
                       })

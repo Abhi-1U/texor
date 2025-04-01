@@ -1,3 +1,12 @@
+# Version 1.5.6
+
+## Bug Fixes
+
+1. Table/Figure/Algorithm Numbering Issues which were broken by updates in pandoc and texor are fixed.
+2. Fixed table references being shown as `??` instead of number or reference name.
+3. Added soft fuse for the `fig_code_chunk` to skip converting further images, on encountering a non standard Image.
+4. Updated workflows and badges.
+
 # Version 1.5.3
 
 ## Bug Fixes

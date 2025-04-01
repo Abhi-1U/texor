@@ -1,6 +1,5 @@
 ## Resubmission 
-1. Fixed errors occurring in CRAN tests.
-2. Bug fixes.
+1. Bug fixes.
 
 ## Test environments
 * local ubuntu 22.04 install, R 4.1.2, 4.3.0

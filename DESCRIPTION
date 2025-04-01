@@ -1,7 +1,7 @@
 Package: texor
 Type: Package
 Title: Converting 'LaTeX' 'R Journal' Articles into 'RJ-web-articles'
-Version: 1.5.3
+Version: 1.5.6
 Authors@R: 
     c(person(given = "Abhishek",
              family = "Ulayil",
