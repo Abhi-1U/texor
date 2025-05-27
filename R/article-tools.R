@@ -347,11 +347,12 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
         preview = "preview.png",
         bibliography = metadata$bibliography,
         CTV = article_metadata$CTV_rev,
+        legacy_pdf = TRUE,
+        legacy_converted = TRUE,
         output = list(
             `rjtools::rjournal_web_article` = list(
                 self_contained = TRUE,
                 toc = FALSE,
-                legacy_pdf = TRUE,
                 mathjax = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js",
                 md_extension = "-tex_math_single_backslash"
             )

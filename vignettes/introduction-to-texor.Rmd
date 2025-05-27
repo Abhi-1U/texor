@@ -155,7 +155,6 @@ We also add important parameters for `rjtools::rjournal_web_article` like:
 
 1. self_contained = TRUE
 2. toc = FALSE
-3. legacy_pdf = TRUE
 4. mathjax = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
 
 ```r
