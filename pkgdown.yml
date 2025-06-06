@@ -1,8 +1,8 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   environment-handling: environment-handling.html
   How-texor-convert-Sweave-to-R-Markdown: How-texor-convert-Sweave-to-R-Markdown.html
   introduction-to-texor: introduction-to-texor.html
-last_built: 2025-04-01T18:17Z
+last_built: 2025-06-06T15:54Z
