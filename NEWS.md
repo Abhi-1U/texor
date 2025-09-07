@@ -1,3 +1,12 @@
+# Version 1.6.0
+
+## Bug Fixes
+
+1. Fixed bugs around table numbering.
+2. Used direct imports from stringr instead of wrapper functions.
+3. Improvements to stream editor, dumping for loop for vectorized gsub.
+4. Updated default Rmd header configuration (#102).
+
 # Version 1.5.6
 
 ## Bug Fixes
