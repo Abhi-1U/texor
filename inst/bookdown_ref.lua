@@ -8,6 +8,7 @@ License:   MIT – see LICENSE file for details
 new_eq_labels = {}
 new_tab_labels = {}
 not_cached = true
+not_cached_2 = true
 fig_fuse = 0
 function Link(el)
     -- check for fig fuse
@@ -25,11 +26,11 @@ function Link(el)
         end
         not_cached = false
     end
-    if file_exists('newtablabels.txt') and not_cached then
+    if file_exists('newtablabels.txt') and not_cached_2 then
         for line in io.lines("newtablabels.txt") do
             table.insert(new_tab_labels, line)
         end
-        not_cached = false
+        not_cached_2 = false
     end
     -- change the numbering of algorithm images
     if file_exists("algorithms.txt") then
@@ -78,12 +79,14 @@ function Link(el)
             mini_iter_f  = mini_iter_f + 1
         end
     end
+
     -- change numbering of tables only if widetables are present
     if (file_exists("tabs.txt")) then
         mini_iter_3 = 1
         for line in io.lines("tabs.txt") do
             if ("#"..line) == (pandoc.utils.stringify(el.target)) then
                 el.target = [[#]]..new_tab_labels[mini_iter_3]
+                el.content = pandoc.Str(tostring(mini_iter_3))
                 break
             end
             mini_iter_3  = mini_iter_3 + 1
@@ -116,11 +119,9 @@ function Link(el)
                 if el.target:match("^#table:") then
                     l:gsub("#table:","#tab:")
                 end
-                el.content = l:gsub("#","")
-                bkdown = [[\@ref(]] .. l:gsub("#","") .. [[)]]
-                return pandoc.RawInline('markdown', bkdown)
+                return el
             else
-                return pandoc.RawInline('markdown', [[[]].. pandoc.utils.stringify(el.content) .. [[](]] .. el.target .. [[)]])
+                return el
             end
         end
     else

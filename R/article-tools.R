@@ -160,10 +160,9 @@ convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = F
     if (kable_tab) {
         pandoc_opt <- c(pandoc_opt,
                         "--lua-filter", table_code_chunk,
-                        "--lua-filter", stat_filter,
-                        "--lua-filter", bookdown_ref_filter)
+                        "--lua-filter", stat_filter)
     }
-
+    pandoc_opt <- c(pandoc_opt,"--lua-filter", bookdown_ref_filter)
     output_format <- "markdown-simple_tables-pipe_tables-fenced_code_attributes"
     # This will generate a markdown file with YAML headers.
     if (!pandoc_version_check()) {
