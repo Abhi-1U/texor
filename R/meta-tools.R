@@ -12,6 +12,7 @@ final_status <- c(
 # List of valid status of articles
 valid_status <- c(
     "submitted",
+    "resubmission",
     "acknowledged",
     "passed initial checks",
     "needs reviewers",
