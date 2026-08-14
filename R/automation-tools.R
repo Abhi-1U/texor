@@ -51,7 +51,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
     if (temp_mode) {
         dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
         dir.create(your_article_folder_2 <- paste(your_article_folder, basename(dirname(dir)),sep = '/'))
-        x <- file.copy(from = dir, to = your_article_folder_2, recursive = TRUE,)
+        x <- file.copy(from = dir, to = your_article_folder_2, recursive = TRUE)
         your_article_path <- paste(your_article_folder_2, basename(dir),"",sep = "/")
         on.exit(unlink(your_article_folder, recursive = TRUE))
         # run latex to web recursively on a temp folder
