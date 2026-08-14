@@ -25,7 +25,7 @@
 #' dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 #' x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 #' your_article_path <- paste(your_article_folder,"article",sep="/")
-#' texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE, temp_mode =FALSE)
+#' latex_to_web(your_article_path,log_steps = FALSE, example = TRUE, temp_mode =FALSE)
 #' unlink(your_article_folder, recursive = TRUE)
 latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = TRUE,
                          temp_mode = TRUE, web_dir = FALSE, interactive_mode = FALSE,
@@ -51,11 +51,11 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
     if (temp_mode) {
         dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
         dir.create(your_article_folder_2 <- paste(your_article_folder, basename(dirname(dir)),sep = '/'))
-        x <- file.copy(from = dir, to = your_article_folder_2,recursive = TRUE,)
+        x <- file.copy(from = dir, to = your_article_folder_2, recursive = TRUE,)
         your_article_path <- paste(your_article_folder_2, basename(dir),"",sep = "/")
         on.exit(unlink(your_article_folder, recursive = TRUE))
         # run latex to web recursively on a temp folder
-        x <- tryCatch(texor::latex_to_web(your_article_path,
+        x <- tryCatch(latex_to_web(your_article_path,
                                           auto_wrapper = auto_wrapper,
                                           temp_mode = FALSE,
                                           web_dir = web_dir,
@@ -67,8 +67,8 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
                           warning(c)
                       })
         all_files <- list.files(your_article_path)
-        exculde_files <- c("*[.]bk$","*[.]tex$","*[.]yaml$","*[.]sty$","*[.]log$","*[.]txt$")
-        for (exp in exculde_files) {
+        exclude_files <- c("*[.]bk$","*[.]tex$","*[.]yaml$","*[.]sty$","*[.]log$","*[.]txt$")
+        for (exp in exclude_files) {
             all_files <- all_files[!grepl(exp,all_files)]
         }
         y <- file.copy(from = paste(your_article_path,all_files,sep = "/"),
@@ -77,7 +77,7 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
                        )
         if (!compile_rmd_in_temp) {
             message(paste0("Knitting Rmd to html"))
-            texor::produce_html(dir, web_dir = web_dir, interactive_mode = interactive_mode)
+            produce_html(dir, web_dir = web_dir, interactive_mode = interactive_mode)
         }
         return(TRUE)
     }
@@ -126,11 +126,11 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
         texor_log(paste0("Stage-07 | ","Converted LaTeX to Markdown"), "info", 2)
         # Step - 8 : Create a new directory and copy
         #            dependent files/folders
-        texor_log(paste0("Stage-08 | ","Copying Dependencies to /web"), "info", 2)
         if (web_dir) {
+            texor_log(paste0("Stage-08 | ","Copying Dependencies to /web"), "info", 2)
             copy_other_files(dir)
+            texor_log(paste0("Stage-08 | ","Copied Dependencies to /web"), "info", 2)
         }
-        texor_log(paste0("Stage-08 | ","Copied Dependencies to /web"), "info", 2)
         # Step - 9 : generate R markdown file with
         #             metadata from DESCRIPTION, tex file
         #             and file path
@@ -139,25 +139,28 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
         # YYYY is the year, ZZ is the Journal issue number and MMM is the DOI
         # referral(unique article number).
         texor_log(paste0("Stage-09 | ","Creating R-markdown File to /web"), "info", 2)
-        texor::generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode)
+        generate_rmd(dir, web_dir = web_dir, interactive_mode = interactive_mode)
         texor_log(paste0("Stage-09 | ","Created R-markdown File to /web"), "info", 2)
         # Step - 10 : produce html (using rj_web_article) format
         if (compile_rmd_in_temp) {
             texor_log(paste0("Stage-10 | ","Knitting Rmd to html"), "info", 2)
-            texor::produce_html(dir, web_dir = web_dir, interactive_mode = interactive_mode)
+            produce_html(dir, web_dir = web_dir, interactive_mode = interactive_mode)
             texor_log(paste0("Stage-10 | ","Knitted Rmd to html"), "info", 2)
         }
-        post_data <- yaml::read_yaml(paste0(dir,"/post-conversion-meta.yaml"))
-        if (post_data$text$words == 0) {
-            texor_log(paste0("Pandoc produced an empty file"), "error", 2)
-        } else {
-            texor_log(paste0("Conversion Summary | ", "Pre-Conversion  ", "Post-Conversion"), "debug", 2)
-            texor_log(paste0("Tables | ", post_data$table, "  ", meta$table), "debug", 2)
-            texor_log(paste0("Figures | ", post_data$figure, "  ", meta$figure), "debug", 2)
-            texor_log(paste0("Math | ", post_data$math, "  ", meta$math), "debug", 2)
-            texor_log(paste0("Citations | ", post_data$citations, "  ", meta$citations), "debug", 2)
-            texor_log(paste0("Code Inline | ", post_data$code$inline, "  ", meta$code$inline), "debug", 2)
-            texor_log(paste0("Code Block | ", post_data$code$block, "  ", meta$code$block), "debug", 2)
+        post_data_fn <- paste0(dir,"/post-conversion-meta.yaml")
+        if(file.exists(post_data_fn)) {
+            post_data <- yaml::read_yaml(post_data_fn)
+            if (post_data$text$words == 0) {
+                texor_log(paste0("Pandoc produced an empty file"), "error", 2)
+            } else {
+                texor_log(paste0("Conversion Summary | ", "Pre-Conversion  ", "Post-Conversion"), "debug", 2)
+                texor_log(paste0("Tables | ", post_data$table, "  ", meta$table), "debug", 2)
+                texor_log(paste0("Figures | ", post_data$figure, "  ", meta$figure), "debug", 2)
+                texor_log(paste0("Math | ", post_data$math, "  ", meta$math), "debug", 2)
+                texor_log(paste0("Citations | ", post_data$citations, "  ", meta$citations), "debug", 2)
+                texor_log(paste0("Code Inline | ", post_data$code$inline, "  ", meta$code$inline), "debug", 2)
+                texor_log(paste0("Code Block | ", post_data$code$block, "  ", meta$code$block), "debug", 2)
+            }
         }
         return(TRUE)
     }
@@ -176,9 +179,9 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
                 copy_other_files(dir) # Step 8
             }
             convert_to_markdown(dir, autonumber_eq = autonumber_eq, kable_tab = kable_tab, fig_in_r = fig_in_r) # Step 7
-            texor::generate_rmd(dir,web_dir = web_dir) # Step 9
+            generate_rmd(dir, web_dir = web_dir) # Step 9
             if (compile_rmd_in_temp) {
-            texor::produce_html(dir,example = TRUE, web_dir = web_dir,
+            produce_html(dir,example = TRUE, web_dir = web_dir,
                                 interactive_mode = interactive_mode) # Step 10
             }
         }
@@ -187,10 +190,9 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
                 copy_other_files(dir) # Step 8
             }
             convert_to_markdown(dir, autonumber_eq = autonumber_eq, kable_tab = kable_tab, fig_in_r = fig_in_r) # Step 7
-            texor::generate_rmd(dir,web_dir = web_dir,
-                                interactive_mode = interactive_mode) # Step 9
+            generate_rmd(dir,web_dir = web_dir, interactive_mode = interactive_mode) # Step 9
             if (compile_rmd_in_temp) {
-                texor::produce_html(dir,web_dir = web_dir,
+                produce_html(dir,web_dir = web_dir,
                                 interactive_mode = interactive_mode) # Step 10
             }
         }
@@ -209,13 +211,13 @@ convert_to_html <- function(dir,log_steps = TRUE) {
     wd <- getwd()
     dir <- xfun::normalize_path(dir)
     if(log_steps){
-        texor::log_setup(wd,"texor-conversions.log","texor-stats",2)
+        log_setup(wd,"texor-conversions.log","texor-stats",2)
     }
     else{
         message("Logging Disabled")
     }
     x<- FALSE
-    x<- tryCatch(texor::latex_to_web(dir),
+    x<- tryCatch(latex_to_web(dir),
                  error = function(c) {
                      c$message <- paste0(c$message, " (in ", basename(dir), ")")
                      if(log_steps){
