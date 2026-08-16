@@ -218,7 +218,7 @@ convert_to_markdown <- function(article_dir, kable_tab = TRUE, autonumber_eq = F
 #' texor::convert_to_markdown(your_article_path)
 #' texor::generate_rmd(your_article_path)
 #' unlink(your_article_folder,recursive = TRUE)
-generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
+generate_rmd <- function(article_dir, web_dir = TRUE, interactive_mode = FALSE) {
     article_dir <- xfun::normalize_path(article_dir)
     if (!pandoc_version_check()) {
         warning(paste0("pandoc version too old, current-v : ",rmarkdown::pandoc_version()," required-v : >=3.1"))
@@ -390,7 +390,7 @@ generate_rmd <- function(article_dir, web_dir= TRUE, interactive_mode = FALSE) {
         output_file_name <- paste(dirname(markdown_file),"/",
                                   article_metadata$slug,
                                   ".Rmd", sep = "")
-        xfun::write_utf8(front_matter$slug,xfun::with_ext(output_file_name,"txt"))
+        xfun::write_utf8(front_matter$slug, xfun::with_ext(output_file_name, "txt"))
     }
     if (web_dir) {
         output_file_name <- paste(dirname(markdown_file),
