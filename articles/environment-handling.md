@@ -1,0 +1,348 @@
+# Environment Handling
+
+Transition from LaTeX to R markdown syntax often has multiple ways of
+describing article components. For example figure environments in R
+markdown, has multiple ways to include a figure like, firstly there is
+simple markdown structure, then one can use
+[`knitr::include_graphics()`](https://rdrr.io/pkg/knitr/man/include_graphics.html)
+within a code chunk to include images or if you are targetting HTML web
+formats then you can also choose to include images using `<img .. />`
+tag as well. Similar variations exist in LaTeX as well and that is why
+understanding how the `texor` package will transform these environments
+and which options are available for you to choose is important.
+
+## Figure Environments
+
+Images are an essential component in any article, However due to the
+differences in the support for various graphic formats between LaTeX and
+markdown/HTML we need to fallback on raster graphics.
+
+| Graphics.Format | LaTeX | Markdown | RMarkdown            | HTML |
+|:----------------|:------|:---------|:---------------------|:-----|
+| PNG             | ✓     | ✓        | ✓                    | ✓    |
+| JPG             | ✓     | ✓        | ✓                    | ✓    |
+| PDF             | ✓     | ✗        | ✗                    | ✗    |
+| SVG             | ✗     | ✓        | ✓                    | ✓    |
+| Tikz            | ✓     | ✗        | ✓(using tikz engine) | ✗    |
+| Algorithm       | ✓     | ✗        | ✗                    | ✗    |
+
+Image Format support in various Markup/Typesetting Languages {.table}
+
+As we can observe from the above table, raster (PNG and JPG) images are
+relatively easy to handle and do not require any additional
+pre-processing. Pandoc handles it well.
+
+PNG,JPG images are easily included as markdown images with captions,
+labels and other parameters.
+
+For other image formats like tikz and algorithm, they are first isolated
+and compiled into a PDF, then to a PNG using pdftools package.
+
+#### For the best results after conversion :
+
+1.  Avoid using framebox or any other latex command to wrap the
+    `\includegraphics{}` . This might interfere with the packages
+    ability to properly read the path and copy the relevant image
+    properly.
+2.  Try to keep the actual content of the caption without any LaTeX
+    markup (normal text), as it is not reflected in HTML properly.
+
+In newer versions of `texor` package, a new option is available to
+convert figures into Rmarkdown style code chunks to include figures
+there. If the option `fig_in_r` is set TRUE, a custom Lua Filter will
+transform the image structure.
+
+For example :
+
+``` latex
+\begin{figure}
+  \includegraphics{image/sample.png}
+  \caption{This is a sample caption}
+  \labeL{fig:image-1}
+\end{figure}
+```
+
+will be converted to
+
+```` r
+```{r , echo=FALSE , fig.cap="This is a sample caption", fig.alt="graphic without alt text",
+ fig.show='hold', fig.align="center", out.width="100%"}
+knitr::include_graphics(c("image/sample.png"))
+```
+````
+
+if the option `fig_in_r` is set FALSE, a simple markdown figure would be
+generated
+
+``` markdown
+![Figure 1: This is a sample caption](image/sample.png){width="100%"
+alt="graphic without alt text"}
+```
+
+#### Notes
+
+1.  Default handling of the `texor` package is to generate R markdown
+    style code chunks to include images using
+    `knitr::include_graphics(c(file_path))`. This mechanism was added
+    using a unique Lua filter [^1] which can also handle multiple images
+    in a single figure environment as well. The Lua filter is open
+    source and available under MIT License
+    [here](https://github.com/Abhi-1U/fig-code-chunk).
+2.  If you set the option `fig_in_r = FALSE` in
+    [`rnw_to_rmd()`](../reference/rnw_to_rmd.md) or
+    [`latex_to_web()`](../reference/latex_to_web.md) functions, you can
+    revert back to simple markdown figures which has the following
+    syntax `![caption](file_path){#identifier ..}`.
+3.  Some authors used to add verbatim environments inside figure
+    environments to be able to add captions. To maintain parity, the
+    `texor` package transforms the block into a raw HTML block so as to
+    enable such out of the box use of figure environment in markdown.
+4.  In case you set `fig_in_r = FALSE`, the captions added to the
+    figures will be appended with figure numbering which would also be
+    reflected in the references to the figures throughout the document
+    as well. If you want to add or change the position of the position
+    of the figures exercise caution.
+5.  To add to accessibility, we have added a default alt-text to every
+    figure which is meant to motivate the author to replace it with a
+    better alt-text rather than repeating the caption as alt-text.
+    However in case of bulk conversions the alt-text is a reasonable
+    placeholder compared to no alt-text at all.
+
+## Table Environments
+
+Tables are commonly used in articles to display data in a tabular
+format. However, there are differences in the way tables are handled by
+LaTeX and HTML.
+
+LaTeX tables have more customization and are usually optimized for
+printing, whereas the web articles need tables optimized for varying
+sizes of media.
+
+pandoc converts most of the tables somewhat easily, but is unable to do
+well with table customization packages and complex tables.
+
+Some pandoc extensions are used in order to tackle them, they are :
+`simple_tables`, `pipe_tables`
+
+Limited Multicolumn support is included[^2].
+
+``` latex
+\begin{table}[t!]
+\begin{tabular}{l | llll }
+ \hline
+EXAMPLE & $X$  & & $Y$ & \\
+ \hline
+  & 1 & 2 & 1 & 2 \\
+ EX1  & X11 & X12 &  Y11  & Y12 \\
+ EX2  & X21 & X22 &  Y21  & Y22 \\
+ EX3  & X31 & X32 &  Y31  & Y32 \\
+ EX4  & X41 & X42 &  Y41  & Y42\\
+ EX5  & X51 & X52 &  Y51  & Y52 \\
+\hline
+\end{tabular}
+\label{table1} \caption{An Example Table}
+\end{table}
+```
+
+In newer versions[^3] of the `texor` package, the default tables
+generated are included using `kable()` function. The data is stored
+within a csv file and has support for multiple data/object types.
+However there are some limitations with handling a wide variety of
+tables available in LaTeX. Hence, in case the `texor` package recognizes
+some complex table, in order to retain the table structure and preserve
+the data in the article, the package will fallback to simpler markdown
+tables for the rest of the document.
+
+```` r
+::: {#table1}
+```{r table-1, echo = FALSE, results = 'asis'}
+table_1_data <- read.csv("table_data_1.csv")
+knitr::kable(table_1_data, caption="An Example Table")
+```
+:::
+````
+
+with the data tucked away in a csv file.
+
+``` csv
+EXAMPLE ,$X$ ,  ,$Y$ , 
+  ,1 ,2 ,1 ,2
+EX1 ,X11 ,X12 ,Y11 ,Y12
+EX2 ,X21 ,X22 ,Y21 ,Y22
+EX3 ,X31 ,X32 ,Y31 ,Y32
+EX4 ,X41 ,X42 ,Y41 ,Y42
+EX5 ,X51 ,X52 ,Y51 ,Y52
+```
+
+However, if you choose to use the option `kable_tab = FALSE` the
+resulting markdown generated would look like
+
+``` markdown
+::: {#table1}
+  -------------------------------------
+  EXAMPLE   \(X\)         \(Y\)   
+  --------- ------- ----- ------- -----
+            1       2     1       2
+
+  EX1       X11     X12   Y11     Y12
+
+  EX2       X21     X22   Y21     Y22
+
+  EX3       X31     X32   Y31     Y32
+
+  EX4       X41     X42   Y41     Y42
+
+  EX5       X51     X52   Y51     Y52
+  -------------------------------------
+
+  : Table 1: An Example Table
+:::
+```
+
+#### Notes
+
+1.  The table data is parsed and converted into a csv file using
+    [this](https://github.com/Abhi-1U/table-code-chunk) Lua filter which
+    is open source and available under MIT License.
+2.  The tables will be converted to `kable()` tables by default, unless
+    some complex LaTeX table is identified, beyond which the package
+    will fallback to simpler markdown tables.
+3.  Provision for wide tables is provided which can span across multiple
+    tables within the document.
+4.  Although some support for including `CodeBlocks` inside of tables
+    exists, it is not the best and can have unintended side effects.
+5.  Markdown tables have their captions appended with table numbering,
+    reflected in the references as well. This is static for the
+    document, which will require modifications if you want to add/
+    re-position the tables in the converted article.
+
+## Code Environments
+
+Pandoc naturally converts verbatim environment easily, however the
+redefinition of other commands such as `example`, `example*`, `Sinput`
+etc to verbatim does not work well in pandoc.
+
+Hence `texor` package uses the stream editor to search find and replace
+matching code environments to verbatim before pandoc touches it.
+
+This way the the code is not lost in conversion, also a pandoc extension
+is used to add attributes to the markdown code using
+`fenced_code_attributes`
+
+#### Supported RJ-article (LaTeX) code environment:
+
+| example | S.series | special.verbatim |
+|:---|:---|:---|
+| example, example\* | Sin, Sout, Scode,Sinput,Soutput | smallverbatim, boxedverbatim |
+
+Code Environment support in texor {.table}
+
+#### Sweave code chunks
+
+With updates to the `texor` package we were able to add support for
+Sweave articles which included retaining the code chunks with
+parameters. This functionality is not found natively in LaTeX, hence
+unsupported in pandoc as well. To add this feature, we designed a custom
+pandoc reader in Lua, which uses LPEG expressions to separate out the
+code chunks from the Sweave document, while retaining the parameters and
+code.
+
+``` r
+<<test>>=
+1+1
+rnorm(30)
+@
+```
+
+The above Sweave code block would be converted to
+
+```` r
+```{r test}
+1+1
+rnorm(30)
+```
+````
+
+Similarly inline code express in Sweave defined by `\Sexpr{'0.6'}` will
+be transformed to `` ` r '0.6'` ``
+
+#### Notes
+
+1.  Any special markup (like font-size, font-style) bought by any of
+    these code environments will be lost.
+2.  The retained text will have syntax highlighting (for R by default,
+    if you want to change the syntax highlighting, change the language
+    in the markdown source code formed).
+
+## Math Environments
+
+Math typesetting has always been LaTeX’s highlight feature, making it a
+de facto choice among academicians and researchers globally. However, as
+we proceed to our humble web interfaces, math is hard to describe
+traditionally. There have been advancements in JavaScript libraries to
+better Typeset and present math in web pages but not all LaTeX
+commands/math functions are available.
+
+The texor package uses Mathjax version 3 to enhance the visual look of
+the math content in HTML. There is support for equations, inline math,
+and equation numbering.
+
+#### Equation Numbering
+
+In bookdown, you do not get automatic numbering of un-labelled
+equations. This can be tricky to deal with if we want to have the
+equation numbering matching with the one in LaTeX. To circumvent this
+issue we first transform the equation labels both in the equations and
+references, to maintain support with the specifications prescribed in
+bookdown. Then we transform the labels from LaTeX label in equations
+from `\label{..}` to `(\#eq:..)` and references from `\ref{..}` to
+`\@ref(eq:..)` which ensures compatibility. Next for equations without
+labels and no `\nonumber` commands, we automatically assign and add a
+equation label like `(\#eq:autonumber..)` where the equation number is
+the last character.
+
+To enable this you need to set the option `autonumber_eq` as `TRUE`
+while converting the documents.
+
+## Output Formats
+
+The aim of the `texor` package was to convert the LaTeX source code to a
+R markdown file which could be then knitted into different web formats.
+
+For R journal articles, we prefer to use the template from `rjtools`
+package
+[`rjtools::rjournal_web_article`](https://rdrr.io/pkg/rjtools/man/rjournal_article.html).
+
+For Sweave articles however, we have opened up options for vignette
+styles.
+
+1.  `bookdown` : The most common choice for `output_format` is
+    `bookdown` option, this will use
+    [`bookdown::html_document2`](https://pkgs.rstudio.com/bookdown/reference/html_document2.html)
+    for the vignette.
+2.  `litedown` : For a lightweight html vignette, set the option
+    `output_format` to `litedown`, which will use
+    `litedown::html_format` for the vignette.
+3.  `biocstyle` : Commonly used among bioconductor vignettes, set the
+    option `output_format` to `biocstyle` which will use
+    `BiocStyle::html_document` for the vignette.
+
+#### Notes
+
+1.  Some functionality like bibliography/footnotes might be lost in
+    `litedown` as of now as it is an experimental package.
+2.  `bookdown` option includes an header file with custom JavaScript to
+    incorporate section numbering and normal equation numbering (i.e. eq
+    1,2,3,.. instead of 1.1,1.2,2.1,3.1,..), this will be included when
+    `autonumber_sec` is set to `TRUE`.
+3.  `bookdown` option will set the math_mode to `katex` by default
+    unless `autonumber_eq` option is set to `TRUE`, where the math_mode
+    is `mathjax`.
+4.  Ultimately you can modify the generated R markdown however you want
+    for the desired format.
+
+[^1]: Included in texor v1.5.0 and above
+
+[^2]: Multicolumn support is not available for `kable()` tables
+
+[^3]: Version 1.5.0 and above

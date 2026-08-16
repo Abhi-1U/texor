@@ -1,0 +1,254 @@
+# Introduction to texor
+
+The CRAN package `texor` helps in converting old LaTeX based documents,
+research papers to HTML through intermediate conversions. This was
+particularly a problem for legacy R Research papers where HTML export
+was not available and hence modern compatibility to export a HTML file
+was missed out.
+
+## Why migrate to web format ?
+
+We have advanced a lot in the field of web development and modern
+websites offer a much more interactive and accessible interface for the
+knowledge we consume. The advantages of a web format are :
+
+1.  Better support for screen readers, hence better accessibility.
+2.  Convenient to use on mobile devices with smaller screens.
+3.  Maintaining parity with newer articles available in the web format.
+4.  Easier translations for the text.
+
+For maintaining parity with modern articles, we convert the legacy
+articles into R markdown format, a markdown based solution developed to
+allow for publishing PDFs and web content simultaneously without
+requiring separate documents, along with executable code chunks to
+reproduce the results during compile.
+
+## How do we bring back the legacy documents into a modern format ?
+
+Now, we have a lot of legacy articles which are only available in the
+PDF format and to bring these LaTeX based documents into a web format we
+needed a conversion tool which could read LaTeX and generate a markdown
+file. The solution exists in a beautiful software written in haskell
+called “Pandoc”, it is fast, portable and integrated well in the R
+ecosystem. But there are limitations in the way Pandoc works with LaTeX
+articles, some of these are :
+
+1.  Pandoc understands a subset of the LaTeX language, which means we
+    have to simplify any document we pass on to it for an efficient
+    conversion.
+2.  It does not recognize custom environments like `example` enviornment
+    which is based on top of `verbatim` environment, so we need to
+    devise methods to replace these custom environments with simple
+    alternatives.
+3.  Talking about bibliography, pandoc will not convert the embedded
+    bibliographic entries into BibTeX, which is a preferred format in R
+    markdown.
+4.  As for meta-data, pandoc can extract a few bits of meta-data from
+    the LaTeX article, however we need a lot more details in order to
+    create a front matter yaml for a R markdown.
+5.  Sweave code chunks are not natively understood by pandoc, this
+    requires a custom reader to seperate the code chunks and transform
+    it into R markdown code chunks.
+6.  Pandoc will never generate R code chunks for figures and tables, we
+    would need to develop filters to get these functionality.
+7.  Numbering and referencing of various article components like figure,
+    equations and tables require modifications during the conversion
+    using filters to acheive a web article which is consistent with the
+    ones we currently publish.
+8.  Some artifacts like included PDF images, tikz graphics and algorithm
+    environments needs pre-processing and integration with the
+    conversion process.
+
+Sounds like a lot of hassle to just convert a single LaTeX article to a
+R markdown file right ? How nice it would be if we automated workarounds
+for most of these limitations programmatically and do not need to
+manually perform them for each and every document. This was the exact
+thought, when we developed the `texor` package and its sister package
+`rebib`. It did all of the above and reduced the conversion process for
+the end user to just a single function call.
+
+If you are converting a R journal LaTeX article
+
+``` r
+
+texor::latex_to_web(path_to_folder)
+```
+
+or in case you are converting a Sweave article[^1]
+
+``` r
+
+texor::rnw_to_rmd(path_to_file)
+```
+
+There are more customization options available, if you desire things to
+be handled differently but for the most part, the default settings will
+yield a relatively good conversion to R markdown, which can be knitted
+to HTML.
+
+This is the aim of the whole package, reducing complexity and automating
+repetitive tasks for a better conversion process.
+
+Although a key point to note here is, not all documents might convert
+well or at all. This is due to the nature of LaTeX being a very
+customizable and less restrictive.
+
+## Internal Conversion Workflow:
+
+To explain the internal conversion process a bit more in depth, I have
+divided them into stages, the workflow here is indicative only and may
+differ from the actual sequence due to updates.
+
+### Stage 0 : preparing to convert
+
+In this stage, we will check the basics like using correct path,
+normalizing the path,extracting the file_name/ wrapper_name etc..
+
+``` r
+
+# normalizing path using xfun package
+dir <- xfun::normalize_path(dir)
+
+# getting wrapper file name
+wrapper_file <- texor::get_wrapper_type(dir)
+
+# getting the main LaTeX file name
+file_name <- texor::get_texfile_name(dir)
+```
+
+### Stage 1 : Copying/Removing Style files
+
+Pandoc does not need, all of the style files as it is not trying to
+compile, but rather convert. Hence, to workaround certain limitations,
+we have to remove the RJournal.sty file and include a new style file
+which redefines certain commands.
+
+``` r
+
+# This function will remove RJournal.sty file,
+# Copy the Metafix.sty file and link it in wrapper.
+texor::include_style_file(dir)
+```
+
+### Stage 2 : Handling Bibliographies
+
+As we do not desire the embedded bibliography to be included as a div
+element in the article itself, we need to convert it to Bibtex format.
+
+For removing the bibliography div elements from the article we use a Lua
+filter later on.
+
+For converting the embedded bibliography we use rebib package. By
+default I have set up the bibliography aggregation function, which will
+logically create/update the bibtex file and include it in the
+article_tex_file as well (if not linked).
+
+``` r
+
+# bibliography aggregation when both bibtex and embedded bibliography available,
+# Using Bibtex file for bibliography if no embedded bibliography available,
+# Create a new bibtex file using the embedded bibliography in the document.
+rebib::aggregate_bibliography(dir)
+```
+
+### Stage 3 : Handing Figures
+
+Texor package creates a yaml report about the figure environments,
+including tikz, algorithm2e images. There is also a logical function
+which uses pandoc’s Image data for converting PDF images to PNG.
+
+``` r
+
+data <- texor::handle_figures(dir, file_name)
+```
+
+### Stage 4 : Patching Environments
+
+Pandoc does not support certain environments, like:  
+in figures : figure\*, algorithmic, algorithm.  
+in table : table\*.  
+in code : example, example\*, Sin, Sout, Scode, Sinput, Soutput,
+smallverbatim, boxedverbatim.
+
+Here, texor will use the stream editor to patch these environments to
+the default types `figure`,`table` and `verbatim`.
+
+There is also a function to patch equations (especially eqnarray
+environment).
+
+``` r
+
+texor::patch_code_env(dir)
+texor::patch_table_env(dir)
+texor::patch_figure_env(dir)
+texor::patch_equations(dir)
+```
+
+### Stage 5 : Converting the LaTeX document to Markdown
+
+Here we will convert the document to Markdown, with a lot of Lua filters
+modifying the document.
+
+``` r
+
+texor::convert_to_markdown(dir)
+```
+
+### Stage 6 : Copying over dependency files
+
+This function will copy the files such as figures of all kinds, bibtex
+file, pdfs etc. to the /web folder.
+
+``` r
+
+texor::copy_other_files(dir)
+```
+
+### Stage 7 : Converting the Markdown to Rmarkdown
+
+In this stage we convert the markdown to Rmarkdown by reading and adding
+metadata information like ctv,CRANpkgs,BIOpkgs,slug,author metadata,
+title, abstract,etc..
+
+We also add important parameters for
+[`rjtools::rjournal_web_article`](https://rdrr.io/pkg/rjtools/man/rjournal_article.html)
+like:
+
+1.  self_contained = TRUE
+2.  toc = FALSE
+3.  mathjax =
+    “<https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js>”
+
+``` r
+
+texor::generate_rmd(dir)
+```
+
+### Stage 8 : Creating RJ-web-article from the Rmarkdown file
+
+``` r
+
+texor::produce_html(dir)
+```
+
+## Note on Dependencies
+
+This package is involved in tackling multiple challenges, thus has to
+rely on multiple software tools. A list of dependencies is included
+here:
+
+1.  Pandoc (min: V3.1) [^2] : To convert the basic LaTeX to rmarkdown.
+2.  poppler pdfutils : To convert embedded PDF to PNG.
+3.  LaTeX/TinyTex[^3] : For Tikz graphic conversion.
+4.  rebib : For bibliography conversions/aggregations.
+5.  rjtools : For the rjournal_web_article template.
+6.  stringr : for string manipulation functions.
+7.  Lua filters [^4]
+
+[^1]: Available in texor version \>= v1.4.0
+
+[^2]: included in Rstudio
+
+[^3]: read more [here](https://yihui.org/tinytex/)
+
+[^4]: Filters are included in texor package
