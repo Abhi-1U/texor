@@ -23,6 +23,7 @@ export(pandoc_version_check)
 export(patch_code_env)
 export(patch_equations)
 export(patch_figure_env)
+export(patch_subfigure_env)
 export(patch_table_env)
 export(pre_conversion_statistics)
 export(produce_html)
@@ -30,11 +31,13 @@ export(rnw_generate_rmd)
 export(rnw_to_rmd)
 export(stream_editor)
 export(texor_log)
-importFrom(stringr,fixed)
-importFrom(stringr,str_c)
-importFrom(stringr,str_detect)
-importFrom(stringr,str_length)
-importFrom(stringr,str_match)
-importFrom(stringr,str_replace_all)
-importFrom(stringr,str_split)
-importFrom(stringr,str_trim)
+importFrom(stringr,
+  fixed,
+  str_c,
+  str_detect,
+  str_length,
+  str_match,
+  str_replace_all,
+  str_split,
+  str_trim
+)

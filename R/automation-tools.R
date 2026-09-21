@@ -117,6 +117,10 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
         # Step - 6 : patch figure environments to figure
         texor_log(paste0("Stage-06 | ","Patching Figure Env"), "info", 2)
         patch_figure_env(dir)
+        patch_subfigure_env(
+            file.path(dir, get_texfile_name(dir)),
+            ref_commands = c("ref", "autoref", "cref", "Cref")
+        )
         texor_log(paste0("Stage-06 | ","Patched Figure Env"), "info", 2)
         # Step - 7 : Convert to markdown + find package
         #            references
@@ -173,6 +177,10 @@ latex_to_web <- function(dir,log_steps = TRUE, example = FALSE, auto_wrapper = T
         data <- handle_figures(dir, file_name) # Step 5
         patch_equations(dir) # Step 5.5
         patch_figure_env(dir) # Step 6
+        patch_subfigure_env(
+            file.path(dir, get_texfile_name(dir)),
+            ref_commands = c("ref", "autoref", "cref", "Cref")
+        )
         meta <- pre_conversion_statistics(dir) # Step 6.5
         if (example) {
             if (web_dir) {

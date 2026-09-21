@@ -22,6 +22,7 @@ reference:
     - patch_equations
     - patch_figure_env
     - patch_table_env
+    - patch_subfigure_env
 - title: Conversion
   desc: >
     Functions to convert articles from one form or the other
