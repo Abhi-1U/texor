@@ -1,5 +1,18 @@
 # Changelog
 
+## Version 1.7.0
+
+### Feature Updates
+
+1.  Added ability to parse and transform subfigure environments using
+    Lua LPEG logic.
+
+### Bug Fixes
+
+1.  fixed citation URL bug.
+2.  Allowed “resubmission” as a valid_status category.
+3.  Fixes for post-conversion-meta.yaml file and errors around it.
+
 ## Version 1.6.0
 
 CRAN release: 2025-09-08

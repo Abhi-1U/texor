@@ -11,6 +11,8 @@ LaTeX files
 - [`patch_figure_env()`](patch_figure_env.md) : patch figure
   environments
 - [`patch_table_env()`](patch_table_env.md) : patch table environment
+- [`patch_subfigure_env()`](patch_subfigure_env.md) : Patch subfigure
+  environments in a LaTeX file
 
 ## Conversion
 

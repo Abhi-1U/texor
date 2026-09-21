@@ -91,8 +91,8 @@ article_dir <- system.file("examples/article",
 dir.create(your_article_folder <- file.path(tempdir(), "tempdir"))
 x <- file.copy(from = article_dir, to = your_article_folder,recursive = TRUE,)
 your_article_path <- paste(your_article_folder,"article",sep="/")
-texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE, temp_mode =FALSE)
-#> /var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T//Rtmp9bTkhd/tempdir/article
+latex_to_web(your_article_path,log_steps = FALSE, example = TRUE, temp_mode =FALSE)
+#> /var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T//RtmpBY0FOp/tempdir/article
 #> No Bib files found !
 #> Cannot aggregate bibliography as there is no BibTeX bibliography
 #> No Bib files found !
@@ -142,7 +142,7 @@ texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE, temp_mo
 #> Changed \begin{widefigure\*} to \begin{figure}
 #> Found 0 Matches for target :  widefigure\*
 #> Changed \end{widefigure\*} to \end{figure}
-#> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/article/RJwrapper.tex --to native --from latex --output /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/article/temp-native.txt -s --resource-path /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/article/RJwrapper.tex --lua-filter /Users/runner/work/_temp/Library/texor/find_pdf_files.lua 
+#> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/article/RJwrapper.tex --to native --from latex --output /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/article/temp-native.txt -s --resource-path /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/article/RJwrapper.tex --lua-filter /Users/runner/work/_temp/Library/texor/find_pdf_files.lua 
 #> Found 0 Matches for target :  figure\*
 #> Changed \begin{figure\*} to \begin{figure}
 #> Found 0 Matches for target :  figure\*
@@ -159,7 +159,7 @@ texor::latex_to_web(your_article_path,log_steps = FALSE, example = TRUE, temp_mo
 #> Changed \begin{algorithm} to \begin{figure}
 #> Found 0 Matches for target :  algorithm
 #> Changed \end{algorithm} to \end{figure}
-#> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/article/RJwrapper.tex --to markdown-simple_tables-pipe_tables-fenced_code_attributes --from latex --output /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/article/RJwrapper.md -s --resource-path /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/article --lua-filter /Users/runner/work/_temp/Library/texor/issue_checker.lua --lua-filter /Users/runner/work/_temp/Library/texor/abs_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/bib_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/equation_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/image_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/sec_depth.lua --lua-filter /Users/runner/work/_temp/Library/texor/image_caption.lua --lua-filter /Users/runner/work/_temp/Library/texor/widetable_patcher.lua --lua-filter /Users/runner/work/_temp/Library/texor/R_code.lua --lua-filter /Users/runner/work/_temp/Library/texor/table_caption.lua --lua-filter /Users/runner/work/_temp/Library/texor/bookdown_ref.lua --citeproc 
+#> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/article/RJwrapper.tex --to markdown-simple_tables-pipe_tables-fenced_code_attributes --from latex --output /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/article/RJwrapper.md -s --resource-path /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/article --lua-filter /Users/runner/work/_temp/Library/texor/issue_checker.lua --lua-filter /Users/runner/work/_temp/Library/texor/abs_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/bib_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/equation_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/image_filter.lua --lua-filter /Users/runner/work/_temp/Library/texor/sec_depth.lua --lua-filter /Users/runner/work/_temp/Library/texor/image_caption.lua --lua-filter /Users/runner/work/_temp/Library/texor/widetable_patcher.lua --lua-filter /Users/runner/work/_temp/Library/texor/R_code.lua --lua-filter /Users/runner/work/_temp/Library/texor/table_caption.lua --lua-filter /Users/runner/work/_temp/Library/texor/bookdown_ref.lua --citeproc 
 #> Detected the following packages from article:
 #>   CRAN: 
 #>   Bioconductor: 

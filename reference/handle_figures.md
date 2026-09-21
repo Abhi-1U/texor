@@ -43,7 +43,7 @@ texor::handle_figures(your_article_path,texor::get_texfile_name(your_article_pat
 #> Changed \begin{widefigure\*} to \begin{figure}
 #> Found 0 Matches for target :  widefigure\*
 #> Changed \end{widefigure\*} to \end{figure}
-#> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/article/RJwrapper.tex --to native --from latex --output /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/article/temp-native.txt -s --resource-path /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/article/RJwrapper.tex --lua-filter /Users/runner/work/_temp/Library/texor/find_pdf_files.lua 
+#> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/article/RJwrapper.tex --to native --from latex --output /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/article/temp-native.txt -s --resource-path /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/article/RJwrapper.tex --lua-filter /Users/runner/work/_temp/Library/texor/find_pdf_files.lua 
 #> [[1]]
 #> [[1]]$image_number
 #> [1] 1

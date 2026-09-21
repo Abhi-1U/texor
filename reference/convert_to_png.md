@@ -47,7 +47,7 @@ your_article_path <- paste(your_article_folder,"pdf_conversion",sep="/")
 rmarkdown::pandoc_version()
 #> [1] ‘3.8.3’
 texor::convert_to_png(paste0(your_article_path,"/normal.pdf"))
-#> Converting page 1 to /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/pdf_conversion/normal.png... done!
-#> [1] "/private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/pdf_conversion/normal.png"
+#> Converting page 1 to /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/pdf_conversion/normal.png... done!
+#> [1] "/private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/pdf_conversion/normal.png"
 unlink(your_article_folder,recursive = TRUE)
 ```

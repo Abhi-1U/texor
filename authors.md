@@ -26,13 +26,13 @@ Source:
 [`DESCRIPTION`](https://github.com/Abhi-1U/texor/blob/main/DESCRIPTION)
 
 Ulayil A (2026). *texor: Converting 'LaTeX' 'R Journal' Articles into
-'RJ-web-articles'*. R package version 1.6.0,
+'RJ-web-articles'*. R package version 1.7.0,
 <https://github.com/Abhi-1U/texor>.
 
     @Manual{,
       title = {texor: Converting 'LaTeX' 'R Journal' Articles into 'RJ-web-articles'},
       author = {Abhishek Ulayil},
       year = {2026},
-      note = {R package version 1.6.0},
+      note = {R package version 1.7.0},
       url = {https://github.com/Abhi-1U/texor},
     }

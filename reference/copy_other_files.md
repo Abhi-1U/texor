@@ -38,7 +38,7 @@ rebib::aggregate_bibliography(your_article_path)
 #> will parse for bibliography
 #> bibtex file created
 texor::copy_other_files(your_article_path)
-#> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/article/RJwrapper.tex --to native --from latex --output /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/article/temp-native.txt -s --resource-path /private/var/folders/df/djsxfhc17x95674wsm_g8s980000gn/T/Rtmp9bTkhd/tempdir/article/RJwrapper.tex --lua-filter /Users/runner/work/_temp/Library/texor/image_list_filter.lua 
+#> /usr/local/bin/pandoc +RTS -K512m -RTS /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/article/RJwrapper.tex --to native --from latex --output /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/article/temp-native.txt -s --resource-path /private/var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/RtmpBY0FOp/tempdir/article/RJwrapper.tex --lua-filter /Users/runner/work/_temp/Library/texor/image_list_filter.lua 
 #> [1] TRUE
 list.files(paste0(your_article_path,"/web/"))
 #> [1] "Rlogo-5.png" "example.bib"

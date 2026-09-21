@@ -35,9 +35,9 @@ x <- file.copy(from = example_files,to=your_article_folder,recursive = TRUE)
 your_article_path <- paste(your_article_folder,"article",sep="/")
 texor::log_setup(your_article_path, "log-file.log", "texor" , 2)
 texor::texor_log("Hello", "INFO", 2)
-#> INFO [2026-08-16 17:56:04] Hello
+#> INFO [2026-09-21 14:23:06] Hello
 #> NULL
 cat(readLines(paste(your_article_path,"/log-file.log",sep="")),sep="\n")
-#> INFO [2026-08-16 17:56:04] Hello
+#> INFO [2026-09-21 14:23:06] Hello
 unlink(your_article_folder,recursive = TRUE)
 ```
